@@ -2,7 +2,7 @@
 
 namespace MVCCamiloMentoria.Controllers
 {
-    public class TurmaController1 : Controller
+    public class TurmaController : Controller
     {
         public IActionResult Create()
         {

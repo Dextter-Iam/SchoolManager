@@ -2,7 +2,7 @@
 
 namespace MVCCamiloMentoria.Controllers
 {
-    public class AlunoController1 : Controller
+    public class AlunoController : Controller
     {
         public IActionResult Index()
         {
