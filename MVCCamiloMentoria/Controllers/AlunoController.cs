@@ -4,7 +4,7 @@ namespace MVCCamiloMentoria.Controllers
 {
     public class AlunoController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Create()
         {
             return View();
         }
