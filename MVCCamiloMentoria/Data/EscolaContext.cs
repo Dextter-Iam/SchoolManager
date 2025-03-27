@@ -19,5 +19,12 @@ namespace MVCCamiloMentoria.Data
         //MAPEANDO OS DADOS QUE VOU UTILIZAR NO BANCO
         public DbSet<Turma> turmas { get; set; }   
         public DbSet<Aluno> alunos { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(EscolaContext).Assembly);
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

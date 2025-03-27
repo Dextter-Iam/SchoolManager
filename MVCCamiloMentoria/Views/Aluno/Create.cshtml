@@ -1,16 +1,15 @@
 ﻿@model MVCCamiloMentoria.Models.Aluno
 
-@{
-    ViewData["Title"] = "View";
-}
 
-<h1>View</h1>
+@{
+    ViewData["Title"] = "Create";
+}
 
 <h4>Aluno</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="View">
+        <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="NomeAluno" class="control-label"></label>

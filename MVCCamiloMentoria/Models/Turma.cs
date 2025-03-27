@@ -12,11 +12,14 @@ namespace MVCCamiloMentoria.Models
         [Key]
         public int TurmaId { get; set; }
 
-        public int AlunosTurma { get; set; }
+        public List<Aluno> Alunos  { get; set; }
 
         [Required]
         public string? NomeTurma {  get; set; }
 
 
+        [Required]
+        public int AnoLetivo { get; set; }
+        public List<ProfessorTurma> Professores { get; internal set; }
     }
 }

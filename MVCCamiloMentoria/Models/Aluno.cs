@@ -23,8 +23,6 @@ namespace MVCCamiloMentoria.Models
         [Required]
         public string? EmailEscolar { get; set; }
 
-        [Required]
-        public int AnoLetivo { get; set; }
 
         [Required]
         public DateTime AnoInscricao { get; set; }
@@ -36,5 +34,10 @@ namespace MVCCamiloMentoria.Models
         [DisplayName("Turma")]
         public int TurmaId { get; set; }
 
+        public Turma Turma { get; set; }
+
+        public int EnderecoId { get; set; }
+
+        public Endereco Endereco { get; set; }
     }
 }
