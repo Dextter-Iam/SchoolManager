@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using MVCCamiloMentoria.Models;
 
-namespace MVCCamiloMentoria.Models
+namespace MVCCamiloMentoria.Data
 {
     public class ProfessorTurmaConfiguration : IEntityTypeConfiguration<ProfessorTurma>
     {

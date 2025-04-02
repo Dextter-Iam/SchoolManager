@@ -8,14 +8,15 @@ namespace MVCCamiloMentoria.Data
     {
         public void Configure(EntityTypeBuilder<Aluno> builder)
         {
-            builder.HasKey(a => a.AlunoId);
+            builder.HasKey(a => a.Id);
 
             builder.Property(a => a.NomeAluno).HasMaxLength(200);
 
             builder.HasOne(a => a.Turma)
-                .WithMany(c => c.Alunos)
-                .HasForeignKey(a => a.TurmaId);
-
+                .WithMany(a => a.Alunos)
+                .HasForeignKey(a => a.TurmaId)
+                .HasForeignKey(a =>a.EnderecoId);
+                
             builder.ToTable("Aluno");
         }
     }

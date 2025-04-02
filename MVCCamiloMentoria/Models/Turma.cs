@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,17 +10,19 @@ namespace MVCCamiloMentoria.Models
 {
     public class Turma
     {
-        [Key]
         public int TurmaId { get; set; }
-
+        
         public List<Aluno> Alunos  { get; set; }
 
-        [Required]
         public string? NomeTurma {  get; set; }
 
-
-        [Required]
         public int AnoLetivo { get; set; }
         public List<ProfessorTurma> Professores { get; internal set; }
+
+        public string? Turno { get; set; }
+
+        public int EscolaId { get; set; }
+        public Escola? Escola { get; set; }
+
     }
 }

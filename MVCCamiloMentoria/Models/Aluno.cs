@@ -11,33 +11,28 @@ namespace MVCCamiloMentoria.Models
 {
     public class Aluno
     {
-        [Key]
-        public int AlunoId { get; set; }
+        public int Id { get; set; }
 
-        [Required]
         public string? NomeAluno { get; set; }
 
-        [Required]
         public DateTime DataNascimento { get; set; }
 
-        [Required]
         public string? EmailEscolar { get; set; }
 
-
-        [Required]
         public DateTime AnoInscricao { get; set; }
 
-        [Required]
         public bool BolsaEscolar { get; set; }
 
-        [ForeignKey("TurmaId")]
-        [DisplayName("Turma")]
         public int TurmaId { get; set; }
 
         public Turma Turma { get; set; }
 
         public int EnderecoId { get; set; }
 
-        public Endereco Endereco { get; set; }
+        public Endereco? Endereco { get; set; }
+
+        public int Telefone {  get; set; }  
+
+        public bool ConfirmacaoPresenca {  get; set; }
     }
 }
