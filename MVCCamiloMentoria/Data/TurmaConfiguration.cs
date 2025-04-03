@@ -1,18 +1,45 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore;
 using MVCCamiloMentoria.Models;
 
-namespace MVCCamiloMentoria.Data
+public class TurmaConfiguration : IEntityTypeConfiguration<Turma>
 {
-    public class TurmaConfiguration : IEntityTypeConfiguration<Turma>
+    public void Configure(EntityTypeBuilder<Turma> builder)
     {
-        public void Configure(EntityTypeBuilder<Turma> builder)
-        {
-            builder.HasKey(t => t.Id);
+        builder.ToTable("Turma");
 
-            
+        builder.HasKey(t => t.TurmaId);
 
-            builder.ToTable("Turma");
-        }
+        builder.Property(t => t.NomeTurma)
+               .IsRequired()
+               .HasMaxLength(50);
+
+        builder.Property(t => t.AnoLetivo)
+               .IsRequired(); 
+
+        builder.Property(t => t.Turno)
+               .IsRequired()
+               .HasMaxLength(10);
+
+   
+        builder.HasOne(t => t.Escola)  
+               .WithMany(e => e.Turmas) 
+               .HasForeignKey(t => t.EscolaId) 
+               .OnDelete(DeleteBehavior.Restrict); 
+
+
+        builder.HasMany(t => t.Alunos)
+               .WithOne(a => a.Turma)
+               .HasForeignKey(a => a.TurmaId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(t => t.Disciplinas)
+               .WithMany(d => d.Turmas)
+               .UsingEntity(j => j.ToTable("TurmaDisciplina"));
+
+        builder.HasMany(t => t.Aulas)
+               .WithOne(a => a.Turma)
+               .HasForeignKey(a => a.TurmaId)
+               .OnDelete(DeleteBehavior.Cascade);
     }
 }

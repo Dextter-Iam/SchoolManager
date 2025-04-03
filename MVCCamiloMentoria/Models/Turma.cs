@@ -10,7 +10,7 @@ namespace MVCCamiloMentoria.Models
 {
     public class Turma
     {
-        public int Id { get; set; }
+        public int TurmaId { get; set; }
         public string? NomeTurma {  get; set; }
         public int AnoLetivo { get; set; }
         public string? Turno { get; set; }
