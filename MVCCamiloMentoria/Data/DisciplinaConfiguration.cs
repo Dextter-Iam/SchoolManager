@@ -20,11 +20,6 @@ namespace MVCCamiloMentoria.Data
                    .WithMany(p => p.Disciplinas)
                    .UsingEntity(pd => pd.ToTable("ProfessorDisciplina"));
 
-            builder.HasOne(t => t.Escola)
-                   .WithOne()
-                   .HasForeignKey<Escola>(t => t.EscolaId)
-                   .OnDelete(DeleteBehavior.Cascade);
-
             builder.HasMany(t => t.Aulas)
                    .WithOne()
                    .HasForeignKey(t => t.TurmaId)

@@ -9,7 +9,7 @@ namespace MVCCamiloMentoria.Data
         public void Configure(EntityTypeBuilder<Escola> builder)
         {
             builder.ToTable("Escola");
-            builder.HasKey(e => e.EscolaId);
+            builder.HasKey(e => e.Id);
 
 
             builder.Property(e => e.Nome)

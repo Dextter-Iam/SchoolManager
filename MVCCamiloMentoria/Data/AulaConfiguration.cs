@@ -22,32 +22,34 @@ public class AulaConfiguration : IEntityTypeConfiguration<Aula>
         builder.Property(a => a.ConfirmacaoPresenca)
                .HasDefaultValue(false);
 
+
         builder.HasOne(a => a.Professor)
                .WithMany(p => p.Aulas)
                .HasForeignKey(a => a.ProfessorId)
                .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasOne(a => a.Disciplina)
+            .WithMany(d => d.Aulas)
+            .HasForeignKey(a => a.DisciplinaId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.HasOne(a => a.Turma)
-               .WithMany(t => t.Aulas)
-               .HasForeignKey(a => a.TurmaId)
-               .OnDelete(DeleteBehavior.Restrict);
+            .WithMany(t => t.Aulas)
+            .HasForeignKey(a => a.TurmaId)
+            .OnDelete(DeleteBehavior.Cascade);
+
 
         builder.HasMany(a => a.AlunosPresentes)
                .WithMany(al => al.Aulas)
                .UsingEntity<Dictionary<string, object>>(
                    "PresencaAula",
-                   j => j.HasOne<Aluno>().WithMany().HasForeignKey("Id"),
-                   j => j.HasOne<Aula>().WithMany().HasForeignKey("AulaId"),
-                   j =>
+                   pa => pa.HasOne<Aluno>().WithMany().HasForeignKey("AlunoId"),  
+                   pa => pa.HasOne<Aula>().WithMany().HasForeignKey("AulaId"), 
+                   p =>
                    {
-                       j.Property<bool>("Presente").HasDefaultValue(false);
-                       j.ToTable("PresencaAula");
+                       p.Property<bool>("Presente").HasDefaultValue(false); 
+                       p.ToTable("PresencaAula"); 
                    }
                );
-
-        builder.HasOne(a => a.Disciplina)
-               .WithMany(d => d.Aulas)
-               .HasForeignKey(a => a.DisciplinaId)
-               .OnDelete(DeleteBehavior.Restrict);
     }
 }
