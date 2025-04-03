@@ -10,7 +10,7 @@ namespace MVCCamiloMentoria.Data
         {
             builder.ToTable("Endereco");
 
-            builder.HasKey(e => e.Id);
+            builder.HasKey(e => e.EnderecoId);
 
             builder.Property(e => e.NomeRua)
                    .HasMaxLength(200)
