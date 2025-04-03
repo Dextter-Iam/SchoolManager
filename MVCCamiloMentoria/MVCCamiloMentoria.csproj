@@ -25,6 +25,18 @@
     <Folder Include="Views\Aluno\" />
     <Folder Include="Views\Escola\" />
     <Folder Include="Views\Fornecedor\" />
+    <Folder Include="Views\Aula\" />
+    <Folder Include="Views\Diretor\" />
+    <Folder Include="Views\Coordenador\" />
+    <Folder Include="Views\Marca\" />
+    <Folder Include="Views\Equipamento\" />
+    <Folder Include="Views\Modelo\" />
+    <Folder Include="Views\Endereco\" />
+    <Folder Include="Views\Disciplina\" />
+    <Folder Include="Views\Turma\" />
+    <Folder Include="Views\Professor\" />
+    <Folder Include="Views\Responsavel\" />
+    <Folder Include="Views\Supervisor\" />
     <Folder Include="Views\PrestadorServico\" />
   </ItemGroup>
 
