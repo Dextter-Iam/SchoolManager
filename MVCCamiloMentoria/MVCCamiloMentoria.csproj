@@ -23,6 +23,9 @@
 
   <ItemGroup>
     <Folder Include="Views\Aluno\" />
+    <Folder Include="Views\Escola\" />
+    <Folder Include="Views\Fornecedor\" />
+    <Folder Include="Views\PrestadorServico\" />
   </ItemGroup>
 
 </Project>
