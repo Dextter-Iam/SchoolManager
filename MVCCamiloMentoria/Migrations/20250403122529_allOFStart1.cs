@@ -61,7 +61,7 @@ namespace MVCCamiloMentoria.Migrations
                         name: "FK_Diretores_Endereco_EnderecoId",
                         column: x => x.EnderecoId,
                         principalTable: "Endereco",
-                        principalColumn: "EnderecoId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -82,7 +82,7 @@ namespace MVCCamiloMentoria.Migrations
                         name: "FK_Escola_Endereco_EnderecoId",
                         column: x => x.EnderecoId,
                         principalTable: "Endereco",
-                        principalColumn: "EnderecoId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -103,7 +103,7 @@ namespace MVCCamiloMentoria.Migrations
                         name: "FK_Responsavel_Endereco_EnderecoId",
                         column: x => x.EnderecoId,
                         principalTable: "Endereco",
-                        principalColumn: "EnderecoId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -125,7 +125,7 @@ namespace MVCCamiloMentoria.Migrations
                         name: "FK_Supervisor_Endereco_EnderecoId",
                         column: x => x.EnderecoId,
                         principalTable: "Endereco",
-                        principalColumn: "EnderecoId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -169,7 +169,7 @@ namespace MVCCamiloMentoria.Migrations
                         name: "FK_Coordenador_Endereco_EnderecoId",
                         column: x => x.EnderecoId,
                         principalTable: "Endereco",
-                        principalColumn: "EnderecoId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Coordenador_Escola_EscolaId",
@@ -264,7 +264,7 @@ namespace MVCCamiloMentoria.Migrations
                         name: "FK_Professor_Endereco_EnderecoId",
                         column: x => x.EnderecoId,
                         principalTable: "Endereco",
-                        principalColumn: "EnderecoId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Professor_Escola_EscolaId",
@@ -401,7 +401,7 @@ namespace MVCCamiloMentoria.Migrations
                         name: "FK_Aluno_Endereco_EnderecoId",
                         column: x => x.EnderecoId,
                         principalTable: "Endereco",
-                        principalColumn: "EnderecoId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Aluno_Escola_EscolaId",
@@ -413,7 +413,7 @@ namespace MVCCamiloMentoria.Migrations
                         name: "FK_Aluno_Turma_TurmaId",
                         column: x => x.TurmaId,
                         principalTable: "Turma",
-                        principalColumn: "TurmaId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -450,7 +450,7 @@ namespace MVCCamiloMentoria.Migrations
                         name: "FK_Aula_Turma_TurmaId",
                         column: x => x.TurmaId,
                         principalTable: "Turma",
-                        principalColumn: "TurmaId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -476,7 +476,7 @@ namespace MVCCamiloMentoria.Migrations
                         name: "FK_ProfessorTurma_Turma_TurmaId",
                         column: x => x.TurmaId,
                         principalTable: "Turma",
-                        principalColumn: "TurmaId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -500,7 +500,7 @@ namespace MVCCamiloMentoria.Migrations
                         name: "FK_TurmaDisciplina_Turma_TurmasTurmaId",
                         column: x => x.TurmasTurmaId,
                         principalTable: "Turma",
-                        principalColumn: "TurmaId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -556,7 +556,7 @@ namespace MVCCamiloMentoria.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Aluno_EnderecoId",
                 table: "Aluno",
-                column: "EnderecoId",
+                column: "Id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -567,7 +567,7 @@ namespace MVCCamiloMentoria.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Aluno_TurmaId",
                 table: "Aluno",
-                column: "TurmaId");
+                column: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AlunoResponsavel_ResponsaveisId",
@@ -587,12 +587,12 @@ namespace MVCCamiloMentoria.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Aula_TurmaId",
                 table: "Aula",
-                column: "TurmaId");
+                column: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Coordenador_EnderecoId",
                 table: "Coordenador",
-                column: "EnderecoId",
+                column: "Id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -603,7 +603,7 @@ namespace MVCCamiloMentoria.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Diretores_EnderecoId",
                 table: "Diretores",
-                column: "EnderecoId");
+                column: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Disciplina_EscolaId",
@@ -628,7 +628,7 @@ namespace MVCCamiloMentoria.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Escola_EnderecoId",
                 table: "Escola",
-                column: "EnderecoId",
+                column: "Id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -659,7 +659,7 @@ namespace MVCCamiloMentoria.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Professor_EnderecoId",
                 table: "Professor",
-                column: "EnderecoId",
+                column: "Id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -680,17 +680,17 @@ namespace MVCCamiloMentoria.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ProfessorTurma_TurmaId",
                 table: "ProfessorTurma",
-                column: "TurmaId");
+                column: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Responsavel_EnderecoId",
                 table: "Responsavel",
-                column: "EnderecoId");
+                column: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Supervisor_EnderecoId",
                 table: "Supervisor",
-                column: "EnderecoId",
+                column: "Id",
                 unique: true);
 
             migrationBuilder.CreateIndex(

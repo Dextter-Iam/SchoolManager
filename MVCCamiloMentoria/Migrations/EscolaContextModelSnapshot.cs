@@ -104,7 +104,7 @@ namespace MVCCamiloMentoria.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("EnderecoId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<int>("EscolaId")
@@ -119,17 +119,17 @@ namespace MVCCamiloMentoria.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
-                    b.Property<int>("TurmaId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnderecoId")
+                    b.HasIndex("Id")
                         .IsUnique();
 
                     b.HasIndex("EscolaId");
 
-                    b.HasIndex("TurmaId");
+                    b.HasIndex("Id");
 
                     b.ToTable("Aluno", (string)null);
                 });
@@ -164,7 +164,7 @@ namespace MVCCamiloMentoria.Migrations
                     b.Property<int>("ProfessorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TurmaId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -173,7 +173,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     b.HasIndex("ProfessorId");
 
-                    b.HasIndex("TurmaId");
+                    b.HasIndex("Id");
 
                     b.ToTable("Aula", (string)null);
                 });
@@ -186,7 +186,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("EnderecoId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<int>("EscolaId")
@@ -207,7 +207,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnderecoId")
+                    b.HasIndex("Id")
                         .IsUnique();
 
                     b.HasIndex("EscolaId");
@@ -223,7 +223,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("EnderecoId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<int?>("Matricula")
@@ -237,7 +237,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnderecoId");
+                    b.HasIndex("Id");
 
                     b.ToTable("Diretores");
                 });
@@ -267,11 +267,11 @@ namespace MVCCamiloMentoria.Migrations
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Endereco", b =>
                 {
-                    b.Property<int>("EnderecoId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EnderecoId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CEP")
                         .HasMaxLength(8)
@@ -298,7 +298,7 @@ namespace MVCCamiloMentoria.Migrations
                     b.Property<int>("NumeroRua")
                         .HasColumnType("int");
 
-                    b.HasKey("EnderecoId");
+                    b.HasKey("Id");
 
                     b.ToTable("Endereco", (string)null);
                 });
@@ -345,7 +345,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("EnderecoId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<string>("Nome")
@@ -360,7 +360,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnderecoId")
+                    b.HasIndex("Id")
                         .IsUnique();
 
                     b.ToTable("Escola", (string)null);
@@ -489,7 +489,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("EnderecoId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<int?>("EscolaId")
@@ -511,7 +511,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnderecoId")
+                    b.HasIndex("Id")
                         .IsUnique();
 
                     b.HasIndex("EscolaId");
@@ -530,14 +530,14 @@ namespace MVCCamiloMentoria.Migrations
                     b.Property<int>("ProfessorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TurmaId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.HasKey("ProfessorTurmaId");
 
                     b.HasIndex("ProfessorId");
 
-                    b.HasIndex("TurmaId");
+                    b.HasIndex("Id");
 
                     b.ToTable("ProfessorTurma", (string)null);
                 });
@@ -550,7 +550,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("EnderecoId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<string>("Nome")
@@ -561,7 +561,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnderecoId");
+                    b.HasIndex("Id");
 
                     b.ToTable("Responsavel");
                 });
@@ -574,7 +574,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("EnderecoId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<int>("Matricula")
@@ -593,7 +593,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnderecoId")
+                    b.HasIndex("Id")
                         .IsUnique();
 
                     b.ToTable("Supervisor", (string)null);
@@ -601,11 +601,11 @@ namespace MVCCamiloMentoria.Migrations
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Turma", b =>
                 {
-                    b.Property<int>("TurmaId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TurmaId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AnoLetivo")
                         .HasColumnType("int");
@@ -623,7 +623,7 @@ namespace MVCCamiloMentoria.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.HasKey("TurmaId");
+                    b.HasKey("Id");
 
                     b.HasIndex("EscolaId");
 
@@ -714,7 +714,7 @@ namespace MVCCamiloMentoria.Migrations
                 {
                     b.HasOne("MVCCamiloMentoria.Models.Endereco", "Endereco")
                         .WithOne()
-                        .HasForeignKey("MVCCamiloMentoria.Models.Aluno", "EnderecoId")
+                        .HasForeignKey("MVCCamiloMentoria.Models.Aluno", "Id")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -726,7 +726,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     b.HasOne("MVCCamiloMentoria.Models.Turma", "Turma")
                         .WithMany("Alunos")
-                        .HasForeignKey("TurmaId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -753,13 +753,13 @@ namespace MVCCamiloMentoria.Migrations
 
                     b.HasOne("MVCCamiloMentoria.Models.Disciplina", null)
                         .WithMany("Aulas")
-                        .HasForeignKey("TurmaId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MVCCamiloMentoria.Models.Turma", "Turma")
                         .WithMany("Aulas")
-                        .HasForeignKey("TurmaId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -774,7 +774,7 @@ namespace MVCCamiloMentoria.Migrations
                 {
                     b.HasOne("MVCCamiloMentoria.Models.Endereco", "Endereco")
                         .WithOne()
-                        .HasForeignKey("MVCCamiloMentoria.Models.Coordenador", "EnderecoId")
+                        .HasForeignKey("MVCCamiloMentoria.Models.Coordenador", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -793,7 +793,7 @@ namespace MVCCamiloMentoria.Migrations
                 {
                     b.HasOne("MVCCamiloMentoria.Models.Endereco", "Endereco")
                         .WithMany()
-                        .HasForeignKey("EnderecoId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -838,7 +838,7 @@ namespace MVCCamiloMentoria.Migrations
                 {
                     b.HasOne("MVCCamiloMentoria.Models.Endereco", "Endereco")
                         .WithOne()
-                        .HasForeignKey("MVCCamiloMentoria.Models.Escola", "EnderecoId")
+                        .HasForeignKey("MVCCamiloMentoria.Models.Escola", "Id")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -882,7 +882,7 @@ namespace MVCCamiloMentoria.Migrations
                 {
                     b.HasOne("MVCCamiloMentoria.Models.Endereco", "Endereco")
                         .WithOne()
-                        .HasForeignKey("MVCCamiloMentoria.Models.Professor", "EnderecoId")
+                        .HasForeignKey("MVCCamiloMentoria.Models.Professor", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -903,7 +903,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     b.HasOne("MVCCamiloMentoria.Models.Turma", "Turma")
                         .WithMany("Professores")
-                        .HasForeignKey("TurmaId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -916,7 +916,7 @@ namespace MVCCamiloMentoria.Migrations
                 {
                     b.HasOne("MVCCamiloMentoria.Models.Endereco", "Endereco")
                         .WithMany()
-                        .HasForeignKey("EnderecoId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -927,7 +927,7 @@ namespace MVCCamiloMentoria.Migrations
                 {
                     b.HasOne("MVCCamiloMentoria.Models.Endereco", "Endereco")
                         .WithOne()
-                        .HasForeignKey("MVCCamiloMentoria.Models.Supervisor", "EnderecoId")
+                        .HasForeignKey("MVCCamiloMentoria.Models.Supervisor", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

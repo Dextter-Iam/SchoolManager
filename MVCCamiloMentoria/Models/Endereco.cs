@@ -2,7 +2,7 @@
 {
     public class Endereco
     {
-        public int EnderecoId { get; set; }
+        public int Id { get; set; }
         public string? NomeRua { get; set; }
         public int? CEP { get; set; }
         public int NumeroRua {get; set;}
