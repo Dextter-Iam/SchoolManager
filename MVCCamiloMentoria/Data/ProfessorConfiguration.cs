@@ -8,9 +8,38 @@ namespace MVCCamiloMentoria.Data
     {
         public void Configure(EntityTypeBuilder<Professor> builder)
         {
-
-
             builder.ToTable("Professor");
+
+            builder.HasKey(p => p.Id);
+
+            builder.Property(p => p.Nome)
+                   .IsRequired()
+                   .HasMaxLength(200);
+
+            builder.Property(p => p.Matricula)
+                   .HasMaxLength(6)
+                   .IsRequired();
+
+            builder.Property(p => p.Telefone)
+                   .IsRequired()
+                   .HasMaxLength(12);
+
+            builder.HasMany(d => d.Disciplinas)
+                   .WithMany(p => p.Professores)
+                   .UsingEntity(pd => pd.ToTable("ProfessorDisciplina"));
+
+            builder.HasMany(p => p.Aulas) 
+                   .WithOne(a => a.Professor)  
+                   .HasForeignKey(a => a.ProfessorId) 
+                   .OnDelete(DeleteBehavior.Restrict);
+
+
+            builder.HasOne(p => p.Endereco)
+                   .WithOne()
+                   .HasForeignKey<Professor>(p => p.EnderecoId)
+                   .OnDelete(DeleteBehavior.Cascade);
+
+
         }
     }
 }

@@ -27,11 +27,11 @@ namespace MVCCamiloMentoria.Migrations
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Aluno", b =>
                 {
-                    b.Property<int>("AlunoId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AlunoId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("AnoInscricao")
                         .HasColumnType("datetime2");
@@ -56,7 +56,7 @@ namespace MVCCamiloMentoria.Migrations
                     b.Property<int>("TurmaId")
                         .HasColumnType("int");
 
-                    b.HasKey("AlunoId");
+                    b.HasKey("Id");
 
                     b.ToTable("alunos");
                 });

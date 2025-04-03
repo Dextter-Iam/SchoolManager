@@ -8,18 +8,47 @@ namespace MVCCamiloMentoria.Data
     {
         public void Configure(EntityTypeBuilder<Escola> builder)
         {
+            builder.ToTable("Escola");
             builder.HasKey(e => e.EscolaId);
 
-            builder.Property(e => e.Nome).IsRequired().HasMaxLength(100);
 
-            builder.Property(e => e.EnderecoId).IsRequired().HasMaxLength(250);
+            builder.Property(e => e.Nome)
+                   .IsRequired()
+                   .HasMaxLength(255);
+
+            builder.Property(e => e.Telefone)
+                   .IsRequired()
+                   .HasMaxLength(15);
+
+            builder.Property(e => e.EnderecoId)
+                   .IsRequired();
+
+            builder.HasOne(e => e.Endereco)
+                   .WithOne()
+                   .HasForeignKey<Escola>(e => e.EnderecoId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
 
             builder.HasMany(e => e.Turmas)
                    .WithOne(t => t.Escola)
+                   .HasForeignKey(t => t.EscolaId) 
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(e => e.PrestadorServico)
+                   .WithOne(e => e.Escola)
                    .HasForeignKey(e => e.EscolaId)
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.ToTable("Escolas");
+            builder.HasMany(e => e.Fornecedores)
+                   .WithOne(e => e.Escola)
+                   .HasForeignKey(e => e.EscolaId)
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(e => e.Equipamentos)
+                   .WithOne(e=>e.Escola)
+                   .HasForeignKey(e => e.EscolaId)
+                   .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

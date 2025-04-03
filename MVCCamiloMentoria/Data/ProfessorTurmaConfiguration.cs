@@ -8,17 +8,19 @@ namespace MVCCamiloMentoria.Data
     {
         public void Configure(EntityTypeBuilder<ProfessorTurma> builder)
         {
-            builder.HasKey(pt=>pt.ProfessorTurmaId);
+            builder.ToTable("ProfessorTurma");
+
+            builder.HasKey(pt => pt.ProfessorTurmaId);
 
             builder.HasOne(pt => pt.Professor)
-                .WithMany(p => p.Turmas)
-                .HasForeignKey(pt => pt.ProfessorId);
+                   .WithMany(p => p.Turmas)
+                   .HasForeignKey(pt => pt.ProfessorId);
 
             builder.HasOne(pt => pt.Turma)
-                .WithMany(p => p.Professores)
-                .HasForeignKey(pt => pt.TurmaId);
+                   .WithMany(p => p.Professores)
+                   .HasForeignKey(pt => pt.TurmaId)
+                   .OnDelete(DeleteBehavior.Cascade);
 
-            builder.ToTable("ProfessorTurma");
         }
     }
 }
