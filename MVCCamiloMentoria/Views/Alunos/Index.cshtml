@@ -1,0 +1,83 @@
+﻿@model IEnumerable<MVCCamiloMentoria.Models.Aluno>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NomeAluno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telefone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataNascimento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailEscolar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AnoInscricao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BolsaEscolar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Turma)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Endereco)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Escola)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NomeAluno)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataNascimento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmailEscolar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AnoInscricao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BolsaEscolar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Turma.NomeTurma)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Endereco.Cidade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Escola.Nome)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

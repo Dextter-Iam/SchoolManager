@@ -9,5 +9,6 @@
         public string? Complemento { get; set; }
         public string? Estado {  get; set; }
         public string? Cidade { get; set; }
+        public List<Aluno>? Alunos { get; set; }
     }
 }

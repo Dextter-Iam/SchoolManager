@@ -12,6 +12,11 @@ namespace MVCCamiloMentoria.Data
 
             builder.HasKey(e => e.EnderecoId);
 
+            builder.HasMany(e => e.Alunos)
+                   .WithOne(e => e.Endereco);
+                    
+
+
             builder.Property(e => e.NomeRua)
                    .HasMaxLength(200)
                    .IsRequired();
@@ -30,6 +35,8 @@ namespace MVCCamiloMentoria.Data
             builder.Property(e => e.Cidade)
                    .HasMaxLength(100)
                    .IsRequired();
+
+
 
         }
     }

@@ -14,5 +14,7 @@
         public List<Equipamento> Equipamentos { get; set; } = new List<Equipamento>();
         public List<Fornecedor> Fornecedores { get; set; } = new List<Fornecedor>();
         public List<PrestadorServico> PrestadorServico { get; set; } = new List<PrestadorServico>();
+
+
     }
 }
