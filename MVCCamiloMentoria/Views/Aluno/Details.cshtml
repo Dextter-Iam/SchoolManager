@@ -1,14 +1,7 @@
 ﻿@model MVCCamiloMentoria.ViewModels.AlunoViewModel
 
-
-@{
-    ViewData["Title"] = "Details";
-}
-
-<h1>Details</h1>
-
 <div>
-    <h4>Aluno</h4>
+    <h4>AlunoViewModel</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -16,12 +9,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.NomeAluno)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Telefone)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Telefone)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DataNascimento)
@@ -54,8 +41,17 @@
             @Html.DisplayFor(model => model.Turma.NomeTurma)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Telefone)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Telefone.Id)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Endereco)
         </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Endereco.NomeRua)
+        </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Escola)
         </dt>

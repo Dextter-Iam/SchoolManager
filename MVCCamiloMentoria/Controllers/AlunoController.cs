@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -28,12 +27,8 @@ namespace MVCCamiloMentoria.Controllers
                 .Include(a => a.Escola)
                 .Select(a => new AlunoViewModel
                 {
-                    Id = a.Id,
                     NomeAluno = a.NomeAluno,
-                    Telefones = a.Telefones,
-                    Turma = a.Turma,
-                    Endereco = a.Endereco,
-                    Escola = a.Escola
+                    Id = a.Id
                 }).ToListAsync();
 
             return View(alunos);
@@ -240,9 +235,9 @@ namespace MVCCamiloMentoria.Controllers
 
         private void CarregarViewBags(AlunoViewModel viewModel = null)
         {
-            ViewBag.EnderecoId = new SelectList(_context.Endereco, "Id", "Cidade", viewModel?.EnderecoId);
+            ViewBag.EnderecoId = new SelectList(_context.Endereco, "Id", "Estado", viewModel?.EnderecoId);
             ViewBag.EscolaId = new SelectList(_context.Escola, "Id", "Nome", viewModel?.EscolaId);
-            ViewBag.TurmaId = new SelectList(_context.Turma, "TurmaId", "NomeTurma", viewModel?.TurmaId);
+            ViewBag.TurmaId = new SelectList(_context.Turma, "TurmaId", "NomeTurma", viewModel?.TurmaId); // Correção aqui
         }
     }
 }

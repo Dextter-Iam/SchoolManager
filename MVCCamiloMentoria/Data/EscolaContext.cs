@@ -29,4 +29,6 @@ public class EscolaContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(EscolaContext).Assembly);
         base.OnModelCreating(modelBuilder);
     }
+
+public DbSet<MVCCamiloMentoria.ViewModels.AlunoViewModel> AlunoViewModel { get; set; } = default!;
 }

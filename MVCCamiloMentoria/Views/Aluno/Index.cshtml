@@ -1,11 +1,5 @@
 ﻿@model IEnumerable<MVCCamiloMentoria.ViewModels.AlunoViewModel>
 
-@{
-    ViewData["Title"] = "Index";
-}
-
-<h1>Index</h1>
-
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -14,9 +8,6 @@
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.NomeAluno)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Telefone)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DataNascimento)
@@ -34,6 +25,9 @@
                 @Html.DisplayNameFor(model => model.Turma)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Telefone)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Endereco)
             </th>
             <th>
@@ -49,9 +43,6 @@
                 @Html.DisplayFor(modelItem => item.NomeAluno)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Telefone)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.DataNascimento)
             </td>
             <td>
@@ -65,6 +56,12 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Turma.NomeTurma)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefone.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Endereco.NomeRua)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Escola.Nome)
