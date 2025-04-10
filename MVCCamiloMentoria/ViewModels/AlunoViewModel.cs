@@ -29,7 +29,8 @@ public class AlunoViewModel
     [Phone]
     [Display(Name = "Telefone")]
     [RegularExpression(@"^\(\d{2}\)\s\d{4,5}-\d{4}$", ErrorMessage = "Telefone inválido. O formato correto é (XX) XXXXX-XXXX.")]
-    public int Telefone { get; set; }
+    public int TelefoneId { get; set; }
+    public Telefone? Telefone { get; set; }
 
     [DisplayName("Endereço")]
     public int EnderecoId { get; set; }
