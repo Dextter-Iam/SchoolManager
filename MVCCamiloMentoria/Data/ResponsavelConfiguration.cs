@@ -16,13 +16,14 @@ namespace MVCCamiloMentoria.Data
                    .IsRequired()
                    .HasMaxLength(200);
 
-            builder.Property(r => r.Telefone)
-                   .IsRequired()
-                   .HasMaxLength(12);
-
             builder.HasOne(r => r.Endereco)
                    .WithOne()
                    .HasForeignKey<Responsavel>(s => s.EnderecoId)
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(e => e.Telefones)
+                   .WithOne(e => e.Responsavel)
+                   .HasForeignKey(e => e.ResponsavelId)
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(r => r.Alunos)

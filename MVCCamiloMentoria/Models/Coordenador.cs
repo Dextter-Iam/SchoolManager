@@ -10,8 +10,8 @@ namespace MVCCamiloMentoria.Models
         public string? Nome { get; set; }
         public int? Matricula { get; set; }
         public int EnderecoId { get; set; }
-        public Endereco? Endereco { get; set; }  
-        public int Telefone { get; set; }
+        public Endereco? Endereco { get; set; }
+        public List<Telefone>? Telefones { get; set; }
         public int EscolaId { get; set; }
         public Escola? Escola { get; set; } 
 

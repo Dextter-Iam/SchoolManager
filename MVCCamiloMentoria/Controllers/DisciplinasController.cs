@@ -22,7 +22,7 @@ namespace MVCCamiloMentoria.Controllers
         // GET: Disciplinas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Disciplinas.Select(d => new DisciplinaViewModel { Nome = d.Nome, Id = d.Id }).ToListAsync());
+            return View(await _context.Disciplina.Select(d => new DisciplinaViewModel { Nome = d.Nome, Id = d.Id }).ToListAsync());
         }
 
         // GET: Disciplinas/Details/5
@@ -33,7 +33,7 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            var disciplina = await _context.Disciplinas
+            var disciplina = await _context.Disciplina
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (disciplina == null)
             {
@@ -75,7 +75,7 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            var disciplina = await _context.Disciplinas.FindAsync(id);
+            var disciplina = await _context.Disciplina.FindAsync(id);
             if (disciplina == null)
             {
                 return NotFound();
@@ -102,7 +102,7 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
-                    var disciplina = _context.Disciplinas.Find(id);
+                    var disciplina = _context.Disciplina.Find(id);
                     if (disciplina != null)
                     {
                         disciplina.Nome = disciplinaViewModel.Nome;
@@ -134,7 +134,7 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            var disciplina = await _context.Disciplinas
+            var disciplina = await _context.Disciplina
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (disciplina == null)
             {
@@ -150,10 +150,10 @@ namespace MVCCamiloMentoria.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var disciplina = await _context.Disciplinas.FindAsync(id);
+            var disciplina = await _context.Disciplina.FindAsync(id);
             if (disciplina != null)
             {
-                _context.Disciplinas.Remove(disciplina);
+                _context.Disciplina.Remove(disciplina);
             }
 
             await _context.SaveChangesAsync();
@@ -162,7 +162,7 @@ namespace MVCCamiloMentoria.Controllers
 
         private bool DisciplinaExists(int id)
         {
-            return _context.Disciplinas.Any(e => e.Id == id);
+            return _context.Disciplina.Any(e => e.Id == id);
         }
     }
 }

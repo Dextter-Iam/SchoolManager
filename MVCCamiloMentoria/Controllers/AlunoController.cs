@@ -22,8 +22,21 @@ namespace MVCCamiloMentoria.Controllers
         // GET: Alunos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Alunos.Select(a => 
-                                       new AlunoViewModel { Id = a.Id, NomeAluno = a.NomeAluno, Turma = a.Turma, Endereco = a.Endereco }).ToListAsync());
+            var alunos = await _context.Alunos
+                .Include(a => a.Turma)
+                .Include(a => a.Endereco)
+                .Include(a => a.Escola)
+                .Select(a => new AlunoViewModel
+                {
+                    Id = a.Id,
+                    NomeAluno = a.NomeAluno,
+                    Telefone = a.Telefone,
+                    Turma = a.Turma,
+                    Endereco = a.Endereco,
+                    Escola = a.Escola
+                }).ToListAsync();
+
+            return View(alunos);
         }
 
         // GET: Alunos/Details/5
@@ -35,51 +48,71 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var aluno = await _context.Alunos
+                .Include(a => a.Turma)
                 .Include(a => a.Endereco)
                 .Include(a => a.Escola)
-                .Include(a => a.Turma)
+                .Include(a => a.Responsaveis)
+                .Include(a => a.Aulas)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (aluno == null)
             {
                 return NotFound();
             }
 
-            var viewModel = new AlunoViewModel 
-            { Id = aluno.Id, NomeAluno = aluno.NomeAluno, Responsaveis = aluno.Responsaveis, DataNascimento = aluno.DataNascimento, BolsaEscolar = aluno.BolsaEscolar};
+            var viewModel = new AlunoViewModel
+            {
+                Id = aluno.Id,
+                NomeAluno = aluno.NomeAluno,
+                Telefone = aluno.Telefone,
+                DataNascimento = aluno.DataNascimento,
+                EmailEscolar = aluno.EmailEscolar,
+                AnoInscricao = aluno.AnoInscricao,
+                BolsaEscolar = aluno.BolsaEscolar,
+                Turma = aluno.Turma,
+                Endereco = aluno.Endereco,
+                Escola = aluno.Escola,
+                Responsaveis = aluno.Responsaveis,
+                Aulas = aluno.Aulas
+            };
+
             return View(viewModel);
         }
 
         // GET: Alunos/Create
         public IActionResult Create()
         {
-            ViewData["EnderecoId"] = new SelectList(_context.Enderecos, "EnderecoId", "Cidade");
-            ViewData["EscolaId"] = new SelectList(_context.Escolas, "Id", "Nome");
-            ViewData["TurmaId"] = new SelectList(_context.Turmas, "TurmaId", "NomeTurma");
-
+            CarregarViewBags();
             return View();
         }
 
         // POST: Alunos/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(AlunoViewModel alunoViewModel)
+        public async Task<IActionResult> Create(AlunoViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                var aluno = new AlunoViewModel
-                { NomeAluno = alunoViewModel.NomeAluno, Endereco = alunoViewModel.Endereco, Turma = alunoViewModel.Turma};
+                var aluno = new Aluno
+                {
+                    NomeAluno = viewModel.NomeAluno,
+                    Telefone = viewModel.Telefone,
+                    DataNascimento = viewModel.DataNascimento,
+                    EmailEscolar = viewModel.EmailEscolar,
+                    AnoInscricao = viewModel.AnoInscricao,
+                    BolsaEscolar = viewModel.BolsaEscolar,
+                    TurmaId = viewModel.TurmaId,
+                    EnderecoId = viewModel.EnderecoId,
+                    EscolaId = viewModel.EscolaId
+                };
+
                 _context.Add(aluno);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["EnderecoId"] = new SelectList(_context.Enderecos, "EnderecoId", "Cidade", alunoViewModel.EnderecoId);
-            ViewData["EscolaId"] = new SelectList(_context.Escolas, "Id", "Nome", alunoViewModel.EscolaId);
-            ViewData["TurmaId"] = new SelectList(_context.Turmas, "TurmaId", "NomeTurma", alunoViewModel.TurmaId);
-            
-            return View(alunoViewModel);
+            CarregarViewBags(viewModel);
+            return View(viewModel);
         }
 
         // GET: Alunos/Edit/5
@@ -95,20 +128,31 @@ namespace MVCCamiloMentoria.Controllers
             {
                 return NotFound();
             }
-            ViewData["EnderecoId"] = new SelectList(_context.Enderecos, "EnderecoId", "Cidade", aluno.EnderecoId);
-            ViewData["EscolaId"] = new SelectList(_context.Escolas, "Id", "Nome", aluno.EscolaId);
-            ViewData["TurmaId"] = new SelectList(_context.Turmas, "TurmaId", "NomeTurma", aluno.TurmaId);
-            return View(aluno);
+
+            var viewModel = new AlunoViewModel
+            {
+                Id = aluno.Id,
+                NomeAluno = aluno.NomeAluno,
+                Telefone = aluno.Telefone,
+                DataNascimento = aluno.DataNascimento,
+                EmailEscolar = aluno.EmailEscolar,
+                AnoInscricao = aluno.AnoInscricao,
+                BolsaEscolar = aluno.BolsaEscolar,
+                TurmaId = aluno.TurmaId,
+                EnderecoId = aluno.EnderecoId,
+                EscolaId = aluno.EscolaId
+            };
+
+            CarregarViewBags(viewModel);
+            return View(viewModel);
         }
 
         // POST: Alunos/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeAluno,Telefone,DataNascimento,EmailEscolar,AnoInscricao,BolsaEscolar,TurmaId,EnderecoId,EscolaId")] Aluno aluno)
+        public async Task<IActionResult> Edit(int id, AlunoViewModel viewModel)
         {
-            if (id != aluno.Id)
+            if (id != viewModel.Id)
             {
                 return NotFound();
             }
@@ -117,12 +161,26 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
+                    var aluno = new Aluno
+                    {
+                        Id = viewModel.Id,
+                        NomeAluno = viewModel.NomeAluno,
+                        Telefone = viewModel.Telefone,
+                        DataNascimento = viewModel.DataNascimento,
+                        EmailEscolar = viewModel.EmailEscolar,
+                        AnoInscricao = viewModel.AnoInscricao,
+                        BolsaEscolar = viewModel.BolsaEscolar,
+                        TurmaId = viewModel.TurmaId,
+                        EnderecoId = viewModel.EnderecoId,
+                        EscolaId = viewModel.EscolaId
+                    };
+
                     _context.Update(aluno);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AlunoExists(aluno.Id))
+                    if (!AlunoExists(viewModel.Id))
                     {
                         return NotFound();
                     }
@@ -133,10 +191,9 @@ namespace MVCCamiloMentoria.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EnderecoId"] = new SelectList(_context.Enderecos, "EnderecoId", "Cidade", aluno.EnderecoId);
-            ViewData["EscolaId"] = new SelectList(_context.Escolas, "Id", "Nome", aluno.EscolaId);
-            ViewData["TurmaId"] = new SelectList(_context.Turmas, "TurmaId", "NomeTurma", aluno.TurmaId);
-            return View(aluno);
+
+            CarregarViewBags(viewModel);
+            return View(viewModel);
         }
 
         // GET: Alunos/Delete/5
@@ -148,10 +205,11 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var aluno = await _context.Alunos
+                .Include(a => a.Turma)
                 .Include(a => a.Endereco)
                 .Include(a => a.Escola)
-                .Include(a => a.Turma)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (aluno == null)
             {
                 return NotFound();
@@ -178,6 +236,13 @@ namespace MVCCamiloMentoria.Controllers
         private bool AlunoExists(int id)
         {
             return _context.Alunos.Any(e => e.Id == id);
+        }
+
+        private void CarregarViewBags(AlunoViewModel viewModel = null)
+        {
+            ViewBag.EnderecoId = new SelectList(_context.Endereco, "EnderecoId", "Cidade", viewModel?.EnderecoId);
+            ViewBag.EscolaId = new SelectList(_context.Escolas, "Id", "Nome", viewModel?.EscolaId);
+            ViewBag.TurmaId = new SelectList(_context.Turmas, "TurmaId", "NomeTurma", viewModel?.TurmaId);
         }
     }
 }

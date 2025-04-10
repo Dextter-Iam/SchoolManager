@@ -16,8 +16,6 @@ public class AlunoConfiguration : IEntityTypeConfiguration<Aluno>
         builder.Property(a => a.EmailEscolar)
                .HasMaxLength(200);
 
-        builder.Property(a => a.Telefone)
-               .HasMaxLength(15);
 
         builder.Property(a => a.BolsaEscolar)
                .IsRequired()
@@ -27,6 +25,7 @@ public class AlunoConfiguration : IEntityTypeConfiguration<Aluno>
                .WithMany(t => t.Alunos)
                .HasForeignKey(a => a.TurmaId)
                .OnDelete(DeleteBehavior.Restrict);
+
 
         builder.HasOne(a => a.Endereco)
                .WithOne()

@@ -7,6 +7,7 @@
         public int? CNPJ { get; set; }
         public int? CPF { get; set; }
         public string? FinalidadeFornecedor { get; set; }
+        public List<Telefone>? Telefones { get; set; }
         public int EscolaId { get; set; }
         public Escola? Escola { get; set; }
     }

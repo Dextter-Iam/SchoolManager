@@ -4,9 +4,9 @@
     {
         public int Id { get; set; }
         public string? Nome { get; set; }
-        public string? Telefone { get; set; }
         public int EnderecoId { get; set; }
         public Endereco? Endereco { get; set; }
+        public List<Telefone>? Telefones { get; set; }
         public List<Turma> Turmas { get; set; } = new List<Turma>();
         public List<Professor> Professores { get; set; } = new List<Professor>();
         public List<Aluno> Alunos { get; set; } = new List<Aluno>();

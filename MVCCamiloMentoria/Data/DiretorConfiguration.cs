@@ -4,11 +4,11 @@ using MVCCamiloMentoria.Models;
 
 namespace MVCCamiloMentoria.Data
 {
-    public class CoordenadorConfiguration : IEntityTypeConfiguration<Coordenador>
+    public class DiretorConfiguration : IEntityTypeConfiguration<Diretor>
     {
-        public void Configure(EntityTypeBuilder<Coordenador> builder)
+        public void Configure(EntityTypeBuilder<Diretor> builder)
         {
-            builder.ToTable("Coordenador");
+            builder.ToTable("Diretor");
 
             builder.HasKey(c => c.Id);
 
@@ -21,17 +21,16 @@ namespace MVCCamiloMentoria.Data
                    .IsRequired();
 
             builder.HasMany(c => c.Telefones)
-                   .WithOne(e=> e.Coordenador)
-                   .HasForeignKey(t => t.CoordenadorId) 
-                   .OnDelete(DeleteBehavior.Cascade); 
+                   .WithOne(e => e.Diretor)
+                   .HasForeignKey(t => t.DiretorId)
+                   .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(c => c.Endereco)
                    .WithOne()
-                   .HasForeignKey<Coordenador>(c => c.EnderecoId)
+                   .HasForeignKey<Diretor>(c => c.EnderecoId)
                    .OnDelete(DeleteBehavior.Cascade);
 
         }
-
 
     }
 }

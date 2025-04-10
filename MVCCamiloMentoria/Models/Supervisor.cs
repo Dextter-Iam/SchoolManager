@@ -8,7 +8,7 @@
         public int EnderecoId { get; set; }
         public Endereco? Endereco { get; set; }
         public List<Escola>? Escolas { get; set; }
-        public string? Telefone { get; set; }   
+        public List<Telefone>? Telefones { get; set; }
 
     }
 }
