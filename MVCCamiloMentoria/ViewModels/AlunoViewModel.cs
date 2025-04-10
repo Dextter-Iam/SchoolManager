@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 
+namespace MVCCamiloMentoria.ViewModels;
 public class AlunoViewModel
 {
     public int Id { get; set; }
@@ -37,12 +38,12 @@ public class AlunoViewModel
     public Endereco? Endereco { get; set; }
 
     [DisplayName("Estado")]
-    public int EstadoId { get; set; } 
+    public int EstadoId { get; set; }
     public Estado? Estado { get; set; }
 
 
     [DisplayName("Rua")]
-    public string NomeRua { get; set; }
+    public string? NomeRua { get; set; }
 
     [DisplayName("CEP")]
     public int CEP { get; set; }
@@ -58,3 +59,4 @@ public class AlunoViewModel
     public List<Responsavel>? Responsaveis { get; set; }
     public List<Aula>? Aulas { get; set; }
 }
+
