@@ -237,7 +237,7 @@ namespace MVCCamiloMentoria.Controllers
         {
             ViewBag.EnderecoId = new SelectList(_context.Endereco, "Id", "Estado", viewModel?.EnderecoId);
             ViewBag.EscolaId = new SelectList(_context.Escola, "Id", "Nome", viewModel?.EscolaId);
-            ViewBag.TurmaId = new SelectList(_context.Turma, "TurmaId", "NomeTurma", viewModel?.TurmaId); // Correção aqui
+            ViewBag.TurmaId = new SelectList(_context.Turma, "TurmaId", "NomeTurma", viewModel?.TurmaId);
         }
     }
 }
