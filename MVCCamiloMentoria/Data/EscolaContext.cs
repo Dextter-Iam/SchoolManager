@@ -30,5 +30,4 @@ public class EscolaContext : DbContext
         base.OnModelCreating(modelBuilder);
     }
 
-public DbSet<MVCCamiloMentoria.ViewModels.AlunoViewModel> AlunoViewModel { get; set; } = default!;
 }
