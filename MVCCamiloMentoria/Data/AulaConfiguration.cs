@@ -7,8 +7,11 @@ public class AulaConfiguration : IEntityTypeConfiguration<Aula>
     public void Configure(EntityTypeBuilder<Aula> builder)
     {
         builder.ToTable("Aula");
+
+      
         builder.HasKey(a => a.Id);
 
+   
         builder.Property(a => a.Nome)
                .IsRequired()
                .HasMaxLength(255);
@@ -23,33 +26,47 @@ public class AulaConfiguration : IEntityTypeConfiguration<Aula>
                .HasDefaultValue(false);
 
 
+        
         builder.HasOne(a => a.Professor)
                .WithMany(p => p.Aulas)
                .HasForeignKey(a => a.ProfessorId)
                .OnDelete(DeleteBehavior.Restrict);
 
+        
         builder.HasOne(a => a.Disciplina)
-            .WithMany(d => d.Aulas)
-            .HasForeignKey(a => a.DisciplinaId)
-            .OnDelete(DeleteBehavior.Cascade);
+               .WithMany(d => d.Aulas)
+               .HasForeignKey(a => a.DisciplinaId)
+               .OnDelete(DeleteBehavior.NoAction);
 
+       
         builder.HasOne(a => a.Turma)
-            .WithMany(t => t.Aulas)
-            .HasForeignKey(a => a.TurmaId)
-            .OnDelete(DeleteBehavior.Cascade);
-
+               .WithMany(t => t.Aulas)
+               .HasForeignKey(a => a.TurmaId)
+               .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(a => a.AlunosPresentes)
                .WithMany(al => al.Aulas)
                .UsingEntity<Dictionary<string, object>>(
                    "PresencaAula",
-                   pa => pa.HasOne<Aluno>().WithMany().HasForeignKey("AlunoId"),  
-                   pa => pa.HasOne<Aula>().WithMany().HasForeignKey("AulaId"), 
+                  
+                   pa => pa.HasOne<Aluno>()
+                           .WithMany()
+                           .HasForeignKey("AlunoId")
+                           .OnDelete(DeleteBehavior.Cascade),
+
+                   
+                   pa => pa.HasOne<Aula>()
+                           .WithMany()
+                           .HasForeignKey("AulaId")
+                           .OnDelete(DeleteBehavior.Cascade), 
+
+                   
                    p =>
                    {
-                       p.Property<bool>("Presente").HasDefaultValue(false); 
-                       p.ToTable("PresencaAula"); 
+                       p.Property<bool>("Presente").HasDefaultValue(false);
+                       p.ToTable("PresencaAula");
                    }
                );
     }
 }
+

@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public string? Nome { get; set; }
         public string? Descricao { get; set; }
-        public List<Modelo> Modelos { get; set; } = new List<Modelo>();
+        public List<Modelo>? Modelos { get; set; }
 
     }
 }

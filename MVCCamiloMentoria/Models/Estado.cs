@@ -7,8 +7,6 @@
         public string? Nome { get; set; }
 
         public string? Sigla { get; set; }
-
-        public int EnderecoId { get; set; }
         public List<Endereco>? Enderecos { get; set; }
 
     }

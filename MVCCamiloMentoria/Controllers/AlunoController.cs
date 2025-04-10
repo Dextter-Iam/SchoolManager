@@ -19,10 +19,10 @@ namespace MVCCamiloMentoria.Controllers
             _context = context;
         }
 
-        // GET: Alunos
+        // GET: Aluno
         public async Task<IActionResult> Index()
         {
-            var alunos = await _context.Alunos
+            var alunos = await _context.Aluno
                 .Include(a => a.Turma)
                 .Include(a => a.Endereco)
                 .Include(a => a.Escola)
@@ -30,7 +30,7 @@ namespace MVCCamiloMentoria.Controllers
                 {
                     Id = a.Id,
                     NomeAluno = a.NomeAluno,
-                    Telefone = a.Telefone,
+                    Telefones = a.Telefones,
                     Turma = a.Turma,
                     Endereco = a.Endereco,
                     Escola = a.Escola
@@ -39,7 +39,7 @@ namespace MVCCamiloMentoria.Controllers
             return View(alunos);
         }
 
-        // GET: Alunos/Details/5
+        // GET: Aluno/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -47,7 +47,7 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            var aluno = await _context.Alunos
+            var aluno = await _context.Aluno
                 .Include(a => a.Turma)
                 .Include(a => a.Endereco)
                 .Include(a => a.Escola)
@@ -79,14 +79,14 @@ namespace MVCCamiloMentoria.Controllers
             return View(viewModel);
         }
 
-        // GET: Alunos/Create
+        // GET: Aluno/Create
         public IActionResult Create()
         {
             CarregarViewBags();
             return View();
         }
 
-        // POST: Alunos/Create
+        // POST: Aluno/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(AlunoViewModel viewModel)
@@ -115,7 +115,7 @@ namespace MVCCamiloMentoria.Controllers
             return View(viewModel);
         }
 
-        // GET: Alunos/Edit/5
+        // GET: Aluno/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -123,7 +123,7 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            var aluno = await _context.Alunos.FindAsync(id);
+            var aluno = await _context.Aluno.FindAsync(id);
             if (aluno == null)
             {
                 return NotFound();
@@ -147,7 +147,7 @@ namespace MVCCamiloMentoria.Controllers
             return View(viewModel);
         }
 
-        // POST: Alunos/Edit/5
+        // POST: Aluno/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, AlunoViewModel viewModel)
@@ -196,7 +196,7 @@ namespace MVCCamiloMentoria.Controllers
             return View(viewModel);
         }
 
-        // GET: Alunos/Delete/5
+        // GET: Aluno/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -204,7 +204,7 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            var aluno = await _context.Alunos
+            var aluno = await _context.Aluno
                 .Include(a => a.Turma)
                 .Include(a => a.Endereco)
                 .Include(a => a.Escola)
@@ -218,15 +218,15 @@ namespace MVCCamiloMentoria.Controllers
             return View(aluno);
         }
 
-        // POST: Alunos/Delete/5
+        // POST: Aluno/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var aluno = await _context.Alunos.FindAsync(id);
+            var aluno = await _context.Aluno.FindAsync(id);
             if (aluno != null)
             {
-                _context.Alunos.Remove(aluno);
+                _context.Aluno.Remove(aluno);
             }
 
             await _context.SaveChangesAsync();
@@ -235,14 +235,14 @@ namespace MVCCamiloMentoria.Controllers
 
         private bool AlunoExists(int id)
         {
-            return _context.Alunos.Any(e => e.Id == id);
+            return _context.Aluno.Any(e => e.Id == id);
         }
 
         private void CarregarViewBags(AlunoViewModel viewModel = null)
         {
-            ViewBag.EnderecoId = new SelectList(_context.Endereco, "EnderecoId", "Cidade", viewModel?.EnderecoId);
-            ViewBag.EscolaId = new SelectList(_context.Escolas, "Id", "Nome", viewModel?.EscolaId);
-            ViewBag.TurmaId = new SelectList(_context.Turmas, "TurmaId", "NomeTurma", viewModel?.TurmaId);
+            ViewBag.EnderecoId = new SelectList(_context.Endereco, "Id", "Cidade", viewModel?.EnderecoId);
+            ViewBag.EscolaId = new SelectList(_context.Escola, "Id", "Nome", viewModel?.EscolaId);
+            ViewBag.TurmaId = new SelectList(_context.Turma, "TurmaId", "NomeTurma", viewModel?.TurmaId);
         }
     }
 }

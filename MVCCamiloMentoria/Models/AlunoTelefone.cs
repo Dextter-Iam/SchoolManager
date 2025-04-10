@@ -6,7 +6,7 @@
         public Aluno? Aluno { get; set; }
 
         public int TelefoneId { get; set; }
-        public Telefone? Telefone { get; set; }
+        public Telefone? Telefones { get; set; }
 
     }
 }

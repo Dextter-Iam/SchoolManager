@@ -48,7 +48,7 @@ namespace MVCCamiloMentoria.Data
             builder.HasMany(e => e.Telefones)
                    .WithOne(e => e.Escola)
                    .HasForeignKey(e => e.EscolaId)
-                   .OnDelete(DeleteBehavior.Cascade);
+                   .OnDelete(DeleteBehavior.NoAction);
 
         }
     }

@@ -18,7 +18,7 @@ namespace MVCCamiloMentoria.Data
                    .HasForeignKey(at => at.AlunoId)
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(at => at.Telefone)
+            builder.HasOne(at => at.Telefones)
                    .WithMany(t => t.Alunos)
                    .HasForeignKey(at => at.TelefoneId)
                    .OnDelete(DeleteBehavior.Cascade);

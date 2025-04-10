@@ -8,9 +8,9 @@
         public int Matricula {  get; set; }
         public int EnderecoId { get; set; }
         public Endereco? Endereco { get; set; }
-        public List<Aula>? Aulas { get; set; } = new List<Aula>();
+        public List<Aula>? Aulas { get; set; }
         public List<ProfessorTurma>? Turmas { get; internal set; }
-        public List<Disciplina>? Disciplinas { get; internal set; } = new List<Disciplina>();
+        public List<Disciplina>? Disciplinas { get; internal set; }
     }
 
 }

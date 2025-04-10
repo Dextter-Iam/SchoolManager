@@ -33,14 +33,12 @@ namespace MVCCamiloMentoria.Data
             builder.HasMany(e => e.Telefones)
                    .WithOne(e => e.Professor)
                    .HasForeignKey(e => e.ProfessorId)
-                   .OnDelete(DeleteBehavior.Cascade);
+                   .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(p => p.Endereco)
                    .WithOne()
                    .HasForeignKey<Professor>(p => p.EnderecoId)
                    .OnDelete(DeleteBehavior.Cascade);
-
-
         }
     }
 }

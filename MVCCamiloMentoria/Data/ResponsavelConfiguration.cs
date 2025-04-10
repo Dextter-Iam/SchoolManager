@@ -24,7 +24,7 @@ namespace MVCCamiloMentoria.Data
             builder.HasMany(e => e.Telefones)
                    .WithOne(e => e.Responsavel)
                    .HasForeignKey(e => e.ResponsavelId)
-                   .OnDelete(DeleteBehavior.Cascade);
+                   .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasMany(r => r.Alunos)
                    .WithMany(r => r.Responsaveis)

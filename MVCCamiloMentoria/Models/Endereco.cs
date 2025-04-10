@@ -1,8 +1,11 @@
-﻿namespace MVCCamiloMentoria.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MVCCamiloMentoria.Models
 {
     public class Endereco
     {
-        public int EnderecoId { get; set; }
+        [Key]
+        public int Id { get; set; }
         public string? NomeRua { get; set; }
         public int? CEP { get; set; }
         public int NumeroRua {get; set;}

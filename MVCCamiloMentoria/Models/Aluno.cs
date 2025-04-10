@@ -26,7 +26,7 @@ namespace MVCCamiloMentoria.Models
         public int EscolaId {  get; set; }
         public Escola? Escola { get; set; }
         public List<AlunoTelefone>? Telefones { get; set; }
-        public List<Responsavel> Responsaveis { get; set; } = new List<Responsavel>();
-        public List<Aula> Aulas { get; set; } = new List<Aula>();
+        public List<Responsavel>? Responsaveis { get; set; }
+        public List<Aula>? Aulas { get; set; }
     }
 }

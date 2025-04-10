@@ -20,7 +20,7 @@ namespace MVCCamiloMentoria.Data
 
             builder.HasMany(e => e.Enderecos)
                    .WithOne(e => e.Estado)
-                   .HasForeignKey(e => e.EnderecoId)
+                   .HasForeignKey(e => e.EstadoId)
                    .OnDelete(DeleteBehavior.Cascade);
         }
     }

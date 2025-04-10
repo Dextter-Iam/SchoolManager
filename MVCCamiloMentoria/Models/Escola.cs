@@ -7,13 +7,13 @@
         public int EnderecoId { get; set; }
         public Endereco? Endereco { get; set; }
         public List<Telefone>? Telefones { get; set; }
-        public List<Turma> Turmas { get; set; } = new List<Turma>();
-        public List<Professor> Professores { get; set; } = new List<Professor>();
-        public List<Aluno> Alunos { get; set; } = new List<Aluno>();
-        public List<Disciplina> Disciplinas { get; set; } = new List<Disciplina>();
-        public List<Equipamento> Equipamentos { get; set; } = new List<Equipamento>();
-        public List<Fornecedor> Fornecedores { get; set; } = new List<Fornecedor>();
-        public List<PrestadorServico> PrestadorServico { get; set; } = new List<PrestadorServico>();
+        public List<Turma>? Turmas { get; set; } 
+        public List<Professor>? Professores { get; set; } 
+        public List<Aluno>? Alunos { get; set; } 
+        public List<Disciplina>? Disciplinas { get; set; } 
+        public List<Equipamento>? Equipamentos { get; set; } 
+        public List<Fornecedor>? Fornecedores { get; set; } 
+        public List<PrestadorServico>? PrestadorServico { get; set; }
 
 
     }

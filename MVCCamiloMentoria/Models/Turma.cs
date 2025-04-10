@@ -16,10 +16,10 @@ namespace MVCCamiloMentoria.Models
         public string? Turno { get; set; }
         public int EscolaId { get; set; }
         public Escola? Escola { get; set; }
-        public List<Aula> Aulas { get; set; } = new List<Aula>();
-        public List<Aluno> Alunos  { get; set; } = new List<Aluno>();
-        public List<ProfessorTurma> Professores { get;  set; } = new List<ProfessorTurma>();
-        public List<Disciplina> Disciplinas { get;  set; } = new List<Disciplina> ();
+        public List<Aula>? Aulas { get; set; } 
+        public List<Aluno>? Alunos  { get; set; } 
+        public List<ProfessorTurma>? Professores { get;  set; }
+        public List<Disciplina>? Disciplinas { get;  set; }
 
     }
 }

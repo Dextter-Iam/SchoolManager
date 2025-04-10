@@ -19,7 +19,7 @@ namespace MVCCamiloMentoria.Data
             builder.HasOne(pt => pt.Turma)
                    .WithMany(p => p.Professores)
                    .HasForeignKey(pt => pt.TurmaId)
-                   .OnDelete(DeleteBehavior.Cascade);
+                   .OnDelete(DeleteBehavior.NoAction);
 
         }
     }

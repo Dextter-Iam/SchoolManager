@@ -7,7 +7,7 @@
         public string? Descricao { get; set; }
         public int MarcaId { get; set; }
         public Marca? Marca { get; set; }
-        public List<Equipamento> Equipamentos { get; set; } = new List<Equipamento>();
+        public List<Equipamento>? Equipamentos { get; set; } 
 
     }
 }

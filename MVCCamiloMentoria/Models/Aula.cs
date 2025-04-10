@@ -7,13 +7,13 @@
         public DateTime HorarioInicio { get; set; }
         public DateTime HorarioFim { get; set; }
         public int ProfessorId { get; set; }
-        public Professor Professor { get; set; } = null!;
+        public Professor? Professor { get; set; }
         public int TurmaId { get; set; }
-        public Turma Turma { get; set; } = null!;
+        public Turma? Turma { get; set; } 
         public int DisciplinaId { get; set; }
-        public Disciplina Disciplina { get; set; } = null!;
+        public Disciplina? Disciplina { get; set; } 
         public bool ConfirmacaoPresenca { get; set; }
-        public List<Aluno> AlunosPresentes { get; set; } = new List<Aluno>();
+        public List<Aluno>? AlunosPresentes { get; set; } 
 
     }
 }
