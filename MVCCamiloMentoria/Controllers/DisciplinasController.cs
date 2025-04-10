@@ -95,6 +95,7 @@ namespace MVCCamiloMentoria.Controllers
             if (id != disciplinaViewModel.Id)
             {
                 return NotFound();
+
             }
 
             if (ModelState.IsValid)

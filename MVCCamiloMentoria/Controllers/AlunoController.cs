@@ -6,14 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCCamiloMentoria.Models;
+using MVCCamiloMentoria.ViewModels;
 
 namespace MVCCamiloMentoria.Controllers
 {
-    public class AlunosController : Controller
+    public class AlunoController : Controller
     {
         private readonly EscolaContext _context;
 
-        public AlunosController(EscolaContext context)
+        public AlunoController(EscolaContext context)
         {
             _context = context;
         }
@@ -21,8 +22,8 @@ namespace MVCCamiloMentoria.Controllers
         // GET: Alunos
         public async Task<IActionResult> Index()
         {
-            var escolaContext = _context.Alunos.Include(a => a.Endereco).Include(a => a.Escola).Include(a => a.Turma);
-            return View(await escolaContext.ToListAsync());
+            return View(await _context.Alunos.Select(a => 
+                                       new AlunoViewModel { Id = a.Id, NomeAluno = a.NomeAluno, Turma = a.Turma, Endereco = a.Endereco }).ToListAsync());
         }
 
         // GET: Alunos/Details/5
@@ -43,7 +44,9 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            return View(aluno);
+            var viewModel = new AlunoViewModel 
+            { Id = aluno.Id, NomeAluno = aluno.NomeAluno, Responsaveis = aluno.Responsaveis, DataNascimento = aluno.DataNascimento, BolsaEscolar = aluno.BolsaEscolar};
+            return View(viewModel);
         }
 
         // GET: Alunos/Create
@@ -52,6 +55,7 @@ namespace MVCCamiloMentoria.Controllers
             ViewData["EnderecoId"] = new SelectList(_context.Enderecos, "EnderecoId", "Cidade");
             ViewData["EscolaId"] = new SelectList(_context.Escolas, "Id", "Nome");
             ViewData["TurmaId"] = new SelectList(_context.Turmas, "TurmaId", "NomeTurma");
+
             return View();
         }
 
@@ -60,18 +64,22 @@ namespace MVCCamiloMentoria.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NomeAluno,Telefone,DataNascimento,EmailEscolar,AnoInscricao,BolsaEscolar,TurmaId,EnderecoId,EscolaId")] Aluno aluno)
+        public async Task<IActionResult> Create(AlunoViewModel alunoViewModel)
         {
             if (ModelState.IsValid)
             {
+                var aluno = new AlunoViewModel
+                { NomeAluno = alunoViewModel.NomeAluno, Endereco = alunoViewModel.Endereco, Turma = alunoViewModel.Turma};
                 _context.Add(aluno);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EnderecoId"] = new SelectList(_context.Enderecos, "EnderecoId", "Cidade", aluno.EnderecoId);
-            ViewData["EscolaId"] = new SelectList(_context.Escolas, "Id", "Nome", aluno.EscolaId);
-            ViewData["TurmaId"] = new SelectList(_context.Turmas, "TurmaId", "NomeTurma", aluno.TurmaId);
-            return View(aluno);
+
+            ViewData["EnderecoId"] = new SelectList(_context.Enderecos, "EnderecoId", "Cidade", alunoViewModel.EnderecoId);
+            ViewData["EscolaId"] = new SelectList(_context.Escolas, "Id", "Nome", alunoViewModel.EscolaId);
+            ViewData["TurmaId"] = new SelectList(_context.Turmas, "TurmaId", "NomeTurma", alunoViewModel.TurmaId);
+            
+            return View(alunoViewModel);
         }
 
         // GET: Alunos/Edit/5
