@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MVCCamiloMentoria.Migrations
 {
     /// <inheritdoc />
-    public partial class UPDATEDB : Migration
+    public partial class firsttimetomigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,6 +55,7 @@ namespace MVCCamiloMentoria.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    EstadoId = table.Column<int>(type: "int", nullable: false),
                     EnderecoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -66,6 +67,12 @@ namespace MVCCamiloMentoria.Migrations
                         principalTable: "Endereco",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Escola_Estado_EstadoId",
+                        column: x => x.EstadoId,
+                        principalTable: "Estado",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -134,7 +141,7 @@ namespace MVCCamiloMentoria.Migrations
                         column: x => x.EscolaId,
                         principalTable: "Escola",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -162,7 +169,7 @@ namespace MVCCamiloMentoria.Migrations
                         column: x => x.EscolaId,
                         principalTable: "Escola",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -278,7 +285,7 @@ namespace MVCCamiloMentoria.Migrations
                         column: x => x.EscolaId,
                         principalTable: "Escola",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -318,7 +325,7 @@ namespace MVCCamiloMentoria.Migrations
                         column: x => x.EscolasId,
                         principalTable: "Escola",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_EscolaSupervisor_Supervisor_SupervisorId",
                         column: x => x.SupervisorId,
@@ -457,13 +464,13 @@ namespace MVCCamiloMentoria.Migrations
                         column: x => x.DisciplinaId,
                         principalTable: "Disciplina",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Aula_Disciplina_TurmaId",
                         column: x => x.TurmaId,
-                        principalTable: "Turma",
-                        principalColumn: "TurmaId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalTable: "Disciplina",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Aula_Professor_ProfessorId",
                         column: x => x.ProfessorId,
@@ -628,7 +635,7 @@ namespace MVCCamiloMentoria.Migrations
                         column: x => x.ResponsaveisId,
                         principalTable: "Responsavel",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -777,6 +784,11 @@ namespace MVCCamiloMentoria.Migrations
                 table: "Escola",
                 column: "EnderecoId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Escola_EstadoId",
+                table: "Escola",
+                column: "EstadoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EscolaSupervisor_SupervisorId",

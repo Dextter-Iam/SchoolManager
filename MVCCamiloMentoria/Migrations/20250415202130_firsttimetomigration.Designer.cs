@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCCamiloMentoria.Migrations
 {
     [DbContext(typeof(EscolaContext))]
-    [Migration("20250415190930_newTables1")]
-    partial class newTables1
+    [Migration("20250415202130_firsttimetomigration")]
+    partial class firsttimetomigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
