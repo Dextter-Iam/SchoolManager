@@ -29,7 +29,4 @@ public class EscolaContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(EscolaContext).Assembly);
         base.OnModelCreating(modelBuilder);
     }
-
-public DbSet<MVCCamiloMentoria.ViewModels.DisciplinaViewModel> DisciplinaViewModel { get; set; } = default!;
-
 }

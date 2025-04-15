@@ -1,13 +1,20 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using MVCCamiloMentoria.Models;
 
 namespace MVCCamiloMentoria.ViewModels
 {
+    [NotMapped]
     public class DisciplinaViewModel
     {
         public int Id { get; set; }
-
-        [Required(ErrorMessage = "Campo{0} é obrigatório!")]
+        [Required(ErrorMessage = "Campo {0} é obrigatório!")]
+        [Display(Name = "Nome da Disciplina")]
         public string? Nome { get; set; }
+        [Display(Name = "Escola")]
+        public int EscolaId { get; set; }
+        public Escola? Escola { get; set; }
+
     }
 }

@@ -13,7 +13,7 @@ namespace MVCCamiloMentoria.Data
 
             builder.HasKey(f => f.Id);
 
-            builder.Property(f => f.NomeEmpresa)
+            builder.Property(f => f.Nome)
                    .IsRequired()
                    .HasMaxLength(190);
 

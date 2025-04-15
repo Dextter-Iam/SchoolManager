@@ -3,9 +3,9 @@
     public class Fornecedor
     {
         public int Id { get; set; }
-        public string? NomeEmpresa { get; set; }
-        public int? CNPJ { get; set; }
-        public int? CPF { get; set; }
+        public string? Nome { get; set; }
+        public string? CNPJ { get; set; }
+        public string? CPF { get; set; }
         public string? FinalidadeFornecedor { get; set; }
         public List<Telefone>? Telefones { get; set; }
         public int EscolaId { get; set; }

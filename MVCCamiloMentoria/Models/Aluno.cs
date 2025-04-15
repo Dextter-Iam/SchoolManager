@@ -12,7 +12,7 @@ namespace MVCCamiloMentoria.Models
     public class Aluno
     {
         public int Id { get; set; }
-        public string? NomeAluno { get; set; }
+        public string? Nome { get; set; }
         public DateTime DataNascimento { get; set; }
         public string? EmailEscolar { get; set; }
         public DateTime AnoInscricao { get; set; }

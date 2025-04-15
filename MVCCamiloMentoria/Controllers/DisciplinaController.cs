@@ -10,11 +10,11 @@ using MVCCamiloMentoria.ViewModels;
 
 namespace MVCCamiloMentoria.Controllers
 {
-    public class DisciplinasController : Controller
+    public class DisciplinaController : Controller
     {
         private readonly EscolaContext _context;
 
-        public DisciplinasController(EscolaContext context)
+        public DisciplinaController(EscolaContext context)
         {
             _context = context;
         }
@@ -47,6 +47,7 @@ namespace MVCCamiloMentoria.Controllers
         // GET: Disciplinas/Create
         public IActionResult Create()
         {
+            CarregarViewBags();
             return View();
         }
 
@@ -59,11 +60,15 @@ namespace MVCCamiloMentoria.Controllers
         {
             if (ModelState.IsValid)
             {
-                var disciplina = new Disciplina { Nome = disciplinaViewModel.Nome };
+                var disciplina = new Disciplina 
+                { Nome = disciplinaViewModel.Nome,
+                  EscolaId = disciplinaViewModel.EscolaId
+                };
                 _context.Add(disciplina);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            CarregarViewBags(disciplinaViewModel);
             return View(disciplinaViewModel);
         }
 
@@ -164,5 +169,11 @@ namespace MVCCamiloMentoria.Controllers
         {
             return _context.Disciplina.Any(e => e.Id == id);
         }
+
+        private void CarregarViewBags(DisciplinaViewModel viewModel = null)
+        {
+            ViewBag.EscolaId = new SelectList(_context.Escola, "Id", "Nome", viewModel?.EscolaId);
+        }
+
     }
 }

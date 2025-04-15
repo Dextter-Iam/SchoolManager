@@ -27,11 +27,12 @@ namespace MVCCamiloMentoria.Controllers
                 .Include(a => a.Escola)
                 .Select(a => new AlunoViewModel
                 {
-                    NomeAluno = a.NomeAluno,
+                    Nome = a.Nome,
                     Id = a.Id
                 }).ToListAsync();
 
             return View(alunos);
+
         }
 
         // GET: Aluno/Details/5
@@ -58,7 +59,7 @@ namespace MVCCamiloMentoria.Controllers
             var viewModel = new AlunoViewModel
             {
                 Id = aluno.Id,
-                NomeAluno = aluno.NomeAluno,
+                Nome = aluno.Nome,
                 Telefone = aluno.Telefone,
                 DataNascimento = aluno.DataNascimento,
                 EmailEscolar = aluno.EmailEscolar,
@@ -90,7 +91,7 @@ namespace MVCCamiloMentoria.Controllers
             {
                 var aluno = new Aluno
                 {
-                    NomeAluno = viewModel.NomeAluno,
+                    Nome = viewModel.Nome,
                     Telefone = viewModel.Telefone,
                     DataNascimento = viewModel.DataNascimento,
                     EmailEscolar = viewModel.EmailEscolar,
@@ -127,7 +128,7 @@ namespace MVCCamiloMentoria.Controllers
             var viewModel = new AlunoViewModel
             {
                 Id = aluno.Id,
-                NomeAluno = aluno.NomeAluno,
+                Nome = aluno.Nome,
                 Telefone = aluno.Telefone,
                 DataNascimento = aluno.DataNascimento,
                 EmailEscolar = aluno.EmailEscolar,
@@ -159,7 +160,7 @@ namespace MVCCamiloMentoria.Controllers
                     var aluno = new Aluno
                     {
                         Id = viewModel.Id,
-                        NomeAluno = viewModel.NomeAluno,
+                        Nome = viewModel.Nome,
                         Telefone = viewModel.Telefone,
                         DataNascimento = viewModel.DataNascimento,
                         EmailEscolar = viewModel.EmailEscolar,
@@ -210,8 +211,18 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            return View(aluno);
+            var viewModel = new AlunoViewModel
+            {
+                Id = aluno.Id,
+                Nome = aluno.Nome,
+                EscolaId = aluno.EscolaId,
+                TurmaId = aluno.TurmaId,
+                EnderecoId = aluno.EnderecoId,
+            };
+
+            return View(viewModel);
         }
+
 
         // POST: Aluno/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -222,9 +233,9 @@ namespace MVCCamiloMentoria.Controllers
             if (aluno != null)
             {
                 _context.Aluno.Remove(aluno);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

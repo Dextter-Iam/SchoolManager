@@ -9,7 +9,7 @@ public class AlunoConfiguration : IEntityTypeConfiguration<Aluno>
         builder.ToTable("Aluno");
         builder.HasKey(a => a.Id);
 
-        builder.Property(a => a.NomeAluno)
+        builder.Property(a => a.Nome)
                .IsRequired()
                .HasMaxLength(255);
 

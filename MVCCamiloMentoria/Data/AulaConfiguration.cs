@@ -34,7 +34,7 @@ public class AulaConfiguration : IEntityTypeConfiguration<Aula>
 
         
         builder.HasOne(a => a.Disciplina)
-               .WithMany(d => d.Aulas)
+               .WithMany(d => d.Aula)
                .HasForeignKey(a => a.DisciplinaId)
                .OnDelete(DeleteBehavior.NoAction);
 

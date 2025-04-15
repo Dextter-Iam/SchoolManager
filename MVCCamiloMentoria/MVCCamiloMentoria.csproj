@@ -13,7 +13,6 @@
     <Compile Remove="Views\Endereco\**" />
     <Compile Remove="Views\Equipamento\**" />
     <Compile Remove="Views\Escola\**" />
-    <Compile Remove="Views\Fornecedor\**" />
     <Compile Remove="Views\Marca\**" />
     <Compile Remove="Views\Modelo\**" />
     <Compile Remove="Views\PrestadorServico\**" />
@@ -27,7 +26,6 @@
     <Content Remove="Views\Endereco\**" />
     <Content Remove="Views\Equipamento\**" />
     <Content Remove="Views\Escola\**" />
-    <Content Remove="Views\Fornecedor\**" />
     <Content Remove="Views\Marca\**" />
     <Content Remove="Views\Modelo\**" />
     <Content Remove="Views\PrestadorServico\**" />
@@ -41,7 +39,6 @@
     <EmbeddedResource Remove="Views\Endereco\**" />
     <EmbeddedResource Remove="Views\Equipamento\**" />
     <EmbeddedResource Remove="Views\Escola\**" />
-    <EmbeddedResource Remove="Views\Fornecedor\**" />
     <EmbeddedResource Remove="Views\Marca\**" />
     <EmbeddedResource Remove="Views\Modelo\**" />
     <EmbeddedResource Remove="Views\PrestadorServico\**" />
@@ -55,7 +52,6 @@
     <None Remove="Views\Endereco\**" />
     <None Remove="Views\Equipamento\**" />
     <None Remove="Views\Escola\**" />
-    <None Remove="Views\Fornecedor\**" />
     <None Remove="Views\Marca\**" />
     <None Remove="Views\Modelo\**" />
     <None Remove="Views\PrestadorServico\**" />

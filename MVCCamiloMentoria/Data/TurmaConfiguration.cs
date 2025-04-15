@@ -34,7 +34,7 @@ public class TurmaConfiguration : IEntityTypeConfiguration<Turma>
                .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(t => t.Disciplinas)
-               .WithMany(d => d.Turmas)
+               .WithMany(d => d.Turma)
                .UsingEntity(j => j.ToTable("TurmaDisciplina"));
 
         builder.HasMany(t => t.Aulas)

@@ -20,10 +20,15 @@ namespace MVCCamiloMentoria.Data
                    .WithMany(p => p.Disciplinas)
                    .UsingEntity(pd => pd.ToTable("ProfessorDisciplina"));
 
-            builder.HasMany(t => t.Aulas)
+            builder.HasMany(t => t.Aula)
                    .WithOne()
                    .HasForeignKey(t => t.TurmaId)
                    .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(d => d.Escola)
+                   .WithMany(e => e.Disciplina)
+                   .HasForeignKey(d => d.EscolaId)
+                   .OnDelete(DeleteBehavior.Restrict); 
 
         }
     }
