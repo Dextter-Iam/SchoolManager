@@ -13,7 +13,7 @@ namespace MVCCamiloMentoria.Models
         public Endereco? Endereco { get; set; }
         public List<Telefone>? Telefones { get; set; }
         public int EscolaId { get; set; }
-        public Escola? Escola { get; set; } 
+        public Escola? Escola { get; set; }
 
     }
 }

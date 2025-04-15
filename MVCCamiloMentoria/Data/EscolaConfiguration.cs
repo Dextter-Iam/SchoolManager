@@ -26,27 +26,27 @@ namespace MVCCamiloMentoria.Data
 
 
             builder.HasMany(e => e.Turmas)
-                   .WithOne(t => t.Escola)
+                   .WithOne()
                    .HasForeignKey(t => t.EscolaId)
                    .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(e => e.PrestadorServico)
-                   .WithOne(e => e.Escola)
+                   .WithOne()
                    .HasForeignKey(e => e.EscolaId)
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(e => e.Fornecedores)
-                   .WithOne(e => e.Escola)
+                   .WithOne()
                    .HasForeignKey(e => e.EscolaId)
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(e => e.Equipamentos)
-                   .WithOne(e => e.Escola)
+                   .WithOne()
                    .HasForeignKey(e => e.EscolaId)
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(e => e.Telefones)
-                   .WithOne(e => e.Escola)
+                   .WithOne()
                    .HasForeignKey(e => e.EscolaId)
                    .OnDelete(DeleteBehavior.NoAction);
 

@@ -14,7 +14,7 @@ namespace MVCCamiloMentoria.ViewModels
         public string? Nome { get; set; }
         [Display(Name = "Escola")]
         public int EscolaId { get; set; }
-        public Escola? Escola { get; set; }
+        public EscolaViewModel? Escola { get; set; }
 
     }
 }

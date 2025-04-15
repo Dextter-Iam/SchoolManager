@@ -7,12 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Views\Aula\**" />
     <Compile Remove="Views\Coordenador\**" />
     <Compile Remove="Views\Diretor\**" />
     <Compile Remove="Views\Endereco\**" />
     <Compile Remove="Views\Equipamento\**" />
-    <Compile Remove="Views\Escola\**" />
     <Compile Remove="Views\Marca\**" />
     <Compile Remove="Views\Modelo\**" />
     <Compile Remove="Views\PrestadorServico\**" />
@@ -20,12 +18,10 @@
     <Compile Remove="Views\Responsavel\**" />
     <Compile Remove="Views\Supervisor\**" />
     <Compile Remove="Views\Turma\**" />
-    <Content Remove="Views\Aula\**" />
     <Content Remove="Views\Coordenador\**" />
     <Content Remove="Views\Diretor\**" />
     <Content Remove="Views\Endereco\**" />
     <Content Remove="Views\Equipamento\**" />
-    <Content Remove="Views\Escola\**" />
     <Content Remove="Views\Marca\**" />
     <Content Remove="Views\Modelo\**" />
     <Content Remove="Views\PrestadorServico\**" />
@@ -33,12 +29,10 @@
     <Content Remove="Views\Responsavel\**" />
     <Content Remove="Views\Supervisor\**" />
     <Content Remove="Views\Turma\**" />
-    <EmbeddedResource Remove="Views\Aula\**" />
     <EmbeddedResource Remove="Views\Coordenador\**" />
     <EmbeddedResource Remove="Views\Diretor\**" />
     <EmbeddedResource Remove="Views\Endereco\**" />
     <EmbeddedResource Remove="Views\Equipamento\**" />
-    <EmbeddedResource Remove="Views\Escola\**" />
     <EmbeddedResource Remove="Views\Marca\**" />
     <EmbeddedResource Remove="Views\Modelo\**" />
     <EmbeddedResource Remove="Views\PrestadorServico\**" />
@@ -46,12 +40,10 @@
     <EmbeddedResource Remove="Views\Responsavel\**" />
     <EmbeddedResource Remove="Views\Supervisor\**" />
     <EmbeddedResource Remove="Views\Turma\**" />
-    <None Remove="Views\Aula\**" />
     <None Remove="Views\Coordenador\**" />
     <None Remove="Views\Diretor\**" />
     <None Remove="Views\Endereco\**" />
     <None Remove="Views\Equipamento\**" />
-    <None Remove="Views\Escola\**" />
     <None Remove="Views\Marca\**" />
     <None Remove="Views\Modelo\**" />
     <None Remove="Views\PrestadorServico\**" />
@@ -74,6 +66,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Aula\" />
   </ItemGroup>
 
 </Project>

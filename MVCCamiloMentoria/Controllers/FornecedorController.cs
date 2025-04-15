@@ -99,15 +99,37 @@ namespace MVCCamiloMentoria.Controllers
         }
 
         // GET: FornecedorController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
+        public async Task<IActionResult> Edit(int? id)
+        {   
+            if(id == null)
+            {
+              return  NotFound();
+            }
+
+            var fornecedor = await _context.Fornecedor.FindAsync(id);
+            if (fornecedor == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new FornecedorViewModel
+            {
+                Id = fornecedor.Id,
+                Nome = fornecedor.Nome,
+                FinalidadeFornecedor = fornecedor.FinalidadeFornecedor,
+                CPF = fornecedor.CPF,
+                CNPJ = fornecedor.CNPJ,
+                EscolaId = fornecedor.EscolaId,
+            };
+
+            CarregarViewBags(viewModel);
+            return View(viewModel);
         }
 
         // POST: FornecedorController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, IFormCollection collection)
         {
             try
             {

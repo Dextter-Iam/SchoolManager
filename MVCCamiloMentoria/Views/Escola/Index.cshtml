@@ -1,0 +1,87 @@
+﻿@model IEnumerable<MVCCamiloMentoria.ViewModels.EscolaViewModel>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Nome)</th>
+            <th>@Html.DisplayNameFor(model => model.Endereco)</th>
+            <th>Professores</th>
+            <th>Turmas</th>
+            <th>Fornecedores</th>
+            <th>Prestadores de Serviço</th>
+            <th>Telefones</th>
+            <th>Equipamentos</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Endereco.NomeRua)<br />
+                    @Html.DisplayFor(modelItem => item.Endereco.CEP)<br />
+                    @Html.DisplayFor(modelItem => item.Endereco.Estado)
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var prof in item.Professores)
+                        {
+                            <li>@prof.Nome</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var turma in item.Turmas)
+                        {
+                            <li>@turma.NomeTurma</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var forn in item.Fornecedores)
+                        {
+                            <li>@forn.Nome</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var prest in item.PrestadorServico)
+                        {
+                            <li>@prest.Nome</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var tel in item.Telefones)
+                        {
+                            <li>@tel.Numero</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var eq in item.Equipamentos)
+                        {
+                            <li>@eq.Nome</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -8,7 +8,7 @@ namespace MVCCamiloMentoria.Models
         public int Id { get; set; }
         public int DDD { get; set; }
         public int Numero { get; set; }
-        public int? EscolaId { get; set; }
+        public int EscolaId { get; set; }
         public Escola? Escola { get; set; }
         public int? PrestadorServicoId { get; set; }
         public PrestadorServico? PrestadorServico { get; set; }

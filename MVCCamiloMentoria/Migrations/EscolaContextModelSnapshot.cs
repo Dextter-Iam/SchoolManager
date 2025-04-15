@@ -78,7 +78,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     b.HasIndex("SupervisorId");
 
-                    b.ToTable("EscolaSupervisor");
+                    b.ToTable("EscolaSupervisor", (string)null);
                 });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Aluno", b =>
@@ -342,7 +342,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     b.HasIndex("ModeloId");
 
-                    b.ToTable("Equipamento");
+                    b.ToTable("Equipamento", (string)null);
                 });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Escola", b =>
@@ -470,7 +470,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     b.HasIndex("MarcaId");
 
-                    b.ToTable("Modelo");
+                    b.ToTable("Modelo", (string)null);
                 });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.PrestadorServico", b =>
@@ -503,7 +503,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     b.HasIndex("EscolaId");
 
-                    b.ToTable("PrestadorServico");
+                    b.ToTable("PrestadorServico", (string)null);
                 });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Professor", b =>
@@ -580,7 +580,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     b.HasIndex("EnderecoId");
 
-                    b.ToTable("Responsavel");
+                    b.ToTable("Responsavel", (string)null);
                 });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Supervisor", b =>
