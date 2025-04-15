@@ -1,8 +1,10 @@
 ﻿using MVCCamiloMentoria.Models;
 using MVCCamiloMentoria.ViewModels;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MVCCamiloMentoria.ViewModels
 {
+    [NotMapped]
     public class EscolaViewModel
     {
         public int Id { get; set; }

@@ -4,7 +4,7 @@ using MVCCamiloMentoria.Models;
 
 namespace MVCCamiloMentoria.Data
 {
-    public class PrestadorServicoConfiguration
+    public class PrestadorServicoConfiguration : IEntityTypeConfiguration<PrestadorServico>
     {
         public void Configure  (EntityTypeBuilder <PrestadorServico> builder)
         {
@@ -32,8 +32,10 @@ namespace MVCCamiloMentoria.Data
                    .HasMaxLength(150);
 
             builder.HasOne(ps => ps.Escola)
-                   .WithMany(ps => ps.PrestadorServico)
+                   .WithMany(e => e.PrestadorServico)
+                   .HasForeignKey(ps => ps.EscolaId)
                    .OnDelete(DeleteBehavior.Cascade);
+
 
         }
     }

@@ -1,15 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Update;
 using MVCCamiloMentoria.Models;
 
 namespace MVCCamiloMentoria.Data
 {
-    public class EquipamentoConfiguratrion
+    public class EquipamentoConfiguration : IEntityTypeConfiguration<Equipamento>
     {
-        public void Configure (EntityTypeBuilder <Equipamento> builder)
+        public void Configure(EntityTypeBuilder <Equipamento> builder)
         {
-            builder.ToTable("Equipamentos");
+            builder.ToTable("Equipamento");
 
             builder.HasKey(eq => eq.Id);
 
@@ -22,7 +21,7 @@ namespace MVCCamiloMentoria.Data
                    .IsRequired();
 
             builder.HasOne(e => e.Modelo)
-                   .WithMany(m => m.Equipamentos)
+                   .WithMany(m => m.Equipamento)
                    .HasForeignKey(e => e.ModeloId)
                    .OnDelete(DeleteBehavior.Cascade);
 

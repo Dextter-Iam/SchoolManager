@@ -11,10 +11,10 @@ namespace MVCCamiloMentoria.Models
         public Marca? Marca {get; set; }
         public int ModeloId { get; set; }
         public Modelo? Modelo { get; set; }
+        public int EscolaId { get; set; }
 
         [ForeignKey("EscolaId")]
-        public int EscolaId { get; set; }
-        public Escola? Escola {get; set; }
+        public Escola? Escola { get; set; }
 
     }
 }

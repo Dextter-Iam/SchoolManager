@@ -1,4 +1,6 @@
-﻿namespace MVCCamiloMentoria.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace MVCCamiloMentoria.Models
 {
     public class Marca
     {
@@ -6,6 +8,8 @@
         public string? Nome { get; set; }
         public string? Descricao { get; set; }
         public int EscolaId { get; set; }
+
+        [ForeignKey("EscolaId")]
         public Escola? Escola { get; set; }
         public List<Modelo>? Modelos { get; set; }
 

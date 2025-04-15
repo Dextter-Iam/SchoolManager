@@ -7,8 +7,9 @@ namespace MVCCamiloMentoria.Models
         public int Id { get; set; }
         public string? Nome { get; set; }
 
-        [ForeignKey("EscolaId")]
         public int EscolaId { get; set; }
+
+        [ForeignKey("EscolaId")]
         public Escola? Escola { get; set; }
         public List<Professor>? Professores { get; set; } 
         public List<Turma>?Turma { get; set;} 

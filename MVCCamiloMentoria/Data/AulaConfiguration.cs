@@ -10,7 +10,6 @@ public class AulaConfiguration : IEntityTypeConfiguration<Aula>
 
       
         builder.HasKey(a => a.Id);
-
    
         builder.Property(a => a.Nome)
                .IsRequired()
@@ -25,24 +24,21 @@ public class AulaConfiguration : IEntityTypeConfiguration<Aula>
         builder.Property(a => a.ConfirmacaoPresenca)
                .HasDefaultValue(false);
 
-
         
         builder.HasOne(a => a.Professor)
                .WithMany(p => p.Aulas)
                .HasForeignKey(a => a.ProfessorId)
                .OnDelete(DeleteBehavior.Restrict);
-
         
         builder.HasOne(a => a.Disciplina)
                .WithMany(d => d.Aula)
                .HasForeignKey(a => a.DisciplinaId)
                .OnDelete(DeleteBehavior.NoAction);
-
        
         builder.HasOne(a => a.Turma)
                .WithMany(t => t.Aulas)
                .HasForeignKey(a => a.TurmaId)
-               .OnDelete(DeleteBehavior.Restrict);
+               .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(a => a.AlunosPresentes)
                .WithMany(al => al.Aulas)

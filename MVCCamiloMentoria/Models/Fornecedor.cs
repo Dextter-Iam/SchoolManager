@@ -10,10 +10,9 @@ namespace MVCCamiloMentoria.Models
         public string? CPF { get; set; }
         public string? FinalidadeFornecedor { get; set; }
         public List<Telefone>? Telefones { get; set; }
+        public int EscolaId { get; set; }
 
         [ForeignKey("EscolaId")]
-
-        public int EscolaId { get; set; }
         public Escola? Escola { get; set; }
     }
 }

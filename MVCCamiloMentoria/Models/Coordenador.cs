@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MVCCamiloMentoria.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MVCCamiloMentoria.Models
 {
@@ -13,6 +14,8 @@ namespace MVCCamiloMentoria.Models
         public Endereco? Endereco { get; set; }
         public List<Telefone>? Telefones { get; set; }
         public int EscolaId { get; set; }
+
+        [ForeignKey("EscolaId")]
         public Escola? Escola { get; set; }
 
     }
