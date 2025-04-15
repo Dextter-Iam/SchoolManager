@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCCamiloMentoria.Models;
 using MVCCamiloMentoria.ViewModels;
@@ -42,7 +43,7 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-             var escolas = await _context.Escola
+            var escolas = await _context.Escola
                         .Include(e => e.Endereco)
                         .Include(e => e.Turmas)
                         .Include(e => e.Fornecedores)
@@ -59,6 +60,9 @@ namespace MVCCamiloMentoria.Controllers
             var escolaViewModel = new EscolaViewModel
             {
                 Nome = escolas.Nome,
+                Endereco = escolas.Endereco,
+                Telefones = escolas.Telefones,
+                Turmas = escolas.Turmas,
                 Id = escolas.Id,
             };
                 return View(escolaViewModel);
@@ -67,22 +71,51 @@ namespace MVCCamiloMentoria.Controllers
         // GET: EscolaController/Create
         public ActionResult Create()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro no método Create: " + ex.Message);
+                return View();
+            }
         }
 
         // POST: EscolaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(EscolaViewModel viewModel)
         {
-            try
+            if (ModelState.IsValid)
             {
+                var endereco = new Endereco
+                {
+                    NomeRua = viewModel.NomeRua,
+                    NumeroRua = viewModel.NumeroRua,
+                    Complemento = viewModel.Complemento,
+                    CEP = viewModel.CEP,
+                    EstadoId = 1,
+                };
+
+                _context.Endereco.Add(endereco);
+                await _context.SaveChangesAsync();
+
+                var escola = new Escola
+                {
+                    Nome = viewModel.Nome,
+                    EstadoId = 1,
+                    EnderecoId = endereco.Id
+                };
+
+                _context.Escola.Add(escola);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+
+            CarregarViewBags(viewModel);
+            return View(viewModel);
         }
 
         // GET: EscolaController/Edit/5
@@ -126,5 +159,16 @@ namespace MVCCamiloMentoria.Controllers
                 return View();
             }
         }
+        private void CarregarViewBags(EscolaViewModel viewModel = null)
+        {
+            var estados = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "1", Text = "São Paulo (SP)" }
+    };
+            ViewBag.Estados = estados;
+        }
+
+
+
     }
 }

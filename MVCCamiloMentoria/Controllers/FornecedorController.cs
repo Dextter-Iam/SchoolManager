@@ -28,6 +28,7 @@ namespace MVCCamiloMentoria.Controllers
                                      CNPJ = f.CNPJ,
                                      CPF = f.CNPJ,
                                      EscolaId = f.EscolaId,
+                                     FinalidadeFornecedor = f.FinalidadeFornecedor,
                                      Id = f.Id,
                                  }).ToListAsync();
             return View(fornecedores);

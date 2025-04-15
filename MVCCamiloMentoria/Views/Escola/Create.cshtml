@@ -1,0 +1,54 @@
+﻿@model MVCCamiloMentoria.ViewModels.EscolaViewModel
+
+<h4>Escola</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Nome" class="control-label"></label>
+                <input asp-for="Nome" class="form-control" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+
+            <h5 class="mt-4">Endereço</h5>
+
+            <div class="form-group">
+                <label asp-for="NomeRua" class="control-label">Rua</label>
+                <input asp-for="NomeRua" class="form-control" />
+                <span asp-validation-for="NomeRua" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NumeroRua" class="control-label">Número</label>
+                <input asp-for="NumeroRua" class="form-control" />
+                <span asp-validation-for="NumeroRua" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Complemento" class="control-label">Complemento</label>
+                <input asp-for="Complemento" class="form-control" />
+                <span asp-validation-for="Complemento" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CEP" class="control-label">CEP</label>
+                <input asp-for="CEP" class="form-control" />
+                <span asp-validation-for="CEP" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="EstadoId" value="1" />
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Voltar à Lista</a>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+}

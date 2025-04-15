@@ -4,6 +4,8 @@
     {
         public int Id { get; set; }
         public string? Nome { get; set; }
+        public int EstadoId { get; set; }
+        public Estado? Estado { get; set; }
         public int EnderecoId { get; set; }
         public Endereco? Endereco { get; set; }
         public List<Telefone>? Telefones { get; set; }
