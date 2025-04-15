@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVCCamiloMentoria.Models;
 using MVCCamiloMentoria.ViewModels;
+using System.Threading.Tasks;
 
 namespace MVCCamiloMentoria.Controllers
 {
@@ -17,27 +18,50 @@ namespace MVCCamiloMentoria.Controllers
         // GET: EscolaController
         public async Task<IActionResult> Index()
         {
-            var escola = await _context.Escola
-                        .Select(e=> new EscolaViewModel
+            var escolas = await _context.Escola
+                        .Include(e => e.Endereco)
+                        .Include(e => e.Turmas)
+                        .Include(e => e.Fornecedores)
+                        .Include(e => e.PrestadorServico)
+                        .Include(e => e.Telefones)
+                        .Include(e => e.Equipamentos)
+                        .Select(e => new EscolaViewModel
                         {
                             Nome = e.Nome,
-                            Endereco = e.Endereco,
-                            Professores = e.Professores,
-                            Turmas = e.Turmas,
-                            Fornecedores = e.Fornecedores,
-                            PrestadorServico = e.PrestadorServico,
-                            Telefones = e.Telefones,
-                            Equipamentos = e.Equipamentos,
                             Id = e.Id,
                         }).ToListAsync();
 
-            return View(escola);
+            return View(escolas);
         }
 
         // GET: EscolaController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
+        public async Task<IActionResult> Details(int? id)
+        { 
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+             var escolas = await _context.Escola
+                        .Include(e => e.Endereco)
+                        .Include(e => e.Turmas)
+                        .Include(e => e.Fornecedores)
+                        .Include(e => e.PrestadorServico)
+                        .Include(e => e.Telefones)
+                        .Include(e => e.Equipamentos)
+                        .FirstOrDefaultAsync(e => e.Id == id);
+
+            if(escolas == null)
+            {
+                return NotFound();
+            }
+
+            var escolaViewModel = new EscolaViewModel
+            {
+                Nome = escolas.Nome,
+                Id = escolas.Id,
+            };
+                return View(escolaViewModel);
         }
 
         // GET: EscolaController/Create

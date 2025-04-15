@@ -1,10 +1,14 @@
-﻿namespace MVCCamiloMentoria.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace MVCCamiloMentoria.Models
 {
     public class Professor
     {
         public int Id { get; set; }
         public string? Nome { get; set; }
         public List<Telefone>? Telefones { get; set; }
+
+        [ForeignKey("EscolaId")]
         public int EscolaId { get; set; }
         public Escola? Escola { get; set; }
         public int Matricula {  get; set; }

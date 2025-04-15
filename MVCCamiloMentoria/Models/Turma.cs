@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
@@ -14,6 +15,8 @@ namespace MVCCamiloMentoria.Models
         public string? NomeTurma {  get; set; }
         public int AnoLetivo { get; set; }
         public string? Turno { get; set; }
+
+        [ForeignKey("EscolaId")]
         public int EscolaId { get; set; }
         public Escola? Escola { get; set; }
         public List<Aula>? Aulas { get; set; } 

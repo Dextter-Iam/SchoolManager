@@ -23,6 +23,8 @@ namespace MVCCamiloMentoria.Models
         public Telefone? Telefone { get; set; }
         public int EnderecoId { get; set; }
         public Endereco? Endereco { get; set; }
+
+        [ForeignKey("EscolaId")]
         public int EscolaId {  get; set; }
         public Escola? Escola { get; set; } 
         public List<AlunoTelefone>? Telefones { get; set; }

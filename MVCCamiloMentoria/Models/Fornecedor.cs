@@ -1,4 +1,6 @@
-﻿namespace MVCCamiloMentoria.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace MVCCamiloMentoria.Models
 {
     public class Fornecedor
     {
@@ -8,6 +10,9 @@
         public string? CPF { get; set; }
         public string? FinalidadeFornecedor { get; set; }
         public List<Telefone>? Telefones { get; set; }
+
+        [ForeignKey("EscolaId")]
+
         public int EscolaId { get; set; }
         public Escola? Escola { get; set; }
     }

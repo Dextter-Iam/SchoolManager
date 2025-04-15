@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.InteropServices;
 
 namespace MVCCamiloMentoria.Models
@@ -8,6 +9,8 @@ namespace MVCCamiloMentoria.Models
         public int Id { get; set; }
         public int DDD { get; set; }
         public int Numero { get; set; }
+
+        [ForeignKey("EscolaId")]
         public int EscolaId { get; set; }
         public Escola? Escola { get; set; }
         public int? PrestadorServicoId { get; set; }
