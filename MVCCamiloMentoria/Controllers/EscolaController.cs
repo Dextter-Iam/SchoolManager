@@ -20,12 +20,12 @@ namespace MVCCamiloMentoria.Controllers
         public async Task<IActionResult> Index()
         {
             var escolas = await _context.Escola
-                        .Include(e => e.Endereco)
-                        .Include(e => e.Turmas)
-                        .Include(e => e.Fornecedores)
-                        .Include(e => e.PrestadorServico)
-                        .Include(e => e.Telefones)
-                        .Include(e => e.Equipamentos)
+                        //.Include(e => e.Endereco)
+                        //.Include(e => e.Turmas)
+                        //.Include(e => e.Fornecedores)
+                        //.Include(e => e.PrestadorServico)
+                        //.Include(e => e.Telefones)
+                        //.Include(e => e.Equipamentos)
                         .Select(e => new EscolaViewModel
                         {
                             Nome = e.Nome,
@@ -91,6 +91,7 @@ namespace MVCCamiloMentoria.Controllers
             {
                 var endereco = new Endereco
                 {
+
                     NomeRua = viewModel.NomeRua,
                     NumeroRua = viewModel.NumeroRua,
                     Complemento = viewModel.Complemento,
@@ -98,14 +99,14 @@ namespace MVCCamiloMentoria.Controllers
                     EstadoId = 1,
                 };
 
-                _context.Endereco.Add(endereco);
-                await _context.SaveChangesAsync();
+                //_context.Endereco.Add(endereco);
+                //await _context.SaveChangesAsync();
 
                 var escola = new Escola
                 {
                     Nome = viewModel.Nome,
                     EstadoId = 1,
-                    EnderecoId = endereco.Id
+                    Endereco = endereco
                 };
 
                 _context.Escola.Add(escola);
