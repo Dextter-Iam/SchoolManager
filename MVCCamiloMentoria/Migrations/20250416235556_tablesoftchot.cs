@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MVCCamiloMentoria.Migrations
 {
     /// <inheritdoc />
-    public partial class firsttimetomigration : Migration
+    public partial class tablesoftchot : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -325,13 +325,13 @@ namespace MVCCamiloMentoria.Migrations
                         column: x => x.EscolasId,
                         principalTable: "Escola",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_EscolaSupervisor_Supervisor_SupervisorId",
                         column: x => x.SupervisorId,
                         principalTable: "Supervisor",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -464,13 +464,13 @@ namespace MVCCamiloMentoria.Migrations
                         column: x => x.DisciplinaId,
                         principalTable: "Disciplina",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Aula_Disciplina_TurmaId",
                         column: x => x.TurmaId,
                         principalTable: "Disciplina",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Aula_Professor_ProfessorId",
                         column: x => x.ProfessorId,
