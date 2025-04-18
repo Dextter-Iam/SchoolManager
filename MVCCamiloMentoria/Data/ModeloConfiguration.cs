@@ -23,7 +23,14 @@ namespace MVCCamiloMentoria.Data
             builder.HasOne(m => m.Marca)
                    .WithMany(m => m.Modelos)
                    .HasForeignKey(m => m.MarcaId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+
+            builder.HasMany(m => m.Equipamentos)
+                   .WithOne(e => e.Modelo)
+                   .HasForeignKey(e => e.ModeloId)
                    .OnDelete(DeleteBehavior.Restrict); 
         }
     }
 }
+
