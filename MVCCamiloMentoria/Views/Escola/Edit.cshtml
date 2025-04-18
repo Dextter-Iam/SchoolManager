@@ -3,18 +3,15 @@
 <h4>Escola</h4>
 <hr />
 <div class="row">
-    <div class="col-md-6">
-        <form asp-action="Create" method="post">
+    <div class="col-md-4">
+        <form asp-action="Edited">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Nome" class="control-label"></label>
                 <input asp-for="Nome" class="form-control" />
                 <span asp-validation-for="Nome" class="text-danger"></span>
             </div>
-
-            <h5 class="mt-4">Endereço</h5>
-
             <div class="form-group">
                 <label asp-for="NomeRua" class="control-label">Rua</label>
                 <input asp-for="NomeRua" class="form-control" />
@@ -38,23 +35,23 @@
                 <input asp-for="CEP" class="form-control" />
                 <span asp-validation-for="CEP" class="text-danger"></span>
             </div>
-
             <div class="form-group">
                 <label asp-for="EstadoId" class="control-label"></label>
                 <select asp-for="EstadoId" class="form-control" asp-items="ViewBag.Estados"></select>
                 <span asp-validation-for="EstadoId" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="btn btn-primary">Salvar</button>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Voltar à Lista</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");
-}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

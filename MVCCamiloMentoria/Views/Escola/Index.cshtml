@@ -3,11 +3,18 @@
 @{
     ViewData["Title"] = "Escolas";
 }
-
-<h2>Lista de Escolas</h2>
+@if (TempData["MensagemSucesso"] != null)
+{
+    <div class="alert alert-success">@TempData["MensagemSucesso"]</div>
+}
+@if (TempData["MensagemErro"] != null)
+{
+    <div class="alert alert-danger">@TempData["MensagemErro"]</div>
+}
+<h2>Escolas</h2>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Nova Escola</a>
+    <a asp-action="Create" class="btn btn-primary">Cadastrar Escola</a>
 </p>
 
 <table class="table table-bordered table-striped">

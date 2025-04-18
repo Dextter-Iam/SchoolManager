@@ -21,8 +21,8 @@ namespace MVCCamiloMentoria.Data
                    .IsRequired();
 
             builder.HasMany(c => c.Telefones)
-                   .WithOne(e=> e.Coordenador)
-                   .HasForeignKey(t => t.CoordenadorId) 
+                   .WithOne(e => e.Coordenador)
+                   .HasForeignKey(t => t.CoordenadorId)
                    .OnDelete(DeleteBehavior.NoAction); 
 
             builder.HasOne(c => c.Endereco)
@@ -30,8 +30,11 @@ namespace MVCCamiloMentoria.Data
                    .HasForeignKey<Coordenador>(c => c.EnderecoId)
                    .OnDelete(DeleteBehavior.Cascade);
 
+            builder.HasOne(c => c.Escola)
+                   .WithMany(e => e.Coordenadores)
+                   .HasForeignKey(c => c.EscolaId)
+                   .OnDelete(DeleteBehavior.Cascade); 
+
         }
-
-
     }
 }

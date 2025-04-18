@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace MVCCamiloMentoria.ViewModels
 {
     [NotMapped]
@@ -11,56 +10,79 @@ namespace MVCCamiloMentoria.ViewModels
     {
         public int Id { get; set; }
 
-        [DisplayName("Nome Aluno")]
+        [DisplayName("Nome do Aluno")]
+        [Required(ErrorMessage = "O nome do aluno é obrigatório.")]
+        [StringLength(200, ErrorMessage = "O nome do aluno deve ter no máximo 200 caracteres.")]
         public string? Nome { get; set; }
 
-        [DisplayName("Nascimento")]
+        [DisplayName("Data de Nascimento")]
+        [Required(ErrorMessage = "A data de nascimento é obrigatória.")]
+        [DataType(DataType.Date)]
         public DateTime DataNascimento { get; set; }
 
-        [DisplayName("Email Aluno")]
+        [DisplayName("E-mail do Aluno")]
+        [Required(ErrorMessage = "O e-mail do aluno é obrigatório.")]
+        [EmailAddress(ErrorMessage = "E-mail inválido.")]
+        [StringLength(100, ErrorMessage = "O e-mail deve ter no máximo 100 caracteres.")]
         public string? EmailEscolar { get; set; }
 
-        [DisplayName("Ano de inscrição")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayName("Ano de Inscrição")]
+        [Required(ErrorMessage = "O ano de inscrição é obrigatório.")]
+        [DataType(DataType.Date)]
         public DateTime AnoInscricao { get; set; }
 
         [DisplayName("Bolsa Escolar")]
         public bool BolsaEscolar { get; set; }
 
         [DisplayName("Turma")]
+        [Required(ErrorMessage = "A turma é obrigatória.")]
         public int TurmaId { get; set; }
         public Turma? Turma { get; set; }
 
-        [Phone]
-        [Display(Name = "Telefone")]
-        [RegularExpression(@"^\(\d{2}\)\s\d{4,5}-\d{4}$", ErrorMessage = "Telefone inválido. O formato correto é (XX) XXXXX-XXXX.")]
-        public int TelefoneId { get; set; }
-        public Telefone? Telefone { get; set; }
 
-        [DisplayName("Endereço")]
+        [DisplayName("DDD")]
+        [Required(ErrorMessage = "Informe o DDD")]
+        [Range(11, 99, ErrorMessage = "DDD inválido")]
+        public int DDD { get; set; }
+
+        [DisplayName("Número de Telefone")]
+        [Required(ErrorMessage = "Informe o número")]
+        [Range(10000000, 999999999, ErrorMessage = "Número inválido")]
+        public int Numero { get; set; }
+
         public int EnderecoId { get; set; }
         public Endereco? Endereco { get; set; }
 
-        [DisplayName("Estado")]
-        public int EstadoId { get; set; }
-        public Estado? Estado { get; set; }
-
-        [DisplayName("Rua")]
+        [DisplayName("Nome da Rua")]
+        [Required(ErrorMessage = "O nome da rua é obrigatório.")]
+        [StringLength(200, ErrorMessage = "O nome da rua deve ter no máximo 200 caracteres.")]
         public string? NomeRua { get; set; }
 
-        [DisplayName("CEP")]
-        public int CEP { get; set; }
-
-        [DisplayName("Número")]
+        [DisplayName("Número da Rua")]
+        [Required(ErrorMessage = "O número da rua é obrigatório.")]
+        [Range(1, int.MaxValue, ErrorMessage = "O número da rua deve ser maior que zero.")]
         public int NumeroRua { get; set; }
 
         [DisplayName("Complemento")]
+        [StringLength(150, ErrorMessage = "O complemento deve ter no máximo 150 caracteres.")]
         public string? Complemento { get; set; }
 
+        [DisplayName("CEP")]
+        [Required(ErrorMessage = "O CEP é obrigatório.")]
+        [Range(1000000, 99999999, ErrorMessage = "CEP inválido.")]
+        public int CEP { get; set; }
+
+        [DisplayName("Estado")]
+        [Required(ErrorMessage = "O estado é obrigatório.")]
+        public int EstadoId { get; set; }
+        public Estado? Estado { get; set; }
+
+        [DisplayName("Escola")]
+        [Required(ErrorMessage = "A escola é obrigatória.")]
         public int EscolaId { get; set; }
         public Escola? Escola { get; set; }
         public List<Responsavel>? Responsaveis { get; set; }
+        public List<AlunoTelefone>? AlunoTelefone { get; set; }
         public List<Aula>? Aulas { get; set; }
     }
 }
-

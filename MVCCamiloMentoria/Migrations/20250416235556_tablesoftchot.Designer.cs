@@ -849,12 +849,12 @@ namespace MVCCamiloMentoria.Migrations
             modelBuilder.Entity("MVCCamiloMentoria.Models.AlunoTelefone", b =>
                 {
                     b.HasOne("MVCCamiloMentoria.Models.Aluno", "Aluno")
-                        .WithMany("Telefones")
+                        .WithMany("AlunoTelefone")
                         .HasForeignKey("AlunoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MVCCamiloMentoria.Models.Telefone", "Telefones")
+                    b.HasOne("MVCCamiloMentoria.Models.Telefone", "AlunoTelefone")
                         .WithMany("Alunos")
                         .HasForeignKey("TelefoneId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -862,7 +862,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     b.Navigation("Aluno");
 
-                    b.Navigation("Telefones");
+                    b.Navigation("AlunoTelefone");
                 });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Aula", b =>
@@ -1111,42 +1111,42 @@ namespace MVCCamiloMentoria.Migrations
             modelBuilder.Entity("MVCCamiloMentoria.Models.Telefone", b =>
                 {
                     b.HasOne("MVCCamiloMentoria.Models.Coordenador", "Coordenador")
-                        .WithMany("Telefones")
+                        .WithMany("AlunoTelefone")
                         .HasForeignKey("CoordenadorId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("MVCCamiloMentoria.Models.Diretor", "Diretor")
-                        .WithMany("Telefones")
+                        .WithMany("AlunoTelefone")
                         .HasForeignKey("DiretorId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("MVCCamiloMentoria.Models.Escola", "Escola")
-                        .WithMany("Telefones")
+                        .WithMany("AlunoTelefone")
                         .HasForeignKey("EscolaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MVCCamiloMentoria.Models.Fornecedor", "Fornecedor")
-                        .WithMany("Telefones")
+                        .WithMany("AlunoTelefone")
                         .HasForeignKey("FornecedorId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("MVCCamiloMentoria.Models.PrestadorServico", "PrestadorServico")
-                        .WithMany("Telefones")
+                        .WithMany("AlunoTelefone")
                         .HasForeignKey("PrestadorServicoId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("MVCCamiloMentoria.Models.Professor", "Professor")
-                        .WithMany("Telefones")
+                        .WithMany("AlunoTelefone")
                         .HasForeignKey("ProfessorId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("MVCCamiloMentoria.Models.Responsavel", "Responsavel")
-                        .WithMany("Telefones")
+                        .WithMany("AlunoTelefone")
                         .HasForeignKey("ResponsavelId");
 
                     b.HasOne("MVCCamiloMentoria.Models.Supervisor", "Supervisor")
-                        .WithMany("Telefones")
+                        .WithMany("AlunoTelefone")
                         .HasForeignKey("SupervisorId")
                         .OnDelete(DeleteBehavior.NoAction);
 
@@ -1195,17 +1195,17 @@ namespace MVCCamiloMentoria.Migrations
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Aluno", b =>
                 {
-                    b.Navigation("Telefones");
+                    b.Navigation("AlunoTelefone");
                 });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Coordenador", b =>
                 {
-                    b.Navigation("Telefones");
+                    b.Navigation("AlunoTelefone");
                 });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Diretor", b =>
                 {
-                    b.Navigation("Telefones");
+                    b.Navigation("AlunoTelefone");
                 });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Disciplina", b =>
@@ -1232,7 +1232,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     b.Navigation("Professores");
 
-                    b.Navigation("Telefones");
+                    b.Navigation("AlunoTelefone");
 
                     b.Navigation("Turmas");
                 });
@@ -1244,7 +1244,7 @@ namespace MVCCamiloMentoria.Migrations
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Fornecedor", b =>
                 {
-                    b.Navigation("Telefones");
+                    b.Navigation("AlunoTelefone");
                 });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Marca", b =>
@@ -1259,26 +1259,26 @@ namespace MVCCamiloMentoria.Migrations
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.PrestadorServico", b =>
                 {
-                    b.Navigation("Telefones");
+                    b.Navigation("AlunoTelefone");
                 });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Professor", b =>
                 {
                     b.Navigation("Aulas");
 
-                    b.Navigation("Telefones");
+                    b.Navigation("AlunoTelefone");
 
                     b.Navigation("Turmas");
                 });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Responsavel", b =>
                 {
-                    b.Navigation("Telefones");
+                    b.Navigation("AlunoTelefone");
                 });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Supervisor", b =>
                 {
-                    b.Navigation("Telefones");
+                    b.Navigation("AlunoTelefone");
                 });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Telefone", b =>

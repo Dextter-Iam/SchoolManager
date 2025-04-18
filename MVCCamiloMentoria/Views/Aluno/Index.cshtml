@@ -25,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.Turma)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Telefone)
+                @Html.DisplayNameFor(model => model.AlunoTelefone) 
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Endereco)
@@ -37,41 +37,55 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataNascimento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmailEscolar)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AnoInscricao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BolsaEscolar)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Turma.NomeTurma)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telefone.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Endereco.NomeRua)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Escola.Nome)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataNascimento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmailEscolar)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AnoInscricao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BolsaEscolar)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Turma.NomeTurma)
+                </td>
+                <td>
+                    @if (item.AlunoTelefone != null && item.AlunoTelefone.Any())
+                    {
+                        foreach (var telefone in item.AlunoTelefone)
+                        {
+                            <p>@telefone.DDD @telefone.Numero</p>
+                        }
+                    }
+                    else
+                    {
+                        <p>No phones available</p>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Endereco.NomeRua)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Escola.Nome)
+                </td>
+            <tr>
+                <td>@item.Nome</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Detalhes</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Excluir</a>
+                </td>
+            </tr>
+            </tr>
+        }
     </tbody>
 </table>

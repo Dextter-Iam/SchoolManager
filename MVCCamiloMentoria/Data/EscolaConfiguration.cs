@@ -22,8 +22,7 @@ namespace MVCCamiloMentoria.Data
             builder.HasOne(e => e.Endereco)
                    .WithOne()
                    .HasForeignKey<Escola>(e => e.EnderecoId)
-                   .OnDelete(DeleteBehavior.Restrict);
-
+                   .OnDelete(DeleteBehavior.Restrict); 
 
             builder.HasMany(e => e.Turmas)
                    .WithOne()

@@ -38,14 +38,40 @@
                 <span asp-validation-for="TurmaId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TelefoneId" class="control-label"></label>
-                <select asp-for="TelefoneId" class="form-control" asp-items="ViewBag.TelefoneId"></select>
-                <span asp-validation-for="TelefoneId" class="text-danger"></span>
+                <label asp-for="AlunoTelefone" class="control-label"></label>
+                <select asp-for="AlunoTelefone" class="form-control" asp-items="ViewBag.TelefoneId"></select>
+                <span asp-validation-for="AlunoTelefone" class="text-danger"></span>
             </div>
+            <h5 class="mt-4">Endereço</h5>
+
             <div class="form-group">
-                <label asp-for="EnderecoId" class="control-label"></label>
-                <select asp-for="EnderecoId" class="form-control" asp-items="ViewBag.EnderecoId"></select>
-                <span asp-validation-for="EnderecoId" class="text-danger"></span>
+                <label asp-for="NomeRua" class="control-label">Rua</label>
+                <input asp-for="NomeRua" class="form-control" />
+                <span asp-validation-for="NomeRua" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NumeroRua" class="control-label">Número</label>
+                <input asp-for="NumeroRua" class="form-control" />
+                <span asp-validation-for="NumeroRua" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Complemento" class="control-label">Complemento</label>
+                <input asp-for="Complemento" class="form-control" />
+                <span asp-validation-for="Complemento" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CEP" class="control-label">CEP</label>
+                <input asp-for="CEP" class="form-control" />
+                <span asp-validation-for="CEP" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EstadoId" class="control-label"></label>
+                <select asp-for="EstadoId" class="form-control" asp-items="ViewBag.Estados"></select>
+                <span asp-validation-for="EstadoId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EscolaId" class="control-label"></label>

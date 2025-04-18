@@ -8,6 +8,7 @@ public class EscolaContext : DbContext
     {
     }
     public DbSet<Turma> Turma { get; set; }
+    public DbSet<AlunoTelefone> AlunoTelefone { get; set; }
     public DbSet<Aluno> Aluno { get; set; }
     public DbSet<Aula> Aula { get; set; }
     public DbSet<Disciplina> Disciplina { get; set; }
@@ -18,6 +19,7 @@ public class EscolaContext : DbContext
     public DbSet<Equipamento> Equipamento { get; set; }
     public DbSet<PrestadorServico> PrestadorServico { get; set; }
     public DbSet<Marca> Marca { get; set; }
+    public DbSet<Telefone> Telefone { get; set; }
     public DbSet<Modelo> Modelo { get; set; }
     public DbSet<Diretor> Diretor { get; set; }
     public DbSet<Professor> Professor { get; set; }
