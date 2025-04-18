@@ -30,14 +30,23 @@ a {
     }
 
 .navbar {
-    background-color: #ffffff;
-    border-bottom: 1px solid #e5e5e5;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease-in-out;
 }
 
+.navbar-nav .nav-link {
+    transition: color 0.3s ease, background-color 0.3s ease;
+    padding: 0.6rem 1rem;
+    border-radius: 0.4rem;
+}
+
+    .navbar-nav .nav-link:hover {
+        background-color: #f1f1f1;
+        color: #0056b3;
+        text-decoration: none;
+    }
+
 .navbar-brand {
-    font-weight: bold;
-    font-size: 1.2rem;
+    letter-spacing: 0.5px;
 }
 
 .nav-link {
