@@ -11,40 +11,48 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-light border-bottom box-shadow mb-3">
+    <header>    
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-3 py-2">
             <div class="container-fluid">
-                <a class="navbar-brand fw-bold text-primary" asp-area="" asp-controller="Home" asp-action="Index">MVCCamiloMentoria</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-                        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <!-- Brand -->
+                <a class="navbar-brand fw-bold text-primary fs-4" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-graduation-cap me-2"></i>School Manager
+                </a>
+
+                <!-- Hamburger -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                        aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
-                    <ul class="navbar-nav">
+
+                <!-- Links -->
+                <div class="collapse navbar-collapse justify-content-end" id="navbarMain">
+                    <ul class="navbar-nav gap-2">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Aluno" asp-action="Index">
-                                <i class="fas fa-user-graduate me-1"></i> Alunos
+                            <a class="nav-link d-flex align-items-center text-dark" asp-controller="Aluno" asp-action="Index">
+                                <i class="fas fa-user-graduate me-2 text-primary"></i> Alunos
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Disciplina" asp-action="Index">
-                                <i class="fas fa-book-open me-1"></i> Disciplinas
+                            <a class="nav-link d-flex align-items-center text-dark" asp-controller="Disciplina" asp-action="Index">
+                                <i class="fas fa-book-open me-2 text-success"></i> Disciplinas
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Fornecedor" asp-action="Index">
-                                <i class="fas fa-truck me-1"></i> Fornecedores
+                            <a class="nav-link d-flex align-items-center text-dark" asp-controller="Fornecedor" asp-action="Index">
+                                <i class="fas fa-truck me-2 text-warning"></i> Fornecedores
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Escola" asp-action="Index">
-                                <i class="fas fa-school me-1"></i> Escolas
+                            <a class="nav-link d-flex align-items-center text-dark" asp-controller="Escola" asp-action="Index">
+                                <i class="fas fa-school me-2 text-secondary"></i> Escolas
                             </a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
+
     </header>
 
     <div class="container pb-5">
@@ -55,7 +63,7 @@
 
     <footer class="border-top footer text-muted bg-light">
         <div class="container text-center py-3">
-            &copy; 2025 - <strong>MVCCamiloMentoria</strong> - <a asp-controller="Home" asp-action="Privacy">Política de Privacidade</a>
+            &copy; 2025 - <strong>FisAppAcademy</strong> - <a asp-controller="Home" asp-action="Privacy">Política de Privacidade</a>
         </div>
     </footer>
 
