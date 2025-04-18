@@ -1,57 +1,67 @@
 ﻿@model MVCCamiloMentoria.ViewModels.EscolaViewModel
 
-<h4>Escola</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edited">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
+<div class="container">
+    <h4>Editar Escola</h4>
+    <hr />
+
+    <form asp-action="Edited" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+
+        <fieldset class="border rounded p-3 mb-4">
+            <legend class="w-auto px-2">Informações da Escola</legend>
+
+            <div class="form-group mb-3">
+                <label asp-for="Nome" class="control-label fw-bold"></label>
                 <input asp-for="Nome" class="form-control" />
                 <span asp-validation-for="Nome" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="NomeRua" class="control-label">Rua</label>
+
+            <h5 class="mt-4">Endereço</h5>
+
+            <div class="form-group mb-3">
+                <label asp-for="NomeRua" class="control-label fw-bold">Rua</label>
                 <input asp-for="NomeRua" class="form-control" />
                 <span asp-validation-for="NomeRua" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="NumeroRua" class="control-label">Número</label>
+            <div class="form-group mb-3">
+                <label asp-for="NumeroRua" class="control-label fw-bold">Número</label>
                 <input asp-for="NumeroRua" class="form-control" />
                 <span asp-validation-for="NumeroRua" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Complemento" class="control-label">Complemento</label>
+            <div class="form-group mb-3">
+                <label asp-for="Complemento" class="control-label fw-bold">Complemento</label>
                 <input asp-for="Complemento" class="form-control" />
                 <span asp-validation-for="Complemento" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="CEP" class="control-label">CEP</label>
+            <div class="form-group mb-3">
+                <label asp-for="CEP" class="control-label fw-bold">CEP</label>
                 <input asp-for="CEP" class="form-control" />
                 <span asp-validation-for="CEP" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EstadoId" class="control-label"></label>
+
+            <div class="form-group mb-3">
+                <label asp-for="EstadoId" class="control-label fw-bold"></label>
                 <select asp-for="EstadoId" class="form-control" asp-items="ViewBag.Estados"></select>
                 <span asp-validation-for="EstadoId" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="form-group mb-3">
+                <button type="submit" class="btn btn-primary">Salvar</button>
             </div>
-        </form>
+        </fieldset>
+    </form>
+
+    <div>
+        <a asp-action="Index" class="btn btn-secondary">Voltar à Lista</a>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

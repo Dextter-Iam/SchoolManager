@@ -1,28 +1,43 @@
 ﻿@model MVCCamiloMentoria.ViewModels.DisciplinaViewModel
 
-<h4>Disciplina</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="container">
+    <h3 class="mb-4">Editar Disciplina</h3>
+    <div class="card">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Editar Disciplina: @Model.Nome</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <!-- Campo Nome -->
+                <div class="form-group">
+                    <label asp-for="Nome" class="control-label">Nome da Disciplina</label>
+                    <input asp-for="Nome" class="form-control" placeholder="Digite o nome da disciplina" />
+                    <span asp-validation-for="Nome" class="text-danger"></span>
+                </div>
+
+                <!-- Botão de Salvar -->
+                <div class="form-group text-right">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-save"></i> Salvar Alterações
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Link para voltar à lista -->
+    <div class="mt-3">
+        <a asp-action="Index" class="btn btn-secondary btn-sm">
+            <i class="fas fa-arrow-left"></i> Voltar para a Lista
+        </a>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -1,50 +1,55 @@
 ﻿@model IEnumerable<MVCCamiloMentoria.ViewModels.FornecedorViewModel>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CNPJ)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CPF)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FinalidadeFornecedor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EscolaId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CNPJ)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CPF)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FinalidadeFornecedor)
-            </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Detalhes</a>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Editar</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Excluir</a>
-                </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="container">
+    <h3 class="mb-4">Lista de Fornecedores</h3>
+    <div class="d-flex justify-content-between mb-3">
+        <!-- Botão para criar novo fornecedor -->
+        <a asp-action="Create" class="btn btn-success btn-lg">
+            <i class="fas fa-plus"></i> Criar Novo Fornecedor
+        </a>
+    </div>
+
+    <!-- Tabela de Fornecedores -->
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Fornecedores Cadastrados</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Nome)</th>
+                        <th>@Html.DisplayNameFor(model => model.CNPJ)</th>
+                        <th>@Html.DisplayNameFor(model => model.CPF)</th>
+                        <th>@Html.DisplayNameFor(model => model.FinalidadeFornecedor)</th>
+                        <th>@Html.DisplayNameFor(model => model.EscolaId)</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                            <td>@Html.DisplayFor(modelItem => item.CNPJ)</td>
+                            <td>@Html.DisplayFor(modelItem => item.CPF)</td>
+                            <td>@Html.DisplayFor(modelItem => item.FinalidadeFornecedor)</td>
+                            <td>@Html.DisplayFor(modelItem => item.EscolaId)</td>
+                            <td class="text-center">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash"></i> Excluir
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

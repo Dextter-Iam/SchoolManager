@@ -3,38 +3,60 @@
 @{
     ViewData["Title"] = "Escolas";
 }
-@if (TempData["MensagemSucesso"] != null)
-{
-    <div class="alert alert-success">@TempData["MensagemSucesso"]</div>
-}
-@if (TempData["MensagemErro"] != null)
-{
-    <div class="alert alert-danger">@TempData["MensagemErro"]</div>
-}
-<h2>Escolas</h2>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Cadastrar Escola</a>
-</p>
+<div class="container">
+    <!-- Mensagens de sucesso ou erro -->
+    @if (TempData["MensagemSucesso"] != null)
+    {
+        <div class="alert alert-success mb-4">@TempData["MensagemSucesso"]</div>
+    }
+    @if (TempData["MensagemErro"] != null)
+    {
+        <div class="alert alert-danger mb-4">@TempData["MensagemErro"]</div>
+    }
 
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Nome</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Detalhes</a>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Editar</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Excluir</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <h2 class="mb-5">Escolas</h2>
+
+    <!-- Botão para cadastrar escola -->
+    <div class="d-flex justify-content-between mb-4">
+        <a asp-action="Create" class="btn btn-success btn-lg">
+            <i class="fas fa-plus"></i> Cadastrar Escola
+        </a>
+    </div>
+
+    <!-- Tabela de Escolas -->
+    <div class="card shadow-sm mb-5">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Escolas Cadastradas</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Nome</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Nome</td>
+                            <td class="text-center">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm mb-2">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm mb-2">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash"></i> Excluir
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

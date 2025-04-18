@@ -1,102 +1,143 @@
 ﻿@model MVCCamiloMentoria.ViewModels.AlunoViewModel
 
-<h4>AlunoViewModel</h4>
+<h4>Cadastro de Aluno</h4>
 <hr />
+
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8 offset-md-2">
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DataNascimento" class="control-label"></label>
-                <input asp-for="DataNascimento" class="form-control" />
-                <span asp-validation-for="DataNascimento" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EmailEscolar" class="control-label"></label>
-                <input asp-for="EmailEscolar" class="form-control" />
-                <span asp-validation-for="EmailEscolar" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AnoInscricao" class="control-label"></label>
-                <input asp-for="AnoInscricao" class="form-control" />
-                <span asp-validation-for="AnoInscricao" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="BolsaEscolar" /> @Html.DisplayNameFor(model => model.BolsaEscolar)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="TurmaId" class="control-label"></label>
-                <select asp-for="TurmaId" class ="form-control" asp-items="ViewBag.TurmaId"></select>
-            </div>
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-        <h5 class="mt-4">Telefone</h5>
+            <fieldset class="border rounded p-3 mb-4">
+                <legend class="w-auto px-2">Informações Pessoais</legend>
 
-        <div class="form-group">
-            <label asp-for="DDD" class="control-label">DDD</label>
-            <input asp-for="DDD" class="form-control" />
-            <span asp-validation-for="DDD" class="text-danger"></span>
-        </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group mb-3">
+                            <label asp-for="Nome" class="form-label"></label>
+                            <input asp-for="Nome" class="form-control" />
+                            <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label asp-for="DataNascimento" class="form-label"></label>
+                            <input asp-for="DataNascimento" class="form-control" />
+                            <span asp-validation-for="DataNascimento" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="form-group">
-            <label asp-for="Numero" class="control-label">Número</label>
-            <input asp-for="Numero" class="form-control" />
-            <span asp-validation-for="Numero" class="text-danger"></span>
-        </div>
+                <div class="form-group mb-3">
+                    <label asp-for="EmailEscolar" class="form-label"></label>
+                    <input asp-for="EmailEscolar" class="form-control" />
+                    <span asp-validation-for="EmailEscolar" class="text-danger"></span>
+                </div>
 
-            <h5 class="mt-4">Endereço</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="AnoInscricao" class="form-label"></label>
+                            <input asp-for="AnoInscricao" class="form-control" />
+                            <span asp-validation-for="AnoInscricao" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-center">
+                        <div class="form-check mt-3">
+                            <input class="form-check-input" asp-for="BolsaEscolar" />
+                            <label class="form-check-label" asp-for="BolsaEscolar"></label>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="NomeRua" class="control-label">Rua</label>
-                <input asp-for="NomeRua" class="form-control" />
-                <span asp-validation-for="NomeRua" class="text-danger"></span>
-            </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="TurmaId" class="form-label"></label>
+                            <select asp-for="TurmaId" class="form-select" asp-items="ViewBag.TurmaId"></select>
+                            <span asp-validation-for="TurmaId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="EscolaId" class="form-label"></label>
+                            <select asp-for="EscolaId" class="form-select" asp-items="ViewBag.EscolaId"></select>
+                            <span asp-validation-for="EscolaId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
 
-            <div class="form-group">
-                <label asp-for="NumeroRua" class="control-label">Número</label>
-                <input asp-for="NumeroRua" class="form-control" />
-                <span asp-validation-for="NumeroRua" class="text-danger"></span>
-            </div>
+            <fieldset class="border rounded p-3 mb-4">
+                <legend class="w-auto px-2">Telefone</legend>
 
-            <div class="form-group">
-                <label asp-for="Complemento" class="control-label">Complemento</label>
-                <input asp-for="Complemento" class="form-control" />
-                <span asp-validation-for="Complemento" class="text-danger"></span>
-            </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label asp-for="DDD" class="form-label"></label>
+                            <input asp-for="DDD" class="form-control" />
+                            <span asp-validation-for="DDD" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group mb-3">
+                            <label asp-for="Numero" class="form-label"></label>
+                            <input asp-for="Numero" class="form-control" />
+                            <span asp-validation-for="Numero" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
 
-            <div class="form-group">
-                <label asp-for="CEP" class="control-label">CEP</label>
-                <input asp-for="CEP" class="form-control" />
-                <span asp-validation-for="CEP" class="text-danger"></span>
-            </div>
+            <fieldset class="border rounded p-3 mb-4">
+                <legend class="w-auto px-2">Endereço</legend>
 
-            <div class="form-group">
-                <label asp-for="EstadoId" class="control-label"></label>
-                <select asp-for="EstadoId" class="form-control" asp-items="ViewBag.Estados"></select>
-                <span asp-validation-for="EstadoId" class="text-danger"></span>
-            </div>
+                <div class="form-group mb-3">
+                    <label asp-for="NomeRua" class="form-label"></label>
+                    <input asp-for="NomeRua" class="form-control" />
+                    <span asp-validation-for="NomeRua" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="EscolaId" class="control-label"></label>
-                <select asp-for="EscolaId" class ="form-control" asp-items="ViewBag.EscolaId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label asp-for="NumeroRua" class="form-label"></label>
+                            <input asp-for="NumeroRua" class="form-control" />
+                            <span asp-validation-for="NumeroRua" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group mb-3">
+                            <label asp-for="Complemento" class="form-label"></label>
+                            <input asp-for="Complemento" class="form-control" />
+                            <span asp-validation-for="Complemento" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="CEP" class="form-label"></label>
+                    <input asp-for="CEP" class="form-control" />
+                    <span asp-validation-for="CEP" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="EstadoId" class="form-label"></label>
+                    <select asp-for="EstadoId" class="form-select" asp-items="ViewBag.Estados"></select>
+                    <span asp-validation-for="EstadoId" class="text-danger"></span>
+                </div>
+            </fieldset>
+
+            <div class="form-group text-end">
+                <input type="submit" value="Cadastrar" class="btn btn-primary px-4" />
+                <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

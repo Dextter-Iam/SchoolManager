@@ -1,24 +1,65 @@
 ﻿@model MVCCamiloMentoria.ViewModels.EscolaViewModel
 
-<div>
-    <h4>Escola</h4>
+<div class="container">
+    <h4>Detalhes da Escola</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Endereco)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Endereco.NomeRua)
-        </dd>
-    </dl>
+
+    <fieldset class="border rounded p-3 mb-4">
+        <legend class="w-auto px-2">Informações da Escola</legend>
+
+        <dl class="row">
+            <dt class="col-sm-3 fw-bold">
+                @Html.DisplayNameFor(model => model.Nome)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Nome)
+            </dd>
+
+            <dt class="col-sm-3 fw-bold">
+                @Html.DisplayNameFor(model => model.Endereco)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Endereco.NomeRua)
+            </dd>
+
+            <dt class="col-sm-3 fw-bold">
+                @Html.DisplayNameFor(model => model.Endereco.NumeroRua)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Endereco.NumeroRua)
+            </dd>
+
+            <dt class="col-sm-3 fw-bold">
+                @Html.DisplayNameFor(model => model.Endereco.Complemento)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Endereco.Complemento)
+            </dd>
+
+            <dt class="col-sm-3 fw-bold">
+                @Html.DisplayNameFor(model => model.Endereco.CEP)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Endereco.CEP)
+            </dd>
+
+            <dt class="col-sm-3 fw-bold">
+                @Html.DisplayNameFor(model => model.Endereco.EstadoId)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Endereco.EstadoId)
+            </dd>
+        </dl>
+    </fieldset>
+
+    <div class="d-flex justify-content-between">
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Editar</a>
+        <a asp-action="Index" class="btn btn-secondary">Voltar à Lista</a>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,51 +1,59 @@
 ﻿@model MVCCamiloMentoria.ViewModels.EscolaViewModel
 
-<h4>Escola</h4>
+<h4>Cadastro de Escola</h4>
 <hr />
+
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 offset-md-3">
         <form asp-action="Create" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
+            <fieldset class="border rounded p-3 mb-4">
+                <legend class="w-auto px-2">Dados da Escola</legend>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Nome" class="form-label"></label>
+                    <input asp-for="Nome" class="form-control" />
+                    <span asp-validation-for="Nome" class="text-danger"></span>
+                </div>
+
+                <h5 class="mt-4">Endereço</h5>
+
+                <div class="form-group mb-3">
+                    <label asp-for="NomeRua" class="form-label">Rua</label>
+                    <input asp-for="NomeRua" class="form-control" />
+                    <span asp-validation-for="NomeRua" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="NumeroRua" class="form-label">Número</label>
+                    <input asp-for="NumeroRua" class="form-control" />
+                    <span asp-validation-for="NumeroRua" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Complemento" class="form-label">Complemento</label>
+                    <input asp-for="Complemento" class="form-control" />
+                    <span asp-validation-for="Complemento" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="CEP" class="form-label">CEP</label>
+                    <input asp-for="CEP" class="form-control" />
+                    <span asp-validation-for="CEP" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="EstadoId" class="form-label"></label>
+                    <select asp-for="EstadoId" class="form-select" asp-items="ViewBag.Estados"></select>
+                    <span asp-validation-for="EstadoId" class="text-danger"></span>
+                </div>
+            </fieldset>
+
+            <div class="form-group text-end">
+                <button type="submit" class="btn btn-primary px-4">Salvar</button>
+                <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
             </div>
-
-            <h5 class="mt-4">Endereço</h5>
-
-            <div class="form-group">
-                <label asp-for="NomeRua" class="control-label">Rua</label>
-                <input asp-for="NomeRua" class="form-control" />
-                <span asp-validation-for="NomeRua" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="NumeroRua" class="control-label">Número</label>
-                <input asp-for="NumeroRua" class="form-control" />
-                <span asp-validation-for="NumeroRua" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Complemento" class="control-label">Complemento</label>
-                <input asp-for="Complemento" class="form-control" />
-                <span asp-validation-for="Complemento" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="CEP" class="control-label">CEP</label>
-                <input asp-for="CEP" class="form-control" />
-                <span asp-validation-for="CEP" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="EstadoId" class="control-label"></label>
-                <select asp-for="EstadoId" class="form-control" asp-items="ViewBag.Estados"></select>
-                <span asp-validation-for="EstadoId" class="text-danger"></span>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Salvar</button>
         </form>
     </div>
 </div>
@@ -55,6 +63,7 @@
 </div>
 
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");
-}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
