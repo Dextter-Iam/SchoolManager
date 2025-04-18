@@ -16,9 +16,11 @@ namespace MVCCamiloMentoria.Controllers
         {
             _context = context;
         }
+
         // GET: EscolaController
         public async Task<IActionResult> Index()
         {
+            TempData["MensagemInfo"] = "Lista de escolas carregada com sucesso.";
             var escolas = await _context.Escola
                         .Select(e => new EscolaViewModel
                         {
@@ -34,6 +36,7 @@ namespace MVCCamiloMentoria.Controllers
         {
             if (id == null)
             {
+                TempData["MensagemErro"] = "ID da escola não fornecido.";
                 return NotFound();
             }
 
@@ -48,9 +51,11 @@ namespace MVCCamiloMentoria.Controllers
 
             if (escolas == null)
             {
+                TempData["MensagemErro"] = "Escola não encontrada.";
                 return NotFound();
             }
 
+            TempData["MensagemInfo"] = "Detalhes da escola carregados com sucesso.";
             var escolaViewModel = new EscolaViewModel
             {
                 Nome = escolas.Nome,
@@ -68,11 +73,12 @@ namespace MVCCamiloMentoria.Controllers
             try
             {
                 CarregarViewBags();
+                TempData["MensagemInfo"] = "Preencha o formulário para cadastrar uma nova escola.";
                 return View();
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erro no método Create: " + ex.Message);
+                TempData["MensagemErro"] = "Erro ao carregar formulário de criação: " + ex.Message;
                 return View();
             }
         }
@@ -103,20 +109,21 @@ namespace MVCCamiloMentoria.Controllers
                 _context.Escola.Add(escola);
                 await _context.SaveChangesAsync();
 
-                TempData["MensagemSucesso"] = "Cadastro Realizado Com Sucesso!";
+                TempData["MensagemSucesso"] = "Cadastro realizado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
 
+            TempData["MensagemErro"] = "Erro ao cadastrar. Verifique os campos obrigatórios.";
             CarregarViewBags(viewModel);
             return View(viewModel);
         }
-
 
         // GET: EscolaController/Edit
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
+                TempData["MensagemErro"] = "ID da escola não fornecido.";
                 return NotFound();
             }
 
@@ -126,6 +133,7 @@ namespace MVCCamiloMentoria.Controllers
 
             if (escola == null)
             {
+                TempData["MensagemErro"] = "Escola não encontrada.";
                 return NotFound();
             }
 
@@ -134,25 +142,25 @@ namespace MVCCamiloMentoria.Controllers
                 Id = escola.Id,
                 Nome = escola.Nome,
                 EstadoId = escola.EstadoId,
-
                 NomeRua = escola.Endereco?.NomeRua,
                 NumeroRua = (int)escola.Endereco?.NumeroRua,
                 Complemento = escola.Endereco?.Complemento,
                 CEP = (int)escola.Endereco?.CEP,
             };
 
+            TempData["MensagemInfo"] = "Edite os dados da escola e clique em salvar.";
             CarregarViewBags(viewModel);
             return View(viewModel);
         }
 
-
-        //POST: EscolaController/Edit/5
+        // POST: EscolaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edited(int? id, EscolaViewModel viewModel)
         {
             if (id != viewModel.Id)
             {
+                TempData["MensagemErro"] = "ID inválido para edição.";
                 return NotFound();
             }
 
@@ -164,6 +172,7 @@ namespace MVCCamiloMentoria.Controllers
 
                 if (escola == null)
                 {
+                    TempData["MensagemErro"] = "Escola não encontrada.";
                     return NotFound();
                 }
 
@@ -181,22 +190,23 @@ namespace MVCCamiloMentoria.Controllers
                 escola.Endereco.CEP = viewModel.CEP;
                 escola.Endereco.EstadoId = (int)viewModel.EstadoId;
 
-
                 await _context.SaveChangesAsync();
 
+                TempData["MensagemSucesso"] = "Escola editada com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
 
+            TempData["MensagemErro"] = "Erro ao editar escola. Verifique os dados informados.";
             CarregarViewBags(viewModel);
             return View(viewModel);
         }
-
 
         // GET: EscolaController/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
+                TempData["MensagemErro"] = "ID da escola não fornecido.";
                 return NotFound();
             }
 
@@ -206,6 +216,7 @@ namespace MVCCamiloMentoria.Controllers
 
             if (escola == null)
             {
+                TempData["MensagemErro"] = "Escola não encontrada.";
                 return NotFound();
             }
 
@@ -220,6 +231,7 @@ namespace MVCCamiloMentoria.Controllers
                 EstadoId = escola.EstadoId
             };
 
+            TempData["MensagemInfo"] = "Confirme a exclusão da escola.";
             return View(viewModel);
         }
 
@@ -251,7 +263,7 @@ namespace MVCCamiloMentoria.Controllers
                 TempData["MensagemSucesso"] = "Exclusão realizada com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 TempData["MensagemErro"] = "Não é possível excluir esta escola. Verifique se há coordenadores, telefones ou outros registros vinculados.";
                 return RedirectToAction(nameof(Index));
@@ -262,8 +274,6 @@ namespace MVCCamiloMentoria.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
-
-
 
         private void CarregarViewBags(EscolaViewModel viewModel = null)
         {
@@ -278,9 +288,5 @@ namespace MVCCamiloMentoria.Controllers
 
             ViewBag.Estados = estados;
         }
-
-
-
-
     }
 }

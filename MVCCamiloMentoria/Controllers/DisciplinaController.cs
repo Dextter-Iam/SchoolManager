@@ -33,8 +33,7 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            var disciplina = await _context.Disciplina
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var disciplina = await _context.Disciplina.FirstOrDefaultAsync(m => m.Id == id);
             if (disciplina == null)
             {
                 return NotFound();
@@ -52,23 +51,26 @@ namespace MVCCamiloMentoria.Controllers
         }
 
         // POST: Disciplinas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DisciplinaViewModel disciplinaViewModel)
         {
             if (ModelState.IsValid)
             {
-                var disciplina = new Disciplina 
-                { Nome = disciplinaViewModel.Nome,
-                  EscolaId = disciplinaViewModel.EscolaId
+                var disciplina = new Disciplina
+                {
+                    Nome = disciplinaViewModel.Nome,
+                    EscolaId = disciplinaViewModel.EscolaId,
                 };
                 _context.Add(disciplina);
                 await _context.SaveChangesAsync();
+
+                TempData["MensagemSucesso"] = "Disciplina criada com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
+
             CarregarViewBags(disciplinaViewModel);
+            TempData["MensagemErro"] = "Erro ao criar disciplina. Verifique os dados informados.";
             return View(disciplinaViewModel);
         }
 
@@ -86,13 +88,17 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            var viewModel = new DisciplinaViewModel { Id = disciplina.Id, Nome = disciplina.Nome };
+            var viewModel = new DisciplinaViewModel
+            {
+                Id = disciplina.Id,
+                Nome = disciplina.Nome,
+            };
+
+            CarregarViewBags(viewModel);
             return View(viewModel);
         }
 
         // POST: Disciplinas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, DisciplinaViewModel disciplinaViewModel)
@@ -100,19 +106,20 @@ namespace MVCCamiloMentoria.Controllers
             if (id != disciplinaViewModel.Id)
             {
                 return NotFound();
-
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var disciplina = _context.Disciplina.Find(id);
+                    var disciplina = await _context.Disciplina.FindAsync(id);
                     if (disciplina != null)
                     {
                         disciplina.Nome = disciplinaViewModel.Nome;
                         _context.Update(disciplina);
                         await _context.SaveChangesAsync();
+
+                        TempData["MensagemSucesso"] = "Disciplina editada com sucesso!";
                     }
                 }
                 catch (DbUpdateConcurrencyException)
@@ -128,6 +135,9 @@ namespace MVCCamiloMentoria.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            CarregarViewBags(disciplinaViewModel);
+            TempData["MensagemErro"] = "Erro ao editar disciplina. Verifique os dados informados.";
             return View(disciplinaViewModel);
         }
 
@@ -139,8 +149,7 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            var disciplina = await _context.Disciplina
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var disciplina = await _context.Disciplina.FirstOrDefaultAsync(m => m.Id == id);
             if (disciplina == null)
             {
                 return NotFound();
@@ -159,9 +168,15 @@ namespace MVCCamiloMentoria.Controllers
             if (disciplina != null)
             {
                 _context.Disciplina.Remove(disciplina);
+                await _context.SaveChangesAsync();
+
+                TempData["MensagemSucesso"] = "Disciplina excluída com sucesso!";
+            }
+            else
+            {
+                TempData["MensagemErro"] = "Erro ao excluir disciplina. Registro não encontrado.";
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -174,6 +189,5 @@ namespace MVCCamiloMentoria.Controllers
         {
             ViewBag.EscolaId = new SelectList(_context.Escola, "Id", "Nome", viewModel?.EscolaId);
         }
-
     }
 }
