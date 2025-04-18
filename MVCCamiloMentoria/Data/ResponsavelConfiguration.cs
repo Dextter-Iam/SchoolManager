@@ -26,9 +26,9 @@ namespace MVCCamiloMentoria.Data
                    .HasForeignKey(e => e.ResponsavelId)
                    .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasMany(r => r.Alunos)
-                   .WithMany(r => r.Responsaveis)
-                   .UsingEntity(ra => ra.ToTable("ResponsavelAluno"));
+            builder.HasMany(r => r.AlunoResponsavel)
+                   .WithOne(ar => ar.Responsavel)
+                   .HasForeignKey(ar => ar.ResponsavelId);
 
         }
     }

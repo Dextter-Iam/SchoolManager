@@ -10,6 +10,7 @@ public class EscolaContext : DbContext
     public DbSet<Turma> Turma { get; set; }
     public DbSet<AlunoTelefone> AlunoTelefone { get; set; }
     public DbSet<Aluno> Aluno { get; set; }
+    public DbSet<AlunoResponsavel> AlunoResponsavel { get; set; }
     public DbSet<Aula> Aula { get; set; }
     public DbSet<Disciplina> Disciplina { get; set; }
     public DbSet<Estado> Estado { get; set; }

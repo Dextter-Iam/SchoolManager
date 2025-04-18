@@ -32,8 +32,8 @@ public class AlunoConfiguration : IEntityTypeConfiguration<Aluno>
                .HasForeignKey<Aluno>(a => a.EnderecoId)
                .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasMany(a => a.Responsaveis)
-               .WithMany(r => r.Alunos)
-               .UsingEntity(j => j.ToTable("AlunoResponsavel"));
+        builder.HasMany(a => a.AlunoResponsavel)
+               .WithOne(ar => ar.Aluno)
+               .HasForeignKey(ar => ar.AlunoId);
     }
 }

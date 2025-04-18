@@ -47,7 +47,7 @@ namespace MVCCamiloMentoria.Controllers
                 .Include(a => a.Turma)
                 .Include(a => a.Endereco)
                 .Include(a => a.Escola)
-                .Include(a => a.Responsaveis)
+                .Include(a => a.AlunoResponsavel)
                 .Include(a => a.Aulas)
                 .Include(a => a.AlunoTelefone!)
                     .ThenInclude(at => at.Telefone)
@@ -85,7 +85,7 @@ namespace MVCCamiloMentoria.Controllers
 
                 EscolaId = aluno.EscolaId,
                 Escola = aluno.Escola,
-                Responsaveis = aluno.Responsaveis,
+                AlunoResponsavel = aluno.AlunoResponsavel,
                 Aulas = aluno.Aulas
             };
 
@@ -178,19 +178,20 @@ namespace MVCCamiloMentoria.Controllers
         {
             if (id == null)
                 return NotFound();
-            
+
             var aluno = await _context.Aluno
-                .Include(a => a.AlunoTelefone!) 
-                .ThenInclude(at => at.Telefone) 
+                .Include(a => a.AlunoTelefone!)
+                    .ThenInclude(at => at.Telefone)
                 .Include(a => a.Turma)
-                .Include(a => a.Escola) 
-                .Include(a => a.Endereco) 
+                .Include(a => a.Escola)
+                .Include(a => a.Endereco)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (aluno == null)
                 return NotFound();
 
-            var alunoTelefone = aluno.AlunoTelefone?.FirstOrDefault();
+            var telefone = aluno.AlunoTelefone?
+                .FirstOrDefault(at => at.Telefone != null)?.Telefone;
 
             var viewModel = new AlunoViewModel
             {
@@ -203,19 +204,19 @@ namespace MVCCamiloMentoria.Controllers
                 TurmaId = aluno.TurmaId,
                 EscolaId = aluno.EscolaId,
 
-                DDD = alunoTelefone?.Telefone?.DDD ?? 0,
-                Numero = alunoTelefone?.Telefone?.Numero ?? 0,
+                DDD = telefone?.DDD ?? 0,
+                Numero = telefone?.Numero ?? 0,
 
                 NomeRua = aluno.Endereco?.NomeRua,
                 NumeroRua = aluno.Endereco?.NumeroRua ?? 0,
                 Complemento = aluno.Endereco?.Complemento,
                 CEP = aluno.Endereco?.CEP ?? 0,
-                EstadoId = (int)aluno.Endereco?.EstadoId!,
+                EstadoId = aluno.Endereco?.EstadoId ?? 0,
                 Estado = aluno.Endereco?.Estado,
 
                 Turma = aluno.Turma,
                 Escola = aluno.Escola,
-                Responsaveis = aluno.Responsaveis,
+                AlunoResponsavel = aluno.AlunoResponsavel,
                 Aulas = aluno.Aulas
             };
 
@@ -224,6 +225,7 @@ namespace MVCCamiloMentoria.Controllers
 
             return View(viewModel);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -246,7 +248,7 @@ namespace MVCCamiloMentoria.Controllers
                     aluno.AnoInscricao = viewModel.AnoInscricao;
                     aluno.BolsaEscolar = viewModel.BolsaEscolar;
                     aluno.TurmaId = viewModel.TurmaId;
-                    aluno.EnderecoId = viewModel.EnderecoId;
+                    aluno.Endereco = viewModel.Endereco;
                     aluno.EscolaId = viewModel.EscolaId;
 
                     var alunoTelefone = _context.AlunoTelefone.FirstOrDefault(at => at.AlunoId == aluno.Id);
@@ -266,7 +268,8 @@ namespace MVCCamiloMentoria.Controllers
                         var telefone = new Telefone
                         {
                             DDD = viewModel.DDD,
-                            Numero = viewModel.Numero
+                            Numero = viewModel.Numero,
+                            EscolaId = viewModel.EscolaId,
                         };
 
                         _context.Telefone.Add(telefone);

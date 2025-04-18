@@ -34,7 +34,7 @@ namespace MVCCamiloMentoria.Models
 
         public List<AlunoTelefone>? AlunoTelefone { get; set; }
 
-        public List<Responsavel>? Responsaveis { get; set; }
+        public List<AlunoResponsavel>? AlunoResponsavel { get; set; }
 
         public List<Aula>? Aulas { get; set; }
     }

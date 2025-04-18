@@ -50,7 +50,7 @@ namespace MVCCamiloMentoria.ViewModels
         [Range(10000000, 999999999, ErrorMessage = "Número inválido")]
         public int Numero { get; set; }
 
-        public int EnderecoId { get; set; }
+        public int? EnderecoId { get; set; }
         public Endereco? Endereco { get; set; }
 
         [DisplayName("Nome da Rua")]
@@ -74,14 +74,14 @@ namespace MVCCamiloMentoria.ViewModels
 
         [DisplayName("Estado")]
         [Required(ErrorMessage = "O estado é obrigatório.")]
-        public int EstadoId { get; set; }
+        public int? EstadoId { get; set; }
         public Estado? Estado { get; set; }
 
         [DisplayName("Escola")]
         [Required(ErrorMessage = "A escola é obrigatória.")]
         public int EscolaId { get; set; }
         public Escola? Escola { get; set; }
-        public List<Responsavel>? Responsaveis { get; set; }
+        public List<AlunoResponsavel>? AlunoResponsavel { get; set; }
         public List<AlunoTelefone>? AlunoTelefone { get; set; }
         public List<Aula>? Aulas { get; set; }
     }

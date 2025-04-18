@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MVCCamiloMentoria.Migrations
 {
     /// <inheritdoc />
-    public partial class tablesoftchot : Migration
+    public partial class ajustedtables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,7 +55,7 @@ namespace MVCCamiloMentoria.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    EstadoId = table.Column<int>(type: "int", nullable: false),
+                    EstadoId = table.Column<int>(type: "int", nullable: true),
                     EnderecoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -71,8 +71,7 @@ namespace MVCCamiloMentoria.Migrations
                         name: "FK_Escola_Estado_EstadoId",
                         column: x => x.EstadoId,
                         principalTable: "Estado",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -141,7 +140,7 @@ namespace MVCCamiloMentoria.Migrations
                         column: x => x.EscolaId,
                         principalTable: "Escola",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -169,7 +168,7 @@ namespace MVCCamiloMentoria.Migrations
                         column: x => x.EscolaId,
                         principalTable: "Escola",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -285,7 +284,7 @@ namespace MVCCamiloMentoria.Migrations
                         column: x => x.EscolaId,
                         principalTable: "Escola",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -331,24 +330,24 @@ namespace MVCCamiloMentoria.Migrations
                         column: x => x.SupervisorId,
                         principalTable: "Supervisor",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Modelo",
+                name: "ModeloEquipamento",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Nome = table.Column<string>(type: "nvarchar(190)", maxLength: 190, nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false),
                     MarcaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Modelo", x => x.Id);
+                    table.PrimaryKey("PK_ModeloEquipamento", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Modelo_MarcaEquipamento_MarcaId",
+                        name: "FK_ModeloEquipamento_MarcaEquipamento_MarcaId",
                         column: x => x.MarcaId,
                         principalTable: "MarcaEquipamento",
                         principalColumn: "Id",
@@ -443,6 +442,51 @@ namespace MVCCamiloMentoria.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Aluno",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    DataNascimento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EmailEscolar = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    AnoInscricao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BolsaEscolar = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    TurmaId = table.Column<int>(type: "int", nullable: false),
+                    EnderecoId = table.Column<int>(type: "int", nullable: false),
+                    EscolaId = table.Column<int>(type: "int", nullable: false),
+                    EstadoId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Aluno", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Aluno_Endereco_EnderecoId",
+                        column: x => x.EnderecoId,
+                        principalTable: "Endereco",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Aluno_Escola_EscolaId",
+                        column: x => x.EscolaId,
+                        principalTable: "Escola",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Aluno_Estado_EstadoId",
+                        column: x => x.EstadoId,
+                        principalTable: "Estado",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Aluno_Turma_TurmaId",
+                        column: x => x.TurmaId,
+                        principalTable: "Turma",
+                        principalColumn: "TurmaId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Aula",
                 columns: table => new
                 {
@@ -464,13 +508,13 @@ namespace MVCCamiloMentoria.Migrations
                         column: x => x.DisciplinaId,
                         principalTable: "Disciplina",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Aula_Disciplina_TurmaId",
                         column: x => x.TurmaId,
                         principalTable: "Disciplina",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Aula_Professor_ProfessorId",
                         column: x => x.ProfessorId,
@@ -562,55 +606,10 @@ namespace MVCCamiloMentoria.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_Equipamento_Modelo_ModeloId",
+                        name: "FK_Equipamento_ModeloEquipamento_ModeloId",
                         column: x => x.ModeloId,
-                        principalTable: "Modelo",
+                        principalTable: "ModeloEquipamento",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Aluno",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    DataNascimento = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EmailEscolar = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    AnoInscricao = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BolsaEscolar = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    TurmaId = table.Column<int>(type: "int", nullable: false),
-                    TelefoneId = table.Column<int>(type: "int", nullable: false),
-                    EnderecoId = table.Column<int>(type: "int", nullable: false),
-                    EscolaId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Aluno", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Aluno_Endereco_EnderecoId",
-                        column: x => x.EnderecoId,
-                        principalTable: "Endereco",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Aluno_Escola_EscolaId",
-                        column: x => x.EscolaId,
-                        principalTable: "Escola",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Aluno_Telefone_TelefoneId",
-                        column: x => x.TelefoneId,
-                        principalTable: "Telefone",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Aluno_Turma_TurmaId",
-                        column: x => x.TurmaId,
-                        principalTable: "Turma",
-                        principalColumn: "TurmaId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -618,21 +617,21 @@ namespace MVCCamiloMentoria.Migrations
                 name: "AlunoResponsavel",
                 columns: table => new
                 {
-                    AlunosId = table.Column<int>(type: "int", nullable: false),
-                    ResponsaveisId = table.Column<int>(type: "int", nullable: false)
+                    AlunoId = table.Column<int>(type: "int", nullable: false),
+                    ResponsavelId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AlunoResponsavel", x => new { x.AlunosId, x.ResponsaveisId });
+                    table.PrimaryKey("PK_AlunoResponsavel", x => new { x.AlunoId, x.ResponsavelId });
                     table.ForeignKey(
-                        name: "FK_AlunoResponsavel_Aluno_AlunosId",
-                        column: x => x.AlunosId,
+                        name: "FK_AlunoResponsavel_Aluno_AlunoId",
+                        column: x => x.AlunoId,
                         principalTable: "Aluno",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AlunoResponsavel_Responsavel_ResponsaveisId",
-                        column: x => x.ResponsaveisId,
+                        name: "FK_AlunoResponsavel_Responsavel_ResponsavelId",
+                        column: x => x.ResponsavelId,
                         principalTable: "Responsavel",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
@@ -643,7 +642,9 @@ namespace MVCCamiloMentoria.Migrations
                 columns: table => new
                 {
                     AlunoId = table.Column<int>(type: "int", nullable: false),
-                    TelefoneId = table.Column<int>(type: "int", nullable: false)
+                    TelefoneId = table.Column<int>(type: "int", nullable: false),
+                    DDD = table.Column<int>(type: "int", maxLength: 3, nullable: false),
+                    Numero = table.Column<int>(type: "int", maxLength: 12, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -698,9 +699,9 @@ namespace MVCCamiloMentoria.Migrations
                 column: "EscolaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Aluno_TelefoneId",
+                name: "IX_Aluno_EstadoId",
                 table: "Aluno",
-                column: "TelefoneId");
+                column: "EstadoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Aluno_TurmaId",
@@ -708,9 +709,9 @@ namespace MVCCamiloMentoria.Migrations
                 column: "TurmaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AlunoResponsavel_ResponsaveisId",
+                name: "IX_AlunoResponsavel_ResponsavelId",
                 table: "AlunoResponsavel",
-                column: "ResponsaveisId");
+                column: "ResponsavelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AlunoTelefone_TelefoneId",
@@ -806,8 +807,8 @@ namespace MVCCamiloMentoria.Migrations
                 column: "EscolaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Modelo_MarcaId",
-                table: "Modelo",
+                name: "IX_ModeloEquipamento_MarcaId",
+                table: "ModeloEquipamento",
                 column: "MarcaId");
 
             migrationBuilder.CreateIndex(
@@ -936,25 +937,16 @@ namespace MVCCamiloMentoria.Migrations
                 name: "TurmaDisciplina");
 
             migrationBuilder.DropTable(
-                name: "Modelo");
+                name: "Telefone");
+
+            migrationBuilder.DropTable(
+                name: "ModeloEquipamento");
 
             migrationBuilder.DropTable(
                 name: "Aluno");
 
             migrationBuilder.DropTable(
                 name: "Aula");
-
-            migrationBuilder.DropTable(
-                name: "MarcaEquipamento");
-
-            migrationBuilder.DropTable(
-                name: "Telefone");
-
-            migrationBuilder.DropTable(
-                name: "Disciplina");
-
-            migrationBuilder.DropTable(
-                name: "Turma");
 
             migrationBuilder.DropTable(
                 name: "Coordenador");
@@ -969,13 +961,22 @@ namespace MVCCamiloMentoria.Migrations
                 name: "PrestadorServico");
 
             migrationBuilder.DropTable(
-                name: "Professor");
-
-            migrationBuilder.DropTable(
                 name: "Responsavel");
 
             migrationBuilder.DropTable(
                 name: "Supervisor");
+
+            migrationBuilder.DropTable(
+                name: "MarcaEquipamento");
+
+            migrationBuilder.DropTable(
+                name: "Disciplina");
+
+            migrationBuilder.DropTable(
+                name: "Professor");
+
+            migrationBuilder.DropTable(
+                name: "Turma");
 
             migrationBuilder.DropTable(
                 name: "Escola");
