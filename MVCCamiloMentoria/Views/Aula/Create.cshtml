@@ -1,0 +1,60 @@
+﻿@model MVCCamiloMentoria.ViewModels.AulaViewModel
+
+<h4>Aula</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Nome" class="control-label"></label>
+                <input asp-for="Nome" class="form-control" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HorarioInicio" class="control-label"></label>
+                <input asp-for="HorarioInicio" class="form-control" />
+                <span asp-validation-for="HorarioInicio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HorarioFim" class="control-label"></label>
+                <input asp-for="HorarioFim" class="form-control" />
+                <span asp-validation-for="HorarioFim" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EscolaId" class="control-label"></label>
+                <select asp-for="EscolaId" class="form-control" asp-items="ViewBag.EscolaId"></select>
+                <span asp-validation-for="EscolaId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProfessorId" class="control-label"></label>
+                <select asp-for="ProfessorId" class="form-control" asp-items="ViewBag.Professores"></select>
+                <span asp-validation-for="ProfessorId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label asp-for="TurmaId" class="form-label"></label>
+                    <select asp-for="TurmaId" class="form-select" asp-items="ViewBag.TurmaId"></select>
+                    <span asp-validation-for="TurmaId" class="text-danger"></span>
+                </div>
+
+            <div class="form-group">
+                <label asp-for="DisciplinaId" class="control-label"></label>
+                <select asp-for="DisciplinaId" class="form-control" asp-items="ViewBag.Disciplinas"></select>
+                <span asp-validation-for="DisciplinaId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

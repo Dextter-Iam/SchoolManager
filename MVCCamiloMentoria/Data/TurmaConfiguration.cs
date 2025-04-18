@@ -15,27 +15,27 @@ public class TurmaConfiguration : IEntityTypeConfiguration<Turma>
                .HasMaxLength(50);
 
         builder.Property(t => t.AnoLetivo)
-               .IsRequired(); 
+               .IsRequired();
 
         builder.Property(t => t.Turno)
                .IsRequired()
                .HasMaxLength(10);
 
-   
-        builder.HasOne(t => t.Escola)  
-               .WithMany(e => e.Turmas) 
-               .HasForeignKey(t => t.EscolaId) 
-               .OnDelete(DeleteBehavior.Restrict); 
-
+        builder.HasOne(t => t.Escola)
+               .WithMany(e => e.Turmas)
+               .HasForeignKey(t => t.EscolaId)
+               .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(t => t.Alunos)
                .WithOne(a => a.Turma)
                .HasForeignKey(a => a.TurmaId)
                .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasMany(t => t.Disciplinas)
-               .WithMany(d => d.Turma)
-               .UsingEntity(j => j.ToTable("TurmaDisciplina"));
+
+        builder.HasMany(t => t.TurmaDisciplinas)
+               .WithOne(td => td.Turma)
+               .HasForeignKey(td => td.TurmaId)
+               .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(t => t.Aulas)
                .WithOne(a => a.Turma)

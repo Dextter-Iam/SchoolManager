@@ -22,7 +22,7 @@ namespace MVCCamiloMentoria.Models
         public List<Aula>? Aulas { get; set; } 
         public List<Aluno>? Alunos  { get; set; } 
         public List<ProfessorTurma>? Professores { get;  set; }
-        public List<Disciplina>? Disciplinas { get;  set; }
+        public ICollection<TurmaDisciplina> TurmaDisciplinas { get; set; } = new List<TurmaDisciplina>();
 
     }
 }

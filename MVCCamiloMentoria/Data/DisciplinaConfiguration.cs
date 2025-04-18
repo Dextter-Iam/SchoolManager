@@ -10,9 +10,9 @@ namespace MVCCamiloMentoria.Data
         {
             builder.ToTable("Disciplina");
 
-            builder.HasKey(t => t.Id);
+            builder.HasKey(d => d.Id);
 
-            builder.Property(t => t.Nome)
+            builder.Property(d => d.Nome)
                    .IsRequired()
                    .HasMaxLength(50);
 
@@ -20,17 +20,20 @@ namespace MVCCamiloMentoria.Data
                    .WithMany(p => p.Disciplinas)
                    .UsingEntity(pd => pd.ToTable("ProfessorDisciplina"));
 
-            builder.HasMany(t => t.Aula)
-                   .WithOne()
-                   .HasForeignKey(t => t.TurmaId)
+            builder.HasMany(d => d.Aula)
+                   .WithOne(a => a.Disciplina)
+                   .HasForeignKey(a => a.DisciplinaId)
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(d => d.Escola)
                    .WithMany(e => e.Disciplina)
                    .HasForeignKey(d => d.EscolaId)
-                   .OnDelete(DeleteBehavior.Restrict); 
+                   .OnDelete(DeleteBehavior.Restrict);
 
+            builder.HasMany(d => d.TurmaDisciplinas)
+                   .WithOne(td => td.Disciplina)
+                   .HasForeignKey(td => td.DisciplinaId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
-

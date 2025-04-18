@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCCamiloMentoria.Migrations
 {
     [DbContext(typeof(EscolaContext))]
-    partial class EscolaContextModelSnapshot : ModelSnapshot
+    [Migration("20250418210924_updatetables")]
+    partial class updatetables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,6 +37,21 @@ namespace MVCCamiloMentoria.Migrations
                     b.HasIndex("ProfessoresId");
 
                     b.ToTable("ProfessorDisciplina", (string)null);
+                });
+
+            modelBuilder.Entity("DisciplinaTurma", b =>
+                {
+                    b.Property<int>("DisciplinasId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TurmaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DisciplinasId", "TurmaId");
+
+                    b.HasIndex("TurmaId");
+
+                    b.ToTable("TurmaDisciplina", (string)null);
                 });
 
             modelBuilder.Entity("EscolaSupervisor", b =>
@@ -750,21 +768,6 @@ namespace MVCCamiloMentoria.Migrations
                     b.ToTable("PresencaAula", (string)null);
                 });
 
-            modelBuilder.Entity("TurmaDisciplina", b =>
-                {
-                    b.Property<int>("TurmaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DisciplinaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("TurmaId", "DisciplinaId");
-
-                    b.HasIndex("DisciplinaId");
-
-                    b.ToTable("TurmaDisciplina", (string)null);
-                });
-
             modelBuilder.Entity("DisciplinaProfessor", b =>
                 {
                     b.HasOne("MVCCamiloMentoria.Models.Disciplina", null)
@@ -776,6 +779,21 @@ namespace MVCCamiloMentoria.Migrations
                     b.HasOne("MVCCamiloMentoria.Models.Professor", null)
                         .WithMany()
                         .HasForeignKey("ProfessoresId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DisciplinaTurma", b =>
+                {
+                    b.HasOne("MVCCamiloMentoria.Models.Disciplina", null)
+                        .WithMany()
+                        .HasForeignKey("DisciplinasId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MVCCamiloMentoria.Models.Turma", null)
+                        .WithMany()
+                        .HasForeignKey("TurmaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -871,7 +889,7 @@ namespace MVCCamiloMentoria.Migrations
             modelBuilder.Entity("MVCCamiloMentoria.Models.Aula", b =>
                 {
                     b.HasOne("MVCCamiloMentoria.Models.Disciplina", "Disciplina")
-                        .WithMany("Aula")
+                        .WithMany()
                         .HasForeignKey("DisciplinaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -886,6 +904,12 @@ namespace MVCCamiloMentoria.Migrations
                         .WithMany("Aulas")
                         .HasForeignKey("ProfessorId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MVCCamiloMentoria.Models.Disciplina", null)
+                        .WithMany("Aula")
+                        .HasForeignKey("TurmaId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MVCCamiloMentoria.Models.Turma", "Turma")
@@ -1196,25 +1220,6 @@ namespace MVCCamiloMentoria.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TurmaDisciplina", b =>
-                {
-                    b.HasOne("MVCCamiloMentoria.Models.Disciplina", "Disciplina")
-                        .WithMany("TurmaDisciplinas")
-                        .HasForeignKey("DisciplinaId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("MVCCamiloMentoria.Models.Turma", "Turma")
-                        .WithMany("TurmaDisciplinas")
-                        .HasForeignKey("TurmaId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Disciplina");
-
-                    b.Navigation("Turma");
-                });
-
             modelBuilder.Entity("MVCCamiloMentoria.Models.Aluno", b =>
                 {
                     b.Navigation("AlunoResponsavel");
@@ -1235,8 +1240,6 @@ namespace MVCCamiloMentoria.Migrations
             modelBuilder.Entity("MVCCamiloMentoria.Models.Disciplina", b =>
                 {
                     b.Navigation("Aula");
-
-                    b.Navigation("TurmaDisciplinas");
                 });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Endereco", b =>
@@ -1325,8 +1328,6 @@ namespace MVCCamiloMentoria.Migrations
                     b.Navigation("Aulas");
 
                     b.Navigation("Professores");
-
-                    b.Navigation("TurmaDisciplinas");
                 });
 #pragma warning restore 612, 618
         }
