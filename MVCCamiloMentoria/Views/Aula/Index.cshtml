@@ -1,59 +1,54 @@
 ﻿@model IEnumerable<MVCCamiloMentoria.ViewModels.AulaViewModel>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HorarioInicio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HorarioFim)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Escola)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HorarioInicio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HorarioFim)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Escola.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Professor.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Turma.NomeTurma)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Disciplina.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ConfirmacaoPresenca)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="container">
+    <h3 class="mb-5">Lista de Aulas</h3>
+
+    <div class="d-flex justify-content-between mb-4">
+        <!-- Botão para criar nova aula -->
+        <a asp-action="Create" class="btn btn-success btn-lg">
+            <i class="fas fa-plus"></i> Criar Nova Aula
+        </a>
+    </div>
+
+    <!-- Tabela de Aulas -->
+    <div class="card shadow-sm mb-5">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Aulas Cadastradas</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Nome)</th>
+                        <th>@Html.DisplayNameFor(model => model.HorarioInicio)</th>
+                        <th>@Html.DisplayNameFor(model => model.HorarioFim)</th>
+                        <th>@Html.DisplayNameFor(model => model.Escola)</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                            <td>@Html.DisplayFor(modelItem => item.HorarioInicio)</td>
+                            <td>@Html.DisplayFor(modelItem => item.HorarioFim)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Escola.Nome)</td>
+                            <td class="text-center">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm mb-2">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm mb-2">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash"></i> Excluir
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

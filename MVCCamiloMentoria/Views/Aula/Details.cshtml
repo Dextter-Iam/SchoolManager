@@ -1,0 +1,40 @@
+﻿@model MVCCamiloMentoria.ViewModels.AulaViewModel
+
+<div class="container mt-4">
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-body">
+            <h2 class="card-title mb-4">📚 Detalhes da Aula</h2>
+            <dl class="row">
+                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Nome)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
+
+                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.HorarioInicio)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.HorarioInicio)</dd>
+
+                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.HorarioFim)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.HorarioFim)</dd>
+
+                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Escola)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Escola.Nome)</dd>
+
+                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Professor)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Professor.Nome)</dd>
+
+                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Turma)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Turma.NomeTurma)</dd>
+
+                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Disciplina)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Disciplina.Nome)</dd>
+            </dl>
+
+        </div>
+        <div class="card-footer bg-white text-end">
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning me-2">
+                ✏️ Editar
+            </a>
+            <a asp-action="Index" class="btn btn-secondary">
+                 Voltar para a Lista
+            </a>
+        </div>
+    </div>
+</div>

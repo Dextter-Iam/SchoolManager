@@ -30,6 +30,7 @@ namespace MVCCamiloMentoria.Controllers
                     Nome = a.Nome,
                     Id = a.Id,
                     EscolaId = a.EscolaId,
+                    Escola = a.Escola,
                     HorarioFim = a.HorarioFim,
                     HorarioInicio = a.HorarioInicio,
                     TurmaId = a.TurmaId,
@@ -48,6 +49,7 @@ namespace MVCCamiloMentoria.Controllers
                 .Include(a => a.Turma)
                 .Include(a => a.Professor)
                 .Include(a => a.Disciplina)
+                .Include(a => a.AlunosPresentes)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (aula == null)
@@ -55,8 +57,27 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            return View(aula);
+            var viewModel = new AulaViewModel
+            {
+                Id = aula.Id,
+                Nome = aula.Nome,
+                HorarioInicio = aula.HorarioInicio,
+                HorarioFim = aula.HorarioFim,
+                EscolaId = aula.EscolaId,
+                Escola = aula.Escola,
+                TurmaId = aula.TurmaId,
+                Turma = aula.Turma,
+                ProfessorId = aula.ProfessorId,
+                Professor = aula.Professor,
+                DisciplinaId = aula.DisciplinaId,
+                Disciplina = aula.Disciplina,
+                ConfirmacaoPresenca = aula.ConfirmacaoPresenca,
+                AlunosPresentes = aula.AlunosPresentes?.ToList()
+            };
+
+            return View(viewModel);
         }
+
 
         // GET: AulaController/Create
         public async Task<IActionResult> Create()
@@ -97,7 +118,6 @@ namespace MVCCamiloMentoria.Controllers
                 }
                 catch (Exception)
                 {
-                    // Se houver erro, pode adicionar um log ou mensagem
                     throw;
                 }
             }
@@ -109,22 +129,47 @@ namespace MVCCamiloMentoria.Controllers
         // GET: AulaController/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var aula = await _context.Aula.FindAsync(id);
+            var aula = await _context.Aula
+                .Include(a => a.Escola)
+                .Include(a => a.Turma)
+                .Include(a => a.Professor)
+                .Include(a => a.Disciplina)
+                .FirstOrDefaultAsync(a => a.Id == id);
+
             if (aula == null)
             {
                 return NotFound();
             }
 
-            await CarregarViewBagsAsync(aula);
-            return View(aula);
+            var viewModel = new AulaViewModel
+            {
+                Id = aula.Id,
+                Nome = aula.Nome,
+                HorarioInicio = aula.HorarioInicio,
+                HorarioFim = aula.HorarioFim,
+                EscolaId = aula.EscolaId,
+                ProfessorId = aula.ProfessorId,
+                TurmaId = aula.TurmaId,
+                DisciplinaId = aula.DisciplinaId,
+                ConfirmacaoPresenca = aula.ConfirmacaoPresenca,
+                Escola = aula.Escola,
+                Professor = aula.Professor,
+                Turma = aula.Turma,
+                Disciplina = aula.Disciplina,
+                AlunosPresentes = aula.AlunosPresentes?.ToList()
+            };
+
+            await CarregarViewBagsAsync(aula); 
+
+            return View(viewModel);
         }
 
         // POST: AulaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Aula aula)
+        public async Task<IActionResult> Edit(int id, AulaViewModel viewModel)
         {
-            if (id != aula.Id)
+            if (id != viewModel.Id)
             {
                 return NotFound();
             }
@@ -133,13 +178,28 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
+                    var aula = await _context.Aula.FindAsync(id);
+                    if (aula == null)
+                    {
+                        return NotFound();
+                    }
+                    aula.Nome = viewModel.Nome;
+                    aula.HorarioInicio = viewModel.HorarioInicio;
+                    aula.HorarioFim = viewModel.HorarioFim;
+                    aula.EscolaId = viewModel.EscolaId;
+                    aula.ProfessorId = viewModel.ProfessorId;
+                    aula.TurmaId = viewModel.TurmaId;
+                    aula.DisciplinaId = viewModel.DisciplinaId;
+                    aula.ConfirmacaoPresenca = viewModel.ConfirmacaoPresenca;
+
                     _context.Update(aula);
                     await _context.SaveChangesAsync();
+
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AulaExists(aula.Id))
+                    if (!AulaExists(viewModel.Id))
                     {
                         return NotFound();
                     }
@@ -150,9 +210,10 @@ namespace MVCCamiloMentoria.Controllers
                 }
             }
 
-            await CarregarViewBagsAsync(aula);
-            return View(aula);
+            await CarregarViewBagsAsync();
+            return View(viewModel);
         }
+
 
         // GET: AulaController/Delete/5
         public async Task<IActionResult> Delete(int id)
@@ -195,16 +256,12 @@ namespace MVCCamiloMentoria.Controllers
             var turmas = await _context.Turma.ToListAsync();
             var disciplinas = await _context.Disciplina.ToListAsync();
 
-            if (escolas == null || professores == null || turmas == null || disciplinas == null)
-            {
-                throw new Exception("Alguns dados necessários não foram carregados corretamente.");
-            }
-
-            ViewBag.EscolaId = new SelectList(_context.Escola, "Id", "Nome", aula?.EscolaId);
-            ViewBag.TurmaId = new SelectList(_context.Turma, "TurmaId", "NomeTurma", aula?.TurmaId);
-            ViewBag.Professores = new SelectList(professores, "Id", "Nome", aula?.ProfessorId);
-            ViewBag.Disciplinas = new SelectList(disciplinas, "Id", "Nome", aula?.DisciplinaId);
+            ViewBag.Escolas = escolas;
+            ViewBag.Professores = professores;
+            ViewBag.TurmaId = new SelectList(await _context.Turma.ToListAsync(), "TurmaId", "NomeTurma", aula?.TurmaId);
+            ViewBag.Disciplinas = disciplinas;
         }
+
 
         private bool AulaExists(int id)
         {
