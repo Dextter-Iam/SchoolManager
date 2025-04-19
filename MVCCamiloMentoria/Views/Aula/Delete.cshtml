@@ -1,0 +1,51 @@
+﻿@model MVCCamiloMentoria.Models.Aula
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded-4 border-0">
+        <div class="card-body p-4">
+            <h3 class="mb-4 text-danger fw-bold">
+                <i class="bi bi-exclamation-triangle-fill"></i> Tem certeza que deseja excluir esta aula?
+            </h3>
+
+            <div class="mb-4">
+                <h5 class="fw-bold text-secondary">Detalhes da Aula</h5>
+                <hr />
+                <dl class="row">
+                    <dt class="col-sm-3 text-muted">Nome</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
+
+                    <dt class="col-sm-3 text-muted">Horário de Início</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.HorarioInicio)</dd>
+
+                    <dt class="col-sm-3 text-muted">Horário de Fim</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.HorarioFim)</dd>
+
+                    <dt class="col-sm-3 text-muted">Escola</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Escola.Nome)</dd>
+
+                    <dt class="col-sm-3 text-muted">Professor</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Professor.Nome)</dd>
+
+                    <dt class="col-sm-3 text-muted">Turma</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Turma.NomeTurma)</dd>
+
+                    <dt class="col-sm-3 text-muted">Disciplina</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Disciplina.Nome)</dd>
+
+                    <dt class="col-sm-3 text-muted">Presença Confirmada</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.ConfirmacaoPresenca)</dd>
+                </dl>
+            </div>
+
+            <form asp-action="Delete" class="d-flex gap-3">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger px-4 rounded-pill shadow-sm">
+                    <i class="bi bi-trash-fill"></i> Excluir
+                </button>
+                <a asp-action="Index" class="btn btn-secondary px-4 rounded-pill shadow-sm">
+                    <i class="bi bi-arrow-left-circle-fill"></i> Voltar para a lista
+                </a>
+            </form>
+        </div>
+    </div>
+</div>

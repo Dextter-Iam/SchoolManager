@@ -88,31 +88,40 @@ namespace MVCCamiloMentoria.Controllers
 
         // POST: AulaController/Create
         [HttpPost]
-        public async Task<IActionResult> Create(Aula aula)
+        public async Task<IActionResult> Create(AulaViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
 
-                    _context.Add(aula);
-
+                    var aulas = new Aula
+                    {
+                        Nome = viewModel.Nome,
+                        HorarioInicio = viewModel.HorarioInicio,
+                        HorarioFim = viewModel.HorarioFim,
+                        EscolaId = viewModel.EscolaId,
+                        TurmaId = viewModel.TurmaId,
+                        ProfessorId = viewModel.ProfessorId,
+                        DisciplinaId = viewModel.DisciplinaId,
+                        ConfirmacaoPresenca = viewModel.ConfirmacaoPresenca
+                    };
+                    _context.Aula.Add(aulas);
 
                     var turmaDisciplinaExistente = await _context.TurmaDisciplina
-                        .FirstOrDefaultAsync(td => td.DisciplinaId == aula.DisciplinaId && td.TurmaId == aula.TurmaId);
+                        .FirstOrDefaultAsync(td => td.DisciplinaId == viewModel.DisciplinaId && td.TurmaId == viewModel.TurmaId);
 
                     if (turmaDisciplinaExistente == null)
                     {
                         var turmaDisciplina = new TurmaDisciplina
                         {
-                            DisciplinaId = aula.DisciplinaId,
-                            TurmaId = aula.TurmaId
+                            DisciplinaId = viewModel.DisciplinaId,
+                            TurmaId = viewModel.TurmaId
                         };
 
                         _context.TurmaDisciplina.Add(turmaDisciplina);
                     }
 
-                    // Salvando as alterações no banco de dados
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -122,9 +131,10 @@ namespace MVCCamiloMentoria.Controllers
                 }
             }
 
-            await CarregarViewBagsAsync(aula);
-            return View(aula);
+            await CarregarViewBagsAsync(viewModel);
+            return View(viewModel);
         }
+
 
         // GET: AulaController/Edit/5
         public async Task<IActionResult> Edit(int id)
@@ -134,6 +144,7 @@ namespace MVCCamiloMentoria.Controllers
                 .Include(a => a.Turma)
                 .Include(a => a.Professor)
                 .Include(a => a.Disciplina)
+                .Include(a => a.AlunosPresentes) 
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (aula == null)
@@ -152,17 +163,21 @@ namespace MVCCamiloMentoria.Controllers
                 TurmaId = aula.TurmaId,
                 DisciplinaId = aula.DisciplinaId,
                 ConfirmacaoPresenca = aula.ConfirmacaoPresenca,
-                Escola = aula.Escola,
-                Professor = aula.Professor,
-                Turma = aula.Turma,
-                Disciplina = aula.Disciplina,
-                AlunosPresentes = aula.AlunosPresentes?.ToList()
+
+
+                Escola = aula.Escola ?? new Escola(),
+                Professor = aula.Professor ?? new Professor(),
+                Turma = aula.Turma ?? new Turma(),
+                Disciplina = aula.Disciplina ?? new Disciplina(),
+
+                AlunosPresentes = aula.AlunosPresentes?.ToList() ?? new List<Aluno>()
             };
 
-            await CarregarViewBagsAsync(aula); 
+            await CarregarViewBagsAsync(viewModel);
 
             return View(viewModel);
         }
+
 
         // POST: AulaController/Edit/5
         [HttpPost]
@@ -210,7 +225,7 @@ namespace MVCCamiloMentoria.Controllers
                 }
             }
 
-            await CarregarViewBagsAsync();
+            await CarregarViewBagsAsync(viewModel);
             return View(viewModel);
         }
 
@@ -249,17 +264,17 @@ namespace MVCCamiloMentoria.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private async Task CarregarViewBagsAsync(Aula aula = null)
+        private async Task CarregarViewBagsAsync(AulaViewModel viewModel = null)
         {
             var escolas = await _context.Escola.ToListAsync();
             var professores = await _context.Professor.ToListAsync();
             var turmas = await _context.Turma.ToListAsync();
             var disciplinas = await _context.Disciplina.ToListAsync();
 
-            ViewBag.Escolas = escolas;
-            ViewBag.Professores = professores;
-            ViewBag.TurmaId = new SelectList(await _context.Turma.ToListAsync(), "TurmaId", "NomeTurma", aula?.TurmaId);
-            ViewBag.Disciplinas = disciplinas;
+            ViewBag.Escolas = new SelectList(escolas, "Id", "Nome", viewModel?.EscolaId);
+            ViewBag.Professores = new SelectList(professores, "Id", "Nome");
+            ViewBag.TurmaId = new SelectList(turmas, "TurmaId", "NomeTurma", viewModel?.TurmaId);
+            ViewBag.Disciplinas = new SelectList(disciplinas, "Id", "Nome", viewModel?.DisciplinaId);
         }
 
 

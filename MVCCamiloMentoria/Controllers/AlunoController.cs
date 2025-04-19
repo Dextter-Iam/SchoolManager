@@ -158,7 +158,7 @@ namespace MVCCamiloMentoria.Controllers
                     _context.Add(alunoTelefone);
                     await _context.SaveChangesAsync();
 
-                    // Mensagem de sucesso
+
                     TempData["MensagemSucesso"] = "Aluno cadastrado com sucesso!";
                     return RedirectToAction(nameof(Index));
                 }

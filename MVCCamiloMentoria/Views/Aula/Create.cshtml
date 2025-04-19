@@ -1,60 +1,75 @@
 ﻿@model MVCCamiloMentoria.ViewModels.AulaViewModel
 
-<h4>Aula</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HorarioInicio" class="control-label"></label>
-                <input asp-for="HorarioInicio" class="form-control" />
-                <span asp-validation-for="HorarioInicio" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HorarioFim" class="control-label"></label>
-                <input asp-for="HorarioFim" class="form-control" />
-                <span asp-validation-for="HorarioFim" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EscolaId" class="control-label"></label>
-                <select asp-for="EscolaId" class="form-control" asp-items="ViewBag.EscolaId"></select>
-                <span asp-validation-for="EscolaId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProfessorId" class="control-label"></label>
-                <select asp-for="ProfessorId" class="form-control" asp-items="ViewBag.Professores"></select>
-                <span asp-validation-for="ProfessorId" class="text-danger"></span>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group mb-3">
-                    <label asp-for="TurmaId" class="form-label"></label>
-                    <select asp-for="TurmaId" class="form-select" asp-items="ViewBag.TurmaId"></select>
-                    <span asp-validation-for="TurmaId" class="text-danger"></span>
+<div class="container mt-5">
+    <div class="card shadow-lg rounded-4">
+        <div class="card-body">
+            <h3 class="card-title mb-4 text-primary fw-bold">Cadastrar Nova Aula</h3>
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="Nome" class="form-label fw-semibold"></label>
+                        <input asp-for="Nome" class="form-control" />
+                        <span asp-validation-for="Nome" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="HorarioInicio" class="form-label fw-semibold"></label>
+                        <input asp-for="HorarioInicio" class="form-control" type="time" />
+                        <span asp-validation-for="HorarioInicio" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="HorarioFim" class="form-label fw-semibold"></label>
+                        <input asp-for="HorarioFim" class="form-control" type="time" />
+                        <span asp-validation-for="HorarioFim" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="EscolaId" class="form-label fw-semibold"></label>
+                        <select asp-for="EscolaId" class="form-select" asp-items="ViewBag.Escolas">
+                            <option value="">Selecione a Escola</option>
+                        </select>
+                        <span asp-validation-for="EscolaId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="ProfessorId" class="form-label fw-semibold"></label>
+                        <select asp-for="ProfessorId" class="form-select" asp-items="ViewBag.Professores">
+                            <option value="">Selecione o Professor</option>
+                        </select>
+                        <span asp-validation-for="ProfessorId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="TurmaId" class="form-label fw-semibold"></label>
+                        <select asp-for="TurmaId" class="form-select" asp-items="ViewBag.TurmaId">
+                            <option value="">Selecione a Turma</option>
+                        </select>
+                        <span asp-validation-for="TurmaId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="DisciplinaId" class="form-label fw-semibold"></label>
+                        <select asp-for="DisciplinaId" class="form-select" asp-items="ViewBag.Disciplinas">
+                            <option value="">Selecione a Disciplina</option>
+                        </select>
+                        <span asp-validation-for="DisciplinaId" class="text-danger small"></span>
+                    </div>
                 </div>
 
-            <div class="form-group">
-                <label asp-for="DisciplinaId" class="control-label"></label>
-                <select asp-for="DisciplinaId" class="form-control" asp-items="ViewBag.Disciplinas"></select>
-                <span asp-validation-for="DisciplinaId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="mt-4 d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-outline-secondary">Voltar para Lista</a>
+                    <button type="submit" class="btn btn-primary">Cadastrar Aula</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
