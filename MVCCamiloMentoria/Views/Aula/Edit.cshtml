@@ -28,7 +28,7 @@
 
             <div class="form-group">
                 <label asp-for="EscolaId" class="control-label"></label>
-                <select asp-for="EscolaId" class="form-control" asp-items="@(new SelectList(ViewBag.Escolas, "Id", "Nome"))">
+                <select asp-for="EscolaId" class="form-control" asp-items="@(new SelectList(ViewBag.Escolas, "Id", "Nome", Model.EscolaId))">
                     <option value="">Selecione a Escola</option>
                 </select>
                 <span asp-validation-for="EscolaId" class="text-danger"></span>
@@ -36,7 +36,7 @@
 
             <div class="form-group">
                 <label asp-for="ProfessorId" class="control-label"></label>
-                <select asp-for="ProfessorId" class="form-control" asp-items="@(new SelectList(ViewBag.Professores, "Id", "Nome"))">
+                <select asp-for="ProfessorId" class="form-control" asp-items="@(new SelectList(ViewBag.Professores, "Id", "Nome", Model.ProfessorId))">
                     <option value="">Selecione o Professor</option>
                 </select>
                 <span asp-validation-for="ProfessorId" class="text-danger"></span>
@@ -44,7 +44,7 @@
 
             <div class="form-group">
                 <label asp-for="TurmaId" class="control-label"></label>
-                <select asp-for="TurmaId" class="form-control" asp-items="@(new SelectList(ViewBag.Turmas, "Id", "Nome"))">
+                <select asp-for="TurmaId" class="form-control" asp-items="@(new SelectList(ViewBag.Turmas, "Id", "Nome", Model.TurmaId))">
                     <option value="">Selecione a Turma</option>
                 </select>
                 <span asp-validation-for="TurmaId" class="text-danger"></span>
@@ -52,11 +52,12 @@
 
             <div class="form-group">
                 <label asp-for="DisciplinaId" class="control-label"></label>
-                <select asp-for="DisciplinaId" class="form-control" asp-items="@(new SelectList(ViewBag.Disciplinas, "Id", "Nome"))">
+                <select asp-for="DisciplinaId" class="form-control" asp-items="@(new SelectList(ViewBag.Disciplinas, "Id", "Nome", Model.DisciplinaId))">
                     <option value="">Selecione a Disciplina</option>
                 </select>
                 <span asp-validation-for="DisciplinaId" class="text-danger"></span>
             </div>
+
 
             <div class="form-group">
                 <input type="submit" value="Salvar" class="btn btn-primary" />

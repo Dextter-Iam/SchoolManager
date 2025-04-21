@@ -144,7 +144,6 @@ namespace MVCCamiloMentoria.Controllers
                 .Include(a => a.Turma)
                 .Include(a => a.Professor)
                 .Include(a => a.Disciplina)
-                .Include(a => a.AlunosPresentes) 
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (aula == null)
@@ -162,18 +161,9 @@ namespace MVCCamiloMentoria.Controllers
                 ProfessorId = aula.ProfessorId,
                 TurmaId = aula.TurmaId,
                 DisciplinaId = aula.DisciplinaId,
-                ConfirmacaoPresenca = aula.ConfirmacaoPresenca,
-
-
-                Escola = aula.Escola ?? new Escola(),
-                Professor = aula.Professor ?? new Professor(),
-                Turma = aula.Turma ?? new Turma(),
-                Disciplina = aula.Disciplina ?? new Disciplina(),
-
-                AlunosPresentes = aula.AlunosPresentes?.ToList() ?? new List<Aluno>()
             };
 
-            await CarregarViewBagsAsync(viewModel);
+            await CarregarViewBagsAsync();
 
             return View(viewModel);
         }
@@ -266,15 +256,40 @@ namespace MVCCamiloMentoria.Controllers
 
         private async Task CarregarViewBagsAsync(AulaViewModel viewModel = null)
         {
+
             var escolas = await _context.Escola.ToListAsync();
             var professores = await _context.Professor.ToListAsync();
             var turmas = await _context.Turma.ToListAsync();
             var disciplinas = await _context.Disciplina.ToListAsync();
 
-            ViewBag.Escolas = new SelectList(escolas, "Id", "Nome", viewModel?.EscolaId);
-            ViewBag.Professores = new SelectList(professores, "Id", "Nome");
-            ViewBag.TurmaId = new SelectList(turmas, "TurmaId", "NomeTurma", viewModel?.TurmaId);
-            ViewBag.Disciplinas = new SelectList(disciplinas, "Id", "Nome", viewModel?.DisciplinaId);
+            
+            ViewBag.Escolas = new SelectList(
+                escolas,
+                "Id",
+                "Nome",
+                viewModel?.EscolaId ?? escolas.FirstOrDefault()?.Id 
+            );
+
+            ViewBag.Professores = new SelectList(
+                professores,
+                "Id",
+                "Nome",
+                viewModel?.ProfessorId 
+            );
+
+            ViewBag.TurmaId = new SelectList(
+                turmas,
+                "TurmaId",
+                "NomeTurma",
+                viewModel?.TurmaId ?? turmas.FirstOrDefault()?.TurmaId 
+            );
+
+            ViewBag.Disciplinas = new SelectList(
+                disciplinas,
+                "Id",
+                "Nome",
+                viewModel?.DisciplinaId ?? disciplinas.FirstOrDefault()?.Id 
+            );
         }
 
 
