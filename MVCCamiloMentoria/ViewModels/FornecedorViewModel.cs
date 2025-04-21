@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using MVCCamiloMentoria.Models;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MVCCamiloMentoria.ViewModels
@@ -22,5 +23,6 @@ namespace MVCCamiloMentoria.ViewModels
 
         [DisplayName("Escola")]
         public int EscolaId { get; set; }
+        public Escola? Escola { get; set; }
     }
 }
