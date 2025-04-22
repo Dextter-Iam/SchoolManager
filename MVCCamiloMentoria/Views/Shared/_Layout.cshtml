@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MVCCamiloMentoria</title>
+    <title>@ViewData["Title"] - SchoolManager</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/plux.css" asp-append-version="true" />
@@ -12,59 +12,24 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
 </head>
 <body>
+    <div id="sidebarMenu" class="sidebar">
+        <ul class="list-unstyled px-3 pt-4">
+            <li><a href="/Aluno" class="nav-link"><i class="fas fa-user-graduate me-2 text-primary"></i>Alunos</a></li>
+            <li><a href="/Disciplina" class="nav-link"><i class="fas fa-book-open me-2 text-success"></i>Disciplinas</a></li>
+            <li><a href="/Fornecedor" class="nav-link"><i class="fas fa-truck me-2 text-warning"></i>Fornecedores</a></li>
+            <li><a href="/Escola" class="nav-link"><i class="fas fa-school me-2 text-secondary"></i>Escolas</a></li>
+            <li><a href="/Aula" class="nav-link"><i class="fas fa-pencil-alt me-2 text-secondary"></i>Aulas</a></li>
+            <li><a href="/Equipamento" class="nav-link"><i class="fas fa-desktop me-2 text-secondary"></i>Equipamentos</a></li>
+        </ul>
+    </div>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-3 py-2">
+        <nav class="navbar navbar-light bg-white shadow-sm px-3 py-2">
             <div class="container-fluid">
-
-                <a class="navbar-brand fw-bold text-primary fs-4" asp-controller="Home" asp-action="Index">
-                    <i class="fas fa-graduation-cap me-2"></i>School Manager
+                <a class="navbar-brand fw-bold text-primary fs-4 d-flex align-items-center" href="#" onclick="toggleSidebar()">
+                    <i class="fas fa-graduation-cap me-2" id="menuToggleIcon"></i> School Manager
                 </a>
-
-         
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
-                        aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse justify-content-end" id="navbarMain">
-                    <ul class="navbar-nav gap-2">
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center text-dark" asp-controller="Aluno" asp-action="Index">
-                                <i class="fas fa-user-graduate me-2 text-primary"></i> Alunos
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center text-dark" asp-controller="Disciplina" asp-action="Index">
-                                <i class="fas fa-book-open me-2 text-success"></i> Disciplinas
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center text-dark" asp-controller="Fornecedor" asp-action="Index">
-                                <i class="fas fa-truck me-2 text-warning"></i> Fornecedores
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center text-dark" asp-controller="Escola" asp-action="Index">
-                                <i class="fas fa-school me-2 text-secondary"></i> Escolas
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center text-dark" asp-controller="Aula" asp-action="Index">
-                                <i class="fas fa-pencil-alt me-2 text-secondary"></i> Aulas
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center text-dark" asp-controller="Equipamento" asp-action="Index">
-                                <i class="fas fa-desktop me-2 text-secondary"></i> Equipamentos
-                            </a>
-                        </li>
-
-                    </ul>
-                </div>
             </div>
         </nav>
-
     </header>
 
     <div class="container pb-5">
@@ -101,5 +66,22 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebarMenu");
+            const body = document.body;
+            const icon = document.getElementById("menuToggleIcon");
+
+            sidebar.classList.toggle("show");
+            body.classList.toggle("menu-open");
+
+            // Animação no ícone (pode adicionar mais se quiser)
+            if (sidebar.classList.contains("show")) {
+                icon.classList.add("text-primary");
+            } else {
+                icon.classList.remove("text-primary");
+            }
+        }
+    </script>
 </body>
 </html>

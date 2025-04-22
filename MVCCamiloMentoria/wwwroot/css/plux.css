@@ -198,3 +198,75 @@ thead.thead-dark th {
 * {
     transition: background-color 0.2s ease, color 0.2s ease;
 }
+/* --- Sidebar Custom --- */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100%;
+    background-color: #fff;
+    border-right: 1px solid #dee2e6;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+    overflow-y: auto;
+    z-index: 1050;
+    transition: left 0.3s ease-in-out;
+}
+
+    .sidebar.show {
+        left: 0;
+    }
+
+    .sidebar .nav-link {
+        display: block;
+        padding: 0.75rem 1rem;
+        color: #333;
+        border-radius: 0.4rem;
+        transition: background-color 0.2s ease;
+    }
+
+        .sidebar .nav-link:hover {
+            background-color: #f1f1f1;
+            color: #0056b3;
+        }
+<style >
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    transition: left 0.3s ease;
+    z-index: 1050;
+}
+
+.sidebar.show {
+    left: 0;
+}
+
+body.menu-open {
+    padding-left: 250px;
+    transition: padding-left 0.3s ease;
+}
+
+#menuToggleIcon {
+    transition: transform 0.3s ease;
+}
+
+.sidebar.show ~ header #menuToggleIcon {
+    transform: rotate(20deg) scale(1.2);
+    color: #0d6efd;
+}
+
+.navbar-brand {
+    transition: margin-left 0.3s ease;
+}
+
+.menu-open .navbar-brand {
+    margin-left: 250px;
+}
+
+</style >
