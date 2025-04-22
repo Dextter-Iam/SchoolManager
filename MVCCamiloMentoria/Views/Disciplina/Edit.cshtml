@@ -1,7 +1,6 @@
 ﻿@model MVCCamiloMentoria.ViewModels.DisciplinaViewModel
 
 <div class="container">
-    <h3 class="mb-4">Editar Disciplina</h3>
     <div class="card">
         <div class="card-header bg-info text-white">
             <h4 class="mb-0">Editar Disciplina: @Model.Nome</h4>
@@ -11,14 +10,14 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
                 <input type="hidden" asp-for="Id" />
 
-                <!-- Campo Nome -->
+
                 <div class="form-group">
                     <label asp-for="Nome" class="control-label">Nome da Disciplina</label>
                     <input asp-for="Nome" class="form-control" placeholder="Digite o nome da disciplina" />
                     <span asp-validation-for="Nome" class="text-danger"></span>
                 </div>
 
-                <!-- Botão de Salvar -->
+
                 <div class="form-group text-right">
                     <button type="submit" class="btn btn-success btn-lg">
                         <i class="fas fa-save"></i> Salvar Alterações
