@@ -41,8 +41,15 @@
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.BolsaEscolar)
                 </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.BolsaEscolar)
+                <dd class="col-sm-9">
+                    @if (Model.BolsaEscolar)
+                    {
+                        <span class="badge bg-success">Bolsista</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-dark">Mensalista</span>
+                    }
                 </dd>
 
                 <dt class="col-sm-2">
