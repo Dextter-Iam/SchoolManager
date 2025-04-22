@@ -42,6 +42,7 @@ namespace MVCCamiloMentoria.Controllers
 
             var escolas = await _context.Escola
                         .Include(e => e.Endereco)
+                        .Include(e=> e.Estado)
                         .Include(e => e.Turmas)
                         .Include(e => e.Fornecedores)
                         .Include(e => e.PrestadorServico)
@@ -62,6 +63,7 @@ namespace MVCCamiloMentoria.Controllers
                 Endereco = escolas.Endereco,
                 Telefones = escolas.Telefones,
                 Turmas = escolas.Turmas,
+                Estado = escolas.Estado,
                 Id = escolas.Id,
             };
             return View(escolaViewModel);

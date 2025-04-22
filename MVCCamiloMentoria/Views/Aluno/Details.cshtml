@@ -16,7 +16,6 @@
                 <dd class="col-sm-10">
                     @Html.DisplayFor(model => model.Nome)
                 </dd>
-
            
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.DataNascimento)
@@ -25,14 +24,12 @@
                     @Html.DisplayFor(model => model.DataNascimento)
                 </dd>
 
-                
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.EmailEscolar)
                 </dt>
                 <dd class="col-sm-10">
                     @Html.DisplayFor(model => model.EmailEscolar)
                 </dd>
-
                 
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.AnoInscricao)
@@ -54,10 +51,9 @@
                 <dd class="col-sm-10">
                     @Html.DisplayFor(model => model.Turma.NomeTurma)
                 </dd>
-
                 
                 <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.AlunoTelefone)
+                        @Html.DisplayName("Telefone")
                 </dt>
                 <dd class="col-sm-10">
                     @if (Model.AlunoTelefone != null && Model.AlunoTelefone.Any())
@@ -74,12 +70,11 @@
                 </dd>
 
                 <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Endereco)
+                    @Html.DisplayName("Endereço")
                 </dt>
                 <dd class="col-sm-10">
                     @Html.DisplayFor(model => model.Endereco.NomeRua)
                 </dd>
-
          
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.Escola)

@@ -11,7 +11,6 @@ namespace MVCCamiloMentoria.Controllers
     {
         private readonly EscolaContext _context;
 
-        // Construtor
         public AulaController(EscolaContext context)
         {
             _context = context;
@@ -77,7 +76,6 @@ namespace MVCCamiloMentoria.Controllers
 
             return View(viewModel);
         }
-
 
         // GET: AulaController/Create
         public async Task<IActionResult> Create()
@@ -159,6 +157,7 @@ namespace MVCCamiloMentoria.Controllers
                 HorarioFim = aula.HorarioFim,
                 EscolaId = aula.EscolaId,
                 ProfessorId = aula.ProfessorId,
+                Turma = aula.Turma,
                 TurmaId = aula.TurmaId,
                 DisciplinaId = aula.DisciplinaId,
             };
@@ -256,41 +255,40 @@ namespace MVCCamiloMentoria.Controllers
 
         private async Task CarregarViewBagsAsync(AulaViewModel viewModel = null)
         {
-
             var escolas = await _context.Escola.ToListAsync();
             var professores = await _context.Professor.ToListAsync();
             var turmas = await _context.Turma.ToListAsync();
             var disciplinas = await _context.Disciplina.ToListAsync();
 
-            
             ViewBag.Escolas = new SelectList(
                 escolas,
                 "Id",
                 "Nome",
-                viewModel?.EscolaId ?? escolas.FirstOrDefault()?.Id 
+                viewModel?.EscolaId ?? (escolas.Any() ? escolas.First().Id : (int?)null)
             );
 
             ViewBag.Professores = new SelectList(
                 professores,
                 "Id",
                 "Nome",
-                viewModel?.ProfessorId 
+                viewModel?.ProfessorId ?? (professores.Any() ? professores.First().Id : (int?)null)
             );
 
-            ViewBag.TurmaId = new SelectList(
+            ViewBag.Turmas = new SelectList(
                 turmas,
                 "TurmaId",
                 "NomeTurma",
-                viewModel?.TurmaId ?? turmas.FirstOrDefault()?.TurmaId 
+                viewModel?.TurmaId ?? (turmas.Any() ? turmas.First().TurmaId : (int?)null)
             );
 
             ViewBag.Disciplinas = new SelectList(
                 disciplinas,
                 "Id",
                 "Nome",
-                viewModel?.DisciplinaId ?? disciplinas.FirstOrDefault()?.Id 
+                viewModel?.DisciplinaId ?? (disciplinas.Any() ? disciplinas.First().Id : (int?)null)
             );
         }
+
 
 
         private bool AulaExists(int id)

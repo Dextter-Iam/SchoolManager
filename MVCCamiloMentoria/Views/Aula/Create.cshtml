@@ -27,32 +27,28 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label asp-for="EscolaId" class="form-label fw-semibold"></label>
-                        <select asp-for="EscolaId" class="form-select" asp-items="ViewBag.Escolas">
+                        <select asp-for="EscolaId" class="form-control" asp-items="ViewBag.Escolas">
                             <option value="">Selecione a Escola</option>
                         </select>
                         <span asp-validation-for="EscolaId" class="text-danger small"></span>
                     </div>
 
                     <div class="col-md-6">
-                        <label asp-for="ProfessorId" class="form-label fw-semibold"></label>
-                        <select asp-for="ProfessorId" class="form-select" asp-items="ViewBag.Professores">
+                        <select asp-for="ProfessorId" class="form-control" asp-items="ViewBag.Professores">
                             <option value="">Selecione o Professor</option>
                         </select>
                         <span asp-validation-for="ProfessorId" class="text-danger small"></span>
                     </div>
 
                     <div class="col-md-6">
-                        <label asp-for="TurmaId" class="form-label fw-semibold"></label>
-                        <select asp-for="TurmaId" class="form-select" asp-items="ViewBag.TurmaId">
+                        <select asp-for="TurmaId" class="form-control" asp-items="ViewBag.Turmas">
                             <option value="">Selecione a Turma</option>
                         </select>
                         <span asp-validation-for="TurmaId" class="text-danger small"></span>
                     </div>
 
                     <div class="col-md-6">
-                        <label asp-for="DisciplinaId" class="form-label fw-semibold"></label>
-                        <select asp-for="DisciplinaId" class="form-select" asp-items="ViewBag.Disciplinas">
+                        <select asp-for="DisciplinaId" class="form-control" asp-items="ViewBag.Disciplinas">
                             <option value="">Selecione a Disciplina</option>
                         </select>
                         <span asp-validation-for="DisciplinaId" class="text-danger small"></span>

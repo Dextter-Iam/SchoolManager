@@ -10,7 +10,7 @@ namespace MVCCamiloMentoria.ViewModels
     {
         public int Id { get; set; }
 
-        [DisplayName("Nome do Aluno")]
+        [DisplayName("Nome")]
         [Required(ErrorMessage = "O nome do aluno é obrigatório.")]
         [StringLength(200, ErrorMessage = "O nome do aluno deve ter no máximo 200 caracteres.")]
         public string? Nome { get; set; }
@@ -20,7 +20,7 @@ namespace MVCCamiloMentoria.ViewModels
         [DataType(DataType.Date)]
         public DateTime DataNascimento { get; set; }
 
-        [DisplayName("E-mail do Aluno")]
+        [DisplayName("E-mail ")]
         [Required(ErrorMessage = "O e-mail do aluno é obrigatório.")]
         [EmailAddress(ErrorMessage = "E-mail inválido.")]
         [StringLength(100, ErrorMessage = "O e-mail deve ter no máximo 100 caracteres.")]
@@ -50,6 +50,7 @@ namespace MVCCamiloMentoria.ViewModels
         [Range(10000000, 999999999, ErrorMessage = "Número inválido")]
         public int Numero { get; set; }
 
+        [DisplayName("Endereço")]
         public int? EnderecoId { get; set; }
         public Endereco? Endereco { get; set; }
 

@@ -10,7 +10,7 @@ namespace MVCCamiloMentoria.ViewModels
         [Key]
         public int Id { get; set; }
 
-        [Display(Name = "Nome da Aula")]
+        [Display(Name = "Aula")]
         [Required(ErrorMessage = "O nome da aula é obrigatório.")]
         [StringLength(100, ErrorMessage = "O nome deve ter no máximo 100 caracteres.")]
         public string? Nome { get; set; }

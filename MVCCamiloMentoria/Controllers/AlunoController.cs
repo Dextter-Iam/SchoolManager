@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCCamiloMentoria.Models;
@@ -53,7 +50,6 @@ namespace MVCCamiloMentoria.Controllers
                     .ThenInclude(at => at.Telefone)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-
             if (aluno == null)
                 return NotFound();
 
@@ -92,7 +88,6 @@ namespace MVCCamiloMentoria.Controllers
             return View(viewModel);
         }
 
-
         // GET: Aluno/Create
         public IActionResult Create()
         {
@@ -110,7 +105,6 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
-
                     var endereco = new Endereco
                     {
                         NomeRua = viewModel.NomeRua,
@@ -120,7 +114,6 @@ namespace MVCCamiloMentoria.Controllers
                         EstadoId = (int)viewModel.EstadoId
                     };
 
-
                     var telefone = new Telefone
                     {
                         DDD = viewModel.DDD,
@@ -128,10 +121,8 @@ namespace MVCCamiloMentoria.Controllers
                         EscolaId = viewModel.EscolaId
                     };
 
-
                     _context.Telefone.Add(telefone);
                     await _context.SaveChangesAsync();
-
 
                     var aluno = new Aluno
                     {
@@ -226,7 +217,6 @@ namespace MVCCamiloMentoria.Controllers
             return View(viewModel);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, AlunoViewModel viewModel)
@@ -264,7 +254,6 @@ namespace MVCCamiloMentoria.Controllers
                     }
                     else
                     {
-
                         var telefone = new Telefone
                         {
                             DDD = viewModel.DDD,
@@ -327,9 +316,32 @@ namespace MVCCamiloMentoria.Controllers
             {
                 Id = aluno.Id,
                 Nome = aluno.Nome,
-                EscolaId = aluno.EscolaId,
+                DataNascimento = aluno.DataNascimento,
+                EmailEscolar = aluno.EmailEscolar,
+                AnoInscricao = aluno.AnoInscricao,
+                BolsaEscolar = aluno.BolsaEscolar,
                 TurmaId = aluno.TurmaId,
-                EnderecoId = aluno.EnderecoId,
+                Turma = aluno.Turma,
+                AlunoTelefone = aluno.AlunoTelefone?
+                .Select(at => new AlunoTelefone
+                {
+                    DDD = at.Telefone?.DDD ?? 0,
+                    Numero = at.Telefone?.Numero ?? 0
+                }).ToList(),
+                Endereco = aluno.Endereco != null ? new Endereco
+                {
+                    NomeRua = aluno.Endereco.NomeRua,
+                    NumeroRua = aluno.Endereco.NumeroRua,
+                    Complemento = aluno.Endereco.Complemento,
+                    CEP = aluno.Endereco.CEP,
+                    EstadoId = aluno.Endereco.EstadoId,
+                    Estado = aluno.Endereco.Estado
+                } : null,
+
+                EscolaId = aluno.EscolaId,
+                Escola = aluno.Escola,
+                AlunoResponsavel = aluno.AlunoResponsavel,
+                Aulas = aluno.Aulas
             };
 
             return View(viewModel);

@@ -1,11 +1,11 @@
 ﻿@model MVCCamiloMentoria.ViewModels.AlunoViewModel
 
 <div class="container">
-    <h3 class="text-danger">Are you sure you want to delete this?</h3>
+    <h3 class="text-danger">Tem certeza que deseja prosseguir?</h3>
 
     <div class="card">
         <div class="card-header bg-warning text-white">
-            <h4 class="mb-0">Aluno - Detalhes</h4>
+            <h4 class="mb-0">Informações</h4>
         </div>
         <div class="card-body">
             <dl class="row">
@@ -50,9 +50,8 @@
                 <dd class="col-sm-10">
                     @Html.DisplayFor(model => model.Turma.NomeTurma)
                 </dd>
-
-                <dt class="col-sm-2 fw-bold">
-                    @Html.DisplayNameFor(model => model.AlunoTelefone) 
+                <dt class="col-sm-2">
+                    @Html.DisplayName("Telefone")
                 </dt>
                 <dd class="col-sm-10">
                     @if (Model.AlunoTelefone != null && Model.AlunoTelefone.Any())
@@ -64,12 +63,12 @@
                     }
                     else
                     {
-                        <p>No phones available</p>
+                        <p>Telefone Não Cadastrado!</p>
                     }
                 </dd>
 
-                <dt class="col-sm-2 fw-bold">
-                    @Html.DisplayNameFor(model => model.Endereco)
+                <dt class="col-sm-2">
+                    @Html.DisplayName("Endereço")
                 </dt>
                 <dd class="col-sm-10">
                     @Html.DisplayFor(model => model.Endereco.NomeRua)
