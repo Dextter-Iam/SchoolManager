@@ -1,0 +1,60 @@
+﻿@model MVCCamiloMentoria.ViewModels.EquipamentoViewModel
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Detalhes do Equipamento</h4>
+        </div>
+
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3 fw-bold">
+                    @Html.DisplayNameFor(model => model.Nome)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Nome)
+                </dd>
+
+                <dt class="col-sm-3 fw-bold">
+                    @Html.DisplayNameFor(model => model.StatusOperacional)
+                </dt>
+                <dd class="col-sm-9">
+                    @if (Model.StatusOperacional)
+                    {
+                        <span class="badge bg-success">Operacional</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Inoperante</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3 fw-bold">
+                    @Html.DisplayNameFor(model => model.Marca)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Marca.Nome)
+                </dd>
+
+                <dt class="col-sm-3 fw-bold">
+                    @Html.DisplayNameFor(model => model.Modelo)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Modelo.Descricao)
+                </dd>
+
+                <dt class="col-sm-3 fw-bold">
+                    @Html.DisplayNameFor(model => model.Escola)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Escola.Nome)
+                </dd>
+            </dl>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Editar</a>
+                <a asp-action="Index" class="btn btn-outline-secondary">Voltar para a Lista</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,66 @@
+﻿@model MVCCamiloMentoria.ViewModels.EquipamentoViewModel
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Confirmação de Exclusão</h4>
+        </div>
+
+        <div class="card-body">
+            <p class="text-danger fw-bold">Tem certeza que deseja excluir este equipamento?</p>
+            <hr />
+
+            <dl class="row">
+                <dt class="col-sm-3 fw-bold">
+                    @Html.DisplayNameFor(model => model.Nome)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Nome)
+                </dd>
+
+                <dt class="col-sm-3 fw-bold">
+                    @Html.DisplayName("Status Equipamento")
+                </dt>
+                <dd class="col-sm-9">
+                    @if (Model.StatusOperacional)
+                    {
+                        <span class="text-success">Operacional</span>
+                    }
+                    else
+                    {
+                        <span class="text-danger">Inoperante</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3 fw-bold">
+                    @Html.DisplayNameFor(model => model.Marca)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Marca.Nome)
+                </dd>
+
+                <dt class="col-sm-3 fw-bold">
+                    @Html.DisplayNameFor(model => model.Modelo)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Modelo.Descricao)
+                </dd>
+
+                <dt class="col-sm-3 fw-bold">
+                    @Html.DisplayNameFor(model => model.Escola)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Escola.Nome)
+                </dd>
+            </dl>
+
+            <form asp-action="Delete" class="mt-4">
+                <input type="hidden" asp-for="Id" />
+                <div class="d-flex justify-content-between">
+                    <input type="submit" value="Excluir" class="btn btn-danger" />
+                    <a asp-action="Index" class="btn btn-outline-secondary">Voltar para a Lista</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

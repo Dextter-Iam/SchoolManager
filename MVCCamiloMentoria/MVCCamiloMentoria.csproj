@@ -10,7 +10,6 @@
     <Compile Remove="Views\Coordenador\**" />
     <Compile Remove="Views\Diretor\**" />
     <Compile Remove="Views\Endereco\**" />
-    <Compile Remove="Views\Equipamento\**" />
     <Compile Remove="Views\Marca\**" />
     <Compile Remove="Views\Modelo\**" />
     <Compile Remove="Views\PrestadorServico\**" />
@@ -21,7 +20,6 @@
     <Content Remove="Views\Coordenador\**" />
     <Content Remove="Views\Diretor\**" />
     <Content Remove="Views\Endereco\**" />
-    <Content Remove="Views\Equipamento\**" />
     <Content Remove="Views\Marca\**" />
     <Content Remove="Views\Modelo\**" />
     <Content Remove="Views\PrestadorServico\**" />
@@ -32,7 +30,6 @@
     <EmbeddedResource Remove="Views\Coordenador\**" />
     <EmbeddedResource Remove="Views\Diretor\**" />
     <EmbeddedResource Remove="Views\Endereco\**" />
-    <EmbeddedResource Remove="Views\Equipamento\**" />
     <EmbeddedResource Remove="Views\Marca\**" />
     <EmbeddedResource Remove="Views\Modelo\**" />
     <EmbeddedResource Remove="Views\PrestadorServico\**" />
@@ -43,7 +40,6 @@
     <None Remove="Views\Coordenador\**" />
     <None Remove="Views\Diretor\**" />
     <None Remove="Views\Endereco\**" />
-    <None Remove="Views\Equipamento\**" />
     <None Remove="Views\Marca\**" />
     <None Remove="Views\Modelo\**" />
     <None Remove="Views\PrestadorServico\**" />
