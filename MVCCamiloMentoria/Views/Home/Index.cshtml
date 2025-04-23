@@ -3,170 +3,183 @@
 }
 
 <div class="home-hero">
-    <div class="hero-content">
-        <h1 class="hero-title">Bem-vindo ao <span>School Manager</span>!</h1>
-        <p class="hero-subtitle">
-            Gerencie seus <strong>Alunos</strong>, <strong>Disciplinas</strong>, <strong>Fornecedores</strong> e <strong>Escolas</strong> com uma plataforma <span class="highlight">moderna</span>, <span class="highlight">intuitiva</span> e <span class="highlight">eficiente</span>.
-        </p>
+    <div class="hero-grid">
+        <div class="hero-text">
+            <h1 class="hero-title">Bem-vindo ao <span>School Manager</span>!</h1>
+            <p class="hero-subtitle">
+                Uma plataforma <span class="highlight">tudo-em-um</span> para transformar a gestão escolar. Controle completo de <strong>alunos</strong>, <strong>disciplinas</strong>, <strong>fornecedores</strong> e <strong>unidades escolares</strong> — com tecnologia moderna, acessível e eficiente.
+            </p>
 
-        <a href="/ActionsPage" class="btn-start">Começar Agora</a>
+            <ul class="hero-features">
+                <li><i class="fas fa-user-graduate"></i> Matrículas e histórico de alunos</li>
+                <li><i class="fas fa-chalkboard-teacher"></i> Gestão de professores e turmas</li>
+                <li><i class="fas fa-book"></i> Controle curricular e avaliações</li>
+                <li><i class="fas fa-truck-loading"></i> Administração de fornecedores e estoques</li>
+                <li><i class="fas fa-school"></i> Gestão multi-escolas com relatórios inteligentes</li>
+            </ul>
+
+            <a href="/ActionsPage" class="btn-start">Começar Agora</a>
+
+            <div class="additional-info">
+                <p><i class="fas fa-lock"></i> Dados protegidos com autenticação e criptografia.</p>
+                <p><i class="fas fa-mobile-alt"></i> Compatível com tablets e smartphones.</p>
+            </div>
+        </div>
+
+        <div class="hero-illustration">
+            <img src="/images/school-illustration.png" alt="Ilustração do sistema School Manager">
+        </div>
     </div>
 </div>
 
 <style>
-    /* Hero Section */
+    html, body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(120deg, #eef5fd, #ffffff);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
     .home-hero {
         display: flex;
         justify-content: center;
         align-items: center;
-        text-align: center;
-        min-height: 100vh;
-        background: linear-gradient(145deg, #e8f0fc, #ffffff);
+        min-height: 90vh;
         padding: 2rem;
+        animation: fadeInUp 1s ease-in-out;
     }
 
-    .hero-content {
-        max-width: 720px;
-        padding: 3rem 2rem;
-        background: #ffffff;
-        border-radius: 1.25rem;
-        /*         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07); */
-        animation: fadeInUp 0.8s ease-in-out;
+    .hero-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        max-width: 1200px;
+        width: 100%;
+        align-items: center;
+    }
+
+    .hero-text {
+        text-align: left;
     }
 
     .hero-title {
         font-size: 3rem;
-        color: #1b6ec2;
         font-weight: 800;
+        color: #0d47a1;
         margin-bottom: 1rem;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
         .hero-title span {
-            color: #0d5dbd;
+            color: #1976d2;
         }
 
     .hero-subtitle {
         font-size: 1.25rem;
-        color: #444;
-        line-height: 1.8;
-        margin-bottom: 2.5rem;
+        color: #333;
+        margin-bottom: 2rem;
+        line-height: 1.7;
     }
 
-        .hero-subtitle .highlight {
-            color: #1b6ec2;
-            font-weight: 700;
+    .highlight {
+        color: #1976d2;
+        font-weight: 700;
+    }
+
+    .hero-features {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 2rem;
+    }
+
+        .hero-features li {
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #444;
+        }
+
+        .hero-features i {
+            color: #1976d2;
+            font-size: 1.3rem;
         }
 
     .btn-start {
-        padding: 0.8rem 2.5rem;
-        background-color: #1b6ec2;
-        color: #fff;
-        border-radius: 0.6rem;
-        text-decoration: none;
+        background: #1976d2;
+        color: white;
+        padding: 0.9rem 2.2rem;
+        border-radius: 0.5rem;
         font-weight: 600;
         font-size: 1rem;
+        text-decoration: none;
         transition: all 0.3s ease;
-        box-shadow: 0 8px 20px #fff;
+        display: inline-block;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 5px 15px rgba(25, 118, 210, 0.2);
     }
 
         .btn-start:hover {
             background-color: powderblue;
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(25, 118, 210, 0.2);
         }
 
-    @@keyframes fadeInUp {
-        0% {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        100% {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .additional-info {
+        font-size: 0.95rem;
+        color: #666;
+        margin-top: 1rem;
     }
 
-    @@media (max-width: 768px) {
-        .hero-title {
-            font-size: 2.2rem;
-        }
-
-        .hero-subtitle {
-            font-size: 1.1rem;
-        }
-
-        .btn-start {
-            width: 100%;
-        }
-    }
-
-    /* Testemunhos */
-    .testimonials-section {
-        background: #f8f9fa;
-        padding: 5rem 0;
-    }
-
-    .testimonial-card {
-        background-color: #fff;
-        padding: 2rem;
-        border-radius: 1rem;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-        text-align: center;
-    }
-
-    .testimonial-avatar {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        margin-bottom: 1rem;
-    }
-
-    .testimonial-text {
-        font-size: 1rem;
-        color: #555;
-        margin-bottom: 1rem;
-        font-style: italic;
-    }
-
-    .testimonial-author {
-        font-weight: 600;
-        color: #1b6ec2;
-    }
-
-    /* Links Section */
-    .links-section {
-        background: #fff;
-        padding: 5rem 0;
-    }
-
-    .btn-link {
-        display: block;
-        padding: 1.25rem;
-        margin: 1rem 0;
-        background-color: #f1f5f8;
-        color: #1b6ec2;
-        border-radius: 0.5rem;
-        font-size: 1.2rem;
-        font-weight: 600;
-        transition: background-color 0.3s ease;
-        text-decoration: none;
-        text-align: center;
-    }
-
-        .btn-link i {
-            font-size: 1.5rem;
+        .additional-info i {
+            color: #1976d2;
             margin-right: 0.5rem;
         }
 
-        .btn-link:hover {
-            background-color: #e4f0fb;
-        }
+    .hero-illustration img {
+        width: 100%;
+        aspect-ratio: 17 / 17; 
+        object-fit: cover;
+        border-radius: 1rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 0.8s ease-in-out;
+    }
 
-    .section-title {
-        font-size: 2rem;
-        color: #1b6ec2;
-        font-weight: 700;
-        margin-bottom: 3rem;
+
+    @@keyframes fadeInUp {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    @@media (max-width: 991px) {
+        .hero-grid
+
+    {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .hero-text {
+        text-align: center;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+
     }
 </style>
