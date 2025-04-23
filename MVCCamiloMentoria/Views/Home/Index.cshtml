@@ -30,7 +30,7 @@
         padding: 3rem 2rem;
         background: #ffffff;
         border-radius: 1.25rem;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+        /*         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07); */
         animation: fadeInUp 0.8s ease-in-out;
     }
 
@@ -67,45 +67,38 @@
         font-weight: 600;
         font-size: 1rem;
         transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(27, 110, 194, 0.3);
+        box-shadow: 0 8px 20px #fff;
     }
 
         .btn-start:hover {
-            background-color: #154f91;
-            box-shadow: 0 8px 20px #1b6ec2;
+            background-color: powderblue;
             transform: translateY(-2px);
         }
 
     @@keyframes fadeInUp {
-        0%
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
 
-    {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     @@media (max-width: 768px) {
-        .hero-title
+        .hero-title {
+            font-size: 2.2rem;
+        }
 
-    {
-        font-size: 2.2rem;
-    }
+        .hero-subtitle {
+            font-size: 1.1rem;
+        }
 
-    .hero-subtitle {
-        font-size: 1.1rem;
-    }
-
-    .btn-start {
-        width: 100%;
-    }
-
+        .btn-start {
+            width: 100%;
+        }
     }
 
     /* Testemunhos */
