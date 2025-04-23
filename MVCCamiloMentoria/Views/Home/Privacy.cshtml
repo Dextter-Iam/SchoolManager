@@ -1,6 +1,105 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "FISApp Academy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<!-- Título separado -->
+<div class="fisapp-academy-header">
+    <h1 class="title-top">@ViewData["Title"]</h1>
+</div>
+
+<div class="fisapp-academy-container">
+
+    <p class="intro-title">
+        <strong>FISApp Academy – Transformando Iniciantes em Programadores Profissionais 🚀</strong>
+    </p>
+
+    <p>
+        A <strong>FISApp Academy</strong> nasceu com a missão de tornar a programação acessível a todos. Se você está começando agora, deseja migrar de carreira ou quer crescer na área de TI, você está no lugar certo!
+    </p>
+
+    <p>
+        Com uma abordagem prática e direta ao ponto, oferecemos conteúdos que te conduzem do zero ao nível profissional, sem enrolação. Nossa metodologia combina <strong>aprendizado técnico</strong>, <strong>visão de negócios</strong> e <strong>foco em produtividade</strong>, preparando você não apenas para programar, mas para se destacar no mercado de trabalho.
+    </p>
+
+    <p>
+        🔥 <strong>O que você encontra na FISApp Academy?</strong><br>
+        ✅ Conteúdo gratuito sobre programação e tecnologia<br>
+        ✅ Dicas para acelerar sua jornada na área de TI<br>
+        ✅ Insights sobre carreira, negócios e inovação<br>
+        ✅ Comunidade ativa para networking e aprendizado contínuo
+
+    </p>
+
+    <p>
+        Seja bem-vindo à próxima geração de programadores! 🚀💻
+    </p>
+    <br />
+    <p>
+        <a href="https://www.linkedin.com/company/fisappacademy" target="_blank" title="Seguir no LinkedIn" style="text-decoration: none; color: #0077b5;">
+            <i class="fab fa-linkedin fa-lg"></i>
+        </a>
+        <strong> Siga a FISApp Academy</strong> e dê o primeiro passo rumo à sua jornada no mundo da tecnologia!
+    </p>
+
+</div>
+
+
+<div class="fisapp-academy-footer">
+   
+</div>
+
+<style>
+    .fisapp-academy-header {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+    .title-top {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #1b6ec2;
+        margin-bottom: 1rem;
+    }
+
+    .fisapp-academy-container {
+        text-align: justify;
+        max-width: 800px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.03);
+        line-height: 1.6;
+        font-size: 1rem;
+    }
+
+    .intro-title {
+        font-size: 1.2rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .fisapp-academy-footer {
+        max-width: 800px;
+        margin: 2rem auto;
+        text-align: center;
+        font-size: 1rem;
+        color: #333;
+        padding: 1rem;
+    }
+
+    @@media (max-width: 768px) {
+        .fisapp-academy-container {
+            padding: 1rem;
+        }
+
+        .title-top {
+            font-size: 1.5rem;
+        }
+
+        .intro-title,
+        .fisapp-academy-footer {
+            font-size: 1rem;
+        }
+    }
+</style>
