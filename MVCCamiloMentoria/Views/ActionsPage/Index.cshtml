@@ -6,37 +6,68 @@
         <h2 class="section-title">Painel Administrativo</h2>
         <div class="grid-cards">
 
-            <!-- Card simples com tooltip e badge -->
-            <a href="/Aluno" class="action-card" title="Ver todos os alunos">
+            <!-- Dropdown: Alunos -->
+            <div class="action-card dropdown-card" title="Ver todos os alunos">
                 <div class="icon">
                     <i class="fas fa-user-graduate"></i>
-                    <span class="badge">148</span>
                 </div>
                 <div class="label">Alunos</div>
-            </a>
+                <div class="dropdown-content">
+                    <a href="/Aluno/Index"><i class="fas fa-users"></i> Ver Alunos</a>
+                    <a href="/Aluno/Create"><i class="fas fa-user-plus"></i> Novo Aluno</a>
+                </div>
+            </div>
 
-            <a href="/Disciplina" class="action-card" title="Gerenciar disciplinas">
+            <!-- Dropdown: Disciplinas -->
+            <div class="action-card dropdown-card" title="Gerenciar disciplinas">
                 <div class="icon">
                     <i class="fas fa-book-open"></i>
                 </div>
                 <div class="label">Disciplinas</div>
-            </a>
-
-            <a href="/Fornecedor" class="action-card" title="Lista de fornecedores">
-                <div class="icon">
-                    <i class="fas fa-truck"></i>
+                <div class="dropdown-content">
+                    <a href="/Disciplina"><i class="fas fa-book"></i> Ver Disciplinas</a>
+                    <a href="/Disciplina/Adicionar"><i class="fas fa-plus-circle"></i> Nova Disciplina</a>
                 </div>
-                <div class="label">Fornecedores</div>
-            </a>
+            </div>
 
-            <a href="/Escola" class="action-card" title="Configurações das escolas">
+            <!-- Dropdown: Escolas -->
+            <div class="action-card dropdown-card" title="Configurações das escolas">
                 <div class="icon">
                     <i class="fas fa-school"></i>
                 </div>
                 <div class="label">Escolas</div>
-            </a>
+                <div class="dropdown-content">
+                    <a href="/Escola"><i class="fas fa-list-ul"></i> Ver Escolas</a>
+                    <a href="/Escola/Adicionar"><i class="fas fa-plus-circle"></i> Nova Escola</a>
+                </div>
+            </div>
 
-            <!-- Card com dropdown -->
+            <!-- Dropdown: Fornecedores -->
+            <div class="action-card dropdown-card" title="Lista de fornecedores">
+                <div class="icon">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <div class="label">Fornecedores</div>
+                <div class="dropdown-content">
+                    <a href="/Fornecedor"><i class="fas fa-clipboard-list"></i> Ver Fornecedores</a>
+                    <a href="/Fornecedor/Adicionar"><i class="fas fa-plus"></i> Novo Fornecedor</a>
+                </div>
+            </div>
+
+            <!-- Dropdown: Equipamentos -->
+            <div class="action-card dropdown-card" title="Ver Equipamentos">
+                <div class="icon">
+                    <i class="fas fa-desktop"></i> 
+                </div>
+                <div class="label">Equipamentos</div>
+                <div class="dropdown-content">
+                    <a href="/Equipamento/Index"><i class="fas fa-list"></i>  Ver Equipamentos</a>
+                    <a href="/Equipamento/Create"><i class="fas fa-plus"></i> Novo Equipamento</a>
+                </div>
+            </div>
+
+
+            <!-- Dropdown: Gestão -->
             <div class="action-card dropdown-card" title="Mais opções administrativas">
                 <div class="icon">
                     <i class="fas fa-cogs"></i>
@@ -52,6 +83,7 @@
         </div>
     </div>
 </div>
+
 
 <style>
     body {
@@ -84,21 +116,29 @@
     .grid-cards {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 1.5rem;
+        gap: 2.5rem;
     }
 
     .action-card {
         position: relative;
-        background: #fff;
+        background-color: #f1f5f8;
         border-radius: 1rem;
-        padding: 2rem 1rem;
+        padding: 2rem 1.5rem;
         text-align: center;
-        color: #1b6ec2;
         text-decoration: none;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-        transition: all 0.3s ease-in-out;
-        cursor: pointer;
+        color: #1b6ec2;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+        min-height: 140px;
+        margin-bottom: 5rem; /* Adiciona espaçamento entre cards */
     }
+
+    .actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 3rem; /* Aqui também é essencial */
+    }
+
 
         .action-card:hover {
             background-color: #f0f8ff;
@@ -131,6 +171,9 @@
     /* Dropdown card */
     .dropdown-card {
         position: relative;
+        margin-bottom: 5.5rem; /* Garante espaço para o dropdown não ser cortado */
+        z-index: 10; /* Coloca o card acima de outros */
+        overflow: visible; /* Permite que o conteúdo transborde */
     }
 
         .dropdown-card .dropdown-content {
@@ -143,14 +186,16 @@
             padding: 0.5rem;
             border-radius: 0.75rem;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            z-index: 100;
-            width: 200px;
+            z-index: 100; /* Garante que o dropdown fique acima de tudo */
+            width: 220px;
+            white-space: nowrap;
         }
 
         .dropdown-card:hover .dropdown-content {
             display: block;
         }
 
+    /* Links internos do dropdown */
     .dropdown-content a {
         display: flex;
         align-items: center;
@@ -160,12 +205,13 @@
         color: #1b6ec2;
         text-decoration: none;
         border-radius: 0.5rem;
-        transition: background 0.2s;
+        transition: background 0.2s ease;
     }
 
         .dropdown-content a:hover {
             background-color: #f1f5f9;
         }
+
 
     @@media (max-width: 768px) {
         .section-title
