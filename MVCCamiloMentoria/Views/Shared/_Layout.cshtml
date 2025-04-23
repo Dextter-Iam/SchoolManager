@@ -11,23 +11,13 @@
     <link rel="stylesheet" href="~/MVCCamiloMentoria.styles.css" asp-append-version="true" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
 </head>
+
 <body>
-    <div id="sidebarMenu" class="sidebar">
-        <ul class="list-unstyled px-3 pt-4">
-            <li><a href="/Aluno" class="nav-link"><i class="fas fa-user-graduate me-2 text-primary"></i>Alunos</a></li>
-            <li><a href="/Disciplina" class="nav-link"><i class="fas fa-book-open me-2 text-success"></i>Disciplinas</a></li>
-            <li><a href="/Fornecedor" class="nav-link"><i class="fas fa-truck me-2 text-warning"></i>Fornecedores</a></li>
-            <li><a href="/Escola" class="nav-link"><i class="fas fa-school me-2 text-secondary"></i>Escolas</a></li>
-            <li><a href="/Aula" class="nav-link"><i class="fas fa-pencil-alt me-2 text-secondary"></i>Aulas</a></li>
-            <li><a href="/Equipamento" class="nav-link"><i class="fas fa-desktop me-2 text-secondary"></i>Equipamentos</a></li>
-            <li><a href="/Home" class="nav-link"><i class="fas fa-home me-2 text-bg-blue"></i>Início</a></li>
-        </ul>
-    </div>
     <header>
         <nav class="navbar navbar-light bg-white shadow-sm px-3 py-2">
             <div class="container-fluid">
-                <a class="navbar-brand fw-bold text-primary fs-4 d-flex align-items-center" href="#" onclick="toggleSidebar()">
-                    <i class="fas fa-graduation-cap me-2 pulse-hat" id="menuToggleIcon"></i> School Manager
+                <a class="navbar-brand fw-bold text-primary fs-4 d-flex align-items-center" href="/">
+                    <i class="fas fa-graduation-cap me-2"></i> School Manager
                 </a>
             </div>
         </nav>
@@ -56,7 +46,6 @@
         </main>
     </div>
 
-
     <footer class="border-top footer text-muted bg-light">
         <div class="container text-center py-3">
             &copy; 2025 - <strong>FISAppAcademy</strong> - <a asp-controller="Home" asp-action="Privacy">Saiba Mais</a>
@@ -67,22 +56,6 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById("sidebarMenu");
-            const body = document.body;
-            const icon = document.getElementById("menuToggleIcon");
-
-            sidebar.classList.toggle("show");
-            body.classList.toggle("menu-open");
-
-            // Animação no ícone (pode adicionar mais se quiser)
-            if (sidebar.classList.contains("show")) {
-                icon.classList.add("text-primary");
-            } else {
-                icon.classList.remove("text-primary");
-            }
-        }
-    </script>
 </body>
+
 </html>

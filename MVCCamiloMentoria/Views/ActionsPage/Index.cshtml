@@ -1,0 +1,135 @@
+﻿@{
+    ViewData["Title"] = "Ações - School Manager";
+}
+<!-- Hero Section -->
+<div class="actions-hero">
+    <div class="links-section py-5">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">Administrativo</h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <a href="/Aluno" class="btn-link">
+                        <i class="fas fa-user-graduate"></i>
+                        <span>Alunos</span>
+                    </a>
+                </div>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <a href="/Disciplina" class="btn-link">
+                        <i class="fas fa-book-open"></i>
+                        <span>Disciplinas</span>
+                    </a>
+                </div>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <a href="/Fornecedor" class="btn-link">
+                        <i class="fas fa-truck"></i>
+                        <span>Fornecedores</span>
+                    </a>
+                </div>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <a href="/Escola" class="btn-link">
+                        <i class="fas fa-school"></i>
+                        <span>Escolas</span>
+                    </a>
+                </div>
+                <!-- Adicione novos menus aqui, se necessário -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .actions-hero {
+        min-height: 50vh;
+        display: flex;
+        align-items: center;
+        background: linear-gradient(145deg, #e8f0fc, #ffffff);
+        padding: 2rem 1rem;
+    }
+
+    .links-section {
+        width: 100%;
+        background: #fff;
+        padding: 4rem 1rem;
+        border-radius: 1rem;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1b6ec2;
+        margin-bottom: 3rem;
+    }
+
+    .btn-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 1.5rem;
+        background-color: #f1f5f8;
+        color: #1b6ec2;
+        border-radius: 0.75rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        position: relative;
+        text-align: center;
+        min-height: 100px;
+    }
+
+        .btn-link i {
+            font-size: 1.6rem;
+        }
+
+        .btn-link:hover {
+            background-color: #e4f0fb;
+            transform: translateY(-3px);
+        }
+
+        .btn-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: #1b6ec2;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .btn-link:hover::after {
+            transform: scaleX(1);
+        }
+
+    @@media (max-width: 768px) {
+        .section-title
+
+    {
+        font-size: 2rem;
+    }
+
+    .btn-link {
+        padding: 1.2rem;
+        font-size: 1rem;
+    }
+
+        .btn-link i {
+            font-size: 1.4rem;
+        }
+
+    }
+
+    @@media (max-width: 576px) {
+        .btn-link
+
+    {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    }
+</style>

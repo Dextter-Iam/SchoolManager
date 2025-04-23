@@ -2,15 +2,178 @@
     ViewData["Title"] = "Início";
 }
 
-<div class="container py-5">
-    <div class="row justify-content-center text-center">
-        <div class="col-lg-8">
-            <h1 class="display-4 mb-4 text-primary fw-bold">Bem-vindo ao School Manger!</h1>
-            <p class="lead text-muted">
-                Aqui você pode gerenciar seus <strong>Alunos</strong>, <strong>Disciplinas</strong>,
-                <strong>Fornecedores</strong> e <strong>Escolas</strong> de forma prática e eficiente.
-            </p>
-            <hr class="my-4" />
-        </div>
+<div class="home-hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Bem-vindo ao <span>School Manager</span>!</h1>
+        <p class="hero-subtitle">
+            Gerencie seus <strong>Alunos</strong>, <strong>Disciplinas</strong>, <strong>Fornecedores</strong> e <strong>Escolas</strong> com uma plataforma <span class="highlight">moderna</span>, <span class="highlight">intuitiva</span> e <span class="highlight">eficiente</span>.
+        </p>
+
+        <a href="/ActionsPage" class="btn-start">Começar Agora</a>
     </div>
 </div>
+
+<style>
+    /* Hero Section */
+    .home-hero {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        min-height: 100vh;
+        background: linear-gradient(145deg, #e8f0fc, #ffffff);
+        padding: 2rem;
+    }
+
+    .hero-content {
+        max-width: 720px;
+        padding: 3rem 2rem;
+        background: #ffffff;
+        border-radius: 1.25rem;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+        animation: fadeInUp 0.8s ease-in-out;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        color: #1b6ec2;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+        .hero-title span {
+            color: #0d5dbd;
+        }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+        color: #444;
+        line-height: 1.8;
+        margin-bottom: 2.5rem;
+    }
+
+        .hero-subtitle .highlight {
+            color: #1b6ec2;
+            font-weight: 700;
+        }
+
+    .btn-start {
+        padding: 0.8rem 2.5rem;
+        background-color: #1b6ec2;
+        color: #fff;
+        border-radius: 0.6rem;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(27, 110, 194, 0.3);
+    }
+
+        .btn-start:hover {
+            background-color: #154f91;
+            box-shadow: 0 8px 20px #1b6ec2;
+            transform: translateY(-2px);
+        }
+
+    @@keyframes fadeInUp {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    @@media (max-width: 768px) {
+        .hero-title
+
+    {
+        font-size: 2.2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .btn-start {
+        width: 100%;
+    }
+
+    }
+
+    /* Testemunhos */
+    .testimonials-section {
+        background: #f8f9fa;
+        padding: 5rem 0;
+    }
+
+    .testimonial-card {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        text-align: center;
+    }
+
+    .testimonial-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin-bottom: 1rem;
+    }
+
+    .testimonial-text {
+        font-size: 1rem;
+        color: #555;
+        margin-bottom: 1rem;
+        font-style: italic;
+    }
+
+    .testimonial-author {
+        font-weight: 600;
+        color: #1b6ec2;
+    }
+
+    /* Links Section */
+    .links-section {
+        background: #fff;
+        padding: 5rem 0;
+    }
+
+    .btn-link {
+        display: block;
+        padding: 1.25rem;
+        margin: 1rem 0;
+        background-color: #f1f5f8;
+        color: #1b6ec2;
+        border-radius: 0.5rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+    }
+
+        .btn-link i {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .btn-link:hover {
+            background-color: #e4f0fb;
+        }
+
+    .section-title {
+        font-size: 2rem;
+        color: #1b6ec2;
+        font-weight: 700;
+        margin-bottom: 3rem;
+    }
+</style>
