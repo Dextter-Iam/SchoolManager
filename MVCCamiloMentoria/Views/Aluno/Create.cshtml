@@ -1,6 +1,11 @@
 ﻿@model MVCCamiloMentoria.ViewModels.AlunoViewModel
 
-<h4>Cadastro de Aluno</h4>
+
+<div class="justify-content-center">
+    <br />
+    <h4>Cadastro de Aluno</h4>
+</div>
+
 <hr />
 
 <div class="row">
@@ -8,6 +13,7 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
+            <!-- Seção Informações Pessoais -->
             <fieldset class="border rounded p-3 mb-4">
                 <legend class="w-auto px-2">Informações Pessoais</legend>
 
@@ -68,6 +74,7 @@
                 </div>
             </fieldset>
 
+            <!-- Seção Telefone -->
             <fieldset class="border rounded p-3 mb-4">
                 <legend class="w-auto px-2">Telefone</legend>
 
@@ -89,6 +96,7 @@
                 </div>
             </fieldset>
 
+            <!-- Seção Endereço -->
             <fieldset class="border rounded p-3 mb-4">
                 <legend class="w-auto px-2">Endereço</legend>
 
@@ -128,6 +136,7 @@
                 </div>
             </fieldset>
 
+            <!-- Botões de Ação -->
             <div class="form-group text-end">
                 <input type="submit" value="Cadastrar" class="btn btn-primary px-4" />
                 <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>

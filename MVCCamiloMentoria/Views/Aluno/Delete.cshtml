@@ -1,58 +1,42 @@
 ﻿@model MVCCamiloMentoria.ViewModels.AlunoViewModel
 
 <div class="container">
-    <h3 class="text-danger">Tem certeza que deseja prosseguir?</h3>
+    <h3 class="text-danger mb-4">Tem certeza que deseja excluir este aluno?</h3>
 
     <div class="card">
         <div class="card-header bg-warning text-white">
-            <h4 class="mb-0">Informações</h4>
+            <h4 class="mb-0">Informações do Aluno</h4>
         </div>
         <div class="card-body">
             <dl class="row">
-                <dt class="col-sm-2 fw-bold">
-                    @Html.DisplayNameFor(model => model.Nome)
-                </dt>
+                <dt class="col-sm-2 fw-bold">@Html.DisplayNameFor(model => model.Nome)</dt>
+                <dd class="col-sm-10">@Html.DisplayFor(model => model.Nome)</dd>
+
+                <dt class="col-sm-2 fw-bold">@Html.DisplayNameFor(model => model.DataNascimento)</dt>
+                <dd class="col-sm-10">@Html.DisplayFor(model => model.DataNascimento)</dd>
+
+                <dt class="col-sm-2 fw-bold">@Html.DisplayNameFor(model => model.EmailEscolar)</dt>
+                <dd class="col-sm-10">@Html.DisplayFor(model => model.EmailEscolar)</dd>
+
+                <dt class="col-sm-2 fw-bold">@Html.DisplayNameFor(model => model.AnoInscricao)</dt>
+                <dd class="col-sm-10">@Html.DisplayFor(model => model.AnoInscricao)</dd>
+
+                <dt class="col-sm-2 fw-bold">@Html.DisplayNameFor(model => model.BolsaEscolar)</dt>
                 <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Nome)
+                    @if (Model.BolsaEscolar)
+                    {
+                        <span class="badge bg-success">Bolsista</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-dark">Mensalista</span>
+                    }
                 </dd>
 
-                <dt class="col-sm-2 fw-bold">
-                    @Html.DisplayNameFor(model => model.DataNascimento)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.DataNascimento)
-                </dd>
+                <dt class="col-sm-2 fw-bold">@Html.DisplayNameFor(model => model.Turma)</dt>
+                <dd class="col-sm-10">@Html.DisplayFor(model => model.Turma.NomeTurma)</dd>
 
-                <dt class="col-sm-2 fw-bold">
-                    @Html.DisplayNameFor(model => model.EmailEscolar)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.EmailEscolar)
-                </dd>
-
-                <dt class="col-sm-2 fw-bold">
-                    @Html.DisplayNameFor(model => model.AnoInscricao)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.AnoInscricao)
-                </dd>
-
-                <dt class="col-sm-2 fw-bold">
-                    @Html.DisplayNameFor(model => model.BolsaEscolar)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.BolsaEscolar)
-                </dd>
-
-                <dt class="col-sm-2 fw-bold">
-                    @Html.DisplayNameFor(model => model.Turma)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Turma.NomeTurma)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayName("Telefone")
-                </dt>
+                <dt class="col-sm-2 fw-bold">Telefone</dt>
                 <dd class="col-sm-10">
                     @if (Model.AlunoTelefone != null && Model.AlunoTelefone.Any())
                     {
@@ -67,32 +51,22 @@
                     }
                 </dd>
 
-                <dt class="col-sm-2">
-                    @Html.DisplayName("Endereço")
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Endereco.NomeRua)
-                </dd>
+                <dt class="col-sm-2 fw-bold">Endereço</dt>
+                <dd class="col-sm-10">@Html.DisplayFor(model => model.Endereco.NomeRua)</dd>
 
-                <dt class="col-sm-2 fw-bold">
-                    @Html.DisplayNameFor(model => model.Escola)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Escola.Nome)
-                </dd>
+                <dt class="col-sm-2 fw-bold">@Html.DisplayNameFor(model => model.Escola)</dt>
+                <dd class="col-sm-10">@Html.DisplayFor(model => model.Escola.Nome)</dd>
             </dl>
         </div>
     </div>
 
     <form asp-action="Delete" method="post" class="mt-4">
         <input type="hidden" asp-for="Id" />
-        <button type="submit" class="btn btn-danger">Delete</button>
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <button type="submit" class="btn btn-danger">Excluir</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }
