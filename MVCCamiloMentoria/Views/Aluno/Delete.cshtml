@@ -1,72 +1,176 @@
 ﻿@model MVCCamiloMentoria.ViewModels.AlunoViewModel
 
 <div class="container">
-    <h3 class="text-danger mb-4">Tem certeza que deseja excluir este aluno?</h3>
-
-    <div class="card">
-        <div class="card-header bg-warning text-white">
-            <h4 class="mb-0">Informações do Aluno</h4>
-        </div>
-        <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-2 fw-bold">@Html.DisplayNameFor(model => model.Nome)</dt>
-                <dd class="col-sm-10">@Html.DisplayFor(model => model.Nome)</dd>
-
-                <dt class="col-sm-2 fw-bold">@Html.DisplayNameFor(model => model.DataNascimento)</dt>
-                <dd class="col-sm-10">@Html.DisplayFor(model => model.DataNascimento)</dd>
-
-                <dt class="col-sm-2 fw-bold">@Html.DisplayNameFor(model => model.EmailEscolar)</dt>
-                <dd class="col-sm-10">@Html.DisplayFor(model => model.EmailEscolar)</dd>
-
-                <dt class="col-sm-2 fw-bold">@Html.DisplayNameFor(model => model.AnoInscricao)</dt>
-                <dd class="col-sm-10">@Html.DisplayFor(model => model.AnoInscricao)</dd>
-
-                <dt class="col-sm-2 fw-bold">@Html.DisplayNameFor(model => model.BolsaEscolar)</dt>
-                <dd class="col-sm-10">
-                    @if (Model.BolsaEscolar)
-                    {
-                        <span class="badge bg-success">Bolsista</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-dark">Mensalista</span>
-                    }
-                </dd>
-
-                <dt class="col-sm-2 fw-bold">@Html.DisplayNameFor(model => model.Turma)</dt>
-                <dd class="col-sm-10">@Html.DisplayFor(model => model.Turma.NomeTurma)</dd>
-
-                <dt class="col-sm-2 fw-bold">Telefone</dt>
-                <dd class="col-sm-10">
-                    @if (Model.AlunoTelefone != null && Model.AlunoTelefone.Any())
-                    {
-                        foreach (var telefone in Model.AlunoTelefone)
-                        {
-                            <p>@telefone.DDD @telefone.Numero</p>
-                        }
-                    }
-                    else
-                    {
-                        <p>Telefone Não Cadastrado!</p>
-                    }
-                </dd>
-
-                <dt class="col-sm-2 fw-bold">Endereço</dt>
-                <dd class="col-sm-10">@Html.DisplayFor(model => model.Endereco.NomeRua)</dd>
-
-                <dt class="col-sm-2 fw-bold">@Html.DisplayNameFor(model => model.Escola)</dt>
-                <dd class="col-sm-10">@Html.DisplayFor(model => model.Escola.Nome)</dd>
-            </dl>
-        </div>
+    <div class="justify-content-center">
+        <br />
+        <h3 class="text-danger mb-4">Tem certeza que deseja excluir este aluno?</h3>
     </div>
 
-    <form asp-action="Delete" method="post" class="mt-4">
-        <input type="hidden" asp-for="Id" />
-        <button type="submit" class="btn btn-danger">Excluir</button>
-        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-    </form>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">Dados do Aluno</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Seção Informações Pessoais -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Informações Pessoais</h5>
+                        </div>
+                        <div class="card-body">
+                            <dl class="row">
+                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Nome)</dt>
+                                <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
+
+                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.DataNascimento)</dt>
+                                <dd class="col-sm-9">@Model.DataNascimento.ToString("dd/MM/yyyy")</dd>
+
+                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.EmailEscolar)</dt>
+                                <dd class="col-sm-9">@Html.DisplayFor(model => model.EmailEscolar)</dd>
+
+                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.AnoInscricao)</dt>
+                                <dd class="col-sm-9">@Model.AnoInscricao.ToString("yyyy")</dd>
+
+                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.BolsaEscolar)</dt>
+                                <dd class="col-sm-9">
+                                    @if (Model.BolsaEscolar)
+                                    {
+                                        <span class="badge bg-success">Bolsista</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Não Bolsista</span>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <!-- Seção Responsáveis -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Responsáveis</h5>
+                        </div>
+                        <div class="card-body">
+                            <dl class="row">
+                                <dt class="col-sm-3 fw-bold">Responsável 1</dt>
+                                <dd class="col-sm-9">
+                                    @if (!string.IsNullOrEmpty(Model.NomeResponsavel1))
+                                    {
+                                        <p>@Model.NomeResponsavel1 <span class="text-muted">(@Model.Parentesco1)</span></p>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Não informado</span>
+                                    }
+                                </dd>
+
+                                <dt class="col-sm-3 fw-bold">Responsável 2</dt>
+                                <dd class="col-sm-9">
+                                    @if (!string.IsNullOrEmpty(Model.NomeResponsavel2))
+                                    {
+                                        <p>@Model.NomeResponsavel2 <span class="text-muted">(@Model.Parentesco2)</span></p>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Não informado</span>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <!-- Seção Telefone -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Contato</h5>
+                        </div>
+                        <div class="card-body">
+                            <dl class="row">
+                                <dt class="col-sm-3 fw-bold">Telefone</dt>
+                                <dd class="col-sm-9">
+                                    @if (Model.AlunoTelefone != null && Model.AlunoTelefone.Any())
+                                    {
+                                        foreach (var telefone in Model.AlunoTelefone)
+                                        {
+                                            <p>(@telefone.DDD) @telefone.Numero.ToString("00000-0000")</p>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Telefone não cadastrado</span>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <!-- Seção Endereço -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Endereço</h5>
+                        </div>
+                        <div class="card-body">
+                            <dl class="row">
+                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Endereco)</dt>
+                                <dd class="col-sm-9">
+                                    @if (Model.Endereco != null)
+                                    {
+                                        <address>
+                                            @Model.Endereco.NomeRua, @Model.Endereco.NumeroRua<br />
+                                            @if (!string.IsNullOrEmpty(Model.Endereco.Complemento))
+                                            {
+                                                @Model.Endereco.Complemento <br />
+                                            }
+                                            CEP: @Model.Endereco.CEP?.ToString("00000-000")<br />
+                                            @Model.Endereco.Estado?.Nome - @Model.Endereco.Estado?.Sigla
+                                        </address>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Endereço não cadastrado</span>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <!-- Seção Escola/Turma -->
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Informações Escolares</h5>
+                        </div>
+                        <div class="card-body">
+                            <dl class="row">
+                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Turma)</dt>
+                                <dd class="col-sm-9">@Html.DisplayFor(model => model.Turma.NomeTurma)</dd>
+
+                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Escola)</dt>
+                                <dd class="col-sm-9">@Html.DisplayFor(model => model.Escola.Nome)</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form asp-action="Delete" method="post" class="text-end">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger px-4">
+                    <i class="fas fa-trash-alt"></i> Confirmar Exclusão
+                </button>
+                <a asp-action="Index" class="btn btn-secondary ms-2">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </form>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial")
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

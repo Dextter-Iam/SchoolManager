@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MVCCamiloMentoria.ViewModels
 {
@@ -20,7 +21,7 @@ namespace MVCCamiloMentoria.ViewModels
         [DataType(DataType.Date)]
         public DateTime DataNascimento { get; set; }
 
-        [DisplayName("E-mail ")]
+        [DisplayName("E-mail")]
         [Required(ErrorMessage = "O e-mail do aluno é obrigatório.")]
         [EmailAddress(ErrorMessage = "E-mail inválido.")]
         [StringLength(100, ErrorMessage = "O e-mail deve ter no máximo 100 caracteres.")]
@@ -38,7 +39,6 @@ namespace MVCCamiloMentoria.ViewModels
         [Required(ErrorMessage = "A turma é obrigatória.")]
         public int TurmaId { get; set; }
         public Turma? Turma { get; set; }
-
 
         [DisplayName("DDD")]
         [Required(ErrorMessage = "Informe o DDD")]
@@ -82,8 +82,39 @@ namespace MVCCamiloMentoria.ViewModels
         [Required(ErrorMessage = "A escola é obrigatória.")]
         public int EscolaId { get; set; }
         public Escola? Escola { get; set; }
+
+        [DisplayName("Responsável")]
+        public int? ResponsavelId { get; set; }
+
+        public SelectList? ResponsaveisDisponiveis { get; set; }
+
+        [DisplayName("Responsável")]
         public List<AlunoResponsavel>? AlunoResponsavel { get; set; }
+   
+        [DisplayName("Responsável Atual")]
+        public string NomeResponsavelAtual =>
+            AlunoResponsavel?.FirstOrDefault()?.Responsavel?.Nome ?? "Nenhum responsável";
+        public Responsavel? Responsavel { get; set; }
+
         public List<AlunoTelefone>? AlunoTelefone { get; set; }
         public List<Aula>? Aulas { get; set; }
+
+
+        [DisplayName("Responsável 1")]
+        public string? NomeResponsavel1 { get; set; }
+
+        [DisplayName("Parentesco 1")]
+        public string? Parentesco1 { get; set; }
+
+        [DisplayName("Responsável 2")]
+        public string? NomeResponsavel2 { get; set; }
+
+        [DisplayName("Parentesco 2")]
+        public string? Parentesco2 { get; set; }
+
+        public SelectList? ParentescoOptions { get; set; }
+
+        [NotMapped]
+        public int ResponsavelIdValue => ResponsavelId ?? 0;
     }
 }
