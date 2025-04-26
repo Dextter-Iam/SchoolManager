@@ -1,240 +1,285 @@
 ﻿@{
-    ViewData["Title"] = "Painel - School Manager";
+	ViewData["Title"] = "Painel - School Manager";
 }
 <div class="admin-panel">
-    <div class="container">
-        <h2 class="section-title">Painel Administrativo</h2>
-        <div class="grid-cards">
+	<div class="container">
+		<h2 class="section-title">Painel Administrativo</h2>
+		<div class="grid-cards">
 
-            <!-- Dropdown: Alunos -->
-            <div class="action-card dropdown-card" title="Ver todos os alunos">
-                <div class="icon">
-                    <i class="fas fa-user-graduate"></i>
-                </div>
-                <div class="label">Alunos</div>
-                <div class="dropdown-content">
-                    <a href="/Aluno/Index"><i class="fas fa-users"></i> Ver Alunos</a>
-                    <a href="/Aluno/Create"><i class="fas fa-user-plus"></i> Novo Aluno</a>
-                </div>
-            </div>
+			<!-- Dropdown: Alunos -->
+			<div class="action-card dropdown-card" title="Ver todos os alunos">
+				<div class="icon">
+					<i class="fas fa-user-graduate"></i>
+				</div>
+				<div class="label">Alunos</div>
+				<div class="dropdown-content">
+					<a href="/Aluno/Index"><i class="fas fa-users"></i> Ver Alunos</a>
+					<a href="/Aluno/Create"><i class="fas fa-user-plus"></i> Novo Aluno</a>
+				</div>
+			</div>
 
-            <!-- Dropdown: Disciplinas -->
-            <div class="action-card dropdown-card" title="Gerenciar disciplinas">
-                <div class="icon">
-                    <i class="fas fa-book-open"></i>
-                </div>
-                <div class="label">Disciplinas</div>
-                <div class="dropdown-content">
-                    <a href="/Disciplina"><i class="fas fa-book"></i> Ver Disciplinas</a>
-                    <a href="/Disciplina/Create"><i class="fas fa-plus-circle"></i> Nova Disciplina</a>
-                </div>
-            </div>
+			<!-- Dropdown: Professores -->
+			<div class="action-card dropdown-card" title="Ver todos os professores">
+				<div class="icon">
+					<i class="fas fa-chalkboard-teacher"></i>
+				</div>
+				<div class="label">Professores</div>
+				<div class="dropdown-content">
+					<a href="/Professor/Index"><i class="fas fa-users"></i> Ver Professores</a>
+					<a href="/Professor/Create"><i class="fas fa-user-plus"></i> Novo Professor</a>
+				</div>
+			</div>
 
-            <!-- Dropdown: Aulas -->
-            <div class="action-card dropdown-card" title="Configurações das escolas">
-                <div class="icon">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                </div>
-                <div class="label">Aulas</div>
-                <div class="dropdown-content">
-                    <a href="/Aula"><i class="fas fa-list-ul"></i> Ver Aulas</a>
-                    <a href="/Aula/Create"><i class="fas fa-plus-circle"></i> Nova Aula</a>
-                </div>
-            </div>
+			<!-- Dropdown: Supervisores -->
+			<div class="action-card dropdown-card" title="Ver todos os supervisores">
+				<div class="icon">
+					<i class="fas fa-user-tie"></i>
+				</div>
+				<div class="label">Supervisores</div>
+				<div class="dropdown-content">
+					<a href="/Supervisor/Index"><i class="fas fa-users"></i> Ver Supervisores</a>
+					<a href="/Supervisor/Create"><i class="fas fa-user-plus"></i> Novo Supervisor</a>
+				</div>
+			</div>
 
-            <!-- Dropdown: Escolas -->
-            <div class="action-card dropdown-card" title="Configurações das escolas">
-                <div class="icon">
-                    <i class="fas fa-school"></i>
-                </div>
-                <div class="label">Escolas</div>
-                <div class="dropdown-content">
-                    <a href="/Escola"><i class="fas fa-list-ul"></i> Ver Escolas</a>
-                    <a href="/Escola/Create"><i class="fas fa-plus-circle"></i> Nova Escola</a>
-                </div>
-            </div>
+			<!-- Dropdown: Diretores -->
+			<div class="action-card dropdown-card" title="Ver todos os Diretores">
+				<div class="icon">
+					<i class="fas fa-users-cog"></i>
+				</div>
+				<div class="label">Diretores</div>
+				<div class="dropdown-content">
+					<a href="/Diretor/Index"><i class="fas fa-users"></i> Ver Diretores</a>
+					<a href="/Diretor/Create"><i class="fas fa-user-plus"></i> Novo Diretor</a>
+				</div>
+			</div>
 
-            <!-- Dropdown: Fornecedores -->
-            <div class="action-card dropdown-card" title="Lista de fornecedores">
-                <div class="icon">
-                    <i class="fas fa-truck"></i>
-                </div>
-                <div class="label">Fornecedores</div>
-                <div class="dropdown-content">
-                    <a href="/Fornecedor"><i class="fas fa-clipboard-list"></i> Ver Fornecedores</a>
-                    <a href="/Fornecedor/Create"><i class="fas fa-plus"></i> Novo Fornecedor</a>
-                </div>
-            </div>
+			<!-- Dropdown: Disciplinas -->
+			<div class="action-card dropdown-card" title="Gerenciar disciplinas">
+				<div class="icon">
+					<i class="fas fa-book-open"></i>
+				</div>
+				<div class="label">Disciplinas</div>
+				<div class="dropdown-content">
+					<a href="/Disciplina"><i class="fas fa-book"></i> Ver Disciplinas</a>
+					<a href="/Disciplina/Create"><i class="fas fa-plus-circle"></i> Nova Disciplina</a>
+				</div>
+			</div>
 
-            <!-- Dropdown: Equipamentos -->
-            <div class="action-card dropdown-card" title="Ver Equipamentos">
-                <div class="icon">
-                    <i class="fas fa-desktop"></i> 
-                </div>
-                <div class="label">Equipamentos</div>
-                <div class="dropdown-content">
-                    <a href="/Equipamento/Index"><i class="fas fa-list"></i>  Ver Equipamentos</a>
-                    <a href="/Equipamento/Create"><i class="fas fa-plus"></i> Novo Equipamento</a>
-                </div>
-            </div>
+			<!-- Dropdown: Aulas -->
+			<div class="action-card dropdown-card" title="Configurações das escolas">
+				<div class="icon">
+					<i class="fas fa-book-reader"></i>
+				</div>
+				<div class="label">Aulas</div>
+				<div class="dropdown-content">
+					<a href="/Aula"><i class="fas fa-list-ul"></i> Ver Aulas</a>
+					<a href="/Aula/Create"><i class="fas fa-plus-circle"></i> Nova Aula</a>
+				</div>
+			</div>
+
+			<!-- Dropdown: Escolas -->
+			<div class="action-card dropdown-card" title="Configurações das escolas">
+				<div class="icon">
+					<i class="fas fa-school"></i>
+				</div>
+				<div class="label">Escolas</div>
+				<div class="dropdown-content">
+					<a href="/Escola"><i class="fas fa-list-ul"></i> Ver Escolas</a>
+					<a href="/Escola/Create"><i class="fas fa-plus-circle"></i> Nova Escola</a>
+				</div>
+			</div>
+
+			<!-- Dropdown: Fornecedores -->
+			<div class="action-card dropdown-card" title="Lista de fornecedores">
+				<div class="icon">
+					<i class="fas fa-truck"></i>
+				</div>
+				<div class="label">Fornecedores</div>
+				<div class="dropdown-content">
+					<a href="/Fornecedor"><i class="fas fa-clipboard-list"></i> Ver Fornecedores</a>
+					<a href="/Fornecedor/Create"><i class="fas fa-plus"></i> Novo Fornecedor</a>
+				</div>
+			</div>
+
+			<!-- Dropdown: Prestadores de Serviço -->
+			<div class="action-card dropdown-card" title="Lista de trabalhadores">
+				<div class="icon">
+					<i class="fas fa-hands-helping"></i>
+				</div>
+				<div class="label">Prestadores de Serviço</div>
+				<div class="dropdown-content">
+					<a href="/PrestadorServico/Index"><i class="fas fa-clipboard-list"></i> Ver Funcionário</a>
+					<a href="/PrestadorServico/Create"><i class="fas fa-plus"></i> Novo Funcionário</a>
+				</div>
+			</div>
+
+			<!-- Dropdown: Equipamentos -->
+			<div class="action-card dropdown-card" title="Ver Equipamentos">
+				<div class="icon">
+					<i class="fas fa-desktop"></i>
+				</div>
+				<div class="label">Equipamentos</div>
+				<div class="dropdown-content">
+					<a href="/Equipamento/Index"><i class="fas fa-list"></i>  Ver Equipamentos</a>
+					<a href="/Equipamento/Create"><i class="fas fa-plus"></i> Novo Equipamento</a>
+				</div>
+			</div>
 
 
-            <!-- Dropdown: Gestão -->
-            <div class="action-card dropdown-card" title="Mais opções administrativas">
-                <div class="icon">
-                    <i class="fas fa-cogs"></i>
-                </div>
-                <div class="label">Gestão</div>
-                <div class="dropdown-content">
-                    <a href="/Funcionarios"><i class="fas fa-users-cog"></i> Funcionários</a>
-                    <a href="/Financeiro"><i class="fas fa-file-invoice-dollar"></i> Financeiro</a>
-                    <a href="/Relatorios"><i class="fas fa-chart-line"></i> Relatórios</a>
-                </div>
-            </div>
+			<!-- Dropdown: Gestão -->
+@* 			<div class="action-card dropdown-card" title="Mais opções administrativas">
+				<div class="icon">
+					<i class="fas fa-cogs"></i>
+				</div>
+				<div class="label">Gestão</div>
+				<div class="dropdown-content">
+					<a href="/Funcionarios"><i class="fas fa-users-cog"></i> Funcionários</a>
+					<a href="/Financeiro"><i class="fas fa-file-invoice-dollar"></i> Financeiro</a>
+					<a href="/Relatorios"><i class="fas fa-chart-line"></i> Relatórios</a>
+				</div>
+			</div> *@
 
-        </div>
-    </div>
+		</div>
+	</div>
 </div>
 
 
 <style>
-    body {
-        background: linear-gradient(to right, #eef2f7, #ffffff);
-        font-family: 'Segoe UI', sans-serif;
-        margin: 0;
-        padding: 0;
-    }
+	body {
+		background: linear-gradient(to right, #eef2f7, #ffffff);
+		font-family: 'Segoe UI', sans-serif;
+		margin: 0;
+		padding: 0;
+	}
 
-    .admin-panel {
-        padding: 4rem 1rem;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-    }
+	.admin-panel {
+		padding: 4rem 1rem;
+		min-height: 100vh;
+		display: flex;
+		justify-content: center;
+	}
 
-    .container {
-        max-width: 1200px;
-        width: 100%;
-    }
+	.container {
+		max-width: 1200px;
+		width: 100%;
+	}
 
-    .section-title {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: #1b6ec2;
-        margin-bottom: 2rem;
-        text-align: left;
-    }
+	.section-title {
+		font-size: 2.5rem;
+		font-weight: 700;
+		color: #1b6ec2;
+		margin-bottom: 2rem;
+		text-align: left;
+	}
 
-    .grid-cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 2.5rem;
-    }
+	.grid-cards {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+		gap: 2.5rem;
+	}
 
-    .action-card {
-        position: relative;
-        background-color: #f1f5f8;
-        border-radius: 1rem;
-        padding: 2rem 1.5rem;
-        text-align: center;
-        text-decoration: none;
-        color: #1b6ec2;
-        transition: all 0.3s ease;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
-        min-height: 140px;
-        margin-bottom: 5rem; /* Adiciona espaçamento entre cards */
-    }
+	.action-card {
+		position: relative;
+		background-color: #f1f5f8;
+		border-radius: 1rem;
+		padding: 2rem 1.5rem;
+		text-align: center;
+		text-decoration: none;
+		color: #1b6ec2;
+		transition: all 0.3s ease;
+		box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+		min-height: 140px;
+		margin-bottom: 5rem; /* Adiciona espaçamento entre cards */
+	}
 
-    .actions-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 3rem; /* Aqui também é essencial */
-    }
-
-
-        .action-card:hover {
-            background-color: #f0f8ff;
-            transform: translateY(-6px);
-            box-shadow: 0 12px 35px rgba(27, 110, 194, 0.12);
-        }
-
-        .action-card .icon {
-            font-size: 2.5rem;
-            position: relative;
-        }
-
-        .action-card .label {
-            margin-top: 0.75rem;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-    .badge {
-        background-color: #dc3545;
-        color: white;
-        font-size: 0.75rem;
-        padding: 0.25rem 0.5rem;
-        border-radius: 999px;
-        position: absolute;
-        top: -10px;
-        right: -10px;
-    }
-
-    /* Dropdown card */
-    .dropdown-card {
-        position: relative;
-        margin-bottom: 5.5rem; /* Garante espaço para o dropdown não ser cortado */
-        z-index: 10; /* Coloca o card acima de outros */
-        overflow: visible; /* Permite que o conteúdo transborde */
-    }
-
-        .dropdown-card .dropdown-content {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #fff;
-            padding: 0.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            z-index: 100; /* Garante que o dropdown fique acima de tudo */
-            width: 220px;
-            white-space: nowrap;
-        }
-
-        .dropdown-card:hover .dropdown-content {
-            display: block;
-        }
-
-    /* Links internos do dropdown */
-    .dropdown-content a {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1rem;
-        font-size: 0.95rem;
-        color: #1b6ec2;
-        text-decoration: none;
-        border-radius: 0.5rem;
-        transition: background 0.2s ease;
-    }
-
-        .dropdown-content a:hover {
-            background-color: #f1f5f9;
-        }
+	.actions-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+		gap: 3rem; /* Aqui também é essencial */
+	}
 
 
-    @@media (max-width: 768px) {
-        .section-title
+	.action-card:hover {
+		background-color: #f0f8ff;
+		transform: translateY(-6px);
+		box-shadow: 0 12px 35px rgba(27, 110, 194, 0.12);
+	}
 
-    {
-        text-align: center;
-    }
+	.action-card .icon {
+		font-size: 2.5rem;
+		position: relative;
+	}
 
-    .grid-cards {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    }
+	.action-card .label {
+		margin-top: 0.75rem;
+		font-size: 1.2rem;
+		font-weight: 600;
+	}
 
-    }
+	.badge {
+		background-color: #dc3545;
+		color: white;
+		font-size: 0.75rem;
+		padding: 0.25rem 0.5rem;
+		border-radius: 999px;
+		position: absolute;
+		top: -10px;
+		right: -10px;
+	}
+
+	/* Dropdown card */
+	.dropdown-card {
+		position: relative;
+		margin-bottom: 5.5rem; /* Garante espaço para o dropdown não ser cortado */
+		z-index: 10; /* Coloca o card acima de outros */
+		overflow: visible; /* Permite que o conteúdo transborde */
+	}
+
+		.dropdown-card .dropdown-content {
+			display: none;
+			position: absolute;
+			top: 100%;
+			left: 50%;
+			transform: translateX(-50%);
+			background: #fff;
+			padding: 0.5rem;
+			border-radius: 0.75rem;
+			box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+			z-index: 100; /* Garante que o dropdown fique acima de tudo */
+			width: 220px;
+			white-space: nowrap;
+		}
+
+		.dropdown-card:hover .dropdown-content {
+			display: block;
+		}
+
+	/* Links internos do dropdown */
+	.dropdown-content a {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.75rem 1rem;
+		font-size: 0.95rem;
+		color: #1b6ec2;
+		text-decoration: none;
+		border-radius: 0.5rem;
+		transition: background 0.2s ease;
+	}
+
+		.dropdown-content a:hover {
+			background-color: #f1f5f9;
+		}
+
+
+	@@media (max-width: 768px) {
+		.section-title {
+			text-align: center;
+		}
+
+		.grid-cards {
+			grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+		}
+	}
 </style>
