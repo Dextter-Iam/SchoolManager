@@ -207,7 +207,7 @@ namespace MVCCamiloMentoria.Controllers
                     TelefoneId = at.TelefoneId,
                     Telefone = new Telefone
                     {
-                        Id = at.Telefone.Id,
+                        Id = at.Telefone.Id!,
                         DDD = at.Telefone.DDD,
                         Numero = at.Telefone.Numero,
                        
@@ -227,7 +227,7 @@ namespace MVCCamiloMentoria.Controllers
                 TurmaId = aluno.TurmaId,
                 EscolaId = aluno.EscolaId,
                 AlunoTelefone = alunoTelefones,
-                // Mantendo propriedades individuais para compatibilidade
+
                 DDD = primeiroTelefone?.DDD ?? 0,
                 Numero = primeiroTelefone?.Numero ?? 0,
                 NomeRua = aluno.Endereco?.NomeRua,
