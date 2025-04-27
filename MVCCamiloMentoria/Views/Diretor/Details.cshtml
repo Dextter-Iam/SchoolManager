@@ -1,34 +1,128 @@
-﻿@model MVCCamiloMentoria.Models.Diretor
+﻿@model MVCCamiloMentoria.ViewModels.DiretorViewModel
 
 @{
-    ViewData["Title"] = "Detalhes do Diretor";
+	ViewData["Title"] = "Detalhes do Diretor";
 }
+<br />
 
-<div class="card shadow-sm">
-    <div class="card-header bg-primary text-white">
-        <h4 class="mb-0">Detalhes do Diretor</h4>
-    </div>
-    <div class="card-body">
-        <dl class="row">
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Nome)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
+<div class="row">
+	<div class="col-md-10 offset-md-1">
+		<div class="card mb-4">
+			<div class="card-header bg-primary text-white">
+				<div class="d-flex justify-content-between align-items-center">
+					<h5 class="mb-0">Informações do Diretor</h5>
+				</div>
+			</div>
 
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Matricula)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(model => model.Matricula)</dd>
+			<div class="card-body">
+				<!-- Seção Informações Pessoais -->
+				<div class="card mb-3">
+					<div class="card-header bg-light">
+						<h5 class="mb-0">Informações Pessoais</h5>
+					</div>
+					<div class="card-body">
+						<dl class="row">
+							<dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Nome)</dt>
+							<dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
 
-            <dt class="col-sm-3">Escola</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(model => model.Escola.Nome)</dd>
+							<dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Matricula)</dt>
+							<dd class="col-sm-9">@Html.DisplayFor(model => model.Matricula)</dd>
+						</dl>
+					</div>
+				</div>
 
-            <dt class="col-sm-3">Endereço</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(model => model.Endereco.NomeRua)</dd>
-        </dl>
-        <div class="mt-4">
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
-                <i class="fas fa-edit"></i> Editar
-            </a>
-            <a asp-action="Index" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Voltar
-            </a>
-        </div>
-    </div>
+				<!-- Seção Escola -->
+				<div class="card mb-3">
+					<div class="card-header bg-light">
+						<h5 class="mb-0">Escola</h5>
+					</div>
+					<div class="card-body">
+						<dl class="row">
+							<dt class="col-sm-3 fw-bold">Escola</dt>
+							<dd class="col-sm-9">
+								@if (Model.Escola != null)
+								{
+									<span>@Model.Escola.Nome</span>
+								}
+								else
+								{
+									<span class="text-muted">Escola não cadastrada</span>
+								}
+							</dd>
+						</dl>
+					</div>
+				</div>
+
+				<!-- Seção Endereço -->
+				<div class="card mb-3">
+					<div class="card-header bg-light">
+						<h5 class="mb-0">Endereço</h5>
+					</div>
+					<div class="card-body">
+						<dl class="row">
+							<dt class="col-sm-3 fw-bold">Endereço</dt>
+							<dd class="col-sm-9">
+								@if (Model.Endereco != null)
+								{
+									<address>
+										@Model.Endereco.NomeRua, @Model.Endereco.NumeroRua<br />
+										@if (!string.IsNullOrEmpty(Model.Endereco.Complemento))
+										{
+											@Model.Endereco.Complemento <br />
+										}
+										CEP: @Model.Endereco.CEP?.ToString("00000-000")<br />
+										@Model.Endereco.Estado?.Nome - @Model.Endereco.Estado?.Sigla
+									</address>
+								}
+								else
+								{
+									<span class="text-muted">Endereço não cadastrado</span>
+								}
+							</dd>
+						</dl>
+					</div>
+				</div>
+
+				<!-- Seção Contato -->
+				<div class="card mb-3">
+					<div class="card-header bg-light">
+						<h5 class="mb-0">Contato</h5>
+					</div>
+					<div class="card-body">
+						<dl class="row">
+							<dt class="col-sm-3 fw-bold">Telefone</dt>
+							<dd class="col-sm-9">
+								@if (Model.Telefones != null && Model.Telefones.Any())
+								{
+									foreach (var telefone in Model.Telefones)
+									{
+										<p>(@telefone.DDD) @telefone.Numero.ToString("00000-0000")</p>
+									}
+								}
+								else
+								{
+									<span class="text-muted">Telefone não cadastrado</span>
+								}
+							</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+
+			<div class="text-end mt-3">
+				<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning px-4">
+					<i class="fas fa-edit"></i> Editar
+				</a>
+				<a asp-action="Index" class="btn btn-secondary ms-2">
+					<i class="fas fa-list"></i> Voltar à Lista
+				</a>
+			</div>
+		</div>
+	</div>
 </div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}
