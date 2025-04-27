@@ -1,79 +1,135 @@
 ﻿@model MVCCamiloMentoria.ViewModels.ResponsavelViewModel
 
 @{
-    ViewData["Title"] = "Excluir Responsável";
+	ViewData["Title"] = "Excluir Responsável";
 }
 
 <div class="container">
-    <div class="justify-content-center">
-        <br />
-        <h3 class="text-danger mb-4">Tem certeza que deseja excluir este responsável?</h3>
-    </div>
+	<div class="justify-content-center">
+		<br />
+		<h3 class="text-danger mb-4">Tem certeza que deseja excluir este responsável?</h3>
+	</div>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <div class="card mb-4">
-                <div class="card-header bg-danger text-white">
-                    <h4 class="mb-0">Dados do Responsável</h4>
-                </div>
-                <div class="card-body">
-                    <!-- Seção Informações Pessoais -->
-                    <div class="card mb-3">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">Informações Pessoais</h5>
-                        </div>
-                        <div class="card-body">
-                            <dl class="row">
-                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Nome)</dt>
-                                <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
-                            </dl>
-                        </div>
-                    </div>
+	<div class="row">
+		<div class="col-md-8 offset-md-2">
+			<div class="card mb-4">
+				<div class="card-header bg-danger text-white">
+					<h4 class="mb-0">Dados do Responsável</h4>
+				</div>
+				<div class="card-body">
+					<!-- Seção Informações Pessoais -->
+					<div class="card mb-3">
+						<div class="card-header bg-light">
+							<h5 class="mb-0">Informações Pessoais</h5>
+						</div>
+						<div class="card-body">
+							<dl class="row">
+								<dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Nome)</dt>
+								<dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
+							</dl>
+						</div>
 
-                    <!-- Seção Alunos Relacionados -->
-                    <div class="card mb-3">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">Alunos Relacionados</h5>
-                        </div>
-                        <div class="card-body">
-                            <dl class="row">
-                                <dt class="col-sm-3 fw-bold">Alunos</dt>
-                                <dd class="col-sm-9">
-                                    @if (Model.AlunoResponsavel != null && Model.AlunoResponsavel.Any())
-                                    {
-                                        foreach (var alunoRel in Model.AlunoResponsavel)
-                                        {
-                                            <p>@alunoRel.Aluno?.Nome</p>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">Nenhum aluno relacionado</span>
-                                    }
-                                </dd>
-                            </dl>
-                        </div>
-                    </div>
-                </div>
-            </div>
+					</div>
 
-            <form asp-action="Delete" method="post" class="text-end">
-                <input type="hidden" asp-for="Id" />
-                <button type="submit" class="btn btn-danger px-4">
-                    <i class="fas fa-trash-alt"></i> Confirmar Exclusão
-                </button>
-                <a asp-action="Index" class="btn btn-secondary ms-2">
-                    <i class="fas fa-times"></i> Cancelar
-                </a>
-            </form>
-        </div>
-    </div>
+					<!-- Seção Endereço -->
+					<div class="card mb-3">
+						<div class="card-header bg-light">
+							<h5 class="mb-0">Endereço</h5>
+						</div>
+						<div class="card-body">
+							<dl class="row">
+								<dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Endereco)</dt>
+								<dd class="col-sm-9">
+									@if (Model.Endereco != null)
+									{
+										<address>
+											@Model.Endereco.NomeRua, @Model.Endereco.NumeroRua<br />
+											@if (!string.IsNullOrEmpty(Model.Endereco.Complemento))
+											{
+												@Model.Endereco.Complemento <br />
+											}
+											CEP: @Model.Endereco.CEP?.ToString("00000-000")<br />
+											@Model.Endereco.Estado?.Nome - @Model.Endereco.Estado?.Sigla
+										</address>
+									}
+									else
+									{
+										<span class="text-muted">Endereço não cadastrado</span>
+									}
+								</dd>
+							</dl>
+						</div>
+					</div>
+
+					<div class="card mb-3">
+						<div class="card-header bg-light">
+							<h5 class="mb-0">Contato</h5>
+						</div>
+						<div class="card-body">
+							<dl class="row">
+								<dt class="col-sm-3 fw-bold">Telefone</dt>
+								<dd class="col-sm-9">
+									@if (Model.Telefones != null && Model.Telefones.Any())
+									{
+										foreach (var telefone in Model.Telefones)
+										{
+											<p>(@telefone.DDD) @telefone.Numero.ToString("00000-0000")</p>
+										}
+									}
+									else
+									{
+										<span class="text-muted">Telefone não cadastrado</span>
+									}
+								</dd>
+							</dl>
+						</div>
+					</div>
+					<!-- Seção Alunos Relacionados -->
+					<div class="card mb-3">
+						<div class="card-header bg-light">
+							<h5 class="mb-0">Alunos Relacionados</h5>
+						</div>
+						<div class="card-body">
+							<dl class="row">
+								<dt class="col-sm-3 fw-bold">Alunos</dt>
+								<dd class="col-sm-9">
+									@if (Model.AlunoResponsavel != null && Model.AlunoResponsavel.Any())
+									{
+										foreach (var alunoRel in Model.AlunoResponsavel)
+										{
+											<p>@alunoRel.Aluno?.Nome</p>
+										}
+									}
+									else
+									{
+										<span class="text-muted">Nenhum aluno relacionado</span>
+									}
+								</dd>
+							</dl>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<form asp-action="Delete" method="post" class="text-end">
+				<input type="hidden" asp-for="Id" />
+				<button type="submit" class="btn btn-danger px-4">
+					<i class="fas fa-trash-alt"></i> Confirmar Exclusão
+				</button>
+				<a asp-action="Index" class="btn btn-secondary ms-2">
+					<i class="fas fa-times"></i> Cancelar
+				</a>
+			</form>
+		</div>
+	</div>
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
 }
