@@ -1,43 +1,107 @@
-﻿@model MVCCamiloMentoria.Models.Coordenador
+﻿@model MVCCamiloMentoria.ViewModels.CoordenadorViewModel
 
 @{
     ViewData["Title"] = "Editar Coordenador";
 }
 
-<div class="card shadow-sm">
-    <div class="card-header bg-primary text-white">
-        <h4 class="mb-0">Editar Coordenador</h4>
+<div class="container">
+    <div class="justify-content-center">
+        <br />
+        <h3 class="mb-4">Editar Coordenador</h3>
     </div>
-    <div class="card-body">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Matricula" class="control-label"></label>
-                <input asp-for="Matricula" class="form-control" />
-                <span asp-validation-for="Matricula" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EscolaId" class="control-label"></label>
-                <select asp-for="EscolaId" class="form-control" asp-items="ViewBag.EscolaId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="EnderecoId" class="control-label"></label>
-                <select asp-for="EnderecoId" class="form-control" asp-items="ViewBag.EnderecoId"></select>
-            </div>
-            <div class="form-group mt-4">
-                <button type="submit" class="btn btn-warning">
-                    <i class="fas fa-save"></i> Salvar
-                </button>
-                <a asp-action="Index" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Voltar
-                </a>
-            </div>
-        </form>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <!-- Informações Pessoais -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">Informações Pessoais</div>
+                    <div class="card-body">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="form-group mb-3">
+                            <label asp-for="Nome"></label>
+                            <input asp-for="Nome" class="form-control" />
+                            <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Matricula"></label>
+                            <input asp-for="Matricula" class="form-control" />
+                            <span asp-validation-for="Matricula" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Telefone -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">Telefone</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label asp-for="DDD"></label>
+                                <input asp-for="DDD" class="form-control" />
+                            </div>
+                            <div class="col-md-8">
+                                <label asp-for="Numero"></label>
+                                <input asp-for="Numero" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Escola -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">Escola</div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label asp-for="EscolaId"></label>
+                            <select asp-for="EscolaId" class="form-select" asp-items="ViewBag.Escolas"></select>
+                            <span asp-validation-for="EscolaId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Endereço -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">Endereço</div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label asp-for="NomeRua"></label>
+                            <input asp-for="NomeRua" class="form-control" />
+                            <span asp-validation-for="NomeRua" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="NumeroRua"></label>
+                            <input asp-for="NumeroRua" class="form-control" />
+                            <span asp-validation-for="NumeroRua" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Complemento"></label>
+                            <input asp-for="Complemento" class="form-control" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="CEP"></label>
+                            <input asp-for="CEP" class="form-control" />
+                            <span asp-validation-for="CEP" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="EstadoId"></label>
+                            <select asp-for="EstadoId" class="form-select" asp-items="ViewBag.Estados"></select>
+                            <span asp-validation-for="EstadoId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="text-end">
+                    <input type="submit" value="Salvar Alterações" class="btn btn-success px-4" />
+                    <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+

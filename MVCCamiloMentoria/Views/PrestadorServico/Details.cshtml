@@ -10,29 +10,30 @@
     </div>
     <div class="card-body">
         <dl class="row">
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Nome)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
+            <dt class="col-sm-3">Nome do Prestador</dt>
+            <dd class="col-sm-9">@Model.Nome</dd>
 
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CPF)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(model => model.CPF)</dd>
+            <dt class="col-sm-3">CPF</dt>
+            <dd class="col-sm-9">@Model.CPF</dd>
 
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CNPJ)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(model => model.CNPJ)</dd>
+            <dt class="col-sm-3">CNPJ</dt>
+            <dd class="col-sm-9">@Model.CNPJ</dd>
 
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.EmpresaNome)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(model => model.EmpresaNome)</dd>
+            <dt class="col-sm-3">Nome da Empresa</dt>
+            <dd class="col-sm-9">@Model.EmpresaNome</dd>
 
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ServicoFinalidade)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(model => model.ServicoFinalidade)</dd>
+            <dt class="col-sm-3">Finalidade do Serviço</dt>
+            <dd class="col-sm-9">@Model.ServicoFinalidade</dd>
 
             <dt class="col-sm-3">Escola</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(model => model.Escola.Nome)</dd>
+            <dd class="col-sm-9">@Model.Escola?.Nome</dd>
         </dl>
-        <div class="mt-4">
+
+        <div class="mt-4 text-end">
             <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
                 <i class="fas fa-edit"></i> Editar
             </a>
-            <a asp-action="Index" class="btn btn-secondary">
+            <a asp-action="Index" class="btn btn-secondary ms-2">
                 <i class="fas fa-arrow-left"></i> Voltar
             </a>
         </div>
