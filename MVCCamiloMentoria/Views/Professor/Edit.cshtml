@@ -1,5 +1,144 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model MVCCamiloMentoria.ViewModels.ProfessorViewModel
+
 @{
+    ViewData["Title"] = "Editar Professor";
+}
+
+<div class="container">
+    <div class="justify-content-center">
+        <br />
+        <h3 class="mb-4">Editar Professor</h3>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <form asp-action="Edit">
+                <input type="hidden" asp-for="Id" />
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <!-- Informações Pessoais -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">Informações Pessoais</div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label asp-for="Nome"></label>
+                            <input asp-for="Nome" class="form-control" />
+                            <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Matricula"></label>
+                            <input asp-for="Matricula" class="form-control" />
+                            <span asp-validation-for="Matricula" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Escola e Turmas -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">Escola e Turmas</div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label asp-for="EscolaId"></label>
+                            <select asp-for="EscolaId" class="form-select" asp-items="ViewBag.EscolaId" id="EscolaId"></select>
+                            <span asp-validation-for="EscolaId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>Turmas</label>
+                            <select asp-for="TurmaIds" class="form-select" multiple id="TurmaIds" asp-items="ViewBag.TurmaIds"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Disciplinas -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">Disciplinas</div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label>Disciplinas</label>
+                            <select asp-for="DisciplinaIds" class="form-select" multiple asp-items="ViewBag.DisciplinaIds"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Endereço -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">Endereço</div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label asp-for="NomeRua"></label>
+                            <input asp-for="NomeRua" class="form-control" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="NumeroRua"></label>
+                            <input asp-for="NumeroRua" class="form-control" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Complemento"></label>
+                            <input asp-for="Complemento" class="form-control" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="CEP"></label>
+                            <input asp-for="CEP" class="form-control" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="EstadoId"></label>
+                            <select asp-for="EstadoId" class="form-select" asp-items="ViewBag.Estados"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Telefone -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">Telefone</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label asp-for="DDD"></label>
+                                <input asp-for="DDD" class="form-control" />
+                            </div>
+                            <div class="col-md-8">
+                                <label asp-for="Numero"></label>
+                                <input asp-for="Numero" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-end">
+                    <input type="submit" value="Salvar Alterações" class="btn btn-warning px-4" />
+                    <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('EscolaId').addEventListener('change', function () {
+            var escolaId = this.value;
+            var turmasSelect = document.getElementById('TurmaIds');
+
+            fetch(`/Professor/ObterTurmasPorEscola?escolaId=${escolaId}`)
+                .then(response => response.json())
+                .then(data => {
+                    turmasSelect.innerHTML = '';
+
+                    data.forEach(turma => {
+                        var option = document.createElement('option');
+                        option.value = turma.turmaId;
+                        option.text = turma.nomeTurma;
+                        turmasSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar turmas:', error);
+                });
+        });
+    </script>
+
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }

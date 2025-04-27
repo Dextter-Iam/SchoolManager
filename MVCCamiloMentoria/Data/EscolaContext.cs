@@ -25,6 +25,7 @@ public class EscolaContext : DbContext
     public DbSet<Diretor> Diretor { get; set; }
     public DbSet<Professor> Professor { get; set; }
     public DbSet<TurmaDisciplina> TurmaDisciplina { get; set; }
+    public DbSet<ProfessorDisciplina> ProfessorDisciplina { get; set; }
     public DbSet<ProfessorTurma> ProfessorTurma { get; set; }
     public DbSet<Supervisor> Supervisor { get; set; }
     public DbSet<Coordenador> Coordenador { get; set; }

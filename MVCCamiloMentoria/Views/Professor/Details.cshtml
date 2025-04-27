@@ -1,5 +1,71 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model MVCCamiloMentoria.ViewModels.ProfessorViewModel
+
 @{
+    ViewData["Title"] = "Detalhes do Professor";
 }
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">Detalhes do Professor</div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Nome</dt>
+            <dd class="col-sm-9">@Model.Nome</dd>
+
+            <dt class="col-sm-3">Matrícula</dt>
+            <dd class="col-sm-9">@Model.Matricula</dd>
+
+            <dt class="col-sm-3">Escola</dt>
+            <dd class="col-sm-9">@Model.Escola?.Nome</dd>
+
+            <dt class="col-sm-3">Endereço</dt>
+            <dd class="col-sm-9">
+                @Model.Endereco?.NomeRua, Nº @Model.Endereco?.NumeroRua
+            </dd>
+
+            <dt class="col-sm-3">Telefone</dt>
+            <dd class="col-sm-9">
+                @foreach (var tel in Model.Telefones ?? new List<Telefone>())
+                {
+                    <p>(@tel.DDD) @tel.Numero</p>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Disciplinas</dt>
+            <dd class="col-sm-9">
+                @if (Model.Disciplinas != null && Model.Disciplinas.Any())
+                {
+                    foreach (var disciplinaRel in Model.Disciplinas)
+                    {
+                        <p>@disciplinaRel.Disciplina?.Nome</p>
+                    }
+                }
+                else
+                {
+                    <span class="text-muted">Nenhuma disciplina cadastrada</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Turmas</dt>
+            <dd class="col-sm-9">
+                @if (Model.Turmas != null && Model.Turmas.Any())
+                {
+                    foreach (var turmaRel in Model.Turmas)
+                    {
+                        <p>@turmaRel.Turma?.NomeTurma</p>
+                    }
+                }
+                else
+                {
+                    <span class="text-muted">Nenhuma turma cadastrada</span>
+                }
+            </dd>
+        </dl>
+
+        <div class="text-end">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Editar
+            </a>
+            <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+        </div>
+    </div>
+</div>

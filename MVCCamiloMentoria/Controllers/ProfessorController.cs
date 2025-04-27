@@ -19,8 +19,9 @@ namespace MVCCamiloMentoria.Controllers
         public async Task<IActionResult> Index()
         {
             var professores = await _context.Professor
-                .Include(p => p.Endereco)
                 .Include(p => p.Escola)
+                .Include(p => p.Endereco)
+                .AsNoTracking()
                 .Select(p => new ProfessorViewModel
                 {
                     Id = p.Id,
@@ -37,20 +38,28 @@ namespace MVCCamiloMentoria.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-                return NotFound();
+            {
+                TempData["MensagemErro"] = "Professor não encontrado.";
+                return RedirectToAction(nameof(Index));
+            }
 
             var professor = await _context.Professor
                 .Include(p => p.Endereco)
                 .Include(p => p.Escola)
                 .Include(p => p.Aulas)
                 .Include(p => p.Telefones)
-                .Include(p => p.Turmas)
-                .Include(p => p.Disciplinas)
+                .Include(p => p.Turmas!)
+                    .ThenInclude(pt => pt.Turma)
+                .Include(p => p.Disciplinas!)
+                    .ThenInclude(pd => pd.Disciplina)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (professor == null)
-                return NotFound();
+            {
+                TempData["MensagemErro"] = "Professor não encontrado.";
+                return RedirectToAction(nameof(Index));
+            }
 
             var viewModel = new ProfessorViewModel
             {
@@ -85,23 +94,88 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
+                    int? cep = null;
+                    if (!string.IsNullOrWhiteSpace(viewModel.CEP))
+                    {
+                        if (int.TryParse(viewModel.CEP, out int parsedCep))
+                        {
+                            cep = parsedCep;
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("CEP", "CEP inválido. Informe apenas números.");
+                            CarregarDependencias(viewModel);
+                            return View(viewModel);
+                        }
+                    }
+
+                    var endereco = new Endereco
+                    {
+                        NomeRua = viewModel.NomeRua,
+                        NumeroRua = viewModel.NumeroRua,
+                        Complemento = viewModel.Complemento,
+                        CEP = cep,
+                        EstadoId = (int)viewModel.EstadoId!
+                    };
+
+                    _context.Endereco.Add(endereco);
+                    await _context.SaveChangesAsync();
+
                     var professor = new Professor
                     {
                         Nome = viewModel.Nome,
                         Matricula = viewModel.Matricula,
                         EscolaId = viewModel.EscolaId,
-                        EnderecoId = viewModel.EnderecoId
+                        EnderecoId = endereco.Id
                     };
 
-                    _context.Add(professor);
+                    _context.Professor.Add(professor);
+                    await _context.SaveChangesAsync();
+
+
+                    if (viewModel.TurmaIds != null)
+                    {
+                        foreach (var turmaId in viewModel.TurmaIds)
+                        {
+                            _context.ProfessorTurma.Add(new ProfessorTurma
+                            {
+                                ProfessorId = professor.Id,
+                                TurmaId = turmaId
+                            });
+                        }
+                    }
+
+                    if (viewModel.DisciplinaIds != null)
+                    {
+                        foreach (var disciplinaId in viewModel.DisciplinaIds)
+                        {
+                            _context.ProfessorDisciplina!.Add(new ProfessorDisciplina
+                            {
+                                ProfessorId = professor.Id,
+                                DisciplinaId = disciplinaId
+                            });
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                    var telefone = new Telefone
+                    {
+                        DDD = viewModel.DDD,
+                        Numero = viewModel.Numero,
+                        EscolaId = viewModel.EscolaId,
+                        ProfessorId = professor.Id
+                    };
+
+                    _context.Telefone.Add(telefone);
                     await _context.SaveChangesAsync();
 
                     TempData["MensagemSucesso"] = "Professor cadastrado com sucesso!";
                     return RedirectToAction(nameof(Index));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    TempData["MensagemErro"] = $"Erro ao cadastrar professor: {ex.Message}";
+                    TempData["MensagemErro"] = "Erro ao cadastrar professor.";
                 }
             }
 
@@ -113,14 +187,28 @@ namespace MVCCamiloMentoria.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
-                return NotFound();
+            {
+                TempData["MensagemErro"] = "Professor não encontrado.";
+                return RedirectToAction(nameof(Index));
+            }
 
             var professor = await _context.Professor
+                .Include(p => p.Endereco)
+                .Include(p => p.Telefones)
+                .Include(p => p.Turmas!)
+                .ThenInclude(pt => pt.Turma)
+                .Include(p => p.Disciplinas!)
+                .ThenInclude(pd => pd.Disciplina)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (professor == null)
-                return NotFound();
+            {
+                TempData["MensagemErro"] = "Professor não encontrado.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var telefone = professor.Telefones?.FirstOrDefault();
 
             var viewModel = new ProfessorViewModel
             {
@@ -128,12 +216,24 @@ namespace MVCCamiloMentoria.Controllers
                 Nome = professor.Nome,
                 Matricula = professor.Matricula,
                 EscolaId = professor.EscolaId,
-                EnderecoId = professor.EnderecoId
+                EnderecoId = professor.EnderecoId,
+                Endereco = professor.Endereco,
+                NomeRua = professor.Endereco?.NomeRua,
+                NumeroRua = professor.Endereco?.NumeroRua ?? 0,
+                Complemento = professor.Endereco?.Complemento,
+                CEP = professor.Endereco?.CEP?.ToString("00000000"),
+                EstadoId = professor.Endereco?.EstadoId,
+                DDD = telefone?.DDD ?? 0,
+                Numero = telefone?.Numero ?? 0,
+                TurmaIds = professor.Turmas?.Select(t => t.TurmaId).ToList(),
+                DisciplinaIds = professor.Disciplinas?.Select(d => d.DisciplinaId).ToList()
             };
 
             CarregarDependencias(viewModel);
+
             return View(viewModel);
         }
+
 
         // POST: Professor/Edit/5
         [HttpPost]
@@ -147,14 +247,94 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
-                    var professor = await _context.Professor.FindAsync(id);
+                    var professor = await _context.Professor
+                        .Include(p => p.Endereco)
+                        .Include(p => p.Telefones)
+                        .Include(p => p.Turmas!)
+                        .Include(p => p.Disciplinas!)
+                        .FirstOrDefaultAsync(p => p.Id == id);
+
                     if (professor == null)
-                        return NotFound();
+                    {
+                        TempData["MensagemErro"] = "Erro ao atualizar: Professor não encontrado.";
+                        return RedirectToAction(nameof(Index));
+                    }
+
 
                     professor.Nome = viewModel.Nome;
                     professor.Matricula = viewModel.Matricula;
                     professor.EscolaId = viewModel.EscolaId;
-                    professor.EnderecoId = viewModel.EnderecoId;
+
+
+                    if (professor.Endereco != null)
+                    {
+                        professor.Endereco.NomeRua = viewModel.NomeRua;
+                        professor.Endereco.NumeroRua = viewModel.NumeroRua;
+                        professor.Endereco.Complemento = viewModel.Complemento;
+                        professor.Endereco.CEP = string.IsNullOrWhiteSpace(viewModel.CEP) ? null : int.Parse(viewModel.CEP);
+                        professor.Endereco.EstadoId = (int)viewModel.EstadoId!;
+                    }
+
+
+                    if (professor.Telefones != null && professor.Telefones.Any())
+                    {
+                        foreach (var telefone in professor.Telefones)
+                        {
+                            telefone.DDD = viewModel.DDD;
+                            telefone.Numero = viewModel.Numero;
+                            telefone.EscolaId = viewModel.EscolaId;
+                        }
+                    }
+
+
+                    var turmasAtuais = professor.Turmas?.ToList() ?? new List<ProfessorTurma>();
+                    var turmasSelecionadas = viewModel.TurmaIds ?? new List<int>();
+
+                    foreach (var turmaRel in turmasAtuais)
+                    {
+                        if (!turmasSelecionadas.Contains(turmaRel.TurmaId))
+                        {
+                            _context.ProfessorTurma.Remove(turmaRel);
+                        }
+                    }
+
+
+                    foreach (var turmaId in turmasSelecionadas)
+                    {
+                        if (!turmasAtuais.Any(pt => pt.TurmaId == turmaId))
+                        {
+                            _context.ProfessorTurma.Add(new ProfessorTurma
+                            {
+                                ProfessorId = professor.Id,
+                                TurmaId = turmaId
+                            });
+                        }
+                    }
+
+
+                    var disciplinasAtuais = professor.Disciplinas?.ToList() ?? new List<ProfessorDisciplina>();
+                    var disciplinasSelecionadas = viewModel.DisciplinaIds ?? new List<int>();
+
+
+                    foreach (var discRel in disciplinasAtuais)
+                    {
+                        if (!disciplinasSelecionadas.Contains(discRel.DisciplinaId))
+                        {
+                            _context.ProfessorDisciplina!.Remove(discRel);
+                        }
+                    }
+
+                    foreach (var disciplinaId in disciplinasSelecionadas)
+                    {
+                        if (!disciplinasAtuais.Any(pd => pd.DisciplinaId == disciplinaId))
+                        {
+                            _context.ProfessorDisciplina!.Add(new ProfessorDisciplina
+                            {
+                                ProfessorId = professor.Id,
+                                DisciplinaId = disciplinaId
+                            });
+                        }
+                    }
 
                     _context.Update(professor);
                     await _context.SaveChangesAsync();
@@ -165,12 +345,15 @@ namespace MVCCamiloMentoria.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!ProfessorExists(viewModel.Id))
-                        return NotFound();
+                    {
+                        TempData["MensagemErro"] = "Erro de concorrência ao atualizar o professor.";
+                        return RedirectToAction(nameof(Index));
+                    }
                     throw;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    TempData["MensagemErro"] = $"Erro ao editar professor: {ex.Message}";
+                    TempData["MensagemErro"] = "Erro inesperado ao atualizar o professor.";
                 }
             }
 
@@ -178,20 +361,33 @@ namespace MVCCamiloMentoria.Controllers
             return View(viewModel);
         }
 
+
         // GET: Professor/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
-                return NotFound();
+            {
+                TempData["MensagemErro"] = "Professor não encontrado.";
+                return RedirectToAction(nameof(Index));
+            }
 
             var professor = await _context.Professor
                 .Include(p => p.Endereco)
                 .Include(p => p.Escola)
+                .Include(p => p.Aulas)
+                .Include(p => p.Telefones)
+                .Include(p => p.Turmas!)
+                    .ThenInclude(pt => pt.Turma)
+                .Include(p => p.Disciplinas!)
+                    .ThenInclude(pd => pd.Disciplina)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (professor == null)
-                return NotFound();
+            {
+                TempData["MensagemErro"] = "Professor não encontrado.";
+                return RedirectToAction(nameof(Index));
+            }
 
             var viewModel = new ProfessorViewModel
             {
@@ -205,6 +401,7 @@ namespace MVCCamiloMentoria.Controllers
             return View(viewModel);
         }
 
+
         // POST: Professor/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -212,13 +409,49 @@ namespace MVCCamiloMentoria.Controllers
         {
             try
             {
-                var professor = await _context.Professor.FindAsync(id);
+                var professor = await _context.Professor
+                    .Include(p => p.Endereco)
+                    .Include(p => p.Escola)
+                    .Include(p => p.Aulas)
+                    .Include(p => p.Telefones)
+                    .Include(p => p.Turmas!)
+                        .ThenInclude(pt => pt.Turma)
+                    .Include(p => p.Disciplinas!)
+                        .ThenInclude(pd => pd.Disciplina)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(p => p.Id == id);
+
                 if (professor == null)
                 {
                     TempData["MensagemErro"] = "Professor não encontrado.";
                     return RedirectToAction(nameof(Index));
                 }
 
+                // Remover Telefones associados
+                if (professor.Telefones != null && professor.Telefones.Any())
+                {
+                    _context.Telefone.RemoveRange(professor.Telefones);
+                }
+
+                // Remover vínculos de Turmas
+                if (professor.Turmas != null && professor.Turmas.Any())
+                {
+                    _context.ProfessorTurma.RemoveRange(professor.Turmas);
+                }
+
+                // Remover vínculos de Disciplinas
+                if (professor.Disciplinas != null && professor.Disciplinas.Any())
+                {
+                    _context.ProfessorDisciplina.RemoveRange(professor.Disciplinas);
+                }
+
+                // Remover Endereço associado
+                if (professor.Endereco != null)
+                {
+                    _context.Endereco.Remove(professor.Endereco);
+                }
+
+                // Remover o próprio Professor
                 _context.Professor.Remove(professor);
                 await _context.SaveChangesAsync();
 
@@ -226,25 +459,63 @@ namespace MVCCamiloMentoria.Controllers
             }
             catch (DbUpdateException)
             {
-                TempData["MensagemErro"] = "Não foi possível excluir o professor. Verifique dependências.";
+                TempData["MensagemErro"] = "Não foi possível excluir o professor. Verifique se há dependências.";
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                TempData["MensagemErro"] = $"Erro inesperado: {ex.Message}";
+                TempData["MensagemErro"] = "Erro inesperado ao excluir o professor.";
             }
 
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProfessorExists(int id)
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> ObterTurmasPorEscola(int escolaId)
         {
-            return _context.Professor.Any(e => e.Id == id);
+            var turmas = await _context.Turma
+                .Where(t => t.EscolaId == escolaId)
+                .Select(t => new { t.TurmaId, t.NomeTurma })
+                .ToListAsync();
+
+            return Json(turmas);
         }
 
         private void CarregarDependencias(ProfessorViewModel viewModel = null)
         {
-            ViewBag.EscolaId = new SelectList(_context.Escola, "Id", "Nome", viewModel?.EscolaId);
-            ViewBag.EnderecoId = new SelectList(_context.Endereco, "Id", "NomeRua", viewModel?.EnderecoId);
+            ViewBag.EscolaId = new SelectList(_context.Escola.OrderBy(e => e.Nome), "Id", "Nome", viewModel?.EscolaId);
+
+            if (viewModel?.EscolaId != null)
+            {
+                ViewBag.TurmaIds = new MultiSelectList(
+                    _context.Turma.Where(t => t.EscolaId == viewModel.EscolaId).OrderBy(t => t.NomeTurma),
+                    "TurmaId", "NomeTurma", viewModel?.TurmaIds
+                );
+            }
+            else
+            {
+                ViewBag.TurmaIds = new MultiSelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text");
+            }
+
+            ViewBag.DisciplinaIds = new MultiSelectList(
+                _context.Disciplina.OrderBy(d => d.Nome),
+                "Id", "Nome", viewModel?.DisciplinaIds
+            );
+
+            ViewBag.Estados = _context.Estado
+                .OrderBy(e => e.Nome)
+                .Select(e => new SelectListItem
+                {
+                    Value = e.id.ToString(),
+                    Text = $"{e.Nome} ({e.Sigla})"
+                }).ToList();
+        }
+
+        private bool ProfessorExists(int id)
+        {
+            return _context.Professor.Any(p => p.Id == id);
         }
     }
 }
