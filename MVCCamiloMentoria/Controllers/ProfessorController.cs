@@ -19,6 +19,7 @@ namespace MVCCamiloMentoria.Controllers
         public async Task<IActionResult> Index()
         {
             var professores = await _context.Professor
+                .Where(p => !p.Excluido)
                 .Include(p => p.Escola)
                 .Include(p => p.Endereco)
                 .AsNoTracking()
@@ -44,6 +45,7 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var professor = await _context.Professor
+                .Where(p => !p.Excluido)
                 .Include(p => p.Endereco)
                 .Include(p => p.Escola)
                 .Include(p => p.Aulas)
@@ -286,6 +288,25 @@ namespace MVCCamiloMentoria.Controllers
                         }
                     }
 
+                    if (professor.Telefones != null && professor.Telefones.Any())
+                    {
+                        _context.Telefone.RemoveRange(professor.Telefones);
+                    }
+
+
+                    if (viewModel.DDD > 0 && viewModel.Numero > 0)
+                    {
+                        var novoTelefone = new Telefone
+                        {
+                            DDD = viewModel.DDD,
+                            Numero = viewModel.Numero,
+                            EscolaId = viewModel.EscolaId,
+                            ProfessorId = professor.Id
+                        };
+
+                        _context.Telefone.Add(novoTelefone);
+                    }
+
 
                     var turmasAtuais = professor.Turmas?.ToList() ?? new List<ProfessorTurma>();
                     var turmasSelecionadas = viewModel.TurmaIds ?? new List<int>();
@@ -372,6 +393,7 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var professor = await _context.Professor
+                .Where(p => !p.Excluido)
                 .Include(p => p.Endereco)
                 .Include(p => p.Escola)
                 .Include(p => p.Aulas)
@@ -395,7 +417,10 @@ namespace MVCCamiloMentoria.Controllers
                 Nome = professor.Nome,
                 Matricula = professor.Matricula,
                 Escola = professor.Escola,
-                Endereco = professor.Endereco
+                Endereco = professor.Endereco,
+                Telefones = professor.Telefones,
+                Turmas = professor.Turmas,
+                Disciplinas = professor.Disciplinas
             };
 
             return View(viewModel);
@@ -410,15 +435,6 @@ namespace MVCCamiloMentoria.Controllers
             try
             {
                 var professor = await _context.Professor
-                    .Include(p => p.Endereco)
-                    .Include(p => p.Escola)
-                    .Include(p => p.Aulas)
-                    .Include(p => p.Telefones)
-                    .Include(p => p.Turmas!)
-                        .ThenInclude(pt => pt.Turma)
-                    .Include(p => p.Disciplinas!)
-                        .ThenInclude(pd => pd.Disciplina)
-                    .AsNoTracking()
                     .FirstOrDefaultAsync(p => p.Id == id);
 
                 if (professor == null)
@@ -427,39 +443,12 @@ namespace MVCCamiloMentoria.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                // Remover Telefones associados
-                if (professor.Telefones != null && professor.Telefones.Any())
-                {
-                    _context.Telefone.RemoveRange(professor.Telefones);
-                }
+                professor.Excluido = true;
 
-                // Remover vínculos de Turmas
-                if (professor.Turmas != null && professor.Turmas.Any())
-                {
-                    _context.ProfessorTurma.RemoveRange(professor.Turmas);
-                }
-
-                // Remover vínculos de Disciplinas
-                if (professor.Disciplinas != null && professor.Disciplinas.Any())
-                {
-                    _context.ProfessorDisciplina.RemoveRange(professor.Disciplinas);
-                }
-
-                // Remover Endereço associado
-                if (professor.Endereco != null)
-                {
-                    _context.Endereco.Remove(professor.Endereco);
-                }
-
-                // Remover o próprio Professor
-                _context.Professor.Remove(professor);
+                _context.Update(professor);
                 await _context.SaveChangesAsync();
 
                 TempData["MensagemSucesso"] = "Professor excluído com sucesso!";
-            }
-            catch (DbUpdateException)
-            {
-                TempData["MensagemErro"] = "Não foi possível excluir o professor. Verifique se há dependências.";
             }
             catch (Exception)
             {
@@ -468,6 +457,13 @@ namespace MVCCamiloMentoria.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        private bool ProfessorExists(int id)
+        {
+            return _context.Professor.Any(p => p.Id == id && !p.Excluido);
+        }
+    
+
 
 
 
@@ -513,9 +509,5 @@ namespace MVCCamiloMentoria.Controllers
                 }).ToList();
         }
 
-        private bool ProfessorExists(int id)
-        {
-            return _context.Professor.Any(p => p.Id == id);
-        }
     }
 }
