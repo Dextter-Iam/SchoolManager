@@ -1,30 +1,89 @@
 ﻿@model MVCCamiloMentoria.ViewModels.SupervisorViewModel
 
-<div>
-    <h4>Supervisor</h4>
+@{
+    ViewData["Title"] = "Detalhes do Supervisor";
+}
+
+<div class="container">
+    <div class="justify-content-center">
+        <br />
+        <h3 class="mb-4">Detalhes do Supervisor</h3>
+    </div>
+
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Matricula)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Matricula)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Endereco)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Endereco.NomeRua)
-        </dd>
-    </dl>
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Informações Pessoais</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3 fw-bold">Nome</dt>
+                        <dd class="col-sm-9">@Model.Nome</dd>
+
+                        <dt class="col-sm-3 fw-bold">Matrícula</dt>
+                        <dd class="col-sm-9">@Model.Matricula</dd>
+
+                        <dt class="col-sm-3">Telefone</dt>
+                        <dd class="col-sm-9">
+                            @foreach (var tel in Model.Telefones ?? new List<Telefone>())
+                            {
+                                <p>(@tel.DDD) @tel.Numero</p>
+                            }
+
+                        <dt class="col-sm-3 fw-bold">Endereço</dt>
+                        <dd class="col-sm-9">
+                                @if (Model.Endereco != null)
+                                {
+                                    @($"{Model.Endereco.NomeRua}, {Model.Endereco.NumeroRua}")
+                                }
+                                else
+                                {
+                                <span class="text-muted">Não informado</span>
+                                }
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Escolas Vinculadas</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Escolas != null && Model.Escolas.Any())
+                    {
+                        <ul class="list-group">
+                            @foreach (var escola in Model.Escolas)
+                            {
+                                if (escola != null)
+                                {
+                                    <li class="list-group-item">@escola.Nome</li>
+                                }
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Nenhuma escola vinculada</p>
+                    }
+                </div>
+            </div>
+
+            <div class="text-end">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning px-4 me-2">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+                <a asp-action="Index" class="btn btn-secondary px-4">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

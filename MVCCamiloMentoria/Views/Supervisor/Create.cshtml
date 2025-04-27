@@ -1,36 +1,121 @@
 ﻿@model MVCCamiloMentoria.ViewModels.SupervisorViewModel
 
-<h4>Supervisor</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Matricula" class="control-label"></label>
-                <input asp-for="Matricula" class="form-control" />
-                <span asp-validation-for="Matricula" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EnderecoId" class="control-label"></label>
-                <select asp-for="EnderecoId" class ="form-control" asp-items="ViewBag.EnderecoId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+@{
+    ViewData["Title"] = "Cadastrar Supervisor";
+}
+
+<div class="container">
+    <div class="justify-content-center">
+        <br />
+        <h3 class="mb-4">Cadastro de Supervisor</h3>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <!-- Informações Pessoais -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">Informações Pessoais</div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label asp-for="Nome"></label>
+                            <input asp-for="Nome" class="form-control" />
+                            <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Matricula"></label>
+                            <input asp-for="Matricula" class="form-control" />
+                            <span asp-validation-for="Matricula" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Escolas -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">Escolas</div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label>Selecionar Escolas</label>
+                            <div class="form-check">
+                                @foreach (var escola in (List<SelectListItem>)ViewBag.Escolas)
+                                {
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               name="EscolaIds"
+                                               value="@escola.Value"
+                                        @(Model.EscolaIds != null && Model.EscolaIds.Contains(int.Parse(escola.Value)) ? "checked" : "") />
+
+                                        <label class="form-check-label" for="EscolaIds">
+                                            @escola.Text
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                            <span asp-validation-for="EscolaIds" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Telefone -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">Telefone</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label asp-for="DDD"></label>
+                                <input asp-for="DDD" class="form-control" />
+                            </div>
+                            <div class="col-md-8">
+                                <label asp-for="Numero"></label>
+                                <input asp-for="Numero" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Endereço -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">Endereço</div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label asp-for="NomeRua"></label>
+                            <input asp-for="NomeRua" class="form-control" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="NumeroRua"></label>
+                            <input asp-for="NumeroRua" class="form-control" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Complemento"></label>
+                            <input asp-for="Complemento" class="form-control" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="CEP"></label>
+                            <input asp-for="CEP" class="form-control" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="EstadoId"></label>
+                            <select asp-for="EstadoId" class="form-select" asp-items="ViewBag.Estados"></select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="text-end">
+                    <input type="submit" value="Cadastrar" class="btn btn-primary px-4" />
+                    <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }

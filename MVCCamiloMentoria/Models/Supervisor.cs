@@ -9,6 +9,8 @@
         public Endereco? Endereco { get; set; }
         public List<Escola>? Escolas { get; set; }
         public List<Telefone>? Telefones { get; set; }
+        public List<SupervisorEscola>? SupervisorEscolas { get; set; }
+
 
     }
 }
