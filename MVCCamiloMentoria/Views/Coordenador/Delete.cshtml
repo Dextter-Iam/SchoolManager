@@ -1,0 +1,34 @@
+﻿@model MVCCamiloMentoria.Models.Coordenador
+
+@{
+    ViewData["Title"] = "Excluir Coordenador";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-danger text-white">
+        <h4 class="mb-0">Excluir Coordenador</h4>
+    </div>
+    <div class="card-body">
+        <h5>Tem certeza que deseja excluir este coordenador?</h5>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Nome)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Matricula)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Matricula)</dd>
+
+            <dt class="col-sm-3">Escola</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Escola.Nome)</dd>
+        </dl>
+        <form asp-action="Delete" class="mt-4">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Confirmar Exclusão
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Cancelar
+            </a>
+        </form>
+    </div>
+</div>

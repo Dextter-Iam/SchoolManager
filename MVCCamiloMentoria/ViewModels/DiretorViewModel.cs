@@ -1,19 +1,19 @@
-﻿using MVCCamiloMentoria.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using MVCCamiloMentoria.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace MVCCamiloMentoria.Models
+namespace MVCCamiloMentoria.ViewModels
 {
-    public class PrestadorServico
-    {
+    [NotMapped]
+    public class DiretorViewModel
+    {   
         public int Id { get; set; }
         public string? Nome { get; set; }
-        public string? CPF { get; set; }
-        public string? CNPJ { get; set; }
-        public string? EmpresaNome { get; set; }
-        public string? ServicoFinalidade {  get; set; }
+        public int? Matricula { get; set; }
+        public int EnderecoId { get; set; }
+        public Endereco? Endereco { get; set; }
         public List<Telefone>? Telefones { get; set; }
         public int EscolaId { get; set; }
 

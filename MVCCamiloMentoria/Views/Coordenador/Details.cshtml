@@ -1,0 +1,34 @@
+﻿@model MVCCamiloMentoria.Models.Coordenador
+
+@{
+    ViewData["Title"] = "Detalhes do Coordenador";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Detalhes do Coordenador</h4>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Nome)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Matricula)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Matricula)</dd>
+
+            <dt class="col-sm-3">Escola</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Escola.Nome)</dd>
+
+            <dt class="col-sm-3">Endereço</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Endereco.NomeRua)</dd>
+        </dl>
+        <div class="mt-4">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Editar
+            </a>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+        </div>
+    </div>
+</div>

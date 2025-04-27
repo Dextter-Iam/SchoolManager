@@ -4,9 +4,10 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace MVCCamiloMentoria.Models
+namespace MVCCamiloMentoria.ViewModels
 {
-    public class PrestadorServico
+    [NotMapped]
+    public class PrestadorServicoViewModel
     {
         public int Id { get; set; }
         public string? Nome { get; set; }

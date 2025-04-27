@@ -1,0 +1,40 @@
+﻿@model MVCCamiloMentoria.Models.PrestadorServico
+
+@{
+    ViewData["Title"] = "Detalhes do Prestador de Serviço";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Detalhes do Prestador de Serviço</h4>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Nome)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CPF)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.CPF)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CNPJ)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.CNPJ)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.EmpresaNome)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.EmpresaNome)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ServicoFinalidade)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.ServicoFinalidade)</dd>
+
+            <dt class="col-sm-3">Escola</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Escola.Nome)</dd>
+        </dl>
+        <div class="mt-4">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Editar
+            </a>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+        </div>
+    </div>
+</div>

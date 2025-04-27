@@ -58,6 +58,6 @@ namespace MVCCamiloMentoria.ViewModels
 
         public List<Fornecedor>? Fornecedores { get; set; }
 
-        public List<PrestadorServico>? PrestadorServico { get; set; }
+        public List<PrestadorServicoViewModel>? PrestadorServico { get; set; }
     }
 }

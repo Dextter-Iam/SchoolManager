@@ -1,0 +1,55 @@
+﻿@model IEnumerable<MVCCamiloMentoria.ViewModels.ProfessorViewModel>
+
+@{
+    ViewData["Title"] = "Professores";
+}
+
+<div class="card shadow-sm mb-5">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Professores</h4>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="fas fa-plus"></i> Novo Professor
+        </a>
+    </div>
+    <div class="card-body">
+        @if (TempData["MensagemSucesso"] != null)
+        {
+            <div class="alert alert-success">@TempData["MensagemSucesso"]</div>
+        }
+        @if (TempData["MensagemErro"] != null)
+        {
+            <div class="alert alert-danger">@TempData["MensagemErro"]</div>
+        }
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Nome)</th>
+                    <th>@Html.DisplayNameFor(model => model.Matricula)</th>
+                    <th>@Html.DisplayNameFor(model => model.Escola)</th>
+                    <th class="text-center">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Matricula)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Escola.Nome)</td>
+                        <td class="d-flex justify-content-around">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
+                                <i class="fas fa-eye"></i> Detalhes
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i> Excluir
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

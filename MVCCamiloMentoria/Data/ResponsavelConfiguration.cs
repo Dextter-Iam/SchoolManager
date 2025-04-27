@@ -4,7 +4,7 @@ using MVCCamiloMentoria.Models;
 
 namespace MVCCamiloMentoria.Data
 {
-    public class ResponsavelConfiguration
+    public class ResponsavelConfiguration : IEntityTypeConfiguration<Responsavel>
     {
         public void Configure(EntityTypeBuilder<Responsavel> builder)
         {

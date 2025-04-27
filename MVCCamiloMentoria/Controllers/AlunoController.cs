@@ -126,7 +126,7 @@ namespace MVCCamiloMentoria.Controllers
                         NumeroRua = viewModel.NumeroRua,
                         Complemento = viewModel.Complemento,
                         CEP = viewModel.CEP,
-                        EstadoId = (int)viewModel.EstadoId
+                        EstadoId = (int)viewModel.EstadoId!,
                     };
 
                     var telefone = new Telefone
