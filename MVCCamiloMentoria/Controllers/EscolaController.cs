@@ -225,9 +225,9 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var escola = await _context.Escola
-                .Include(e => e.Estado) // ← necessário para exibir o Estado da escola
+                .Include(e => e.Estado) 
                 .Include(e => e.Endereco)
-                    .ThenInclude(end => end.Estado) // ← caso o endereço tenha estado também
+                    .ThenInclude(end => end.Estado!) 
                 .FirstOrDefaultAsync(e => e.Id == id);
 
             if (escola == null)
