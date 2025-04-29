@@ -28,12 +28,15 @@
                                     <span asp-validation-for="Nome" class="text-danger"></span>
                                 </div>
 
-                                <div class ="card-body">
+                                <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-8">
-                                            <div class="form-group mb-3">
-                                    <label>Foto</label>
-                                    <input asp-for="FotoUpload" type="file" />
+                                            <div class="mb-3">
+                                                <label asp-for="FotoUpload" class="form-label fw-semibold">
+                                                    <i class="fas fa-image me-2 text-primary"></i>Foto do Aluno
+                                                </label>
+                                                <input asp-for="FotoUpload" type="file" class="form-control form-control-sm border-1 shadow-sm" />
+                                                <span asp-validation-for="FotoUpload" class="text-danger small"></span>
                                             </div>
                                         </div>
                                     </div>

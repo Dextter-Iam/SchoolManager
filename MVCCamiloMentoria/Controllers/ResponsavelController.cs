@@ -43,6 +43,7 @@ namespace MVCCamiloMentoria.Controllers
 
             var responsavel = await _context.Responsavel
                 .Include(r => r.Endereco)
+                    .ThenInclude(re => re.Estado)
                 .Include(r => r.Telefones)
                 .Include(r => r.AlunoResponsavel!)
                     .ThenInclude(ar => ar.Aluno)
@@ -57,6 +58,7 @@ namespace MVCCamiloMentoria.Controllers
                 Id = responsavel.Id,
                 Nome = responsavel.Nome,
                 Endereco = responsavel.Endereco,
+                Estado = responsavel.Endereco!.Estado,
                 Telefones = responsavel.Telefones,
                 AlunoResponsavel = responsavel.AlunoResponsavel
             };
@@ -102,7 +104,7 @@ namespace MVCCamiloMentoria.Controllers
                 };
 
                 _context.Responsavel.Add(responsavel);
-                await _context.SaveChangesAsync(); 
+                await _context.SaveChangesAsync();
 
 
                 int? alunoIdx = viewModel.AlunoIds?.FirstOrDefault();
@@ -110,7 +112,7 @@ namespace MVCCamiloMentoria.Controllers
                     ? await _context.Aluno.FirstOrDefaultAsync(a => a.Id == alunoIdx.Value)
                     : null;
 
-      
+
                 var telefone = new Telefone
                 {
                     DDD = viewModel.DDD,
@@ -122,7 +124,7 @@ namespace MVCCamiloMentoria.Controllers
                 _context.Telefone.Add(telefone);
                 await _context.SaveChangesAsync();
 
-     
+
                 if (viewModel.AlunoIds != null && viewModel.AlunoIds.Any())
                 {
                     foreach (var alunoId in viewModel.AlunoIds)
@@ -153,13 +155,13 @@ namespace MVCCamiloMentoria.Controllers
             var responsavel = await _context.Responsavel
                 .Include(r => r.Endereco)
                 .Include(r => r.AlunoResponsavel)
-                .Include(r => r.Telefones) 
+                .Include(r => r.Telefones)
                 .FirstOrDefaultAsync(r => r.Id == id);
 
             if (responsavel == null)
                 return NotFound();
 
-            var telefone = responsavel.Telefones?.FirstOrDefault(); 
+            var telefone = responsavel.Telefones?.FirstOrDefault();
 
             var viewModel = new ResponsavelViewModel
             {
@@ -207,17 +209,17 @@ namespace MVCCamiloMentoria.Controllers
                     if (responsavel == null)
                         return NotFound();
 
-          
+
                     responsavel.Nome = viewModel.Nome;
                     responsavel.EnderecoId = viewModel.EnderecoId ?? responsavel.EnderecoId;
 
-                  
+
                     int? alunoId = viewModel.AlunoIds?.FirstOrDefault();
                     var aluno = alunoId.HasValue
                         ? await _context.Aluno.AsNoTracking().FirstOrDefaultAsync(a => a.Id == alunoId.Value)
                         : null;
 
-              
+
                     if (viewModel.DDD > 0 && viewModel.Numero > 0)
                     {
                         if (responsavel.Telefones != null && responsavel.Telefones.Any())
@@ -242,11 +244,11 @@ namespace MVCCamiloMentoria.Controllers
                         }
                     }
 
-     
+
                     var alunosAtuais = responsavel.AlunoResponsavel?.ToList() ?? new List<AlunoResponsavel>();
                     var alunosSelecionados = viewModel.AlunoIds ?? new List<int>();
 
-           
+
                     foreach (var alunoRel in alunosAtuais)
                     {
                         if (!alunosSelecionados.Contains(alunoRel.AlunoId))
@@ -343,11 +345,11 @@ namespace MVCCamiloMentoria.Controllers
                 if (responsavel.AlunoResponsavel != null && responsavel.AlunoResponsavel.Any())
                     _context.AlunoResponsavel.RemoveRange(responsavel.AlunoResponsavel);
 
-   
+
                 if (responsavel.Telefones != null && responsavel.Telefones.Any())
                     _context.Telefone.RemoveRange(responsavel.Telefones);
 
-  
+
                 _context.Responsavel.Remove(responsavel);
 
                 await _context.SaveChangesAsync();

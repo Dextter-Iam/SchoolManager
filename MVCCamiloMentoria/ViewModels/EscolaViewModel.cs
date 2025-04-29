@@ -55,7 +55,7 @@ namespace MVCCamiloMentoria.ViewModels
         public List<Diretor>? Diretores { get; set; }
         public List<Aluno>? Alunos { get; set; }
 
-        public List<Coordenador>? Coordenadores  { get; set; }
+        public List<CoordenadorViewModel>? Coordenadores  { get; set; }
 
         public List<Disciplina>? Disciplina { get; set; }
 

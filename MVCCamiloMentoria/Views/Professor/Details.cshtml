@@ -22,7 +22,7 @@
                         </div>
                         <div class="card-body row">
                             <div class="col-md-4 text-center">
-                                @if (Model.Foto != null && Model.Foto.Length > 0)
+                                @if (Model?.Foto != null && Model?.Foto?.Length > 0)
                                 {
                                     <img src="@Url.Action("GetFoto", "Professor", new { id = Model.Id })" class="img-fluid rounded mb-3 shadow-sm" alt="Foto do Professor" style="max-height: 250px;" />
                                 }
@@ -41,7 +41,7 @@
 
                                     <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Endereco)</dt>
                                     <dd class="col-sm-8">
-                                        @Model.Endereco?.NomeRua, Nº @Model.Endereco?.NumeroRua
+                                        @Model.Endereco?.NomeRua, Nº @Model.Endereco?.NumeroRua, @Model.Endereco?.Estado?.Sigla
                                     </dd>
 
                                     <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Telefones)</dt>
