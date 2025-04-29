@@ -41,7 +41,7 @@
 
                                     <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Endereco)</dt>
                                     <dd class="col-sm-8">
-                                        @Model.Endereco?.NomeRua, Nº @Model.Endereco?.NumeroRua, @Model.Endereco?.Estado?.Sigla
+                                        @Model!.Endereco?.NomeRua, Nº @Model.Endereco?.NumeroRua
                                     </dd>
 
                                     <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Telefones)</dt>

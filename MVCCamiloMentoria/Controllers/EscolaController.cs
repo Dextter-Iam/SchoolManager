@@ -75,7 +75,7 @@ namespace MVCCamiloMentoria.Controllers
                 Supervisores = escolas.SupervisorEscolas?.Select(se => se.Supervisor!).ToList(),
                 Diretores = escolas.Diretores,
             };
-            escolaViewModel.Coordenadores = escolas.Coordenadores.Select(c => new CoordenadorViewModel { Id = c.Id, Nome=c.Nome }).ToList();
+            escolaViewModel.Coordenadores = escolas.Coordenadores!.Select(c => new CoordenadorViewModel { Id = c.Id, Nome=c.Nome }).ToList();
 
             return View(escolaViewModel);
         }
