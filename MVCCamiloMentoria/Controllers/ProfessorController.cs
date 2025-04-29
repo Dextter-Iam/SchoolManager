@@ -67,6 +67,7 @@ namespace MVCCamiloMentoria.Controllers
             {
                 Id = professor.Id,
                 Nome = professor.Nome,
+                Foto = professor.Foto,
                 Matricula = professor.Matricula,
                 Escola = professor.Escola,
                 Endereco = professor.Endereco,
@@ -216,6 +217,7 @@ namespace MVCCamiloMentoria.Controllers
             {
                 Id = professor.Id,
                 Nome = professor.Nome,
+                Foto = professor.Foto,
                 Matricula = professor.Matricula,
                 EscolaId = professor.EscolaId,
                 EnderecoId = professor.EnderecoId,
@@ -240,10 +242,12 @@ namespace MVCCamiloMentoria.Controllers
         // POST: Professor/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ProfessorViewModel viewModel)
-        {
+        public async Task<IActionResult> Edit(int id, ProfessorViewModel viewModel, IFormFile fotoUpload)
+       {
             if (id != viewModel.Id)
                 return NotFound();
+
+            ModelState.Remove("FotoUpload");
 
             if (ModelState.IsValid)
             {
@@ -355,6 +359,19 @@ namespace MVCCamiloMentoria.Controllers
                                 DisciplinaId = disciplinaId
                             });
                         }
+                    }
+
+                    if (fotoUpload != null && fotoUpload.Length > 0)
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await fotoUpload.CopyToAsync(memoryStream);
+                            professor.Foto = memoryStream.ToArray();
+                        }
+                    }
+                    else
+                    {
+
                     }
 
                     _context.Update(professor);
@@ -509,5 +526,17 @@ namespace MVCCamiloMentoria.Controllers
                 }).ToList();
         }
 
+        public IActionResult GetFoto(int id)
+        {
+            var professor = _context.Professor
+                                .FirstOrDefault(p => p.Id == id);
+
+            if (professor == null || professor.Foto == null || professor.Foto.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(professor.Foto, "image/jpeg");
+        }
     }
 }

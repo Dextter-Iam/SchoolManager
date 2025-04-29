@@ -14,7 +14,7 @@
 
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <form asp-action="Edit">
+            <form asp-action="Edit" enctype="multipart/form-data">
                 <input type="hidden" asp-for="Id" />
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
@@ -27,6 +27,18 @@
                             <input asp-for="Nome" class="form-control" />
                             <span asp-validation-for="Nome" class="text-danger"></span>
                         </div>
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group mb-3">
+                                        <label>Foto</label>
+                                        <input asp-for="FotoUpload" type="file" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group mb-3">
                             <label asp-for="Matricula"></label>
                             <input asp-for="Matricula" class="form-control" />

@@ -12,6 +12,8 @@ namespace MVCCamiloMentoria.ViewModels
         public int Id { get; set; }
         public string? Nome { get; set; }
 
+        public byte[]? Foto { get; set; }
+        public IFormFile? FotoUpload { get; set; }
         public int TurmaId { get; set; }
         public List<Telefone>? Telefones { get; set; }
 

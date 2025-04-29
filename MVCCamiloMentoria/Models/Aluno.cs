@@ -10,6 +10,8 @@ namespace MVCCamiloMentoria.Models
 
         public string? Nome { get; set; }
 
+        public byte[]? Foto { get; set; }
+
         public DateTime DataNascimento { get; set; }
 
         public string? EmailEscolar { get; set; }

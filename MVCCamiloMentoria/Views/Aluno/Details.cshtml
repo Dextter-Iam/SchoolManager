@@ -20,7 +20,16 @@
                         <div class="card-header bg-light">
                             <h5 class="mb-0">Informações Pessoais</h5>
                         </div>
-                        <div class="card-body">
+                        <div class="col-md-4 text-center">
+                            @if (Model.Foto != null && Model.Foto.Length > 0)
+                            {
+                                <img src="@Url.Action("GetFoto", "Aluno", new { id = Model.Id })" class="img-fluid rounded mb-3 shadow-sm" alt="Foto do Aluno" style="max-height: 250px;" />
+                            }
+                            else
+                            {
+                                <img src="~/images/sem-foto.png" class="img-fluid rounded mb-3 shadow-sm" alt="Sem Foto" style="max-height: 250px;" />
+                            }
+                        </div>
                             <dl class="row">
                                 <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Nome)</dt>
                                 <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
@@ -123,7 +132,9 @@
                                             @Model.Endereco.NomeRua, @Model.Endereco.NumeroRua<br />
                                             @if (!string.IsNullOrEmpty(Model.Endereco.Complemento))
                                             {
-                                                @Model.Endereco.Complemento <br />
+                                                @Model.Endereco.Complemento
+
+                                                <br />
                                             }
                                             CEP: @Model.Endereco.CEP?.ToString("00000-000")<br />
                                             @Model.Endereco.Estado?.Nome - @Model.Endereco.Estado?.Sigla
@@ -139,33 +150,55 @@
                     </div>
 
                     <!-- Seção Escola/Turma -->
-                    <div class="card">
+                    <div class="card mb-3">
                         <div class="card-header bg-light">
                             <h5 class="mb-0">Informações Escolares</h5>
                         </div>
                         <div class="card-body">
                             <dl class="row">
                                 <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Turma)</dt>
-                                <dd class="col-sm-9">@Html.DisplayFor(model => model.Turma.NomeTurma)</dd>
+                                <dd class="col-sm-9">
+                                    @if (Model.Turma != null)
+                                    {
+                                        @Html.DisplayFor(model => model.Turma.NomeTurma)
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Turma não informada</span>
+                                    }
+                                </dd>
 
                                 <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Escola)</dt>
-                                <dd class="col-sm-9">@Html.DisplayFor(model => model.Escola.Nome)</dd>
+                                <dd class="col-sm-9">
+                                    @if (Model.Escola != null)
+                                    {
+                                        @Html.DisplayFor(model => model.Escola.Nome)
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Escola não informada</span>
+                                    }
+                                </dd>
                             </dl>
                         </div>
                     </div>
+
                 </div>
+
+                <div class="text-end mt-3 mb-3 me-3">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning px-4">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+                    <a asp-action="Index" class="btn btn-secondary ms-2">
+                        <i class="fas fa-list"></i> Voltar à Lista
+                    </a>
+                </div>
+
             </div>
-                <!-- Botões de Ação -->
-                <div class="form-group text-end">
-                    <input type="submit" value="Salvar" class="btn btn-primary px-4" />
-                    <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
-                </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }

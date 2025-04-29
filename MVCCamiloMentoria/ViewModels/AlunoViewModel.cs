@@ -95,7 +95,8 @@ namespace MVCCamiloMentoria.ViewModels
         public string NomeResponsavelAtual =>
             AlunoResponsavel?.FirstOrDefault()?.Responsavel?.Nome ?? "Nenhum responsável";
         public ResponsavelViewModel? Responsavel { get; set; }
-
+        public byte[]? Foto { get; set; }
+        public IFormFile? FotoUpload { get; set; }
         public List<AlunoTelefone>? AlunoTelefone { get; set; }
         public List<Aula>? Aulas { get; set; }
 

@@ -37,6 +37,9 @@ namespace MVCCamiloMentoria.Controllers
             return View(alunos);
         }
 
+
+
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -60,6 +63,7 @@ namespace MVCCamiloMentoria.Controllers
             {
                 Id = aluno.Id,
                 Nome = aluno.Nome,
+                Foto = aluno.Foto,
                 DataNascimento = aluno.DataNascimento,
                 EmailEscolar = aluno.EmailEscolar,
                 AnoInscricao = aluno.AnoInscricao,
@@ -207,7 +211,7 @@ namespace MVCCamiloMentoria.Controllers
                     TelefoneId = at.TelefoneId,
                     Telefone = new Telefone
                     {
-                        Id = at.Telefone.Id!,
+                        Id = at.Telefone!.Id,
                         DDD = at.Telefone.DDD,
                         Numero = at.Telefone.Numero,
                        
@@ -256,16 +260,18 @@ namespace MVCCamiloMentoria.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, AlunoViewModel viewModel)
+        public async Task<IActionResult> Edit(int id, AlunoViewModel viewModel, IFormFile fotoUpload)
         {
             if (id != viewModel.Id)
                 return NotFound();
+
+            ModelState.Remove("FotoUpload");
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    // Verificar se os valores do telefone são válidos antes de salvar
+                   
                     if (viewModel.DDD <= 0 || viewModel.Numero <= 0)
                     {
                         TempData["MensagemErro"] = "DDD e Número do telefone são obrigatórios";
@@ -328,7 +334,14 @@ namespace MVCCamiloMentoria.Controllers
                         };
                         _context.Add(novoAlunoTelefone);
                     }
-
+                    if (fotoUpload != null && fotoUpload.Length > 0)
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await fotoUpload.CopyToAsync(memoryStream);
+                            aluno.Foto = memoryStream.ToArray();
+                        }
+                    }
                     _context.Update(aluno);
                     await _context.SaveChangesAsync();
 
@@ -469,5 +482,18 @@ namespace MVCCamiloMentoria.Controllers
             var parentescos = new List<string> { "PAI", "MÃE", "IRMÃO", "TIO", "AVÔ", "AVÓ", "TIA", "CUIDADOR" };
             viewModel.ParentescoOptions = new SelectList(parentescos);
         }
+        public IActionResult GetFoto(int id)
+        {
+            var aluno = _context.Aluno
+                                .FirstOrDefault(a => a.Id == id);
+
+            if (aluno == null || aluno.Foto == null || aluno.Foto.Length == 0)
+            {
+                return NotFound(); 
+            }
+
+            return File(aluno.Foto, "image/jpeg");
+        }
+
     }
 }
