@@ -28,9 +28,7 @@ public class EscolaContext : DbContext
     public DbSet<ProfessorDisciplina> ProfessorDisciplina { get; set; }
     public DbSet<ProfessorTurma> ProfessorTurma { get; set; }
     public DbSet<Supervisor> Supervisor { get; set; }
-
     public DbSet<SupervisorEscola>? SupervisorEscola { get; set; }
-
     public DbSet<Coordenador> Coordenador { get; set; }
     public DbSet<Responsavel> Responsavel { get; set; }
 

@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MVCCamiloMentoria.Models;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace MVCCamiloMentoria.Models
+namespace MVCCamiloMentoria.ViewModels
 {
- 
-    public class Turma
+    [NotMapped]
+    public class TurmaViewModel
     {
         public int TurmaId { get; set; }
         public string? NomeTurma {  get; set; }

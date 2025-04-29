@@ -219,37 +219,44 @@ namespace MVCCamiloMentoria.Controllers
         }
 
 
-        // GET: AulaController/Delete/5
+        // GET: Turma/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var aula = await _context.Aula
-                .Include(a => a.Escola)
-                .Include(a => a.Turma)
-                .Include(a => a.Professor)
-                .Include(a => a.Disciplina)
-                .FirstOrDefaultAsync(a => a.Id == id);
+            var turma = await _context.Turma
+                .Include(t => t.Escola)
+                .Include(t => t.Alunos)
+                .Include(t => t.TurmaDisciplinas)
+                    .ThenInclude(td => td.Disciplina)
+                .FirstOrDefaultAsync(t => t.TurmaId == id);
 
-            if (aula == null)
+            if (turma == null)
             {
                 return NotFound();
             }
 
-            return View(aula);
+            return View(turma);
         }
 
-        // POST: AulaController/Delete/5
+        // POST: Turma/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var aula = await _context.Aula.FindAsync(id);
-            if (aula == null)
+            var turma = await _context.Turma
+                .Include(t => t.Alunos)
+                .Include(t => t.TurmaDisciplinas)
+                .FirstOrDefaultAsync(t => t.TurmaId == id);
+
+            if (turma == null)
             {
                 return NotFound();
             }
 
-            _context.Aula.Remove(aula);
+            // Se quiser, aqui poderia remover alunos ou disciplinas relacionados (dependendo da regra de negócio).
+
+            _context.Turma.Remove(turma);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 

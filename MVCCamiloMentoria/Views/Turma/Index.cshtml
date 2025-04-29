@@ -1,0 +1,39 @@
+﻿@model IEnumerable<MVCCamiloMentoria.ViewModels.TurmaViewModel>
+
+@{
+    ViewData["Title"] = "Turmas";
+}
+
+<h1>Turmas</h1>
+
+<p>
+    <a href="@Url.Action("Create")" class="btn btn-primary">Criar Nova Turma</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome da Turma</th>
+            <th>Ano Letivo</th>
+            <th>Turno</th>
+            <th>Escola</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var turma in Model)
+        {
+            <tr>
+                <td>@turma.NomeTurma</td>
+                <td>@turma.AnoLetivo</td>
+                <td>@turma.Turno</td>
+                <td>@turma.Escola?.Nome</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@turma.TurmaId" class="btn btn-info">Detalhes</a>
+                    <a asp-action="Edit" asp-route-id="@turma.TurmaId" class="btn btn-warning">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@turma.TurmaId" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

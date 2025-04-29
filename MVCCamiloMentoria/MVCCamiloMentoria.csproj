@@ -10,19 +10,15 @@
     <Compile Remove="Views\Endereco\**" />
     <Compile Remove="Views\Marca\**" />
     <Compile Remove="Views\Modelo\**" />
-    <Compile Remove="Views\Turma\**" />
     <Content Remove="Views\Endereco\**" />
     <Content Remove="Views\Marca\**" />
     <Content Remove="Views\Modelo\**" />
-    <Content Remove="Views\Turma\**" />
     <EmbeddedResource Remove="Views\Endereco\**" />
     <EmbeddedResource Remove="Views\Marca\**" />
     <EmbeddedResource Remove="Views\Modelo\**" />
-    <EmbeddedResource Remove="Views\Turma\**" />
     <None Remove="Views\Endereco\**" />
     <None Remove="Views\Marca\**" />
     <None Remove="Views\Modelo\**" />
-    <None Remove="Views\Turma\**" />
   </ItemGroup>
 
   <ItemGroup>

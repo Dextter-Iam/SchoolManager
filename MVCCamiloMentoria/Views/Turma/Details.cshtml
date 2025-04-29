@@ -1,0 +1,38 @@
+﻿@model MVCCamiloMentoria.ViewModels.TurmaViewModel
+
+@{
+    ViewData["Title"] = "Detalhes da Turma";
+}
+
+<h1>@Model.NomeTurma</h1>
+
+<div>
+    <h3>Ano Letivo: @Model.AnoLetivo</h3>
+    <h4>Turno: @Model.Turno</h4>
+    <p>Escola: @Model.Escola?.Nome</p>
+</div>
+
+<h3>Alunos</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Matrícula</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var aluno in Model.Alunos)
+        {
+            <tr>
+                <td>@aluno.Nome</td>
+                <td>
+                    <!-- Se quiser adicionar algum botão de ação por aluno, por exemplo -->
+                    <a asp-action="Edit" asp-route-id="@aluno.Id" class="btn btn-warning btn-sm">Editar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("Index")" class="btn btn-secondary">Voltar</a>
