@@ -1,66 +1,66 @@
 ﻿@model IEnumerable<MVCCamiloMentoria.ViewModels.ResponsavelViewModel>
 
-<div class="container">
-	<div class="row">
-		<div class="col-md-10 offset-md-1">
-			<div class="card mb-4">
-				<div class="card-header bg-primary text-white">
-					<div class="d-flex justify-content-between align-items-center">
-						<h5 class="mb-0">Responsáveis Cadastrados</h5>
-					</div>
+@{
+	ViewData["Title"] = "Responsáveis Cadastrados";
+}
+<div>
+	<div class="card shadow-sm mb-5">
+		<div class="card-header bg-primary text-white">
+			<h4 class="mb-0">Responsáveis Cadastrados</h4>
+		</div>
+		<div class="card-body">
+			@if (!Model.Any())
+			{
+				<div class="alert alert-info text-center">
+					Nenhum responsável cadastrado.
 				</div>
-				<div class="card-body">
-					@if (!Model.Any())
-					{
-						<div class="alert alert-info text-center">
-							Nenhum responsável cadastrado.
-						</div>
-					}
-					else
-					{
-						<div class="table-responsive">
-							<table class="table table-bordered table-striped">
-								<thead class="thead-dark">
-									<tr>
-										<th>Nome</th>
-										<th>Endereço</th>
-										<th>Aluno</th>
-										<th class="text-center">Ações</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach (var item in Model)
+			}
+			else
+			{
+				<table class="table table-bordered table-striped">
+					<thead class="thead-dark">
+						<tr>
+							<th>Nome</th>
+							<th>Endereço</th>
+							<th>Aluno(s)</th>
+							<th class="text-center">Ações</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
+							<tr>
+								<td>@item.Nome</td>
+								<td>@item.Endereco?.NomeRua</td>
+								<td>
+									@if (item.AlunoResponsavel != null && item.AlunoResponsavel.Any())
 									{
-										<tr>
-											<td>@item.Nome</td>
-											<td>@item.Endereco?.NomeRua</td>
-											<td>
-												@if (item.AlunoResponsavel != null && item.AlunoResponsavel.Any())
-												{
-													foreach (var alunoRel in item.AlunoResponsavel)
-													{
-														<div>@alunoRel.Aluno?.Nome</div>
-													}
-												}
-												else
-												{
-													<span class="text-muted">Nenhum aluno</span>
-												}
-											</td>
-
-											<td class="text-center">
-												<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm me-1">Detalhes</a>
-												<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm me-1">Editar</a>
-												<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Excluir</a>
-											</td>
-										</tr>
+										foreach (var alunoRel in item.AlunoResponsavel)
+										{
+											<div>@alunoRel.Aluno?.Nome</div>
+										}
 									}
-								</tbody>
-							</table>
-						</div>
-					}
-				</div>
-			</div>
+									else
+									{
+										<span class="text-muted">Nenhum aluno</span>
+									}
+								</td>
+								<td class="d-flex justify-content-around">
+									<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
+										<i class="fas fa-eye"></i> Detalhes
+									</a>
+									<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+										<i class="fas fa-edit"></i> Editar
+									</a>
+									<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+										<i class="fas fa-trash"></i> Excluir
+									</a>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			}
 		</div>
 	</div>
 </div>
@@ -93,6 +93,8 @@
 	.table {
 		border-radius: 0.5rem;
 		overflow: hidden;
+		width: 100%;
+		border-collapse: collapse;
 	}
 
 		.table thead {
@@ -105,6 +107,22 @@
 			padding: 12px;
 			font-size: 1rem;
 		}
+
+
+			.table td:nth-child(3) {
+				max-width: 250px;
+				word-wrap: break-word;
+				white-space: normal;
+			}
+
+
+			.table td:last-child {
+				display: flex;
+				flex-direction: column;
+				gap: 0.5rem;
+				align-items: center;
+				justify-content: center;
+			}
 
 		.table .btn {
 			border-radius: 0.25rem;
@@ -170,4 +188,3 @@
 		justify-content: space-between;
 	}
 </style>
-
