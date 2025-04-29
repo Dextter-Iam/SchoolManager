@@ -17,5 +17,5 @@ public class Professor
     public List<ProfessorTurma>? Turmas { get; set; }
     public List<ProfessorDisciplina>? Disciplinas { get; set; }
 
-    public bool Excluido { get; set; } = false; // << Adicionado aqui!
+    public bool Excluido { get; set; } = false;
 }

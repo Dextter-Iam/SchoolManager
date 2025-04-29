@@ -41,9 +41,6 @@ namespace MVCCamiloMentoria.Controllers
             return View(turmaViewModels);
         }
 
-
-
-
         // GET: Turmas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -221,7 +218,7 @@ namespace MVCCamiloMentoria.Controllers
                 AnoLetivo = turma.AnoLetivo,
                 Turno = turma.Turno,
                 Escola = turma.Escola,
-                Alunos = turma.Alunos.ToList(),
+                Alunos = turma.Alunos!.ToList(),
                 TurmaDisciplinas = turma.TurmaDisciplinas.ToList()
             };
 
@@ -251,8 +248,6 @@ namespace MVCCamiloMentoria.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
-
 
         private async Task CarregarViewBagsAsync(TurmaViewModel viewModel = null)
         {

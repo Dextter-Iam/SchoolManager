@@ -334,6 +334,7 @@ namespace MVCCamiloMentoria.Controllers
                         };
                         _context.Add(novoAlunoTelefone);
                     }
+
                     if (fotoUpload != null && fotoUpload.Length > 0)
                     {
                         using (var memoryStream = new MemoryStream())
@@ -342,6 +343,7 @@ namespace MVCCamiloMentoria.Controllers
                             aluno.Foto = memoryStream.ToArray();
                         }
                     }
+
                     _context.Update(aluno);
                     await _context.SaveChangesAsync();
 
@@ -482,6 +484,7 @@ namespace MVCCamiloMentoria.Controllers
             var parentescos = new List<string> { "PAI", "MÃE", "IRMÃO", "TIO", "AVÔ", "AVÓ", "TIA", "CUIDADOR" };
             viewModel.ParentescoOptions = new SelectList(parentescos);
         }
+
         public IActionResult GetFoto(int id)
         {
             var aluno = _context.Aluno

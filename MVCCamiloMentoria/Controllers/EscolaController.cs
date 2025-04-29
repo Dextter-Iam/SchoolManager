@@ -17,7 +17,7 @@ namespace MVCCamiloMentoria.Controllers
             _context = context;
         }
 
-        // GET: EscolaController
+        // GET: EscolaController/Index
         public async Task<IActionResult> Index()
         {
             TempData["MensagemInfo"] = "Lista de escolas carregada com sucesso.";
@@ -110,7 +110,7 @@ namespace MVCCamiloMentoria.Controllers
                     NumeroRua = viewModel.NumeroRua,
                     Complemento = viewModel.Complemento,
                     CEP = viewModel.CEP,
-                    EstadoId = (int)viewModel.EstadoId
+                    EstadoId = (int)viewModel.EstadoId!,
                 };
 
                 var escola = new Escola
@@ -157,9 +157,9 @@ namespace MVCCamiloMentoria.Controllers
                 Nome = escola.Nome,
                 EstadoId = escola.EstadoId,
                 NomeRua = escola.Endereco?.NomeRua,
-                NumeroRua = (int)escola.Endereco?.NumeroRua,
+                NumeroRua = (int)escola.Endereco?.NumeroRua!,
                 Complemento = escola.Endereco?.Complemento,
-                CEP = (int)escola.Endereco?.CEP,
+                CEP = (int)escola.Endereco?.CEP!,
             };
 
             TempData["MensagemInfo"] = "Edite os dados da escola e clique em salvar.";
@@ -191,7 +191,7 @@ namespace MVCCamiloMentoria.Controllers
                 }
 
                 escola.Nome = viewModel.Nome;
-                escola.EstadoId = (int)viewModel.EstadoId;
+                escola.EstadoId = (int)viewModel.EstadoId!;
 
                 if (escola.Endereco == null)
                 {
@@ -225,7 +225,9 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var escola = await _context.Escola
+                .Include(e => e.Estado) // ← necessário para exibir o Estado da escola
                 .Include(e => e.Endereco)
+                    .ThenInclude(end => end.Estado) // ← caso o endereço tenha estado também
                 .FirstOrDefaultAsync(e => e.Id == id);
 
             if (escola == null)
@@ -238,16 +240,15 @@ namespace MVCCamiloMentoria.Controllers
             {
                 Id = escola.Id,
                 Nome = escola.Nome,
-                NomeRua = escola.Endereco?.NomeRua,
-                NumeroRua = escola.Endereco?.NumeroRua ?? 0,
-                Complemento = escola.Endereco?.Complemento,
-                CEP = escola.Endereco?.CEP ?? 0,
-                EstadoId = escola.EstadoId
+                EstadoId = escola.EstadoId,
+                Estado = escola.Estado,
+                Endereco = escola.Endereco 
             };
 
             TempData["MensagemInfo"] = "Confirme a exclusão da escola.";
             return View(viewModel);
         }
+
 
         // POST: EscolaController/Delete/5
         [HttpPost, ActionName("Delete")]

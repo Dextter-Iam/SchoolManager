@@ -1,49 +1,71 @@
 ﻿@model MVCCamiloMentoria.ViewModels.EscolaViewModel
 
 <div class="container">
-    <h3 class="mb-4">Are you sure you want to delete this?</h3>
-
-    <!-- Exibição dos detalhes da Escola -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-header bg-danger text-white">
-            <h4 class="mb-0">Escola</h4>
-        </div>
-        <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Nome)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Nome)
-                </dd>
-
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Estado)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Estado.Nome)
-                </dd>
-
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Endereco)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Endereco.NomeRua)
-                </dd>
-            </dl>
-        </div>
+    <div class="justify-content-center">
+        <br />
+        <h3 class="text-danger mb-4">Tem certeza que deseja excluir esta escola?</h3>
     </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">Dados da Escola</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Seção Informações da Escola -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Informações Gerais</h5>
+                        </div>
+                        <div class="card-body">
+                            <dl class="row">
+                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Nome)</dt>
+                                <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
 
-    <!-- Formulário de exclusão -->
-    <div class="d-flex justify-content-between">
-        <form asp-action="Delete">
-            <input type="hidden" asp-for="Id" />
-            <input type="submit" value="Delete" class="btn btn-danger btn-lg" />
-        </form>
+                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Estado)</dt>
+                                <dd class="col-sm-9">@Html.DisplayFor(model => model.Estado!.Nome) (@Html.DisplayFor(model => model.Estado!.Sigla))</dd>
 
-        <!-- Link para voltar à lista -->
-        <a asp-action="Index" class="btn btn-secondary btn-lg">
-            <i class="fas fa-arrow-left"></i> Back to List
-        </a>
+                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Endereco)</dt>
+                                <dd class="col-sm-9">
+                                    @if (Model.Endereco != null)
+                                    {
+                                        <address>
+                                            @Model.Endereco.NomeRua, @Model.Endereco.NumeroRua<br />
+                                            @if (!string.IsNullOrEmpty(Model.Endereco.Complemento))
+                                            {
+                                                @Model.Endereco.Complemento <br />
+                                            }
+                                            CEP: @Model.Endereco.CEP?.ToString("00000-000")<br />
+                                        </address>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Endereço não cadastrado</span>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulário de exclusão -->
+            <form asp-action="Delete" method="post" class="text-end">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger px-4">
+                    <i class="fas fa-trash-alt"></i> Confirmar Exclusão
+                </button>
+                <a asp-action="Index" class="btn btn-secondary ms-2">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </form>
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
