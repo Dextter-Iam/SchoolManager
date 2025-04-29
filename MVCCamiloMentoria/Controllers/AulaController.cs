@@ -219,46 +219,58 @@ namespace MVCCamiloMentoria.Controllers
         }
 
 
-        // GET: Turma/Delete/5
+        // GET: Aula/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var turma = await _context.Turma
-                .Include(t => t.Escola)
-                .Include(t => t.Alunos)
-                .Include(t => t.TurmaDisciplinas)
-                    .ThenInclude(td => td.Disciplina)
-                .FirstOrDefaultAsync(t => t.TurmaId == id);
+            var aula = await _context.Aula
+                .Include(a => a.Escola)
+                .Include(a => a.Turma)
+                .Include(a => a.Professor)
+                .Include(a => a.Disciplina)
+                .FirstOrDefaultAsync(a => a.Id == id);
 
-            if (turma == null)
+            if (aula == null)
             {
                 return NotFound();
             }
 
-            return View(turma);
+            var viewModel = new AulaViewModel
+            {
+                Id = aula.Id,
+                Nome = aula.Nome,
+                HorarioInicio = aula.HorarioInicio,
+                HorarioFim = aula.HorarioFim,
+                EscolaId = aula.EscolaId,
+                Escola = aula.Escola,
+                TurmaId = aula.TurmaId,
+                Turma = aula.Turma,
+                ProfessorId = aula.ProfessorId,
+                Professor = aula.Professor,
+                DisciplinaId = aula.DisciplinaId,
+                Disciplina = aula.Disciplina
+            };
+
+            return View(viewModel);
         }
 
-        // POST: Turma/Delete/5
+        // POST: Aula/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var turma = await _context.Turma
-                .Include(t => t.Alunos)
-                .Include(t => t.TurmaDisciplinas)
-                .FirstOrDefaultAsync(t => t.TurmaId == id);
+            var aula = await _context.Aula.FindAsync(id);
 
-            if (turma == null)
+            if (aula == null)
             {
                 return NotFound();
             }
 
-            // Se quiser, aqui poderia remover alunos ou disciplinas relacionados (dependendo da regra de negócio).
-
-            _context.Turma.Remove(turma);
+            _context.Aula.Remove(aula);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
+
 
         private async Task CarregarViewBagsAsync(AulaViewModel viewModel = null)
         {
