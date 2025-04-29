@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCCamiloMentoria.Migrations
 {
     [DbContext(typeof(EscolaContext))]
-    partial class EscolaContextModelSnapshot : ModelSnapshot
+    [Migration("20250429013936_tablesss")]
+    partial class tablesss
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -780,6 +783,9 @@ namespace MVCCamiloMentoria.Migrations
                     b.Property<int>("EscolaId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("EscolaId1")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Excluido")
                         .HasColumnType("bit");
 
@@ -800,6 +806,8 @@ namespace MVCCamiloMentoria.Migrations
                         .IsUnique();
 
                     b.HasIndex("EscolaId");
+
+                    b.HasIndex("EscolaId1");
 
                     b.ToTable("Professor", (string)null);
                 });
@@ -1264,10 +1272,14 @@ namespace MVCCamiloMentoria.Migrations
                         .IsRequired();
 
                     b.HasOne("MVCCamiloMentoria.Models.Escola", "Escola")
-                        .WithMany("Professores")
+                        .WithMany()
                         .HasForeignKey("EscolaId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("MVCCamiloMentoria.Models.Escola", null)
+                        .WithMany("Professores")
+                        .HasForeignKey("EscolaId1");
 
                     b.Navigation("Endereco");
 

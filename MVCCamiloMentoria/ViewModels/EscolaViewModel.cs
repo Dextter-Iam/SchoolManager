@@ -44,13 +44,18 @@ namespace MVCCamiloMentoria.ViewModels
 
         public Endereco? Endereco { get; set; }
 
+        public List<Supervisor>? Supervisores { get; set; }
+
         public List<Telefone>? Telefones { get; set; }
 
         public List<Turma>? Turmas { get; set; }
 
         public List<Professor>? Professores { get; set; }
 
+        public List<Diretor>? Diretores { get; set; }
         public List<Aluno>? Alunos { get; set; }
+
+        public List<Coordenador>? Coordenadores  { get; set; }
 
         public List<Disciplina>? Disciplina { get; set; }
 
@@ -58,6 +63,7 @@ namespace MVCCamiloMentoria.ViewModels
 
         public List<Fornecedor>? Fornecedores { get; set; }
 
-        public List<PrestadorServicoViewModel>? PrestadorServico { get; set; }
+        public List<PrestadorServico>? PrestadorServico { get; set; }
+
     }
 }

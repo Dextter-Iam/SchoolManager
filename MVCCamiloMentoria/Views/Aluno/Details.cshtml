@@ -1,65 +1,64 @@
 ﻿@model MVCCamiloMentoria.ViewModels.AlunoViewModel
 
 <div class="container">
-    <div class="justify-content-center">
-        <br />
-        <h3 class="mb-4">Detalhes do Aluno</h3>
-    </div>
 
-    <hr />
-
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <div class="card mb-4">
-                <div class="card-header bg-info text-white">
-                    <h4 class="mb-0">Informações do Aluno</h4>
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-sm">
+                <div class ="card-header bg-primary text-white">
+                    <h4 class="mb-0">Detalhes do aluno</h4>
                 </div>
+
                 <div class="card-body">
+
                     <!-- Seção Informações Pessoais -->
-                    <div class="card mb-3">
+                    <div class="card mb-4 shadow-sm">
                         <div class="card-header bg-light">
                             <h5 class="mb-0">Informações Pessoais</h5>
                         </div>
-                        <div class="col-md-4 text-center">
-                            @if (Model.Foto != null && Model.Foto.Length > 0)
-                            {
-                                <img src="@Url.Action("GetFoto", "Aluno", new { id = Model.Id })" class="img-fluid rounded mb-3 shadow-sm" alt="Foto do Aluno" style="max-height: 250px;" />
-                            }
-                            else
-                            {
-                                <img src="~/images/sem-foto.png" class="img-fluid rounded mb-3 shadow-sm" alt="Sem Foto" style="max-height: 250px;" />
-                            }
-                        </div>
-                            <dl class="row">
-                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Nome)</dt>
-                                <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
+                        <div class="card-body row">
+                            <div class="col-md-4 text-center">
+                                @if (Model.Foto != null && Model.Foto.Length > 0)
+                                {
+                                    <img src="@Url.Action("GetFoto", "Aluno", new { id = Model.Id })" class="img-fluid rounded mb-3 shadow-sm" alt="Foto do Aluno" style="max-height: 250px;" />
+                                }
+                                else
+                                {
+                                    <img src="~/images/sem-foto.png" class="img-fluid rounded mb-3 shadow-sm" alt="Sem Foto" style="max-height: 250px;" />
+                                }
+                            </div>
+                            <div class="col-md-8">
+                                <dl class="row">
+                                    <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Nome)</dt>
+                                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Nome)</dd>
 
-                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.DataNascimento)</dt>
-                                <dd class="col-sm-9">@Model.DataNascimento.ToString("dd/MM/yyyy")</dd>
+                                    <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.DataNascimento)</dt>
+                                    <dd class="col-sm-8">@Model.DataNascimento.ToString("dd/MM/yyyy")</dd>
 
-                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.EmailEscolar)</dt>
-                                <dd class="col-sm-9">@Html.DisplayFor(model => model.EmailEscolar)</dd>
+                                    <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.EmailEscolar)</dt>
+                                    <dd class="col-sm-8">@Html.DisplayFor(model => model.EmailEscolar)</dd>
 
-                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.AnoInscricao)</dt>
-                                <dd class="col-sm-9">@Model.AnoInscricao.ToString("yyyy")</dd>
+                                    <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.AnoInscricao)</dt>
+                                    <dd class="col-sm-8">@Model.AnoInscricao.ToString("yyyy")</dd>
 
-                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.BolsaEscolar)</dt>
-                                <dd class="col-sm-9">
-                                    @if (Model.BolsaEscolar)
-                                    {
-                                        <span class="badge bg-success">Bolsista</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-secondary">Não Bolsista</span>
-                                    }
-                                </dd>
-                            </dl>
+                                    <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.BolsaEscolar)</dt>
+                                    <dd class="col-sm-8">
+                                        @if (Model.BolsaEscolar)
+                                        {
+                                            <span class="badge bg-success">Bolsista</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Não Bolsista</span>
+                                        }
+                                    </dd>
+                                </dl>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Seção Responsáveis -->
-                    <div class="card mb-3">
+                    <div class="card mb-4 shadow-sm">
                         <div class="card-header bg-light">
                             <h5 class="mb-0">Responsáveis</h5>
                         </div>
@@ -92,8 +91,8 @@
                         </div>
                     </div>
 
-                    <!-- Seção Telefone -->
-                    <div class="card mb-3">
+                    <!-- Seção Contato -->
+                    <div class="card mb-4 shadow-sm">
                         <div class="card-header bg-light">
                             <h5 class="mb-0">Contato</h5>
                         </div>
@@ -118,7 +117,7 @@
                     </div>
 
                     <!-- Seção Endereço -->
-                    <div class="card mb-3">
+                    <div class="card mb-4 shadow-sm">
                         <div class="card-header bg-light">
                             <h5 class="mb-0">Endereço</h5>
                         </div>
@@ -149,8 +148,8 @@
                         </div>
                     </div>
 
-                    <!-- Seção Escola/Turma -->
-                    <div class="card mb-3">
+                    <!-- Seção Informações Escolares -->
+                    <div class="card mb-4 shadow-sm">
                         <div class="card-header bg-light">
                             <h5 class="mb-0">Informações Escolares</h5>
                         </div>
@@ -183,17 +182,17 @@
                         </div>
                     </div>
 
-                </div>
+                    <!-- Botões -->
+                    <div class="text-end mt-4">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning px-4">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        <a asp-action="Index" class="btn btn-secondary ms-2">
+                            <i class="fas fa-list"></i> Voltar à Lista
+                        </a>
+                    </div>
 
-                <div class="text-end mt-3 mb-3 me-3">
-                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning px-4">
-                        <i class="fas fa-edit"></i> Editar
-                    </a>
-                    <a asp-action="Index" class="btn btn-secondary ms-2">
-                        <i class="fas fa-list"></i> Voltar à Lista
-                    </a>
                 </div>
-
             </div>
         </div>
     </div>

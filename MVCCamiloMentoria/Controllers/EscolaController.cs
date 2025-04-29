@@ -41,14 +41,19 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var escolas = await _context.Escola
-                        .Include(e => e.Endereco)
-                        .Include(e=> e.Estado)
-                        .Include(e => e.Turmas)
-                        .Include(e => e.Fornecedores)
-                        .Include(e => e.PrestadorServico)
-                        .Include(e => e.Telefones)
-                        .Include(e => e.Equipamentos)
-                        .FirstOrDefaultAsync(e => e.Id == id);
+                .Include(e => e.Endereco)
+                .Include(e => e.Estado)
+                .Include(e => e.Professores)
+                .Include(e => e.Coordenadores)
+                .Include(e => e.Diretores)
+                .Include(e => e.Turmas)
+                .Include(e => e.Fornecedores)
+                .Include(e => e.PrestadorServico)
+                .Include(e => e.Telefones)
+                .Include(e => e.Equipamentos)
+                .Include(e => e.SupervisorEscolas!)
+                    .ThenInclude(se => se.Supervisor)
+                .FirstOrDefaultAsync(e => e.Id == id);
 
             if (escolas == null)
             {
@@ -57,6 +62,7 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             TempData["MensagemInfo"] = "Detalhes da escola carregados com sucesso.";
+
             var escolaViewModel = new EscolaViewModel
             {
                 Nome = escolas.Nome,
@@ -65,9 +71,15 @@ namespace MVCCamiloMentoria.Controllers
                 Turmas = escolas.Turmas,
                 Estado = escolas.Estado,
                 Id = escolas.Id,
+                Professores = escolas.Professores,
+                Supervisores = escolas.SupervisorEscolas?.Select(se => se.Supervisor!).ToList(),
+                Coordenadores  = escolas.Coordenadores,
+                Diretores = escolas.Diretores,
             };
+
             return View(escolaViewModel);
         }
+
 
         // GET: EscolaController/Create
         public ActionResult Create()

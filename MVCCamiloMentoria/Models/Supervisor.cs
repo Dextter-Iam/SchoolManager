@@ -11,6 +11,5 @@
         public List<Telefone>? Telefones { get; set; }
         public List<SupervisorEscola>? SupervisorEscolas { get; set; }
 
-
     }
 }

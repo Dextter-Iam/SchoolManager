@@ -20,7 +20,7 @@ namespace MVCCamiloMentoria.Data
                    .IsRequired();
 
             builder.HasOne(p => p.Escola)
-                   .WithMany()
+                   .WithMany(p => p.Professores)
                    .HasForeignKey(p => p.EscolaId)
                    .OnDelete(DeleteBehavior.Restrict);
 
