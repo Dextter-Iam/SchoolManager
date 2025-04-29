@@ -35,6 +35,7 @@ namespace MVCCamiloMentoria.Controllers
                 Turno = t.Turno,
                 Alunos = t.Alunos,
                 EscolaId = t.EscolaId,
+                Escola = t.Escola,
             }).ToList();
 
             return View(turmaViewModels);
@@ -105,7 +106,7 @@ namespace MVCCamiloMentoria.Controllers
                 _context.Add(novaTurma);
                 await _context.SaveChangesAsync();
 
-                // Adicionando as disciplinas da turma
+
                 foreach (var disciplina in turma.TurmaDisciplinas)
                 {
                     _context.Add(new TurmaDisciplina
@@ -197,7 +198,7 @@ namespace MVCCamiloMentoria.Controllers
         }
 
         // GET: Turma/Delete/5
-        [HttpGet]  // <-- Adicionado para deixar explícito que é o GET
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             var turma = await _context.Turma
@@ -212,8 +213,21 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            return View(turma);
+            // Mapeamento manual
+            var turmaViewModel = new TurmaViewModel
+            {
+                TurmaId = turma.TurmaId,
+                NomeTurma = turma.NomeTurma,
+                AnoLetivo = turma.AnoLetivo,
+                Turno = turma.Turno,
+                Escola = turma.Escola,
+                Alunos = turma.Alunos.ToList(),
+                TurmaDisciplinas = turma.TurmaDisciplinas.ToList()
+            };
+
+            return View(turmaViewModel);
         }
+
 
         // POST: Turma/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -221,8 +235,10 @@ namespace MVCCamiloMentoria.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var turma = await _context.Turma
+                .Include(t => t.Escola)
                 .Include(t => t.Alunos)
                 .Include(t => t.TurmaDisciplinas)
+                    .ThenInclude(td => td.Disciplina)
                 .FirstOrDefaultAsync(t => t.TurmaId == id);
 
             if (turma == null)

@@ -4,35 +4,60 @@
     ViewData["Title"] = "Detalhes da Turma";
 }
 
-<h1>@Model.NomeTurma</h1>
+<div class="container">
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Detalhes da Turma</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3 fw-bold">Nome da Turma</dt>
+                <dd class="col-sm-9">@Model.NomeTurma</dd>
 
-<div>
-    <h3>Ano Letivo: @Model.AnoLetivo</h3>
-    <h4>Turno: @Model.Turno</h4>
-    <p>Escola: @Model.Escola?.Nome</p>
+                <dt class="col-sm-3 fw-bold">Ano Letivo</dt>
+                <dd class="col-sm-9">@Model.AnoLetivo</dd>
+
+                <dt class="col-sm-3 fw-bold">Turno</dt>
+                <dd class="col-sm-9">@Model.Turno</dd>
+
+                <dt class="col-sm-3 fw-bold">Escola</dt>
+                <dd class="col-sm-9">@Model.Escola?.Nome</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">Alunos da Turma</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Nome</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var aluno in Model.Alunos)
+                    {
+                        <tr>
+                            <td>@aluno.Nome</td>
+                            <td class="text-center">
+                                <a asp-action="Edit" asp-route-id="@aluno.Id" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="text-end mt-3">
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
-
-<h3>Alunos</h3>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Matrícula</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var aluno in Model.Alunos)
-        {
-            <tr>
-                <td>@aluno.Nome</td>
-                <td>
-                    <!-- Se quiser adicionar algum botão de ação por aluno, por exemplo -->
-                    <a asp-action="Edit" asp-route-id="@aluno.Id" class="btn btn-warning btn-sm">Editar</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<a href="@Url.Action("Index")" class="btn btn-secondary">Voltar</a>
