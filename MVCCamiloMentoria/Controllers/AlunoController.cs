@@ -81,7 +81,7 @@ namespace MVCCamiloMentoria.Controllers
                     Numero = at.Telefone?.Numero ?? 0
                 }).ToList(),
 
-                Endereco = aluno.Endereco != null ? new Endereco
+                Endereco = aluno.Endereco != null ? new EnderecoViewModel
                 {
                     Id = aluno.Endereco.Id,
                     NomeRua = aluno.Endereco.NomeRua,
@@ -124,7 +124,7 @@ namespace MVCCamiloMentoria.Controllers
                         return View(viewModel);
                     }
 
-                    var endereco = new Endereco
+                    var endereco = new EnderecoViewModel
                     {
                         NomeRua = viewModel.NomeRua,
                         NumeroRua = viewModel.NumeroRua,
@@ -297,7 +297,7 @@ namespace MVCCamiloMentoria.Controllers
 
                     if (aluno.Endereco == null)
                     {
-                        aluno.Endereco = new Endereco();
+                        aluno.Endereco = new EnderecoViewModel();
                     }
                     aluno.Endereco.NomeRua = viewModel.NomeRua;
                     aluno.Endereco.NumeroRua = viewModel.NumeroRua;
@@ -402,7 +402,7 @@ namespace MVCCamiloMentoria.Controllers
                         DDD = at.Telefone?.DDD ?? 0,
                         Numero = at.Telefone?.Numero ?? 0
                     }).ToList(),
-                Endereco = aluno.Endereco != null ? new Endereco
+                Endereco = aluno.Endereco != null ? new EnderecoViewModel
                 {
                     NomeRua = aluno.Endereco.NomeRua,
                     NumeroRua = aluno.Endereco.NumeroRua,

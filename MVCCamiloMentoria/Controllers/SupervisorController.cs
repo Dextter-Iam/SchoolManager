@@ -106,7 +106,7 @@ namespace MVCCamiloMentoria.Controllers
                         }
                     }
 
-                    var endereco = new Endereco
+                    var endereco = new EnderecoViewModel
                     {
                         NomeRua = viewModel.NomeRua,
                         NumeroRua = viewModel.NumeroRua,

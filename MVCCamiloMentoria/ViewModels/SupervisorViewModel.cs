@@ -33,7 +33,7 @@ namespace MVCCamiloMentoria.ViewModels
 
         [DisplayName("Endereço")]
         public int? EnderecoId { get; set; }
-        public Endereco? Endereco { get; set; }
+        public EnderecoViewModel? Endereco { get; set; }
 
         [Required(ErrorMessage = "O nome da rua é obrigatório.")]
         [StringLength(200, ErrorMessage = "O nome da rua deve ter no máximo 200 caracteres.")]

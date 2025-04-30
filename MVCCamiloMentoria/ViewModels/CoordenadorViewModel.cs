@@ -31,7 +31,7 @@ namespace MVCCamiloMentoria.ViewModels
 
         [DisplayName("Endereço")]
         public int? EnderecoId { get; set; }
-        public Endereco? Endereco { get; set; }
+        public EnderecoViewModel? Endereco { get; set; }
 
         [DisplayName("Nome da Rua")]
         [Required(ErrorMessage = "O nome da rua é obrigatório.")]

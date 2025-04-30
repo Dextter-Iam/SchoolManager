@@ -42,7 +42,7 @@ namespace MVCCamiloMentoria.ViewModels
 
         public int EnderecoId { get; set; }
 
-        public Endereco? Endereco { get; set; }
+        public EnderecoViewModel? Endereco { get; set; }
 
         public List<Supervisor>? Supervisores { get; set; }
 

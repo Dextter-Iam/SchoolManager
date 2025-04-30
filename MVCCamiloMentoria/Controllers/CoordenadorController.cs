@@ -99,7 +99,7 @@ namespace MVCCamiloMentoria.Controllers
                         cep = parsedCep;
                     }
 
-                    var endereco = new Endereco
+                    var endereco = new EnderecoViewModel
                     {
                         NomeRua = viewModel.NomeRua,
                         NumeroRua = viewModel.NumeroRua,

@@ -15,7 +15,7 @@ public class EscolaContext : DbContext
     public DbSet<Disciplina> Disciplina { get; set; }
     public DbSet<Estado> Estado { get; set; }
     public DbSet<Escola> Escola { get; set; }   
-    public DbSet<Endereco> Endereco { get; set; }
+    public DbSet<EnderecoViewModel> Endereco { get; set; }
     public DbSet<Fornecedor> Fornecedor { get; set; }
     public DbSet<Equipamento> Equipamento { get; set; }
     public DbSet<PrestadorServico> PrestadorServico { get; set; }

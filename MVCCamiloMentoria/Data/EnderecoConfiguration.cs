@@ -4,9 +4,9 @@ using MVCCamiloMentoria.Models;
 
 namespace MVCCamiloMentoria.Data
 {
-    public class EnderecoConfiguration : IEntityTypeConfiguration<Endereco>
+    public class EnderecoConfiguration : IEntityTypeConfiguration<EnderecoViewModel>
     {
-        public void Configure(EntityTypeBuilder<Endereco> builder)
+        public void Configure(EntityTypeBuilder<EnderecoViewModel> builder)
         {
             builder.ToTable("Endereco");
 

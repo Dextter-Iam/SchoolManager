@@ -1,17 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MVCCamiloMentoria.Models
+namespace MVCCamiloMentoria.ViewModels
 {
+    [NotMapped]
     public class EnderecoViewModel
     {
-        [Key]
         public int Id { get; set; }
         public string? NomeRua { get; set; }
         public int? CEP { get; set; }
         public int NumeroRua {get; set;}
         public string? Complemento { get; set; }
-        public int EstadoId { get; set; }
-        public Estado? Estado {  get; set; }
-        public List<Aluno>? Alunos { get; set; }
+        public List<EstadoViewModel>? Estado {  get; set; }
+        public List<AlunoViewModel>? Alunos { get; set; }
     }
 }

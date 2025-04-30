@@ -112,7 +112,7 @@ namespace MVCCamiloMentoria.Controllers
                         }
                     }
 
-                    var endereco = new Endereco
+                    var endereco = new EnderecoViewModel
                     {
                         NomeRua = viewModel.NomeRua,
                         NumeroRua = viewModel.NumeroRua,
@@ -399,7 +399,6 @@ namespace MVCCamiloMentoria.Controllers
             return View(viewModel);
         }
 
-
         // GET: Professor/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -479,11 +478,6 @@ namespace MVCCamiloMentoria.Controllers
         {
             return _context.Professor.Any(p => p.Id == id && !p.Excluido);
         }
-    
-
-
-
-
 
         [HttpGet]
         public async Task<IActionResult> ObterTurmasPorEscola(int escolaId)

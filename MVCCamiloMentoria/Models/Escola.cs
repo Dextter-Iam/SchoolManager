@@ -9,7 +9,7 @@ namespace MVCCamiloMentoria.Models
         public int? EstadoId { get; set; }
         public Estado? Estado { get; set; }
         public int? EnderecoId { get; set; }
-        public Endereco? Endereco { get; set; }
+        public EnderecoViewModel? Endereco { get; set; }
         public List<Telefone>? Telefones { get; set; }
         public List<Coordenador>? Coordenadores { get; set; }
         public List<Diretor>? Diretores { get; set; }

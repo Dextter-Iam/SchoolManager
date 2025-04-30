@@ -57,6 +57,31 @@
                         </div>
                     </div>
 
+                    <!-- Seção Contato -->
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Contato</h5>
+                        </div>
+                        <div class="card-body">
+                            <dl class="row">
+                                <dt class="col-sm-3 fw-bold">Telefone</dt>
+                                <dd class="col-sm-9">
+                                    @if (Model.AlunoTelefone != null && Model.AlunoTelefone.Any())
+                                    {
+                                        foreach (var telefone in Model.AlunoTelefone)
+                                        {
+                                            <p>(@telefone.DDD) @telefone.Numero.ToString("00000-0000")</p>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Telefone não cadastrado</span>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+
                     <!-- Seção Responsáveis -->
                     <div class="card mb-4 shadow-sm">
                         <div class="card-header bg-light">
@@ -85,31 +110,6 @@
                                     else
                                     {
                                         <span class="text-muted">Não informado</span>
-                                    }
-                                </dd>
-                            </dl>
-                        </div>
-                    </div>
-
-                    <!-- Seção Contato -->
-                    <div class="card mb-4 shadow-sm">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">Contato</h5>
-                        </div>
-                        <div class="card-body">
-                            <dl class="row">
-                                <dt class="col-sm-3 fw-bold">Telefone</dt>
-                                <dd class="col-sm-9">
-                                    @if (Model.AlunoTelefone != null && Model.AlunoTelefone.Any())
-                                    {
-                                        foreach (var telefone in Model.AlunoTelefone)
-                                        {
-                                            <p>(@telefone.DDD) @telefone.Numero.ToString("00000-0000")</p>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">Telefone não cadastrado</span>
                                     }
                                 </dd>
                             </dl>

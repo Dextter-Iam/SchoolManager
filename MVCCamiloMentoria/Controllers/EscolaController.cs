@@ -104,7 +104,7 @@ namespace MVCCamiloMentoria.Controllers
         {
             if (ModelState.IsValid)
             {
-                var endereco = new Endereco
+                var endereco = new EnderecoViewModel
                 {
                     NomeRua = viewModel.NomeRua,
                     NumeroRua = viewModel.NumeroRua,
@@ -195,7 +195,7 @@ namespace MVCCamiloMentoria.Controllers
 
                 if (escola.Endereco == null)
                 {
-                    escola.Endereco = new Endereco();
+                    escola.Endereco = new EnderecoViewModel();
                 }
 
                 escola.Endereco.NomeRua = viewModel.NomeRua;
