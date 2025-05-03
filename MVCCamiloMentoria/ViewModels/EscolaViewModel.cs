@@ -17,7 +17,6 @@ namespace MVCCamiloMentoria.ViewModels
 
         [Required(ErrorMessage = "Selecione um estado.")]
         [DisplayName("Estado (UF)")]
-
         public List<EstadoViewModel>? Estados { get; set; }
         public EnderecoViewModel? Endereco { get; set; }
         public List<SupervisorEscolaViewModel>? Supervisores { get; set; }

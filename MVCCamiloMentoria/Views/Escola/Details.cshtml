@@ -42,11 +42,12 @@
                 @Html.DisplayFor(model => model.Endereco.CEP)
             </dd>
 
-            <dt class="col-sm-3 fw-bold">
-                @Html.DisplayNameFor(model => model.Estado)
-            </dt>
+            <dt class="col-sm-3 fw-bold">Estado</dt>
             <dd class="col-sm-9">
-                @Html.DisplayFor(model => model.Estado.Sigla)
+                @{
+                    var estado = Model.Estados?.FirstOrDefault(e => e.id == Model.Endereco!.EstadoId);
+                }
+                @estado?.Sigla
             </dd>
         </dl>
     </fieldset>
@@ -107,7 +108,7 @@
                                     <ul class="list-unstyled mb-0">
                                         @foreach (var supervisor in Model.Supervisores)
                                         {
-                                            <li>@supervisor.Nome</li>
+                                            <li>@supervisor.Supervisor!.Nome</li>
                                         }
                                     </ul>
                                 }

@@ -42,22 +42,28 @@
 							<dl class="row">
 								<dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Endereco)</dt>
 								<dd class="col-sm-9">
-									@if (Model.Endereco != null)
-									{
+								<dd class="col-sm-9">
+										@if (Model.Endereco != null && Model.Endereco.ListaDeEstados != null && Model.Endereco.ListaDeEstados.Any())
+										{
 										<address>
-											@Model.Endereco.NomeRua, @Model.Endereco.NumeroRua<br />
-											@if (!string.IsNullOrEmpty(Model.Endereco.Complemento))
-											{
-												@Model.Endereco.Complemento <br />
-											}
-											CEP: @Model.Endereco.CEP?.ToString("00000-000")<br />
-											@Model.Endereco.Estado?.Nome - @Model.Endereco.Estado?.Sigla
+												@Model.Endereco.NomeRua, @Model.Endereco.NumeroRua
+											<br />
+												@if (!string.IsNullOrEmpty(Model.Endereco.Complemento))
+												{
+													@Model.Endereco.Complemento <br />
+												}
+											CEP: @Model.Endereco.CEP?.ToString("00000-000") <br />
+
+												@foreach (var estado in Model.Endereco.ListaDeEstados)
+												{
+												<div>@estado.Nome - @estado.Sigla</div>
+												}
 										</address>
-									}
-									else
-									{
-										<span class="text-muted">Endereço não cadastrado</span>
-									}
+										}
+										else
+										{
+										<span class="text-muted">Endereço ou estado não informado</span>
+										}
 								</dd>
 							</dl>
 						</div>

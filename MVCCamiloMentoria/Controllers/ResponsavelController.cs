@@ -220,7 +220,7 @@ namespace MVCCamiloMentoria.Controllers
                     Complemento = responsavel.Endereco?.Complemento,
                     CEP = responsavel.Endereco!.CEP,
                     EstadoId = responsavel.Endereco!.EstadoId,
-                    Estados = await AcessarEstados(),
+                    ListaDeEstados = await AcessarEstados(),
                 },
 
                 Telefones = responsavel.Telefones!
@@ -380,7 +380,7 @@ namespace MVCCamiloMentoria.Controllers
                     Complemento = responsavel.Endereco?.Complemento,
                     CEP = responsavel.Endereco!.CEP,
                     EstadoId = responsavel.Endereco!.EstadoId,
-                    Estados = await AcessarEstados(),
+                    ListaDeEstados = await AcessarEstados(),
                 },
 
                 Telefones = responsavel.Telefones!

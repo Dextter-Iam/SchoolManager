@@ -1,6 +1,6 @@
 ﻿using MVCCamiloMentoria.Models;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -43,27 +43,24 @@ namespace MVCCamiloMentoria.ViewModels
         [DisplayName("Endereço")]
         public EnderecoViewModel? Endereco { get; set; }
 
-        [DisplayName("Estado")]
-        [Required(ErrorMessage = "O estado é obrigatório.")]
-        public List<EstadoViewModel>? Estados { get; set; }
-
         [DisplayName("Escola")]
         [Required(ErrorMessage = "A escola é obrigatória.")]
         public int EscolaId { get; set; }
-        public List<EscolaViewModel>? Escola { get; set; }
+        public List<EscolaViewModel>? Escolas { get; set; }
 
         [DisplayName("Responsável")]
         public int? ResponsavelId { get; set; }
         public SelectList? ResponsaveisDisponiveis { get; set; }
 
-        [DisplayName("Responsável")]
-
+        [DisplayName("Responsáveis")]
         public List<AlunoResponsavelViewModel>? Responsaveis { get; set; }
-   
+
         [DisplayName("Responsável Atual")]
         public ResponsavelViewModel? Responsavel { get; set; }
+
         public byte[]? Foto { get; set; }
         public IFormFile? FotoUpload { get; set; }
+
         public List<AlunoTelefoneViewModel>? Telefones { get; set; }
         public List<AulaViewModel>? Aulas { get; set; }
 
@@ -83,7 +80,5 @@ namespace MVCCamiloMentoria.ViewModels
 
         [NotMapped]
         public int ResponsavelIdValue => ResponsavelId ?? 0;
-
-
     }
 }

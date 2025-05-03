@@ -37,7 +37,7 @@ namespace MVCCamiloMentoria.Controllers
                     NumeroRua = d.Endereco.NumeroRua,
                     Complemento = d.Endereco.Complemento,
                     CEP = d.Endereco.CEP,
-                    Estados = estados,
+                    ListaDeEstados = estados,
                 },
                 Telefones = d.Telefones!
                              .Select(td => new TelefoneViewModel

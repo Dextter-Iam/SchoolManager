@@ -19,33 +19,33 @@
             <h5 class="mt-4">Endereço</h5>
 
             <div class="form-group mb-3">
-                <label asp-for="NomeRua" class="control-label fw-bold">Rua</label>
-                <input asp-for="NomeRua" class="form-control" />
-                <span asp-validation-for="NomeRua" class="text-danger"></span>
+                <label asp-for="Endereco.NomeRua" class="control-label fw-bold">Rua</label>
+                <input asp-for="Endereco.NomeRua" class="form-control" />
+                <span asp-validation-for="Endereco.NomeRua" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="NumeroRua" class="control-label fw-bold">Número</label>
-                <input asp-for="NumeroRua" class="form-control" />
-                <span asp-validation-for="NumeroRua" class="text-danger"></span>
+                <label asp-for="Endereco.NumeroRua" class="control-label fw-bold">Número</label>
+                <input asp-for="Endereco.NumeroRua" class="form-control" />
+                <span asp-validation-for="Endereco.NumeroRua" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="Complemento" class="control-label fw-bold">Complemento</label>
-                <input asp-for="Complemento" class="form-control" />
-                <span asp-validation-for="Complemento" class="text-danger"></span>
+                <label asp-for="Endereco.Complemento" class="control-label fw-bold">Complemento</label>
+                <input asp-for="Endereco.Complemento" class="form-control" />
+                <span asp-validation-for="Endereco.Complemento" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="CEP" class="control-label fw-bold">CEP</label>
-                <input asp-for="CEP" class="form-control" />
-                <span asp-validation-for="CEP" class="text-danger"></span>
+                <label asp-for="Endereco.CEP" class="control-label fw-bold">CEP</label>
+                <input asp-for="Endereco.CEP" class="form-control" />
+                <span asp-validation-for="Endereco.CEP" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="EstadoId" class="control-label fw-bold"></label>
-                <select asp-for="EstadoId" class="form-control" asp-items="ViewBag.Estados"></select>
-                <span asp-validation-for="EstadoId" class="text-danger"></span>
+                <label asp-for="Endereco.EstadoId" class="control-label fw-bold"></label>
+                <select asp-for="Endereco.EstadoId" class="form-control" asp-items="ViewBag.Estados"></select>
+                <span asp-validation-for="Endereco.EstadoId" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">

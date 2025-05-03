@@ -12,7 +12,6 @@ namespace MVCCamiloMentoria.ViewModels
         public int NumeroRua {get; set;}
         public string? Complemento { get; set; }
         public int EstadoId { get; set; }
-        public List<EstadoViewModel>? Estados { get; set; } 
-        public List<AlunoViewModel>? Alunos { get; set; }
+        public List<EstadoViewModel>? ListaDeEstados { get; set; } 
     }
 }

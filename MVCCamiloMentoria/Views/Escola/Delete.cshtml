@@ -23,8 +23,17 @@
                                 <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Nome)</dt>
                                 <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
 
-                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Estado)</dt>
-                                <dd class="col-sm-9">@Html.DisplayFor(model => model.Estado!.Nome) (@Html.DisplayFor(model => model.Estado!.Sigla))</dd>
+                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Estados)</dt>
+                                <dd class="col-sm-9">
+                                    @if (Model.Estados != null && Model.Estados.Any())
+                                    {
+                                        <p>@Model.Estados.FirstOrDefault()?.Nome (@Model.Estados.FirstOrDefault()?.Sigla)</p>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Estado não informado</span>
+                                    }
+                                </dd>
 
                                 <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Endereco)</dt>
                                 <dd class="col-sm-9">

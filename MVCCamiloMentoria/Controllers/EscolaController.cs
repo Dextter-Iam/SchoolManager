@@ -37,7 +37,7 @@ namespace MVCCamiloMentoria.Controllers
                         CEP = e.Endereco.CEP,
                         Complemento = e.Endereco!.Complemento,
                         EstadoId = e.Endereco.EstadoId,
-                        Estados = estados.Select(est => new EstadoViewModel
+                        ListaDeEstados = estados.Select(est => new EstadoViewModel
                         {
                             id = est.id,
                             Nome = est.Nome,
@@ -94,7 +94,7 @@ namespace MVCCamiloMentoria.Controllers
                     CEP = escolas.Endereco!.CEP,
                     NumeroRua = escolas.Endereco!.NumeroRua,
                     Complemento = escolas.Endereco!.Complemento,
-                    Estados = await AcessarEstados(),
+                    ListaDeEstados = await AcessarEstados(),
                 },
 
                 Telefones = escolas.Telefones?

@@ -32,8 +32,7 @@ namespace MVCCamiloMentoria.Models
         public Escola? Escola { get; set; }
 
         public int EstadoId { get; set; }
-        public Estado? Estado { get; set; }
-
+        public List<Estado>? Estado { get; set; }
         public string? NomeResponsavel1 { get; set; }
         public string? Parentesco1 { get; set; }
         public string? NomeResponsavel2 { get; set; }

@@ -79,28 +79,35 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Escolas -->
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">Escolas</div>
                     <div class="card-body">
                         <div class="form-group mb-3">
                             <label>Selecionar Escolas</label>
                             <div class="form-check">
-                                @foreach (var escola in (List<SelectListItem>)ViewBag.Escolas)
+                                @for (int i = 0; i < ((List<SelectListItem>)ViewBag.Escolas).Count; i++)
                                 {
+                                    var escola = ((List<SelectListItem>)ViewBag.Escolas)[i];
+                                    int escolaId = int.Parse(escola.Value);
+                                    bool isChecked = Model.Escolas != null && Model.Escolas.Any(e => e.EscolaId == escolaId);
+
                                     <div class="form-check mb-2">
                                         <input class="form-check-input"
                                                type="checkbox"
                                                name="EscolaIds"
-                                               value="@escola.Value"
-                                        @(Model.EscolaIds != null && Model.EscolaIds.Contains(int.Parse(escola.Value)) ? "checked" : "") />
+                                               id="escola_@i"
+                                               value="@escolaId"
+                                        @(isChecked ? "checked" : "") />
 
-                                        <label class="form-check-label" for="EscolaIds">
+                                        <label class="form-check-label" for="escola_@i">
                                             @escola.Text
                                         </label>
                                     </div>
                                 }
                             </div>
-                            <span asp-validation-for="EscolaIds" class="text-danger"></span>
+                            <span asp-validation-for="Escolas" class="text-danger"></span>
                         </div>
                     </div>
                 </div>

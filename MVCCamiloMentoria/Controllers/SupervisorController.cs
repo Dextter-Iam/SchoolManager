@@ -37,7 +37,7 @@ namespace MVCCamiloMentoria.Controllers
                     NumeroRua = s.Endereco.NumeroRua,
                     Complemento = s.Endereco.Complemento,
                     CEP = s.Endereco.CEP,
-                    Estados = await AcessarEstados(),
+                    ListaDeEstados = await AcessarEstados(),
                 },
                 Telefones = s.Telefones!
                              .Select(st => new TelefoneViewModel
@@ -97,7 +97,7 @@ namespace MVCCamiloMentoria.Controllers
                     NumeroRua = supervisor.Endereco.NumeroRua,
                     Complemento = supervisor.Endereco.Complemento,
                     CEP = supervisor.Endereco.CEP,
-                    Estados = await AcessarEstados(),
+                    ListaDeEstados = await AcessarEstados(),
                 },
                 Telefones = supervisor.Telefones!
                              .Select(st => new TelefoneViewModel
@@ -252,7 +252,7 @@ namespace MVCCamiloMentoria.Controllers
                     Complemento = supervisor.Endereco?.Complemento,
                     CEP = supervisor.Endereco?.CEP,
                     EstadoId = supervisor.Endereco!.EstadoId,
-                    Estados = await AcessarEstados(),
+                    ListaDeEstados = await AcessarEstados(),
                 },
 
                 Escolas = supervisor.Escolas!

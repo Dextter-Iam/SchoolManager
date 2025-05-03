@@ -35,7 +35,7 @@ namespace MVCCamiloMentoria.Controllers
                     Complemento = c.Endereco.Complemento,
                     NumeroRua = c.Endereco.NumeroRua,
                     CEP = c.Endereco.CEP,
-                    Estados = await AcessarEstados(),
+                    ListaDeEstados = await AcessarEstados(),
                 },
                 Escola = new EscolaViewModel
                 {
@@ -80,7 +80,7 @@ namespace MVCCamiloMentoria.Controllers
                     Complemento = coordenador.Endereco.Complemento,
                     NumeroRua = coordenador.Endereco.NumeroRua,
                     CEP = coordenador.Endereco.CEP,
-                    Estados = await AcessarEstados(),
+                    ListaDeEstados = await AcessarEstados(),
                 },
                 Escola = new EscolaViewModel
                 {
@@ -115,7 +115,7 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
-                    var estadoSelecionado = viewModel.Endereco!.Estados!
+                    var estadoSelecionado = viewModel.Endereco!.ListaDeEstados!
                                             .FirstOrDefault(e => e.id == viewModel.Endereco.EstadoId);
 
                     var endereco = new Endereco
