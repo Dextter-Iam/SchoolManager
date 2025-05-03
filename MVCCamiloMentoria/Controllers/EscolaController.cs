@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCCamiloMentoria.Models;
 using MVCCamiloMentoria.ViewModels;
+using System.IO;
+using System.Runtime.ConstrainedExecution;
 using System.Threading.Tasks;
 
 namespace MVCCamiloMentoria.Controllers
@@ -42,6 +44,7 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
+            var estados = AcessarEstados();
             var escolas = await _context.Escola
                 .Include(e => e.Endereco)
                 .Include(e => e.Estado)
@@ -70,8 +73,16 @@ namespace MVCCamiloMentoria.Controllers
                 Id = escolas.Id,
                 Nome = escolas.Nome,
 
+                Endereco = new EnderecoViewModel
+                {
+                    NomeRua = escolas.Endereco!.NomeRua,
+                    CEP = escolas.Endereco!.CEP,
+                    NumeroRua = escolas.Endereco!.NumeroRua,
+                    Complemento = escolas.Endereco!.Complemento,
+                    Estados = await AcessarEstados(),
+                },
 
-                Telefones = escolas.Telefones!
+                Telefones = escolas.Telefones?
                                      .Select(et => new TelefoneViewModel
                                      {
                                          Id = et.Id,
@@ -84,8 +95,6 @@ namespace MVCCamiloMentoria.Controllers
                                 {
                                     TurmaId = t.TurmaId,
                                     NomeTurma = t.NomeTurma,
-                                    AnoLetivo = t.AnoLetivo,
-                                    Turno = t.Turno,
                                 }).ToList(),
 
                 Disciplina = escolas.Disciplina!
@@ -100,15 +109,6 @@ namespace MVCCamiloMentoria.Controllers
                                 {
                                     Id = a.Id,
                                     Nome = a.Nome,
-                                    EmailEscolar = a.EmailEscolar,
-                                    BolsaEscolar = a.BolsaEscolar,
-                                    AlunoTelefone = a.AlunoTelefone,
-                                    AlunoResponsavel = a.AlunoResponsavel,
-                                    AnoInscricao = a.AnoInscricao,
-                                    DataNascimento = a.DataNascimento,
-                                    Foto = a.Foto,
-                                    NomeResponsavel1 = a.NomeResponsavel1,
-                                    NomeResponsavel2 = a.NomeResponsavel2,
                                 }).ToList(),
 
                 Supervisores = escolas.SupervisorEscolas!
@@ -116,7 +116,6 @@ namespace MVCCamiloMentoria.Controllers
                                       {
                                           SupervisorId = se.SupervisorId,
                                           EscolaId = se.EscolaId,
-
                                       }).ToList(),
 
                 Coordenadores = escolas.Coordenadores!
@@ -124,7 +123,11 @@ namespace MVCCamiloMentoria.Controllers
                                        {
                                            Id = c.Id,
                                            Nome = c.Nome,
-
+                                           Escola = new EscolaViewModel
+                                           {
+                                               Id = c.EscolaId,
+                                               Nome = c.Escola!.Nome,
+                                           },
                                        }).ToList(),
 
                 Diretores = escolas.Diretores!
@@ -132,28 +135,27 @@ namespace MVCCamiloMentoria.Controllers
                                     {
                                         Id = d.Id,
                                         Nome = d.Nome,
-                                        Telefones = d.Telefones,
-                                        Escola = d.Escola,
-
+                                        Escola = new EscolaViewModel
+                                        {
+                                            Id = d.EscolaId,
+                                            Nome = d.Escola!.Nome,
+                                        }
                                     }).ToList(),
 
-                PrestadorServico = escolas.PrestadorServico!
-                                         .Select(ps => new PrestadorServicoViewModel
+                Professores = escolas.Professores!
+                                     .Select(p => new ProfessorViewModel
+                                     {
+                                         Id = p.Id,
+                                         Nome = p.Nome,
+                                         Escola = new EscolaViewModel
                                          {
-                                             Id = ps.Id,
-                                             Nome = ps.Nome,
-                                             EmpresaNome = ps.EmpresaNome,
-                                             CNPJ = ps.CNPJ,
-                                             CPF = ps.CPF,
-                                             ServicoFinalidade = ps.ServicoFinalidade,
-                                             Escola = ps.Escola,
-                                             Telefones = ps.Telefones,
-                                         }).ToList()
+                                             Id = p.EscolaId,
+                                             Nome = p.Escola!.Nome,
+                                         },
+                                     }).ToList(),
 
             };
-
             return View(escolaViewModel);
-
         }
 
 
@@ -180,37 +182,52 @@ namespace MVCCamiloMentoria.Controllers
         {
             if (ModelState.IsValid)
             {
-
-                var estado = await AcessarEstados();
-
-
-                var escola = new Escola
+                try
                 {
-                    Id = viewModel.Id,
-                    Nome = viewModel.Nome,
 
-                    Endereco = new Endereco
+                    var escola = new Escola
                     {
-                        Id = viewModel.Id,
-                        NomeRua = viewModel.NomeRua,
-                        CEP = viewModel.CEP,
-                        Complemento = viewModel.Complemento,
-                        NumeroRua = viewModel.NumeroRua,
-                    }
+                        Nome = viewModel.Nome,
+                        Endereco = new Endereco
+                        {
+                            NomeRua = viewModel.Endereco!.NomeRua,
+                            CEP = viewModel.Endereco.CEP,
+                            NumeroRua = viewModel.Endereco!.NumeroRua,
+                            Complemento = viewModel.Endereco!.Complemento,
+                            EstadoId = viewModel.Endereco!.EstadoId,
+                        },
 
-                };
+                        Telefones = new List<Telefone>()
+                        {   new Telefone
+                        {
+                            DDD = viewModel.Telefones![0].DDD,
+                            Numero = viewModel.Telefones[0].Numero
+                        }
 
+                        }
+                    };
 
+                    _context.Escola.Add(escola);
+                    await _context.SaveChangesAsync();
 
-                _context.Escola.Add(escola);
-                await _context.SaveChangesAsync();
-
-                // Mensagem de sucesso
-                TempData["MensagemSucesso"] = "Cadastro realizado com sucesso!";
-                return RedirectToAction(nameof(Index));
+                    TempData["MensagemSucesso"] = "Escola criada com sucesso!";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    TempData["MensagemErro"] = $"Erro ao criar escola: {ex.Message}";
+                    return View(viewModel);
+                }
             }
+
+
+            var estado = await AcessarEstados();
+            ViewBag.Estados = estado;
+
             return View(viewModel);
         }
+
+
 
 
         // GET: EscolaController/Edit
@@ -224,6 +241,8 @@ namespace MVCCamiloMentoria.Controllers
 
             var escola = await _context.Escola
                 .Include(e => e.Endereco)
+                .Include(e => e.Estado)
+                .Include(e => e.Telefones)
                 .FirstOrDefaultAsync(e => e.Id == id);
 
             if (escola == null)
@@ -231,16 +250,20 @@ namespace MVCCamiloMentoria.Controllers
                 TempData["MensagemErro"] = "Escola não encontrada.";
                 return NotFound();
             }
+
             var estados = await AcessarEstados();
             var viewModel = new EscolaViewModel
             {
                 Id = escola.Id,
                 Nome = escola.Nome,
+                Endereco = new EnderecoViewModel
+                {
+                    NomeRua = escola.Endereco!.NomeRua,
+                    NumeroRua = escola.Endereco!.NumeroRua,
+                    Complemento = escola.Endereco!.Complemento,
+                    CEP = escola.Endereco.CEP,
+                },
                 Estados = estados,
-                NomeRua = escola.Endereco?.NomeRua,
-                NumeroRua = (int)escola.Endereco?.NumeroRua!,
-                Complemento = escola.Endereco?.Complemento,
-                CEP = (int)escola.Endereco?.CEP!,
             };
 
             TempData["MensagemInfo"] = "Edite os dados da escola e clique em salvar.";
@@ -264,6 +287,7 @@ namespace MVCCamiloMentoria.Controllers
                 var escola = await _context.Escola
                     .Include(e => e.Endereco)
                     .Include(e => e.Estado)
+                    .Include(e => e.Telefones)
                     .FirstOrDefaultAsync(e => e.Id == id);
 
                 if (escola == null)
@@ -273,7 +297,7 @@ namespace MVCCamiloMentoria.Controllers
                 }
                 var estados = await AcessarEstados();
 
-                var buscarEstado = estados.FirstOrDefault(e => e.id == viewModel.EstadoId);
+                var buscarEstado = estados.FirstOrDefault(e => e.id == viewModel.Endereco!.EstadoId);
 
                 if (buscarEstado == null)
                 {
@@ -282,7 +306,7 @@ namespace MVCCamiloMentoria.Controllers
                 }
 
                 escola.Nome = viewModel.Nome;
-                var selecionarEstado = estados.FirstOrDefault(e => e.id == viewModel.EstadoId);
+                var selecionarEstado = estados.FirstOrDefault(e => e.id == viewModel.Endereco!.EstadoId);
 
                 if (buscarEstado != null)
                 {
@@ -299,12 +323,19 @@ namespace MVCCamiloMentoria.Controllers
                     escola.Endereco = new Endereco();
                 }
 
-                escola.Endereco.NomeRua = viewModel.NomeRua;
-                escola.Endereco.NumeroRua = viewModel.NumeroRua;
-                escola.Endereco.Complemento = viewModel.Complemento;
-                escola.Endereco.CEP = viewModel.CEP;
-
+                escola.Endereco.NomeRua = viewModel.Endereco!.NomeRua;
+                escola.Endereco.NumeroRua = viewModel.Endereco.NumeroRua;
+                escola.Endereco.Complemento = viewModel.Endereco.Complemento;
+                escola.Endereco.CEP = viewModel.Endereco.CEP;
                 await _context.SaveChangesAsync();
+
+                escola.Telefones = new List<Telefone>()
+                        {   new Telefone
+                        {
+                            DDD = viewModel.Telefones![0].DDD,
+                            Numero = viewModel.Telefones[0].Numero
+                        },
+                };
 
                 TempData["MensagemSucesso"] = "Escola editada com sucesso!";
                 return RedirectToAction(nameof(Index));
@@ -327,7 +358,7 @@ namespace MVCCamiloMentoria.Controllers
             var escola = await _context.Escola
                 .Include(e => e.Estado)
                 .Include(e => e.Endereco)
-                    .ThenInclude(end => end.Estado!)
+                .Include(e => e.Telefones)
                 .FirstOrDefaultAsync(e => e.Id == id);
 
             if (escola == null)
@@ -340,12 +371,17 @@ namespace MVCCamiloMentoria.Controllers
             {
                 Id = escola.Id,
                 Nome = escola.Nome,
-
+                Telefones = escola.Telefones?.Select(t => new TelefoneViewModel
+                {
+                    DDD = t.DDD,
+                    Numero = t.Numero
+                }).ToList() ?? new List<TelefoneViewModel>()
             };
 
             TempData["MensagemInfo"] = "Confirme a exclusão da escola.";
             return View(viewModel);
         }
+
 
 
         // POST: EscolaController/Delete/5
@@ -357,6 +393,7 @@ namespace MVCCamiloMentoria.Controllers
             {
                 var escola = await _context.Escola
                     .Include(e => e.Endereco)
+                    .Include(e => e.Telefones)
                     .FirstOrDefaultAsync(e => e.Id == id);
 
                 if (escola == null)
@@ -364,6 +401,13 @@ namespace MVCCamiloMentoria.Controllers
                     TempData["MensagemErro"] = "Escola não encontrada.";
                     return RedirectToAction(nameof(Index));
                 }
+
+
+                if (escola.Telefones != null && escola.Telefones.Any())
+                {
+                    _context.Telefone.RemoveRange(escola.Telefones);
+                }
+
 
                 if (escola.Endereco != null)
                 {
@@ -387,6 +431,7 @@ namespace MVCCamiloMentoria.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
 
         private void CarregarViewBags(EscolaViewModel viewModel = null)
         {

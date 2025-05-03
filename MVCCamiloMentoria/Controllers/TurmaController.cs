@@ -210,7 +210,6 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            // Mapeamento manual
             var turmaViewModel = new TurmaViewModel
             {
                 TurmaId = turma.TurmaId,

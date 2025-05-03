@@ -32,24 +32,25 @@ namespace MVCCamiloMentoria.ViewModels
 
         [Display(Name = "Professor")]
         [Required(ErrorMessage = "O professor é obrigatório.")]
+
         public int ProfessorId { get; set; }
-        public Professor? Professor { get; set; }
+        public ProfessorViewModel? Professor { get; set; }
 
         [Display(Name = "Turma")]
         [Required(ErrorMessage = "A turma é obrigatória.")]
         public int TurmaId { get; set; }
-        public Turma? Turma { get; set; }
+        public TurmaViewModel? Turma { get; set; }
 
         [Display(Name = "Disciplina")]
         [Required(ErrorMessage = "A disciplina é obrigatória.")]
         public int DisciplinaId { get; set; }
-        public Disciplina? Disciplina { get; set; }
+        public DisciplinaViewModel? Disciplina { get; set; }
 
         [Display(Name = "Confirmação de Presença")]
         public bool ConfirmacaoPresenca { get; set; }
 
         [Display(Name = "Alunos Presentes")]
-        public List<Aluno>? AlunosPresentes { get; set; }
+        public List<AlunoViewModel>? AlunosPresentes { get; set; }
     }
 }
     

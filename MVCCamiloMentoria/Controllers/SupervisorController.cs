@@ -253,7 +253,7 @@ namespace MVCCamiloMentoria.Controllers
                     supervisor.Nome = viewModel.Nome;
                     supervisor.Matricula = viewModel.Matricula;
 
-              
+
                     if (supervisor.Endereco != null)
                     {
                         supervisor.Endereco.NomeRua = viewModel.NomeRua;
@@ -266,20 +266,10 @@ namespace MVCCamiloMentoria.Controllers
                     _context.Update(supervisor);
                     await _context.SaveChangesAsync();
 
-               
-                    var escolasAtuais = supervisor.SupervisorEscolas?.Select(se => se.EscolaId).ToList() ?? new List<int>();
-                    var novasEscolas = viewModel.EscolaIds ?? new List<int>();
 
-                    if (escolasAtuais.Any())
-                    {
-                        var escolasParaRemover = supervisor.SupervisorEscolas!.Where(se => !novasEscolas.Contains(se.EscolaId)).ToList();
-                        _context.SupervisorEscola!.RemoveRange(escolasParaRemover);
-                    }
-
-                    var escolasParaAdicionar = novasEscolas.Except(escolasAtuais).ToList();
                     foreach (var escolaId in escolasParaAdicionar)
                     {
-                        _context.SupervisorEscola!.Add(new SupervisorEscola
+                        _context.SupervisorEscola!.Add(new SupervisorEscolaViewModel
                         {
                             SupervisorId = supervisor.Id,
                             EscolaId = escolaId
@@ -288,35 +278,10 @@ namespace MVCCamiloMentoria.Controllers
 
                     await _context.SaveChangesAsync();
 
-              
+
                     if (supervisor.Telefones != null && supervisor.Telefones.Any())
                     {
                         _context.Telefone.RemoveRange(supervisor.Telefones);
-                    }
-
-                    if (viewModel.Telefones != null)
-                    {
-                        foreach (var tel in viewModel.Telefones)
-                        {
-                            _context.Telefone.Add(new Telefone
-                            {
-                                DDD = tel.DDD,
-                                Numero = tel.Numero,
-                                SupervisorId = supervisor.Id,
-                                EscolaId = tel.EscolaId
-                            });
-                        }
-                    }
-                    else
-                    {
-
-                        _context.Telefone.Add(new Telefone
-                        {
-                            DDD = viewModel.DDD,
-                            Numero = viewModel.Numero,
-                            SupervisorId = supervisor.Id,
-                            EscolaId = (int)viewModel.EscolaIds!.FirstOrDefault()
-                        });
                     }
 
                     await _context.SaveChangesAsync();
@@ -372,9 +337,21 @@ namespace MVCCamiloMentoria.Controllers
                 Id = supervisor.Id,
                 Nome = supervisor.Nome,
                 Matricula = supervisor.Matricula,
-                Endereco = supervisor.Endereco,
-                Telefones = supervisor.Telefones,
-                Escolas = supervisor.SupervisorEscolas?.Select(se => se.Escola!).ToList()
+                Endereco = new EnderecoViewModel
+                {
+                    NumeroRua = supervisor.Endereco!.NumeroRua,
+                    NomeRua = supervisor.Endereco.NomeRua,
+                    Complemento = supervisor.Endereco.Complemento,
+                    CEP = supervisor.Endereco.CEP,
+                },
+                Telefones = new List<TelefoneViewModel>
+                {
+                     new TelefoneViewModel
+                      {
+                            DDD = 0,
+                           Numero = 0
+                      }
+                },
             };
 
             return View(viewModel);
@@ -429,10 +406,10 @@ namespace MVCCamiloMentoria.Controllers
             ViewBag.Escolas = _context.Escola
                     .OrderBy(e => e.Nome)
                     .Select(e => new SelectListItem
-                     {
+                    {
                         Value = e.Id.ToString(),
                         Text = e.Nome
-                     }).ToList();
+                    }).ToList();
 
 
             ViewBag.Estados = _context.Estado

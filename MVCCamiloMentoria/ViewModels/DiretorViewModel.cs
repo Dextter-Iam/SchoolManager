@@ -23,7 +23,6 @@ namespace MVCCamiloMentoria.ViewModels
         public int Numero { get; set; }
 
         [DisplayName("Endereço")]
-        public int? EnderecoId { get; set; }
         public EnderecoViewModel? Endereco { get; set; }
 
         [DisplayName("Nome da Rua")]
@@ -48,13 +47,13 @@ namespace MVCCamiloMentoria.ViewModels
         [DisplayName("Estado")]
         [Required(ErrorMessage = "O estado é obrigatório.")]
         public int? EstadoId { get; set; }
-        public Estado? Estado { get; set; }
-        public List<Telefone>? Telefones { get; set; }
+        public EstadoViewModel? Estado { get; set; }
+        public List<TelefoneViewModel>? Telefones { get; set; } = new List<TelefoneViewModel>();
 
         [DisplayName("Escola")]
         public int EscolaId { get; set; }
 
         [ForeignKey("EscolaId")]
-        public Escola? Escola { get; set; }
+        public EscolaViewModel? Escola { get; set; }
     }
 }

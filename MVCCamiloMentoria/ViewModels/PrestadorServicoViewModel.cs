@@ -34,13 +34,10 @@ namespace MVCCamiloMentoria.ViewModels
         public string? ServicoFinalidade { get; set; }
 
         [DisplayName("Telefones")]
-        public List<Telefone>? Telefones { get; set; }
+        public List<TelefoneViewModel>? Telefones { get; set; } = new List<TelefoneViewModel>();
 
         [DisplayName("Escola")]
         [Required(ErrorMessage = "A escola é obrigatória.")]
-        public int EscolaId { get; set; }
-
-        [ForeignKey("EscolaId")]
         public Escola? Escola { get; set; }
     }
 }
