@@ -157,16 +157,18 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
-                    var endereco = new EnderecoViewModel
+                    // Verificar se o Endereco não é nulo antes de usar
+                    var endereco = viewModel.Endereco != null ? new Endereco
                     {
-                        NomeRua = viewModel.Endereco!.NomeRua,
-                        NumeroRua = viewModel.Endereco!.NumeroRua,
-                        CEP = viewModel.Endereco!.CEP,
-                        Complemento = viewModel.Endereco!.Complemento,
-                        ListaDeEstados = new List<EstadoViewModel>()
-                    };
+                        NomeRua = viewModel.Endereco.NomeRua,
+                        NumeroRua = viewModel.Endereco.NumeroRua,
+                        CEP = viewModel.Endereco.CEP,
+                        Complemento = viewModel.Endereco.Complemento,
+                        EstadoId = viewModel.Endereco.EstadoId,
+                    } : null;
 
-                    var aluno = new AlunoViewModel
+                    // Criar o objeto aluno
+                    var aluno = new Aluno
                     {
                         Nome = viewModel.Nome,
                         DataNascimento = viewModel.DataNascimento,
@@ -174,51 +176,42 @@ namespace MVCCamiloMentoria.Controllers
                         AnoInscricao = viewModel.AnoInscricao,
                         BolsaEscolar = viewModel.BolsaEscolar,
                         TurmaId = viewModel.TurmaId,
-                        Endereco = endereco,
                         EscolaId = viewModel.EscolaId,
                         NomeResponsavel1 = viewModel.NomeResponsavel1,
                         Parentesco1 = viewModel.Parentesco1,
                         NomeResponsavel2 = viewModel.NomeResponsavel2,
                         Parentesco2 = viewModel.Parentesco2,
-                        Telefones = viewModel.Telefones,
+                        Endereco = endereco,
 
+                        AlunoTelefone = viewModel.Telefones?.Select(t => new AlunoTelefone
+                        {
+                            Telefone = new Telefone
+                            {
+                                DDD = t.Telefones!.DDD,
+                                Numero = t.Telefones!.Numero,
+                                EscolaId = viewModel.EscolaId,
+                            }
+                        }).ToList()
                     };
 
                     _context.Add(aluno);
-                    await _context.SaveChangesAsync();
-
-                    if (aluno.Telefones != null)
-                    {
-                        var alunoTelefone = aluno.Telefones
-                            .Where(at => at.Telefones != null)
-                            .Select(at => new AlunoTelefoneViewModel
-                            {
-                                AlunoId = at.AlunoId,
-                                TelefoneId = at.TelefoneId,
-                                Telefones = new TelefoneViewModel
-                                {
-                                    Id = at.Telefones!.Id,
-                                    DDD = at.Telefones.DDD,
-                                    Numero = at.Telefones.Numero,
-                                }
-                            }).ToList();
-
-                        _context.AddRange(alunoTelefone);
                         await _context.SaveChangesAsync();
-                    }
 
-                    TempData["MensagemSucesso"] = "Aluno cadastrado com sucesso!";
-                    return RedirectToAction(nameof(Index));
-                }
+                        TempData["MensagemSucesso"] = "Aluno cadastrado com sucesso!";
+                        return RedirectToAction(nameof(Index));
+                    }
                 catch (Exception ex)
                 {
+
                     TempData["MensagemErro"] = $"Erro ao cadastrar aluno: {ex.Message}";
                 }
             }
 
+            // Recarregar dependências e retornar a view com os dados inseridos
             CarregarDependencias(viewModel);
             return View(viewModel);
         }
+
 
         public async Task<IActionResult> Edit(int? id)
         {
