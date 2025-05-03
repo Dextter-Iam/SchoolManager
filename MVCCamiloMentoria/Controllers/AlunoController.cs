@@ -157,7 +157,7 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
-                    // Verificar se o Endereco não é nulo antes de usar
+
                     var endereco = viewModel.Endereco != null ? new Endereco
                     {
                         NomeRua = viewModel.Endereco.NomeRua,
@@ -167,7 +167,6 @@ namespace MVCCamiloMentoria.Controllers
                         EstadoId = viewModel.Endereco.EstadoId,
                     } : null;
 
-                    // Criar o objeto aluno
                     var aluno = new Aluno
                     {
                         Nome = viewModel.Nome,
@@ -207,7 +206,6 @@ namespace MVCCamiloMentoria.Controllers
                 }
             }
 
-            // Recarregar dependências e retornar a view com os dados inseridos
             CarregarDependencias(viewModel);
             return View(viewModel);
         }
