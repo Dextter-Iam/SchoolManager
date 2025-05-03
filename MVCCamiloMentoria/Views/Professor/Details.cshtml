@@ -46,7 +46,7 @@
 
                                     <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Telefones)</dt>
                                     <dd class="col-sm-8">
-                                        @foreach (var tel in Model.Telefones ?? new List<Telefone>())
+                                        @foreach (var tel in Model.Telefones!)
                                         {
                                             <p>(@tel.DDD) @tel.Numero</p>
                                         }

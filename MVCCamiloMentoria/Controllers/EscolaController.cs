@@ -23,14 +23,29 @@ namespace MVCCamiloMentoria.Controllers
         // GET: EscolaController/Index
         public async Task<IActionResult> Index()
         {
+            var estados = await AcessarEstados();
             TempData["MensagemInfo"] = "Lista de escolas carregada com sucesso.";
             var escolas = await _context.Escola
-                        .Select(e => new EscolaViewModel
+                .Select(e => new EscolaViewModel
+                {
+                    Id = e.Id,
+                    Nome = e.Nome,
+                    Endereco = new EnderecoViewModel
+                    {
+                        NomeRua = e.Endereco!.NomeRua,
+                        NumeroRua = e.Endereco!.NumeroRua,
+                        CEP = e.Endereco.CEP,
+                        Complemento = e.Endereco!.Complemento,
+                        EstadoId = e.Endereco.EstadoId,
+                        Estados = estados.Select(est => new EstadoViewModel
                         {
-                            Id = e.Id,
-                            Nome = e.Nome,
-
-                        }).ToListAsync();
+                            id = est.id,
+                            Nome = est.Nome,
+                            Sigla = est.Sigla
+                        }).ToList(),
+                    },
+                })
+                .ToListAsync();
 
             return View(escolas);
         }
@@ -220,15 +235,11 @@ namespace MVCCamiloMentoria.Controllers
                 }
             }
 
-
             var estado = await AcessarEstados();
             ViewBag.Estados = estado;
 
             return View(viewModel);
         }
-
-
-
 
         // GET: EscolaController/Edit
         public async Task<IActionResult> Edit(int? id)
@@ -382,8 +393,6 @@ namespace MVCCamiloMentoria.Controllers
             return View(viewModel);
         }
 
-
-
         // POST: EscolaController/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -431,8 +440,6 @@ namespace MVCCamiloMentoria.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
-
-
         private void CarregarViewBags(EscolaViewModel viewModel = null)
         {
             var estados = _context.Estado
@@ -446,7 +453,6 @@ namespace MVCCamiloMentoria.Controllers
 
             ViewBag.Estados = estados;
         }
-
         private async Task<List<EstadoViewModel>> AcessarEstados()
         {
             var estados = await _context.Estado

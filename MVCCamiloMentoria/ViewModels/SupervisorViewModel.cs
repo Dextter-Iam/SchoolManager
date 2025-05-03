@@ -24,10 +24,6 @@ namespace MVCCamiloMentoria.ViewModels
         [DisplayName("Endereço")]
         public EnderecoViewModel? Endereco { get; set; }
 
-        [Required(ErrorMessage = "O estado é obrigatório.")]
-        [DisplayName("Estado")]
-        public EstadoViewModel? Estado { get; set; }
-
         [Required(ErrorMessage = "Selecione pelo menos uma escola.")]
         [DisplayName("Escolas")]
         public List<SupervisorEscolaViewModel>? Escolas { get; set; }

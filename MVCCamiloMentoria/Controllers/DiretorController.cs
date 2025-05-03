@@ -21,9 +21,10 @@ namespace MVCCamiloMentoria.Controllers
             var diretores = await _context.Diretor
                 .Include(d => d.Endereco)
                 .Include(d => d.Telefones)
-                .ToListAsync(); // busca normal
+                .Include(d=> d.Escola)
+                .ToListAsync(); 
 
-            var estados = await AcessarEstados(); // chamada async separada
+            var estados = await AcessarEstados(); 
 
             var viewModelList = diretores.Select(d => new DiretorViewModel
             {
@@ -54,7 +55,7 @@ namespace MVCCamiloMentoria.Controllers
 
 
             CarregarViewBags();
-            return View(diretores);
+            return View(viewModelList);
         }
 
         // GET: Diretor/Details/5

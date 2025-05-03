@@ -14,14 +14,14 @@ namespace MVCCamiloMentoria.ViewModels
 
         public byte[]? Foto { get; set; }
         public IFormFile? FotoUpload { get; set; }
-        public int TurmaId { get; set; }
-        public List<Telefone>? Telefones { get; set; }
+        public List<TelefoneViewModel>? Telefones { get; set; }
 
         [DisplayName("Endereço")]
         public EnderecoViewModel? Endereco { get; set; }
 
         [DisplayName("Escola")]
         [Required(ErrorMessage = "A escola é obrigatória.")]
+        public int EscolaId { get; set; }
         public EscolaViewModel? Escola { get; set; }
         public int Matricula {  get; set; }
         public List<AulaViewModel>? Aulas { get; set; }

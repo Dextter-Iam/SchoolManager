@@ -22,7 +22,14 @@ namespace MVCCamiloMentoria.Controllers
         // GET: Disciplinas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Disciplina.Select(d => new DisciplinaViewModel { Nome = d.Nome, Id = d.Id }).ToListAsync());
+            return View(await _context.Disciplina
+                                      .Select(d => new DisciplinaViewModel 
+                                      { 
+                                        Nome = d.Nome, 
+                                        Id = d.Id 
+
+                                      }).ToListAsync());
+
         }
 
         // GET: Disciplinas/Details/5
@@ -39,7 +46,12 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            var viewModel = new DisciplinaViewModel { Id = disciplina.Id, Nome = disciplina.Nome };
+            var viewModel = new DisciplinaViewModel
+                                 { Id = disciplina.Id, 
+                                   Nome = disciplina.Nome,
+                                   EscolaId = disciplina.EscolaId,
+                                 };
+
             return View(viewModel);
         }
 
@@ -149,13 +161,17 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            var disciplina = await _context.Disciplina.FirstOrDefaultAsync(m => m.Id == id);
+            var disciplina = await _context.Disciplina
+                                           .FirstOrDefaultAsync(m => m.Id == id);
             if (disciplina == null)
             {
                 return NotFound();
             }
 
-            var viewModel = new DisciplinaViewModel { Id = disciplina.Id, Nome = disciplina.Nome };
+            var viewModel = new DisciplinaViewModel
+                               { Id = disciplina.Id, 
+                                 Nome = disciplina.Nome,
+                               };
             return View(viewModel);
         }
 

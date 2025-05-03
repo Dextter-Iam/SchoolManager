@@ -18,26 +18,43 @@ namespace MVCCamiloMentoria.Controllers
         // GET: Professor
         public async Task<IActionResult> Index()
         {
+            var estados = await AcessarEstados();
+
             var professores = await _context.Professor
                 .Where(p => !p.Excluido)
                 .Include(p => p.Escola)
                 .Include(p => p.Endereco)
-                .AsNoTracking()
-                .Select(p => new ProfessorViewModel
-                {
-                    Id = p.Id,
-                    Nome = p.Nome,
-                    Matricula = p.Matricula,
-                    Escola = p.Escola,
-                    Endereco = p.Endereco
-                }).ToListAsync();
+                .ToListAsync();
 
-            return View(professores);
+            var viewModelList = professores.Select(p => new ProfessorViewModel
+            {
+                Id = p.Id,
+                Nome = p.Nome,
+                Matricula = p.Matricula,
+                Escola = new EscolaViewModel
+                {
+                    Nome = p.Escola!.Nome,
+                    Id = p.Escola.Id,
+                },
+                Endereco = new EnderecoViewModel
+                {
+                    NomeRua = p.Endereco!.NomeRua,
+                    NumeroRua = p.Endereco!.NumeroRua,
+                    Complemento = p.Endereco.Complemento,
+                    EstadoId = p.Endereco.EstadoId,
+                    Estados = estados
+
+                }
+
+            }).ToList();
+
+            return View(viewModelList);
         }
 
         // GET: Professor/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var estados = await AcessarEstados();
             if (id == null)
             {
                 TempData["MensagemErro"] = "Professor não encontrado.";
@@ -69,12 +86,72 @@ namespace MVCCamiloMentoria.Controllers
                 Nome = professor.Nome,
                 Foto = professor.Foto,
                 Matricula = professor.Matricula,
-                Escola = professor.Escola,
-                Endereco = professor.Endereco,
-                Aulas = professor.Aulas,
-                Telefones = professor.Telefones,
-                Turmas = professor.Turmas,
-                Disciplinas = professor.Disciplinas
+                Escola = new EscolaViewModel
+                {
+                    Id = professor.EscolaId,
+                    Nome = professor.Escola!.Nome,
+                },
+
+                Endereco = new EnderecoViewModel
+                {
+                    NomeRua = professor.Endereco!.NomeRua,
+                    NumeroRua = professor.Endereco.NumeroRua,
+                    Complemento = professor.Endereco.Complemento,
+                    CEP = professor.Endereco!.CEP,
+                    EstadoId = professor.Endereco.EstadoId,
+                    Estados = estados,
+                },
+
+                Aulas = professor.Aulas!
+                                 .Select(ap => new AulaViewModel
+                                 {
+                                     Id = ap.Id,
+                                     Nome = ap.Nome,
+                                     HorarioFim = ap.HorarioFim,
+                                     HorarioInicio = ap.HorarioInicio,
+                                     Turma = new TurmaViewModel
+                                     {
+                                         TurmaId = ap.TurmaId,
+                                         NomeTurma = ap.Turma!.NomeTurma,
+                                     },
+                                     Escola = new EscolaViewModel
+                                     {
+                                         Id = ap.EscolaId,
+                                         Nome = ap.Escola!.Nome,
+                                     }
+                                 }).ToList(),
+
+                Telefones = professor.Telefones!
+                                     .Select(pft => new TelefoneViewModel
+                                     {
+                                         Numero = pft.Numero,
+                                         DDD = pft.DDD,
+
+                                     }).ToList(),
+
+                Turmas = professor.Turmas!
+                                  .Select(pt => new ProfessorTurmaViewModel
+                                  {
+                                      TurmaId = pt.TurmaId,
+                                      Turma = new TurmaViewModel
+                                      {
+                                          NomeTurma = pt.Turma!.NomeTurma,
+                                          TurmaId = pt.TurmaId,
+                                      }
+                                  }).ToList(),
+
+                Disciplinas = professor.Disciplinas!
+                                       .Select(pd => new ProfessorDisciplinaViewModel
+                                       {
+                                           DisciplinaId = pd.DisciplinaId,
+                                           ProfessorId = pd.ProfessorId,
+                                           Disciplina = new DisciplinaViewModel
+                                           {
+                                              Id = pd.DisciplinaId,
+                                              Nome = pd.Disciplina!.Nome 
+                                           }
+
+                                       }).ToList(),
             };
 
             return View(viewModel);
@@ -97,42 +174,27 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
-                    int? cep = null;
-                    if (!string.IsNullOrWhiteSpace(viewModel.CEP))
+                    var enderecoviewModel = new Endereco
                     {
-                        if (int.TryParse(viewModel.CEP, out int parsedCep))
-                        {
-                            cep = parsedCep;
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("CEP", "CEP inválido. Informe apenas números.");
-                            CarregarDependencias(viewModel);
-                            return View(viewModel);
-                        }
-                    }
-
-                    var endereco = new EnderecoViewModel
-                    {
-                        NomeRua = viewModel.NomeRua,
-                        NumeroRua = viewModel.NumeroRua,
-                        Complemento = viewModel.Complemento,
-                        CEP = cep,
-                        EstadoId = (int)viewModel.EstadoId!
+                        NomeRua = viewModel.Endereco!.NomeRua,
+                        NumeroRua = viewModel.Endereco!.NumeroRua,
+                        Complemento = viewModel.Endereco!.Complemento,
+                        CEP = viewModel.Endereco!.CEP,
+                        EstadoId = (int)viewModel.Endereco!.EstadoId!,
                     };
 
-                    _context.Endereco.Add(endereco);
+                    _context.Endereco.AddRange(enderecoviewModel);
                     await _context.SaveChangesAsync();
 
-                    var professor = new Professor
+                    var professorViewModel = new Professor
                     {
                         Nome = viewModel.Nome,
                         Matricula = viewModel.Matricula,
-                        EscolaId = viewModel.EscolaId,
-                        EnderecoId = endereco.Id
+                        EscolaId = viewModel.Escola!.Id,
+                        EnderecoId = enderecoviewModel.Id,
                     };
 
-                    _context.Professor.Add(professor);
+                    _context.Professor.Add(professorViewModel);
                     await _context.SaveChangesAsync();
 
 
@@ -142,7 +204,7 @@ namespace MVCCamiloMentoria.Controllers
                         {
                             _context.ProfessorTurma.Add(new ProfessorTurma
                             {
-                                ProfessorId = professor.Id,
+                                ProfessorId = professorViewModel.Id,
                                 TurmaId = turmaId
                             });
                         }
@@ -154,7 +216,7 @@ namespace MVCCamiloMentoria.Controllers
                         {
                             _context.ProfessorDisciplina!.Add(new ProfessorDisciplina
                             {
-                                ProfessorId = professor.Id,
+                                ProfessorId = professorViewModel.Id,
                                 DisciplinaId = disciplinaId
                             });
                         }
@@ -162,15 +224,15 @@ namespace MVCCamiloMentoria.Controllers
 
                     await _context.SaveChangesAsync();
 
-                    var telefone = new Telefone
+                    var telefones = viewModel.Telefones!.Select(t => new Telefone
                     {
-                        DDD = viewModel.DDD,
-                        Numero = viewModel.Numero,
-                        EscolaId = viewModel.EscolaId,
-                        ProfessorId = professor.Id
-                    };
+                        DDD = t.DDD,
+                        Numero = t.Numero,
+                        EscolaId = viewModel.Escola.Id,
+                        ProfessorId = viewModel.Id
+                    }).ToList();
 
-                    _context.Telefone.Add(telefone);
+                    _context.Telefone.AddRange(telefones);
                     await _context.SaveChangesAsync();
 
                     TempData["MensagemSucesso"] = "Professor cadastrado com sucesso!";
@@ -219,18 +281,27 @@ namespace MVCCamiloMentoria.Controllers
                 Nome = professor.Nome,
                 Foto = professor.Foto,
                 Matricula = professor.Matricula,
-                EscolaId = professor.EscolaId,
-                EnderecoId = professor.EnderecoId,
-                Endereco = professor.Endereco,
-                NomeRua = professor.Endereco?.NomeRua,
-                NumeroRua = professor.Endereco?.NumeroRua ?? 0,
-                Complemento = professor.Endereco?.Complemento,
-                CEP = professor.Endereco?.CEP?.ToString("00000000"),
-                EstadoId = professor.Endereco?.EstadoId,
-                DDD = telefone?.DDD ?? 0,
-                Numero = telefone?.Numero ?? 0,
-                TurmaIds = professor.Turmas?.Select(t => t.TurmaId).ToList(),
-                DisciplinaIds = professor.Disciplinas?.Select(d => d.DisciplinaId).ToList()
+                EscolaId = professor.Escola!.Id,
+                Endereco = new EnderecoViewModel
+                {
+                    NomeRua = professor.Endereco?.NomeRua,
+                    NumeroRua = professor.Endereco?.NumeroRua ?? 0,
+                    Complemento = professor.Endereco?.Complemento,
+                    CEP = professor.Endereco?.CEP,
+                    EstadoId = professor.Endereco!.EstadoId
+                },
+                Telefones = professor.Telefones!
+                                     .Select(pft => new TelefoneViewModel
+                                     {
+                                         DDD = pft?.DDD ?? 0,
+                                         Numero = pft?.Numero ?? 0,
+                                         Id = pft?.Id ?? 0,
+                                     }).ToList(),
+
+                TurmaIds = professor.Turmas?
+                                    .Select(t => t.TurmaId).ToList(),
+                DisciplinaIds = professor.Disciplinas?
+                                          .Select(d => d.DisciplinaId).ToList()
             };
 
             CarregarDependencias(viewModel);
@@ -243,7 +314,7 @@ namespace MVCCamiloMentoria.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ProfessorViewModel viewModel, IFormFile fotoUpload)
-       {
+        {
             if (id != viewModel.Id)
                 return NotFound();
 
@@ -274,22 +345,11 @@ namespace MVCCamiloMentoria.Controllers
 
                     if (professor.Endereco != null)
                     {
-                        professor.Endereco.NomeRua = viewModel.NomeRua;
-                        professor.Endereco.NumeroRua = viewModel.NumeroRua;
-                        professor.Endereco.Complemento = viewModel.Complemento;
-                        professor.Endereco.CEP = string.IsNullOrWhiteSpace(viewModel.CEP) ? null : int.Parse(viewModel.CEP);
-                        professor.Endereco.EstadoId = (int)viewModel.EstadoId!;
-                    }
-
-
-                    if (professor.Telefones != null && professor.Telefones.Any())
-                    {
-                        foreach (var telefone in professor.Telefones)
-                        {
-                            telefone.DDD = viewModel.DDD;
-                            telefone.Numero = viewModel.Numero;
-                            telefone.EscolaId = viewModel.EscolaId;
-                        }
+                        professor.Endereco.NomeRua = viewModel.Endereco!.NomeRua;
+                        professor.Endereco.NumeroRua = viewModel.Endereco!.NumeroRua;
+                        professor.Endereco.Complemento = viewModel.Endereco!.Complemento;
+                        professor.Endereco.CEP = viewModel.Endereco!.CEP;
+                        professor.Endereco.EstadoId = (int)viewModel.Endereco!.EstadoId!;
                     }
 
                     if (professor.Telefones != null && professor.Telefones.Any())
@@ -298,19 +358,21 @@ namespace MVCCamiloMentoria.Controllers
                     }
 
 
-                    if (viewModel.DDD > 0 && viewModel.Numero > 0)
+                    if (viewModel.Telefones != null && viewModel.Telefones.Any(t => t.Numero > 0))
                     {
-                        var novoTelefone = new Telefone
+                        foreach (var telefoneViewModel in viewModel.Telefones.Where(t => t.Numero > 0))
                         {
-                            DDD = viewModel.DDD,
-                            Numero = viewModel.Numero,
-                            EscolaId = viewModel.EscolaId,
-                            ProfessorId = professor.Id
-                        };
+                            var novoTel = new Telefone
+                            {
+                                DDD = telefoneViewModel.DDD,
+                                Numero = telefoneViewModel.Numero,
+                                EscolaId = viewModel.EscolaId,
+                                ProfessorId = professor.Id
+                            };
 
-                        _context.Telefone.Add(novoTelefone);
+                            _context.Telefone.Add(novoTel);
+                        }
                     }
-
 
                     var turmasAtuais = professor.Turmas?.ToList() ?? new List<ProfessorTurma>();
                     var turmasSelecionadas = viewModel.TurmaIds ?? new List<int>();
@@ -431,12 +493,29 @@ namespace MVCCamiloMentoria.Controllers
             {
                 Id = professor.Id,
                 Nome = professor.Nome,
+                Foto = professor.Foto,
                 Matricula = professor.Matricula,
-                Escola = professor.Escola,
-                Endereco = professor.Endereco,
-                Telefones = professor.Telefones,
-                Turmas = professor.Turmas,
-                Disciplinas = professor.Disciplinas
+                EscolaId = professor.Escola!.Id,
+                Endereco = new EnderecoViewModel
+                {
+                    NomeRua = professor.Endereco?.NomeRua,
+                    NumeroRua = professor.Endereco?.NumeroRua ?? 0,
+                    Complemento = professor.Endereco?.Complemento,
+                    CEP = professor.Endereco?.CEP,
+                    EstadoId = professor.Endereco!.EstadoId
+                },
+                Telefones = professor.Telefones!
+                                     .Select(pft => new TelefoneViewModel
+                                     {
+                                         DDD = pft?.DDD ?? 0,
+                                         Numero = pft?.Numero ?? 0,
+                                         Id = pft?.Id ?? 0,
+                                     }).ToList(),
+
+                TurmaIds = professor.Turmas?
+                                    .Select(t => t.TurmaId).ToList(),
+                DisciplinaIds = professor.Disciplinas?
+                                          .Select(d => d.DisciplinaId).ToList()
             };
 
             return View(viewModel);
@@ -531,6 +610,19 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             return File(professor.Foto, "image/jpeg");
+        }
+
+        private async Task<List<EstadoViewModel>> AcessarEstados()
+        {
+            var estados = await _context.Estado
+             .Select(ac => new EstadoViewModel
+             {
+                 id = ac.id,
+                 Nome = ac.Nome,
+                 Sigla = ac.Sigla,
+             }).ToListAsync();
+
+            return estados;
         }
     }
 }

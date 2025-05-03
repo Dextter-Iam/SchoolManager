@@ -15,10 +15,8 @@ namespace MVCCamiloMentoria.ViewModels
         [Key]
         public int EscolaId { get; set; }
 
-        [ForeignKey("SupervisorId")]
         public SupervisorViewModel? Supervisor { get; set; }
 
-        [ForeignKey("EscolaId")]
         public EscolaViewModel? Escola { get; set; }
     }
 }

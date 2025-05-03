@@ -41,71 +41,79 @@
                         <div class="form-group mb-3">
                             <label>Selecionar Escolas</label>
                             <div class="form-check">
-                                @foreach (var escola in (List<SelectListItem>)ViewBag.Escolas)
+                                @for (int i = 0; i < ((List<SelectListItem>)ViewBag.Escolas).Count; i++)
                                 {
+                                    var escola = ((List<SelectListItem>)ViewBag.Escolas)[i];
+                                    int escolaId = int.Parse(escola.Value);
+                                    bool isChecked = Model.Escolas != null && Model.Escolas.Any(e => e.EscolaId == escolaId);
+
                                     <div class="form-check mb-2">
                                         <input class="form-check-input"
                                                type="checkbox"
                                                name="EscolaIds"
-                                               value="@escola.Value"
-                                        @(Model.EscolaIds != null && Model.EscolaIds.Contains(int.Parse(escola.Value)) ? "checked" : "") />
+                                               id="escola_@i"
+                                               value="@escolaId"
+                                        @(isChecked ? "checked" : "") />
 
-                                        <label class="form-check-label" for="EscolaIds">
+                                        <label class="form-check-label" for="escola_@i">
                                             @escola.Text
                                         </label>
                                     </div>
                                 }
                             </div>
-                            <span asp-validation-for="EscolaIds" class="text-danger"></span>
+                            <span asp-validation-for="Escolas" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
-
 
                 <!-- Telefone -->
                 <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">Telefone</div>
+                    <div class="card-header bg-primary text-white">Telefones</div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label asp-for="DDD"></label>
-                                <input asp-for="DDD" class="form-control" />
+                        @for (int i = 0; i < Model.Telefones!.Count; i++)
+                        {
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <label asp-for="Telefones[i].DDD"></label>
+                                    <input asp-for="Telefones[i].Numero" class="form-control" />
+                                    <span asp-validation-for="Telefones[i].Numero" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="Telefones[i].Numero"></label>
+                                    <input asp-for="Telefones[i].Numero" class="form-control" />
+                                    <span asp-validation-for="Telefones[i].Numero" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="col-md-8">
-                                <label asp-for="Numero"></label>
-                                <input asp-for="Numero" class="form-control" />
-                            </div>
-                        </div>
+                        }
                     </div>
                 </div>
-
+            
                 <!-- Endereço -->
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">Endereço</div>
                     <div class="card-body">
                         <div class="form-group mb-3">
-                            <label asp-for="NomeRua"></label>
-                            <input asp-for="NomeRua" class="form-control" />
+                            <label asp-for="Endereco.NomeRua"></label>
+                            <input asp-for="Endereco.NomeRua" class="form-control" />
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="NumeroRua"></label>
-                            <input asp-for="NumeroRua" class="form-control" />
+                            <label asp-for="Endereco.NumeroRua"></label>
+                            <input asp-for="Endereco.NumeroRua" class="form-control" />
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="Complemento"></label>
-                            <input asp-for="Complemento" class="form-control" />
+                            <label asp-for="Endereco.Complemento"></label>
+                            <input asp-for="Endereco.Complemento" class="form-control" />
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="CEP"></label>
-                            <input asp-for="CEP" class="form-control" />
+                            <label asp-for="Endereco.CEP"></label>
+                            <input asp-for="Endereco.CEP" class="form-control" />
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="EstadoId"></label>
-                            <select asp-for="EstadoId" class="form-select" asp-items="ViewBag.Estados"></select>
+                            <label asp-for="Endereco.EstadoId"></label>
+                            <select asp-for="Endereco.EstadoId" class="form-select" asp-items="ViewBag.Estados"></select>
                         </div>
                     </div>
                 </div>
-
 
                 <div class="text-end">
                     <input type="submit" value="Cadastrar" class="btn btn-primary px-4" />

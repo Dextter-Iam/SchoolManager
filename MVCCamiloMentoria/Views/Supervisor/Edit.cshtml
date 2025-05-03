@@ -41,24 +41,24 @@
                     <div class="card-header bg-primary text-white">Endereço</div>
                     <div class="card-body">
                         <div class="form-group mb-3">
-                            <label asp-for="NomeRua"></label>
-                            <input asp-for="NomeRua" class="form-control" />
+                            <label asp-for="Endereco.NomeRua"></label>
+                            <input asp-for="Endereco.NomeRua" class="form-control" />
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="NumeroRua"></label>
-                            <input asp-for="NumeroRua" class="form-control" />
+                            <label asp-for="Endereco.NumeroRua"></label>
+                            <input asp-for="Endereco.NumeroRua" class="form-control" />
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="Complemento"></label>
-                            <input asp-for="Complemento" class="form-control" />
+                            <label asp-for="Endereco.Complemento"></label>
+                            <input asp-for="Endereco.Complemento" class="form-control" />
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="CEP"></label>
-                            <input asp-for="CEP" class="form-control" />
+                            <label asp-for="Endereco.CEP"></label>
+                            <input asp-for="Endereco.CEP" class="form-control" />
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="EstadoId"></label>
-                            <select asp-for="EstadoId" class="form-select" asp-items="ViewBag.Estados"></select>
+                            <label asp-for="Endereco.EstadoId"></label>
+                            <select asp-for="Endereco.EstadoId" class="form-select" asp-items="ViewBag.Estados"></select>
                         </div>
                     </div>
                 </div>
@@ -69,12 +69,12 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-4">
-                                <label asp-for="DDD"></label>
-                                <input asp-for="DDD" class="form-control" />
+                                <label asp-for="Telefones[0].DDD"></label>
+                                <input asp-for="Telefones[0].DDD" class="form-control" />
                             </div>
                             <div class="col-md-8">
-                                <label asp-for="Numero"></label>
-                                <input asp-for="Numero" class="form-control" />
+                                <label asp-for="Telefones[0].Numero"></label>
+                                <input asp-for="Telefones[0].Numero" class="form-control" />
                             </div>
                         </div>
                     </div>
@@ -104,7 +104,6 @@
                         </div>
                     </div>
                 </div>
-
 
                 <!-- Botões -->
                 <div class="text-end">

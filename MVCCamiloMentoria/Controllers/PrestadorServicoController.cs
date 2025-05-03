@@ -60,7 +60,7 @@ namespace MVCCamiloMentoria.Controllers
                     CNPJ = prestadorViewModel.CNPJ,
                     CPF = prestadorViewModel.CPF,
                     EmpresaNome = prestadorViewModel.EmpresaNome,
-                    EscolaId = prestadorViewModel.EscolaId,
+                    EscolaId = prestadorViewModel.Escola!.Id,
                     ServicoFinalidade = prestadorViewModel.ServicoFinalidade,
                     Escola = prestadorViewModel.Escola,
                 };
@@ -70,7 +70,7 @@ namespace MVCCamiloMentoria.Controllers
                 TempData["MensagemSucesso"] = "Prestador cadastrado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.EscolaId = new SelectList(_context.Escola, "Id", "Nome", prestadorViewModel.EscolaId);
+            ViewBag.EscolaId = new SelectList(_context.Escola, "Id", "Nome", prestadorViewModel.Escola!.Id);
             return View(prestadorViewModel);
         }
 
@@ -105,7 +105,7 @@ namespace MVCCamiloMentoria.Controllers
                         CNPJ = prestadorViewModel.CNPJ,
                         CPF = prestadorViewModel.CPF,
                         EmpresaNome = prestadorViewModel.EmpresaNome,
-                        EscolaId = prestadorViewModel.EscolaId,
+                        EscolaId = prestadorViewModel.Escola!.Id,
                         ServicoFinalidade = prestadorViewModel.ServicoFinalidade,
                         Escola = prestadorViewModel.Escola,
                     };
@@ -122,7 +122,7 @@ namespace MVCCamiloMentoria.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.EscolaId = new SelectList(_context.Escola, "Id", "Nome", prestadorViewModel.EscolaId);
+            ViewBag.EscolaId = new SelectList(_context.Escola, "Id", "Nome", prestadorViewModel.Escola!.Id);
             return View(prestadorViewModel);
         }
 

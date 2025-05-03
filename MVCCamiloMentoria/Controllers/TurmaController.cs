@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCCamiloMentoria.Models;
@@ -20,11 +21,11 @@ namespace MVCCamiloMentoria.Controllers
         public async Task<IActionResult> Index()
         {
             var turmas = await _context.Turma
-                .Include(t => t.Escola)                 
-                .Include(t => t.Alunos)                 
-                .Include(t => t.Professores)            
-                .Include(t => t.TurmaDisciplinas)        
-                    .ThenInclude(td => td.Disciplina)     
+                .Include(t => t.Escola)
+                .Include(t => t.Alunos)
+                .Include(t => t.Professores)
+                .Include(t => t.TurmaDisciplinas)
+                    .ThenInclude(td => td.Disciplina)
                 .ToListAsync();
 
             var turmaViewModels = turmas.Select(t => new TurmaViewModel
@@ -33,9 +34,19 @@ namespace MVCCamiloMentoria.Controllers
                 NomeTurma = t.NomeTurma,
                 AnoLetivo = t.AnoLetivo,
                 Turno = t.Turno,
-                Alunos = t.Alunos,
-                EscolaId = t.EscolaId,
-                Escola = t.Escola,
+                Alunos = t.Alunos!
+                          .Select(a => new AlunoViewModel
+                          {
+                              Nome = a.Nome,
+                              Id = a.Id,
+                          }).ToList(),
+
+                Escola = new EscolaViewModel
+                {
+                    Nome = t.Escola!.Nome,
+                    Id = t.Escola!.Id,
+                }
+
             }).ToList();
 
             return View(turmaViewModels);
@@ -51,6 +62,7 @@ namespace MVCCamiloMentoria.Controllers
 
             var turma = await _context.Turma
                 .Include(t => t.Escola)
+                .Include(t => t.Aulas)
                 .Include(t => t.Alunos)
                 .Include(t => t.TurmaDisciplinas)
                 .ThenInclude(td => td.Disciplina)
@@ -61,21 +73,35 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            var turmaViewModel = new TurmaViewModel
+            var turmaViewModels = new TurmaViewModel
             {
                 TurmaId = turma.TurmaId,
                 NomeTurma = turma.NomeTurma,
                 AnoLetivo = turma.AnoLetivo,
                 Turno = turma.Turno,
-                EscolaId = turma.EscolaId,
-                Escola = turma.Escola,
-                Aulas = turma.Aulas,
-                Alunos = turma.Alunos,
-                Professores = turma.Professores,
-                TurmaDisciplinas = turma.TurmaDisciplinas
+
+                Aulas = turma.Aulas!
+                             .Select(al => new AulaViewModel
+                             {
+                                 Id = al.Id,
+                                 Nome = al.Nome,
+                             }).ToList(),
+
+                Alunos = turma.Alunos!
+                          .Select(a => new AlunoViewModel
+                          {
+                              Nome = a.Nome,
+                              Id = a.Id,
+                          }).ToList(),
+
+                Escola = new EscolaViewModel
+                {
+                    Nome = turma.Escola!.Nome,
+                    Id = turma.Escola!.Id,
+                }
             };
 
-            return View(turmaViewModel);
+            return View(turmaViewModels);
         }
 
         // GET: Turmas/Create
@@ -97,7 +123,7 @@ namespace MVCCamiloMentoria.Controllers
                     NomeTurma = turma.NomeTurma,
                     AnoLetivo = turma.AnoLetivo,
                     Turno = turma.Turno,
-                    EscolaId = turma.EscolaId
+                    EscolaId = turma.Escola!.Id,
                 };
 
                 _context.Add(novaTurma);
@@ -142,7 +168,11 @@ namespace MVCCamiloMentoria.Controllers
                 NomeTurma = turma.NomeTurma,
                 AnoLetivo = turma.AnoLetivo,
                 Turno = turma.Turno,
-                EscolaId = turma.EscolaId
+                Escola = new EscolaViewModel
+                {
+                    Nome = turma.Escola!.Nome,
+                    Id = turma.Escola.Id,
+                },
             };
 
             await CarregarViewBagsAsync(turmaViewModel);
@@ -172,7 +202,7 @@ namespace MVCCamiloMentoria.Controllers
                     turmaExistente.NomeTurma = turma.NomeTurma;
                     turmaExistente.AnoLetivo = turma.AnoLetivo;
                     turmaExistente.Turno = turma.Turno;
-                    turmaExistente.EscolaId = turma.EscolaId;
+                    turmaExistente.EscolaId = turma.Escola!.Id;
 
                     _context.Update(turmaExistente);
                     await _context.SaveChangesAsync();
@@ -216,9 +246,29 @@ namespace MVCCamiloMentoria.Controllers
                 NomeTurma = turma.NomeTurma,
                 AnoLetivo = turma.AnoLetivo,
                 Turno = turma.Turno,
-                Escola = turma.Escola,
-                Alunos = turma.Alunos!.ToList(),
-                TurmaDisciplinas = turma.TurmaDisciplinas.ToList()
+                Escola = new EscolaViewModel
+                {
+                    Nome = turma.Escola!.Nome,
+                    Id = turma.EscolaId
+                },
+
+                Alunos = turma.Alunos!
+                          .Select(a => new AlunoViewModel
+                          {
+                              Nome = a.Nome,
+                              Id = a.Id,
+                          }).ToList(),
+                TurmaDisciplinas = turma.TurmaDisciplinas!
+                                        .Select(td => new TurmaDisciplinaViewModel
+                                        {
+                                            TurmaId = td.TurmaId,
+                                            DisciplinaId = td.DisciplinaId,
+                                            Disciplina = new DisciplinaViewModel
+                                            {
+                                                Id = td.DisciplinaId,
+                                                Nome = td.Disciplina!.Nome
+                                            },
+                                        }).ToList(),
             };
 
             return View(turmaViewModel);
@@ -253,7 +303,7 @@ namespace MVCCamiloMentoria.Controllers
             var escolas = await _context.Escola.ToListAsync();
             var disciplinas = await _context.Disciplina.ToListAsync();
 
-            ViewBag.Escolas = new SelectList(escolas, "Id", "Nome", viewModel?.EscolaId ?? escolas.FirstOrDefault()?.Id);
+            ViewBag.Escolas = new SelectList(escolas, "Id", "Nome", viewModel?.Escola!.Id ?? escolas.FirstOrDefault()?.Id);
             ViewBag.Disciplinas = new SelectList(disciplinas, "Id", "Nome");
         }
 

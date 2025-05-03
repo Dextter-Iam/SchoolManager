@@ -34,11 +34,11 @@
                         </div>
 
                         <div class="form-group mb-4">
-                            <label asp-for="EscolaId" class="form-label">Escola</label>
-                            <select asp-for="EscolaId" class="form-select" asp-items="ViewBag.Escolas">
+                            <label asp-for="Escola.Id" class="form-label">Escola</label>
+                            <select asp-for="Escola.Id" class="form-select" asp-items="ViewBag.Escolas">
                                 <option value="">Selecione uma escola</option>
                             </select>
-                            <span asp-validation-for="EscolaId" class="text-danger"></span>
+                            <span asp-validation-for="Escola.Id" class="text-danger"></span>
                         </div>
 
                         <div class="text-end">
