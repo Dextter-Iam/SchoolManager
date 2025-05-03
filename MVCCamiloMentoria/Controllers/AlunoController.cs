@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCCamiloMentoria.Models;
 using MVCCamiloMentoria.ViewModels;
+using System.Collections.Immutable;
 
 namespace MVCCamiloMentoria.Controllers
 {
@@ -88,8 +89,8 @@ namespace MVCCamiloMentoria.Controllers
                     NumeroRua = aluno.Endereco.NumeroRua,
                     Complemento = aluno.Endereco.Complemento,
                     CEP = aluno.Endereco.CEP,
-                    EstadoId = aluno.Endereco.EstadoId,
-                    Estado = aluno.Endereco.Estado
+
+
                 } : null,
                 EscolaId = aluno.EscolaId,
                 Escola = aluno.Escola,
@@ -130,7 +131,7 @@ namespace MVCCamiloMentoria.Controllers
                         NumeroRua = viewModel.NumeroRua,
                         Complemento = viewModel.Complemento,
                         CEP = viewModel.CEP,
-                        EstadoId = (int)viewModel.EstadoId!,
+                        Estados = await AcessarEstados(),
                     };
 
                     var telefone = new Telefone
@@ -143,7 +144,7 @@ namespace MVCCamiloMentoria.Controllers
                     _context.Telefone.Add(telefone);
                     await _context.SaveChangesAsync();
 
-                    var aluno = new Aluno
+                    var aluno = new AlunoViewModel
                     {
                         Nome = viewModel.Nome,
                         DataNascimento = viewModel.DataNascimento,
@@ -157,7 +158,7 @@ namespace MVCCamiloMentoria.Controllers
                         Parentesco1 = viewModel.Parentesco1,
                         NomeResponsavel2 = viewModel.NomeResponsavel2,
                         Parentesco2 = viewModel.Parentesco2,
-                        EstadoId = (int)viewModel.EstadoId,
+                        Estados = await AcessarEstados(),
                     };
 
                     _context.Add(aluno);
@@ -206,7 +207,7 @@ namespace MVCCamiloMentoria.Controllers
                 .Where(at => at.Telefone != null)
                 .Select(at => new AlunoTelefone
                 {
-              
+
                     AlunoId = at.AlunoId,
                     TelefoneId = at.TelefoneId,
                     Telefone = new Telefone
@@ -214,12 +215,13 @@ namespace MVCCamiloMentoria.Controllers
                         Id = at.Telefone!.Id,
                         DDD = at.Telefone.DDD,
                         Numero = at.Telefone.Numero,
-                       
+
                     }
                 }).ToList();
 
             var primeiroTelefone = alunoTelefones?.FirstOrDefault()?.Telefone;
 
+            var estado = await AcessarEstados();
             var viewModel = new AlunoViewModel
             {
                 Id = aluno.Id,
@@ -238,8 +240,7 @@ namespace MVCCamiloMentoria.Controllers
                 NumeroRua = aluno.Endereco?.NumeroRua ?? 0,
                 Complemento = aluno.Endereco?.Complemento,
                 CEP = aluno.Endereco?.CEP ?? 0,
-                EstadoId = aluno.Endereco?.EstadoId ?? 0,
-                Estado = aluno.Endereco?.Estado,
+                Estados = estado,
                 Turma = aluno.Turma,
                 Escola = aluno.Escola,
                 NomeResponsavel1 = aluno.NomeResponsavel1,
@@ -250,7 +251,7 @@ namespace MVCCamiloMentoria.Controllers
                 {
                     Id = a.Id,
                     Nome = a.Nome,
-                    
+
                 }).ToList()
             };
 
@@ -271,7 +272,7 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
-                   
+
                     if (viewModel.DDD <= 0 || viewModel.Numero <= 0)
                     {
                         TempData["MensagemErro"] = "DDD e Número do telefone são obrigatórios";
@@ -295,17 +296,15 @@ namespace MVCCamiloMentoria.Controllers
                     aluno.NomeResponsavel2 = viewModel.NomeResponsavel2;
                     aluno.Parentesco2 = viewModel.Parentesco2;
 
-                    if (aluno.Endereco == null)
-                    {
-                        aluno.Endereco = new EnderecoViewModel();
-                    }
-                    aluno.Endereco.NomeRua = viewModel.NomeRua;
+                    var estados = await AcessarEstados();
+
+                    aluno.Endereco!.NomeRua = viewModel.NomeRua;
                     aluno.Endereco.NumeroRua = viewModel.NumeroRua;
                     aluno.Endereco.Complemento = viewModel.Complemento;
                     aluno.Endereco.CEP = viewModel.CEP;
-                    aluno.Endereco.EstadoId = viewModel.EstadoId ?? 0;
+                    estados = estados.ToList();
 
-               
+
                     var alunoTelefone = await _context.AlunoTelefone
                         .Include(at => at.Telefone)
                         .FirstOrDefaultAsync(at => at.AlunoId == aluno.Id);
@@ -382,6 +381,7 @@ namespace MVCCamiloMentoria.Controllers
             if (aluno == null)
                 return NotFound();
 
+            var estado = await AcessarEstados();
             var viewModel = new AlunoViewModel
             {
                 Id = aluno.Id,
@@ -408,8 +408,7 @@ namespace MVCCamiloMentoria.Controllers
                     NumeroRua = aluno.Endereco.NumeroRua,
                     Complemento = aluno.Endereco.Complemento,
                     CEP = aluno.Endereco.CEP,
-                    EstadoId = aluno.Endereco.EstadoId,
-                    Estado = aluno.Endereco.Estado
+                    Estados = estado,
                 } : null,
                 EscolaId = aluno.EscolaId,
                 Escola = aluno.Escola
@@ -492,10 +491,23 @@ namespace MVCCamiloMentoria.Controllers
 
             if (aluno == null || aluno.Foto == null || aluno.Foto.Length == 0)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             return File(aluno.Foto, "image/jpeg");
+        }
+
+        private async Task<List<EstadoViewModel>> AcessarEstados()
+        {
+               var estados = await _context.Estado
+                .Select(ac => new EstadoViewModel
+                {
+                    id = ac.id,
+                    Nome = ac.Nome,
+                    Sigla = ac.Sigla,
+                }).ToListAsync();
+
+            return estados;
         }
 
     }

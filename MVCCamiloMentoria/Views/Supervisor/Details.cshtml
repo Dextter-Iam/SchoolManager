@@ -28,7 +28,7 @@
 
                         <dt class="col-sm-3">Telefone</dt>
                         <dd class="col-sm-9">
-                            @foreach (var tel in Model.Telefones ?? new List<Telefone>())
+                            @foreach (var tel in Model.Telefones ?? new List<AlunoTelefone>())
                             {
                                 <p>(@tel.DDD) @tel.Numero</p>
                             }

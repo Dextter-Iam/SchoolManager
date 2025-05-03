@@ -25,21 +25,18 @@ namespace MVCCamiloMentoria.ViewModels
 
         [DisplayName("Escola")]
         [Required(ErrorMessage = "A escola é obrigatória.")]
-        [ForeignKey("Escola")]
-        public int EscolaId { get; set; }
-
-        public Escola? Escola { get; set; }
+        public EscolaViewModel? Escola { get; set; }
 
         [DisplayName("Aulas")]
-        public List<Aula> Aulas { get; set; } = new();
+        public List<AulaViewModel> Aulas { get; set; } = new();
 
         [DisplayName("Alunos")]
-        public List<Aluno> Alunos { get; set; } = new();
+        public List<AlunoViewModel>? Alunos { get; set; } = new();
 
         [DisplayName("Professores")]
-        public List<ProfessorTurma> Professores { get; set; } = new();
+        public List<ProfessorTurmaViewModel> Professores { get; set; } = new();
 
         [DisplayName("Disciplinas da Turma")]
-        public ICollection<TurmaDisciplina> TurmaDisciplinas { get; set; } = new List<TurmaDisciplina>();
+        public ICollection<TurmaDisciplinaViewModel> TurmaDisciplinas { get; set; } = new List<TurmaDisciplinaViewModel>();
     }
 }

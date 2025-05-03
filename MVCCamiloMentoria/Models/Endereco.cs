@@ -2,7 +2,7 @@
 
 namespace MVCCamiloMentoria.Models
 {
-    public class EnderecoViewModel
+    public class Endereco
     {
         [Key]
         public int Id { get; set; }

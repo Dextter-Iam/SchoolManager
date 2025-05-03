@@ -17,8 +17,10 @@ namespace MVCCamiloMentoria.ViewModels
 
         [Required(ErrorMessage = "Selecione um estado.")]
         [DisplayName("Estado (UF)")]
-        public int? EstadoId { get; set; }
+        public List<EstadoViewModel>? Estados { get; set; }
 
+        // Não representa diretamente o modelo de entidade.
+        public int EstadoId { get; set; }
         [Required(ErrorMessage = "O nome da rua é obrigatório.")]
         [DisplayName("Nome da Rua")]
         [StringLength(200)]
@@ -38,32 +40,29 @@ namespace MVCCamiloMentoria.ViewModels
         [Range(1000000, 99999999, ErrorMessage = "CEP inválido.")]
         public int CEP { get; set; }
 
-        public Estado? Estado { get; set; }
-
-        public int EnderecoId { get; set; }
-
         public EnderecoViewModel? Endereco { get; set; }
 
-        public List<Supervisor>? Supervisores { get; set; }
+        public List<SupervisorEscolaViewModel>? Supervisores { get; set; }
 
-        public List<Telefone>? Telefones { get; set; }
+        public List<TelefoneViewModel>? Telefones { get; set; }
 
-        public List<Turma>? Turmas { get; set; }
+        public List<TurmaViewModel>? Turmas { get; set; }
 
-        public List<Professor>? Professores { get; set; }
+        public List<ProfessorViewModel>? Professores { get; set; }
 
-        public List<Diretor>? Diretores { get; set; }
-        public List<Aluno>? Alunos { get; set; }
+        public List<DiretorViewModel>? Diretores { get; set; }
+
+        public List<AlunoViewModel>? Alunos { get; set; }
 
         public List<CoordenadorViewModel>? Coordenadores  { get; set; }
 
-        public List<Disciplina>? Disciplina { get; set; }
+        public List<DisciplinaViewModel>? Disciplina { get; set; }
 
-        public List<Equipamento>? Equipamentos { get; set; }
+        public List<EquipamentoViewModel>? Equipamentos { get; set; }
 
-        public List<Fornecedor>? Fornecedores { get; set; }
+        public List<FornecedorViewModel>? Fornecedores { get; set; }
 
-        public List<PrestadorServico>? PrestadorServico { get; set; }
+        public List<PrestadorServicoViewModel>? PrestadorServico { get; set; }
 
     }
 }

@@ -75,8 +75,7 @@ namespace MVCCamiloMentoria.ViewModels
 
         [DisplayName("Estado")]
         [Required(ErrorMessage = "O estado é obrigatório.")]
-        public int? EstadoId { get; set; }
-        public Estado? Estado { get; set; }
+        public List<EstadoViewModel>? Estados { get; set; }
 
         [DisplayName("Escola")]
         [Required(ErrorMessage = "A escola é obrigatória.")]
@@ -117,5 +116,7 @@ namespace MVCCamiloMentoria.ViewModels
 
         [NotMapped]
         public int ResponsavelIdValue => ResponsavelId ?? 0;
+
+
     }
 }

@@ -57,14 +57,14 @@ namespace MVCCamiloMentoria.ViewModels
         [Required(ErrorMessage = "O estado é obrigatório.")]
         [DisplayName("Estado")]
         public int? EstadoId { get; set; }
-        public Estado? Estado { get; set; }
+        public EstadoViewModel? Estado { get; set; }
 
         [Required(ErrorMessage = "Selecione pelo menos uma escola.")]
         [DisplayName("Escolas")]
         public List<int>? EscolaIds { get; set; }
 
-        public List<Escola>? Escolas { get; set; }
+        public List<SupervisorEscolaViewModel>? Escolas { get; set; }
 
-        public List<Telefone>? Telefones { get; set; }
+        public List<TelefoneViewModel>? Telefones { get; set; }
     }
 }
