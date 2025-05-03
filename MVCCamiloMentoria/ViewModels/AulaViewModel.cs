@@ -28,7 +28,7 @@ namespace MVCCamiloMentoria.ViewModels
         [Display(Name = "Escola")]
         [Required(ErrorMessage = "A escola é obrigatória.")]
         public int EscolaId { get; set; }
-        public Escola? Escola { get; set; }
+        public EscolaViewModel? Escola { get; set; }
 
         [Display(Name = "Professor")]
         [Required(ErrorMessage = "O professor é obrigatório.")]

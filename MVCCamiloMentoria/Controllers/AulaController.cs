@@ -29,7 +29,11 @@ namespace MVCCamiloMentoria.Controllers
                     Nome = a.Nome,
                     Id = a.Id,
                     EscolaId = a.EscolaId,
-                    Escola = a.Escola,
+                    Escola = new EscolaViewModel
+                    {
+                        Id = a.EscolaId,
+                        Nome = a.Escola!.Nome,
+                    },
                     HorarioFim = a.HorarioFim,
                     HorarioInicio = a.HorarioInicio,
                     TurmaId = a.TurmaId,
@@ -63,15 +67,33 @@ namespace MVCCamiloMentoria.Controllers
                 HorarioInicio = aula.HorarioInicio,
                 HorarioFim = aula.HorarioFim,
                 EscolaId = aula.EscolaId,
-                Escola = aula.Escola,
+                Escola = new EscolaViewModel
+                {
+                    Id = aula.EscolaId,
+                    Nome = aula.Escola!.Nome,
+                },
                 TurmaId = aula.TurmaId,
-                Turma = aula.Turma,
+                Turma = new TurmaViewModel
+                {
+                    NomeTurma = aula.Turma!.NomeTurma,
+                    TurmaId = aula.TurmaId!,
+                },
+
                 ProfessorId = aula.ProfessorId,
-                Professor = aula.Professor,
+                Professor = new ProfessorViewModel
+                {
+                    Id = aula.ProfessorId,
+                    Nome = aula.Professor!.Nome,
+                },
+
                 DisciplinaId = aula.DisciplinaId,
-                Disciplina = aula.Disciplina,
+                Disciplina = new DisciplinaViewModel
+                {
+                    Id = aula.DisciplinaId,
+                    Nome = aula.Disciplina!.Nome,
+                },
+
                 ConfirmacaoPresenca = aula.ConfirmacaoPresenca,
-                AlunosPresentes = aula.AlunosPresentes?.ToList()
             };
 
             return View(viewModel);
@@ -92,7 +114,6 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
-
                     var aulas = new Aula
                     {
                         Nome = viewModel.Nome,
@@ -157,7 +178,11 @@ namespace MVCCamiloMentoria.Controllers
                 HorarioFim = aula.HorarioFim,
                 EscolaId = aula.EscolaId,
                 ProfessorId = aula.ProfessorId,
-                Turma = aula.Turma,
+                Turma = new TurmaViewModel
+                {
+                    TurmaId = aula.TurmaId,
+                    NomeTurma = aula.Turma!.NomeTurma,
+                },
                 TurmaId = aula.TurmaId,
                 DisciplinaId = aula.DisciplinaId,
             };
@@ -241,13 +266,28 @@ namespace MVCCamiloMentoria.Controllers
                 HorarioInicio = aula.HorarioInicio,
                 HorarioFim = aula.HorarioFim,
                 EscolaId = aula.EscolaId,
-                Escola = aula.Escola,
+                Escola = new EscolaViewModel
+                {
+                    Id = aula.EscolaId,
+                    Nome = aula.Escola!.Nome,
+                },
                 TurmaId = aula.TurmaId,
-                Turma = aula.Turma,
+                Turma = new TurmaViewModel
+                {
+                    NomeTurma = aula.Turma?.NomeTurma,
+                },
                 ProfessorId = aula.ProfessorId,
-                Professor = aula.Professor,
+                Professor = new ProfessorViewModel
+                {
+                    Nome = aula.Professor?.Nome,
+                    Id = aula.ProfessorId,
+                },
                 DisciplinaId = aula.DisciplinaId,
-                Disciplina = aula.Disciplina
+                Disciplina = new DisciplinaViewModel
+                {
+                    Id = aula.DisciplinaId,
+                    Nome = aula.Disciplina!.Nome,
+                }
             };
 
             return View(viewModel);
@@ -307,9 +347,6 @@ namespace MVCCamiloMentoria.Controllers
                 viewModel?.DisciplinaId ?? (disciplinas.Any() ? disciplinas.First().Id : (int?)null)
             );
         }
-
-
-
         private bool AulaExists(int id)
         {
             return _context.Aula.Any(e => e.Id == id);

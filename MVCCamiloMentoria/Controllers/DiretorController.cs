@@ -19,21 +19,39 @@ namespace MVCCamiloMentoria.Controllers
         public async Task<IActionResult> Index()
         {
             var diretores = await _context.Diretor
-                .Include(d => d.Escola)
                 .Include(d => d.Endereco)
                 .Include(d => d.Telefones)
-                .AsNoTracking()
-                .Select(d => new DiretorViewModel
+                .ToListAsync(); // busca normal
+
+            var estados = await AcessarEstados(); // chamada async separada
+
+            var viewModelList = diretores.Select(d => new DiretorViewModel
+            {
+                Id = d.Id,
+                Nome = d.Nome,
+                Matricula = d.Matricula,
+                Endereco = new EnderecoViewModel
                 {
-                    Id = d.Id,
-                    Nome = d.Nome,
-                    Matricula = d.Matricula,
-                    EnderecoId = d.EnderecoId,
-                    Endereco = d.Endereco,
-                    Telefones = d.Telefones,
-                    EscolaId = d.EscolaId,
-                    Escola = d.Escola
-                }).ToListAsync();
+                    NomeRua = d.Endereco!.NomeRua,
+                    NumeroRua = d.Endereco.NumeroRua,
+                    Complemento = d.Endereco.Complemento,
+                    CEP = d.Endereco.CEP,
+                    Estados = estados,
+                },
+                Telefones = d.Telefones!
+                             .Select(td => new TelefoneViewModel
+                             {
+                                 Id = td.Id,
+                                 Numero = td.Numero,
+                                 DDD = td.DDD,
+                             }).ToList(),
+                Escola = new EscolaViewModel
+                {
+                    Id = d.EscolaId, 
+                    Nome = d.Escola!.Nome,
+                }
+            }).ToList();
+
 
             CarregarViewBags();
             return View(diretores);
@@ -68,16 +86,12 @@ namespace MVCCamiloMentoria.Controllers
                 Id = diretor.Id,
                 Nome = diretor.Nome,
                 Matricula = diretor.Matricula,
-                EnderecoId = diretor.EnderecoId,
-                Endereco = diretor.Endereco,
                 NomeRua = diretor.Endereco?.NomeRua,
                 NumeroRua = diretor.Endereco?.NumeroRua ?? 0,
                 Complemento = diretor.Endereco?.Complemento,
                 CEP = diretor.Endereco?.CEP?.ToString("00000000"),
                 EstadoId = diretor.Endereco?.EstadoId,
                 EscolaId = diretor.EscolaId,
-                Escola = diretor.Escola,
-                Telefones = diretor.Telefones,
                 DDD = telefone?.DDD ?? 0,
                 Numero = telefone?.Numero ?? 0
             };
@@ -109,16 +123,17 @@ namespace MVCCamiloMentoria.Controllers
                         return View(viewModel);
                     }
 
-                    var endereco = new EnderecoViewModel
+                    var endereco = new Endereco
                     {
-                        NomeRua = viewModel.NomeRua,
-                        NumeroRua = viewModel.NumeroRua,
-                        Complemento = viewModel.Complemento,
-                        CEP = string.IsNullOrWhiteSpace(viewModel.CEP) ? null : int.Parse(viewModel.CEP),
-                        EstadoId = (int)viewModel.EstadoId!
+                        NomeRua = viewModel.Endereco!.NomeRua,
+                        NumeroRua = viewModel.Endereco.NumeroRua,
+                        Complemento = viewModel.Endereco.Complemento,
+                        CEP = viewModel.Endereco.CEP,
+                        EstadoId = (int)viewModel.Endereco.EstadoId!
                     };
 
                     _context.Endereco.Add(endereco);
+
                     await _context.SaveChangesAsync();
 
                     var diretor = new Diretor
@@ -179,23 +194,26 @@ namespace MVCCamiloMentoria.Controllers
 
             var telefone = diretor.Telefones?.FirstOrDefault();
 
+            var escolad = new EscolaViewModel
+            {
+                Id = diretor.EscolaId,
+                Nome = diretor.Escola!.Nome,
+            };
+
             var viewModel = new DiretorViewModel
             {
                 Id = diretor.Id,
                 Nome = diretor.Nome,
                 Matricula = diretor.Matricula,
-                EnderecoId = diretor.EnderecoId,
-                Endereco = diretor.Endereco,
                 NomeRua = diretor.Endereco?.NomeRua,
                 NumeroRua = diretor.Endereco?.NumeroRua ?? 0,
                 Complemento = diretor.Endereco?.Complemento,
                 CEP = diretor.Endereco?.CEP?.ToString("00000000"),
                 EstadoId = diretor.Endereco?.EstadoId,
                 EscolaId = diretor.EscolaId,
-                Telefones = diretor.Telefones,
                 DDD = telefone?.DDD ?? 0,
                 Numero = telefone?.Numero ?? 0,
-                Escola = diretor.Escola
+                Escola = escolad,
             };
 
             CarregarDependencias(viewModel);
@@ -225,12 +243,10 @@ namespace MVCCamiloMentoria.Controllers
                         return RedirectToAction(nameof(Index));
                     }
 
-                    // Atualiza dados do diretor
                     diretor.Nome = viewModel.Nome;
                     diretor.Matricula = viewModel.Matricula;
                     diretor.EscolaId = viewModel.EscolaId;
 
-                    // Atualiza endereço
                     if (diretor.Endereco != null)
                     {
                         diretor.Endereco.NomeRua = viewModel.NomeRua;
@@ -240,7 +256,6 @@ namespace MVCCamiloMentoria.Controllers
                         diretor.Endereco.EstadoId = (int)viewModel.EstadoId!;
                     }
 
-                    // Atualiza telefone
                     if (diretor.Telefones != null && diretor.Telefones.Any())
                     {
                         foreach (var telefone in diretor.Telefones)
@@ -287,6 +302,7 @@ namespace MVCCamiloMentoria.Controllers
 
             var diretor = await _context.Diretor
                 .Include(d => d.Escola)
+                .Include(d => d.Telefones)
                 .Include(d => d.Endereco)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(d => d.Id == id);
@@ -296,16 +312,28 @@ namespace MVCCamiloMentoria.Controllers
                 TempData["MensagemErro"] = "Diretor não encontrado.";
                 return RedirectToAction(nameof(Index));
             }
-
+            var escolad = new EscolaViewModel
+            {
+                Id = diretor.EscolaId,
+                Nome = diretor.Escola!.Nome,
+            };
             var viewModel = new DiretorViewModel
             {
                 Id = diretor.Id,
                 Nome = diretor.Nome,
                 Matricula = diretor.Matricula,
-                EnderecoId = diretor.EnderecoId,
-                Endereco = diretor.Endereco,
+                NomeRua = diretor.Endereco!.NomeRua,
+                NumeroRua = diretor.Endereco.NumeroRua, 
+                Complemento = diretor.Endereco.Complemento,
                 EscolaId = diretor.EscolaId,
-                Escola = diretor.Escola
+                Escola = escolad,
+                Telefones = diretor.Telefones!
+                                   .Select(d => new TelefoneViewModel
+                                   { 
+                                       Numero = d.Numero,
+                                       DDD = d.DDD,
+
+                                   }).ToList(),
             };
 
             return View(viewModel);
@@ -319,6 +347,7 @@ namespace MVCCamiloMentoria.Controllers
             try
             {
                 var diretor = await _context.Diretor
+                    .Include(d => d.Endereco)
                     .Include(d => d.Telefones)
                     .FirstOrDefaultAsync(d => d.Id == id);
 
@@ -328,7 +357,6 @@ namespace MVCCamiloMentoria.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                // Remove os telefones primeiro (se necessário)
                 if (diretor.Telefones != null && diretor.Telefones.Any())
                 {
                     _context.Telefone.RemoveRange(diretor.Telefones);
@@ -372,6 +400,19 @@ namespace MVCCamiloMentoria.Controllers
                 }).ToList();
 
             ViewBag.Estados = estados;
+        }
+
+        private async Task<List<EstadoViewModel>> AcessarEstados()
+        {
+            var estados = await _context.Estado
+             .Select(ac => new EstadoViewModel
+             {
+                 id = ac.id,
+                 Nome = ac.Nome,
+                 Sigla = ac.Sigla,
+             }).ToListAsync();
+
+            return estados;
         }
     }
 }

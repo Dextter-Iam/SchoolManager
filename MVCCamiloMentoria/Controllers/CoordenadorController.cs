@@ -24,13 +24,24 @@ namespace MVCCamiloMentoria.Controllers
                 .AsNoTracking()
                 .ToListAsync();
 
-            var viewModel = coordenadores.Select(c => new CoordenadorViewModel
+            var viewModel = coordenadores.Select(async c => new CoordenadorViewModel
             {
                 Id = c.Id,
                 Nome = c.Nome,
                 Matricula = c.Matricula,
-                Endereco = c.Endereco,
-                Escola = c.Escola
+                Endereco = new EnderecoViewModel
+                {
+                    NomeRua = c.Endereco!.NomeRua,
+                    Complemento = c.Endereco.Complemento,
+                    NumeroRua = c.Endereco.NumeroRua,
+                    CEP = c.Endereco.CEP,
+                    Estados = await AcessarEstados(),
+                },
+                Escola = new EscolaViewModel
+                {
+                    Id = c.EscolaId,
+                    Nome = c.Escola!.Nome,
+                },
             }).ToList();
 
             return View(viewModel);
@@ -63,9 +74,26 @@ namespace MVCCamiloMentoria.Controllers
                 Id = coordenador.Id,
                 Nome = coordenador.Nome,
                 Matricula = coordenador.Matricula,
-                Endereco = coordenador.Endereco,
-                Escola = coordenador.Escola,
-                Telefones = coordenador.Telefones?.ToList()
+                Endereco = new EnderecoViewModel
+                {
+                    NomeRua = coordenador.Endereco!.NomeRua,
+                    Complemento = coordenador.Endereco.Complemento,
+                    NumeroRua = coordenador.Endereco.NumeroRua,
+                    CEP = coordenador.Endereco.CEP,
+                    Estados = await AcessarEstados(),
+                },
+                Escola = new EscolaViewModel
+                {
+                    Id = coordenador.EscolaId,
+                    Nome = coordenador.Escola!.Nome,
+                },
+                Telefones = coordenador.Telefones?
+                                       .Select(t => new TelefoneViewModel
+                                       {
+                                           DDD = t.DDD,
+                                           Numero = t.Numero
+
+                                       }).ToList(),
             };
 
             return View(viewModel);
@@ -87,25 +115,21 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
-                    int? cep = null;
-                    if (!string.IsNullOrWhiteSpace(viewModel.CEP))
-                    {
-                        if (!int.TryParse(viewModel.CEP, out int parsedCep))
-                        {
-                            ModelState.AddModelError("CEP", "CEP inválido. Informe apenas números.");
-                            CarregarDependencias();
-                            return View(viewModel);
-                        }
-                        cep = parsedCep;
-                    }
+                    var estadoSelecionado = viewModel.Endereco!.Estados!
+                                            .FirstOrDefault(e => e.id == viewModel.Endereco.EstadoId);
 
-                    var endereco = new EnderecoViewModel
+                    var endereco = new Endereco
                     {
-                        NomeRua = viewModel.NomeRua,
-                        NumeroRua = viewModel.NumeroRua,
-                        Complemento = viewModel.Complemento,
-                        CEP = cep,
-                        EstadoId = (int)viewModel.EstadoId!
+                        NomeRua = viewModel.Endereco!.NomeRua,
+                        NumeroRua = viewModel.Endereco.NumeroRua,
+                        Complemento = viewModel.Endereco.Complemento,
+                        CEP = viewModel.Endereco!.CEP,
+                        Estado = new Estado
+                        {
+                            id = estadoSelecionado!.id,
+                            Nome = estadoSelecionado.Nome,
+                            Sigla = estadoSelecionado.Sigla
+                        }
                     };
 
                     _context.Endereco.Add(endereco);
@@ -122,14 +146,15 @@ namespace MVCCamiloMentoria.Controllers
                     _context.Coordenador.Add(coordenador);
                     await _context.SaveChangesAsync();
 
-                    var telefone = new Telefone
+                    var telefone = viewModel.Telefones!.Select(t => new Telefone
                     {
-                        DDD = viewModel.DDD,
-                        Numero = viewModel.Numero,
+                        DDD = t.DDD,
+                        Numero = t.Numero,
                         CoordenadorId = coordenador.Id,
-                        EscolaId = (int)viewModel.EscolaId!,
-                    };
-                    _context.Telefone.Add(telefone);
+                        EscolaId = (int)viewModel.EscolaId!
+                    }).ToList();
+
+                    _context.Telefone.AddRange(telefone);
 
                     await _context.SaveChangesAsync();
 
@@ -174,16 +199,15 @@ namespace MVCCamiloMentoria.Controllers
                 Id = coordenador.Id,
                 Nome = coordenador.Nome,
                 Matricula = coordenador.Matricula,
-                EnderecoId = coordenador.EnderecoId,
-                NomeRua = coordenador.Endereco?.NomeRua,
-                NumeroRua = coordenador.Endereco?.NumeroRua ?? 0,
-                Complemento = coordenador.Endereco?.Complemento,
-                CEP = coordenador.Endereco?.CEP?.ToString("00000000"),
-                EstadoId = coordenador.Endereco?.EstadoId,
+
                 EscolaId = coordenador.EscolaId,
-                Telefones = coordenador.Telefones?.ToList(),
-                DDD = telefone?.DDD ?? 0,
-                Numero = telefone?.Numero ?? 0,
+                Telefones = coordenador.Telefones?
+                                       .Select(c=> new TelefoneViewModel
+                                       {
+                                           DDD = c.DDD,
+                                           Numero = c.Numero,  
+
+                                       }).ToList(),
             };
 
             CarregarDependencias();
@@ -219,25 +243,26 @@ namespace MVCCamiloMentoria.Controllers
 
                     if (coordenador.Endereco != null)
                     {
-                        coordenador.Endereco.NomeRua = viewModel.NomeRua;
-                        coordenador.Endereco.NumeroRua = viewModel.NumeroRua;
-                        coordenador.Endereco.Complemento = viewModel.Complemento;
-                        coordenador.Endereco.CEP = string.IsNullOrWhiteSpace(viewModel.CEP) ? null : int.Parse(viewModel.CEP);
-                        coordenador.Endereco.EstadoId = (int)viewModel.EstadoId!;
+                        coordenador.Endereco.NomeRua = viewModel.Endereco!.NomeRua;
+                        coordenador.Endereco.NumeroRua = viewModel.Endereco!.NumeroRua;
+                        coordenador.Endereco.Complemento = viewModel.Endereco!.Complemento;
+                        coordenador.Endereco.CEP = viewModel.Endereco!.CEP;
+                        coordenador.Endereco.EstadoId = (int)viewModel.Endereco!.EstadoId;
                     }
 
-                    // Atualizar Telefones
+                  
                     if (coordenador.Telefones != null && coordenador.Telefones.Any())
                         _context.Telefone.RemoveRange(coordenador.Telefones);
 
-                    var telefone = new Telefone
-                    {
-                        DDD = viewModel.DDD,
-                        Numero = viewModel.Numero,
-                        CoordenadorId = coordenador.Id,
-                        EscolaId = (int)viewModel.EscolaId!,
-                    };
-                    _context.Telefone.Add(telefone);
+                    var telefones = coordenador.Telefones!
+                        .Select(c => new Telefone
+                        {
+                            DDD = c.DDD,
+                            Numero = c.Numero,
+                            CoordenadorId = coordenador.Id
+                        }).ToList();
+
+                    _context.Telefone.AddRange(telefones);
 
                     _context.Update(coordenador);
                     await _context.SaveChangesAsync();
@@ -291,9 +316,15 @@ namespace MVCCamiloMentoria.Controllers
                 Id = coordenador.Id,
                 Nome = coordenador.Nome,
                 Matricula = coordenador.Matricula,
-                Endereco = coordenador.Endereco,
-                Escola = coordenador.Escola,
-                Telefones = coordenador.Telefones?.ToList()
+
+                EscolaId = coordenador.EscolaId,
+                Telefones = coordenador.Telefones?
+                                       .Select(c => new TelefoneViewModel
+                                       {
+                                           DDD = c.DDD,
+                                           Numero = c.Numero,
+
+                                       }).ToList(),
             };
 
             return View(viewModel);
@@ -363,7 +394,18 @@ namespace MVCCamiloMentoria.Controllers
         {
             return _context.Coordenador.Any(e => e.Id == id);
         }
+        private async Task<List<EstadoViewModel>> AcessarEstados()
+        {
+            var estados = await _context.Estado
+             .Select(ac => new EstadoViewModel
+             {
+                 id = ac.id,
+                 Nome = ac.Nome,
+                 Sigla = ac.Sigla,
+             }).ToListAsync();
 
+            return estados;
+        }
 
     }
 }
