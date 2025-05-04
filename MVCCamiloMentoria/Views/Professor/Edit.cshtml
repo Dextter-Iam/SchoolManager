@@ -1,156 +1,190 @@
 ﻿@model MVCCamiloMentoria.ViewModels.ProfessorViewModel
 
 @{
-    ViewData["Title"] = "Editar Professor";
+	ViewData["Title"] = "Editar Professor";
 }
 
-<div class="container">
-    <div class="justify-content-center">
-        <br />
-        <h3 class="mb-4">Editar Professor</h3>
-    </div>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <form asp-action="Edit" enctype="multipart/form-data">
-                <input type="hidden" asp-for="Id" />
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+	<div class="row justify-content-center">
+		<div class="col-md-8">
+			<form asp-action="Edit" enctype="multipart/form-data" class="bg-light p-4 rounded shadow-sm">
+				<input type="hidden" asp-for="Id" />
+				<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-                <!-- Informações Pessoais -->
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">Informações Pessoais</div>
-                    <div class="card-body">
-                        <div class="form-group mb-3">
-                            <label asp-for="Nome"></label>
-                            <input asp-for="Nome" class="form-control" />
-                            <span asp-validation-for="Nome" class="text-danger"></span>
-                        </div>
+				<div class="card mb-4 border-light">
+					<div class="card-header bg-primary text-white">
+						<h5 class="mb-0">Informações Pessoais</h5>
+					</div>
+					<div class="card-body">
+						<div class="form-group mb-3">
+							<label asp-for="Nome" class="fw-bold"></label>
+							<input asp-for="Nome" class="form-control" placeholder="Nome completo do professor" />
+							<span asp-validation-for="Nome" class="text-danger"></span>
+						</div>
 
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="form-group mb-3">
-                                        <label>Foto</label>
-                                        <input asp-for="FotoUpload" type="file" class="form-control" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+						<div class="form-group mb-3">
+							<label asp-for="Matricula" class="fw-bold"></label>
+							<input asp-for="Matricula" class="form-control" placeholder="Matrícula do professor" />
+							<span asp-validation-for="Matricula" class="text-danger"></span>
+						</div>
 
-                        <div class="form-group mb-3">
-                            <label asp-for="Matricula"></label>
-                            <input asp-for="Matricula" class="form-control" />
-                            <span asp-validation-for="Matricula" class="text-danger"></span>
-                        </div>
-                    </div>
-                </div>
+						<div class="row">
+							<div class="col-md-8">
+								<div class="form-group mb-3">
+									<label class="fw-bold">Foto</label>
+									<input asp-for="FotoUpload" type="file" class="form-control" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-                <!-- Escola e Turmas -->
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">Escola e Turmas</div>
-                    <div class="card-body">
-                        <div class="form-group mb-3">
-                            <label asp-for="EscolaId"></label>
-                            <select asp-for="EscolaId" class="form-select" asp-items="ViewBag.EscolaId" id="EscolaId"></select>
-                            <span asp-validation-for="EscolaId" class="text-danger"></span>
-                        </div>
+				<div class="card mb-4 border-light">
+					<div class="card-header bg-primary text-white">
+						<h5 class="mb-0">Telefone</h5>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-4">
+								<label asp-for="Telefones[0].DDD" class="fw-bold"></label>
+								<input asp-for="Telefones[0].DDD" class="form-control" placeholder="DDD" />
+							</div>
+							<div class="col-md-8">
+								<label asp-for="Telefones[0].Numero" class="fw-bold"></label>
+								<input asp-for="Telefones[0].Numero" class="form-control" placeholder="Número do telefone" />
+							</div>
+						</div>
+					</div>
+				</div>
 
-                        <div class="form-group mb-3">
-                            <label>Turmas</label>
-                            <select asp-for="TurmaIds" class="form-select" multiple id="TurmaIds" asp-items="ViewBag.TurmaIds"></select>
-                        </div>
-                    </div>
-                </div>
+				<div class="card mb-4 border-light">
+					<div class="card-header bg-primary text-white">
+						<h5 class="mb-0">Escola e Turmas</h5>
+					</div>
+					<div class="card-body">
+						<div class="form-group mb-3">
+							<label asp-for="EscolaId" class="fw-bold"></label>
+							<select asp-for="EscolaId" class="form-select" asp-items="ViewBag.EscolaId">
+								<option value="">Selecione a Escola</option>
+							</select>
+							<span asp-validation-for="EscolaId" class="text-danger"></span>
+						</div>
 
-                <!-- Disciplinas -->
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">Disciplinas</div>
-                    <div class="card-body">
-                        <div class="form-group mb-3">
-                            <label>Disciplinas</label>
-                            <select asp-for="DisciplinaIds" class="form-select" multiple asp-items="ViewBag.DisciplinaIds"></select>
-                        </div>
-                    </div>
-                </div>
+						<div class="form-group mb-3">
+							<div class="form-check">
+								<select asp-for="TurmaIds" class="form-select" multiple id="TurmaIds" asp-items="ViewBag.TurmaIds"></select>
+							</div>
+						</div>
+					</div>
+				</div>
 
-                <!-- Endereço -->
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">Endereço</div>
-                    <div class="card-body">
-                        <div class="form-group mb-3">
-                            <label asp-for="Endereco.NomeRua"></label>
-                            <input asp-for="Endereco.NomeRua" class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="Endereco.NumeroRua"></label>
-                            <input asp-for="Endereco.NumeroRua" class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="Endereco.Complemento"></label>
-                            <input asp-for="Endereco.Complemento" class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="Endereco.CEP"></label>
-                            <input asp-for="Endereco.CEP" class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="Endereco.EstadoId"></label>
-                            <select asp-for="Endereco.EstadoId" class="form-select" asp-items="ViewBag.Estados"></select>
-                        </div>
-                    </div>
-                </div>
+		
+				<div class="card mb-4">
+					<div class="card-header bg-primary text-white">Disciplinas</div>
+					<div class="card-body">
+						<div class="form-group mb-3">
+							<label>Disciplinas</label>
+							<select asp-for="DisciplinaIds" class="form-select" multiple asp-items="ViewBag.DisciplinaIds"></select>
+						</div>
+					</div>
+				</div>
 
-                <!-- Telefone -->
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">Telefone</div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label asp-for="Telefones[0].DDD"></label>
-                                <input asp-for="Telefones[0].DDD" class="form-control" />
-                            </div>
-                            <div class="col-md-8">
-                                <label asp-for="Telefones[0].Numero"></label>
-                                <input asp-for="Telefones[0].Numero" class="form-control" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="text-end">
-                    <input type="submit" value="Salvar Alterações" class="btn btn-warning px-4" />
-                    <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
-                </div>
-            </form>
-        </div>
-    </div>
+				<div class="card mb-4 border-light">
+					<div class="card-header bg-primary text-white">
+						<h5 class="mb-0">Endereço</h5>
+					</div>
+					<div class="card-body">
+						<div class="form-group mb-3">
+							<label asp-for="Endereco.NomeRua" class="fw-bold"></label>
+							<input asp-for="Endereco.NomeRua" class="form-control" placeholder="Nome da Rua" />
+						</div>
+						<div class="form-group mb-3">
+							<label asp-for="Endereco.NumeroRua" class="fw-bold"></label>
+							<input asp-for="Endereco.NumeroRua" class="form-control" placeholder="Número da Rua" />
+						</div>
+						<div class="form-group mb-3">
+							<label asp-for="Endereco.Complemento" class="fw-bold"></label>
+							<input asp-for="Endereco.Complemento" class="form-control" placeholder="Complemento" />
+						</div>
+						<div class="form-group mb-3">
+							<label asp-for="Endereco.CEP" class="fw-bold"></label>
+							<input asp-for="Endereco.CEP" class="form-control" placeholder="CEP" />
+						</div>
+						<div class="form-group mb-3">
+							<label asp-for="Endereco.EstadoId" class="fw-bold"></label>
+							<select asp-for="Endereco.EstadoId" class="form-select" asp-items="ViewBag.Estados">
+								<option value="">Selecione o Estado</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+
+
+
+				<div class="text-end mt-4">
+					<input type="submit" value="Salvar Alterações" class="btn btn-warning px-4" />
+					<a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
 
 @section Scripts {
-    <script>
-        document.getElementById('EscolaId').addEventListener('change', function () {
-            var escolaId = this.value;
-            var turmasSelect = document.getElementById('TurmaIds');
+	<script>
+		document.getElementById('EscolaId').addEventListener('change', function () {
+			var escolaId = this.value;
+			var turmasSelect = document.getElementById('TurmaIds');
 
-            fetch(`/Professor/ObterTurmasPorEscola?escolaId=${escolaId}`)
-                .then(response => response.json())
-                .then(data => {
-                    turmasSelect.innerHTML = '';
+			fetch(`/Professor/ObterTurmasPorEscola?escolaId=${escolaId}`)
+				.then(response => response.json())
+				.then(data => {
+					turmasSelect.innerHTML = '';
 
-                    data.forEach(turma => {
-                        var option = document.createElement('option');
-                        option.value = turma.turmaId;
-                        option.text = turma.nomeTurma;
-                        turmasSelect.appendChild(option);
-                    });
-                })
-                .catch(error => {
-                    console.error('Erro ao buscar turmas:', error);
-                });
-        });
-    </script>
+					data.forEach(turma => {
+						var option = document.createElement('option');
+						option.value = turma.turmaId;
+						option.text = turma.nomeTurma;
+						turmasSelect.appendChild(option);
+					});
+				})
+				.catch(error => {
+					console.error('Erro ao buscar turmas:', error);
+				});
+		});
+	</script>
 
-    @await Html.PartialAsync("_ValidationScriptsPartial")
+	<script>
+		function previewImage(input) {
+			const file = input.files[0];
+			if (file) {
+				const maxSize = 2 * 1024 * 1024; // 2MB
+				const allowedTypes = ['image/jpeg', 'image/png'];
+
+				if (!allowedTypes.includes(file.type)) {
+					alert("Apenas arquivos JPG ou PNG são permitidos.");
+					input.value = "";
+					return;
+				}
+
+				if (file.size > maxSize) {
+					alert("O tamanho máximo do arquivo é 2MB.");
+					input.value = "";
+					return;
+				}
+
+				const reader = new FileReader();
+				reader.onload = function (e) {
+					document.getElementById('preview').src = e.target.result;
+				};
+				reader.readAsDataURL(file);
+			}
+		}
+	</script>
+
+	@await Html.PartialAsync("_ValidationScriptsPartial")
 }

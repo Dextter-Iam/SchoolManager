@@ -10,7 +10,7 @@ namespace MVCCamiloMentoria.Data
         {
             builder.ToTable("SupervisorEscola");
 
-            builder.HasKey(se => se.SupervisorEscolaId); // Chave primária é o ID
+            builder.HasKey(se => se.SupervisorEscolaId); 
 
             builder.HasOne(se => se.Supervisor)
                    .WithMany(s => s.SupervisorEscolas)

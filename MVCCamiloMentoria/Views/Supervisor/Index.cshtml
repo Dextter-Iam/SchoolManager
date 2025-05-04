@@ -40,9 +40,9 @@
 									}
 								</td>
 								<td>
-									@if (supervisor.Escolas != null && supervisor.Escolas.Any())
+									@if (supervisor.SupervisorEscola != null && supervisor.SupervisorEscola.Any())
 									{
-										foreach (var escola in supervisor.Escolas)
+										foreach (var escola in supervisor.SupervisorEscola)
 										{
 											<div>@escola.Escola!.Nome</div>
 										}

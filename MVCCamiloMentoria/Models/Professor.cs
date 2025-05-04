@@ -6,6 +6,7 @@ public class Professor
     public string? Nome { get; set; }
     public int Matricula { get; set; }
     public byte[]? Foto { get; set; }
+    
     public int EscolaId { get; set; }
     public Escola? Escola { get; set; }
 

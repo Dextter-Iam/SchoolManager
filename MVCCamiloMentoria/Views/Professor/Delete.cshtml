@@ -1,168 +1,140 @@
 ﻿@model MVCCamiloMentoria.ViewModels.ProfessorViewModel
 
+@{
+    ViewData["Title"] = "Deletar Professor";
+}
+
 <div class="container">
-    <div class="justify-content-center">
-        <br />
-        <h3 class="text-danger mb-4">Tem certeza que deseja excluir este professor?</h3>
-    </div>
 
-    <hr />
-
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <div class="card mb-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-sm">
                 <div class="card-header bg-danger text-white">
-                    <h4 class="mb-0">Dados do Professor</h4>
+                    <h4 class="mb-0">Deletar Professor</h4>
                 </div>
+
                 <div class="card-body">
 
-                    <!-- Seção Informações Pessoais -->
-                    <div class="card mb-3">
+                    <div class="alert alert-warning">
+                        <h4 class="alert-heading">Tem certeza que deseja excluir este professor?</h4>
+                    </div>
+
+                    <div class="card mb-4 shadow-sm">
                         <div class="card-header bg-light">
                             <h5 class="mb-0">Informações Pessoais</h5>
                         </div>
-                        <div class="card-body">
-                            <dl class="row">
-                                <dt class="col-sm-3 fw-bold">Nome</dt>
-                                <dd class="col-sm-9">@Model.Nome</dd>
+                        <div class="card-body row">
+                            <div class="col-md-4 text-center">
+                                @if (Model?.Foto != null && Model?.Foto?.Length > 0)
+                                {
+                                    <img src="@Url.Action("GetFoto", "Professor", new { id = Model.Id })" class="img-fluid rounded mb-3 shadow-sm" alt="Foto do Professor" style="max-height: 250px;" />
+                                }
+                                else
+                                {
+                                    <img src="~/images/sem-foto.png" class="img-fluid rounded mb-3 shadow-sm" alt="Sem Foto" style="max-height: 150px;" />
+                                }
+                            </div>
+                            <div class="col-md-8">
+                                <dl class="row">
+                                    <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Nome)</dt>
+                                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Nome)</dd>
 
-                                <dt class="col-sm-3 fw-bold">Matrícula</dt>
-                                <dd class="col-sm-9">@Model.Matricula</dd>
-                            </dl>
-                        </div>
-                    </div>
+                                    <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Matricula)</dt>
+                                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Matricula)</dd>
 
-                    <!-- Seção Contato -->
-                    <div class="card mb-3">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">Contato</h5>
-                        </div>
-                        <div class="card-body">
-                            <dl class="row">
-                                <dt class="col-sm-3 fw-bold">Telefone</dt>
-                                <dd class="col-sm-9">
-                                    @if (Model.Telefones != null && Model.Telefones.Any())
-                                    {
-                                        foreach (var telefone in Model.Telefones)
+                                    <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Endereco)</dt>
+                                    <dd class="col-sm-8">
+                                        @Model!.Endereco?.NomeRua, Nº @Model.Endereco?.NumeroRua
+                                    </dd>
+
+                                    <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Telefones)</dt>
+                                    <dd class="col-sm-8">
+                                        @foreach (var tel in Model.Telefones!)
                                         {
-                                            <p>(@telefone.DDD) @telefone.Numero</p>
+                                            <p>(@tel.DDD) @tel.Numero</p>
                                         }
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">Telefone não cadastrado</span>
-                                    }
-                                </dd>
-                            </dl>
+                                    </dd>
+                                </dl>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Seção Endereço -->
-                    <div class="card mb-3">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">Endereço</h5>
-                        </div>
-                        <div class="card-body">
-                            <dl class="row">
-                                <dt class="col-sm-3 fw-bold">Endereço</dt>
-                                <dd class="col-sm-9">
-                                    @if (Model.Endereco != null && Model.Endereco.ListaDeEstados != null && Model.Endereco.ListaDeEstados.Any())
-                                    {
-                                        <address>
-                                            @Model.Endereco.NomeRua, @Model.Endereco.NumeroRua
-                                            <br />
-                                            @if (!string.IsNullOrEmpty(Model.Endereco.Complemento))
+
+                    <div class="mt-4">
+                        <h5 class="border-bottom pb-2 mb-3">Atuação</h5>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Escola</th>
+                                        <th>Disciplinas</th>
+                                        <th>Turmas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            @if (Model.Escola != null)
                                             {
-                                                @Model.Endereco.Complemento <br />
+                                                @Model.Escola.Nome
                                             }
-                                            CEP: @Model.Endereco.CEP?.ToString("00000-000") <br />
-
-                                            @foreach (var estado in Model.Endereco.ListaDeEstados)
+                                            else
                                             {
-                                                <div>@estado.Nome - @estado.Sigla</div>
+                                                <span class="text-muted">Nenhuma escola cadastrada</span>
                                             }
-                                        </address>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">Endereço ou estado não informado</span>
-                                    }
-                                </dd>
-                            </dl>
+                                        </td>
+                                        <td>
+                                            @if (Model.Disciplinas != null && Model.Disciplinas.Any())
+                                            {
+                                                <ul class="list-unstyled mb-0">
+                                                    @foreach (var disciplinaRel in Model.Disciplinas)
+                                                    {
+                                                        <li>@disciplinaRel.Disciplina?.Nome</li>
+                                                    }
+                                                </ul>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">Nenhuma disciplina cadastrada</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (Model.Turmas != null && Model.Turmas.Any())
+                                            {
+                                                <ul class="list-unstyled mb-0">
+                                                    @foreach (var turmaRel in Model.Turmas)
+                                                    {
+                                                        <li>@turmaRel.Turma?.NomeTurma</li>
+                                                    }
+                                                </ul>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">Nenhuma turma cadastrada</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
-                    <!-- Seção Escola -->
-                    <div class="card mb-3">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">Escola</h5>
+                    <!-- Formulário de Deleção -->
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex justify-content-start gap-2">
+                            <input type="submit" value="Deletar" class="btn btn-danger" />
+                            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
                         </div>
-                        <div class="card-body">
-                            <dl class="row">
-                                <dt class="col-sm-3 fw-bold">Escola</dt>
-                                <dd class="col-sm-9">@Model.Escola?.Nome</dd>
-                            </dl>
-                        </div>
-                    </div>
-
-                    <!-- Seção Turmas -->
-                    <div class="card mb-3">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">Turmas</h5>
-                        </div>
-                        <div class="card-body">
-                            @if (Model.Turmas != null && Model.Turmas.Any())
-                            {
-                                foreach (var turmaRel in Model.Turmas)
-                                {
-                                    <p>@turmaRel.Turma?.NomeTurma</p>
-                                }
-                            }
-                            else
-                            {
-                                <span class="text-muted">Nenhuma turma vinculada</span>
-                            }
-                        </div>
-                    </div>
-
-                    <!-- Seção Disciplinas -->
-                    <div class="card">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">Disciplinas</h5>
-                        </div>
-                        <div class="card-body">
-                            @if (Model.Disciplinas != null && Model.Disciplinas.Any())
-                            {
-                                foreach (var disciplinaRel in Model.Disciplinas)
-                                {
-                                    <p>@disciplinaRel.Disciplina?.Nome</p>
-                                }
-                            }
-                            else
-                            {
-                                <span class="text-muted">Nenhuma disciplina vinculada</span>
-                            }
-                        </div>
-                    </div>
+                    </form>
 
                 </div>
             </div>
-
-            <form asp-action="Delete" method="post" class="text-end">
-                <input type="hidden" asp-for="Id" />
-                <button type="submit" class="btn btn-danger px-4">
-                    <i class="fas fa-trash-alt"></i> Confirmar Exclusão
-                </button>
-                <a asp-action="Index" class="btn btn-secondary ms-2">
-                    <i class="fas fa-times"></i> Cancelar
-                </a>
-            </form>
         </div>
     </div>
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }

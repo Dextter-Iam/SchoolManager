@@ -45,7 +45,7 @@
                                 {
                                     var escola = ((List<SelectListItem>)ViewBag.Escolas)[i];
                                     int escolaId = int.Parse(escola.Value);
-                                    bool isChecked = Model.Escolas != null && Model.Escolas.Any(e => e.EscolaId == escolaId);
+                                    bool isChecked = Model.SupervisorEscola != null && Model.SupervisorEscola.Any(e => e.EscolaId == escolaId);
 
                                     <div class="form-check mb-2">
                                         <input class="form-check-input"
@@ -61,7 +61,7 @@
                                     </div>
                                 }
                             </div>
-                            <span asp-validation-for="Escolas" class="text-danger"></span>
+                            <span asp-validation-for="SupervisorEscola" class="text-danger"></span>
                         </div>
                     </div>
                 </div>

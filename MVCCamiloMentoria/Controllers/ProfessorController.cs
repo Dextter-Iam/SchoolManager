@@ -160,10 +160,21 @@ namespace MVCCamiloMentoria.Controllers
         // GET: Professor/Create
         public IActionResult Create()
         {
-            var viewModel = new ProfessorViewModel();
+            var viewModel = new ProfessorViewModel
+            {
+                Telefones = new List<TelefoneViewModel>
+        {
+            new TelefoneViewModel()
+        },
+                Endereco = new EnderecoViewModel(),
+                TurmaIds = new List<int>(),
+                DisciplinaIds = new List<int>()
+            };
+
             CarregarDependencias(viewModel);
             return View(viewModel);
         }
+
 
         // POST: Professor/Create
         [HttpPost]
@@ -190,7 +201,7 @@ namespace MVCCamiloMentoria.Controllers
                     {
                         Nome = viewModel.Nome,
                         Matricula = viewModel.Matricula,
-                        EscolaId = viewModel.Escola!.Id,
+                        EscolaId = viewModel.EscolaId,
                         EnderecoId = enderecoviewModel.Id,
                     };
 
@@ -228,8 +239,8 @@ namespace MVCCamiloMentoria.Controllers
                     {
                         DDD = t.DDD,
                         Numero = t.Numero,
-                        EscolaId = viewModel.Escola.Id,
-                        ProfessorId = viewModel.Id
+                        EscolaId = viewModel.EscolaId,
+                        ProfessorId = professorViewModel.Id
                     }).ToList();
 
                     _context.Telefone.AddRange(telefones);
@@ -258,6 +269,7 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var professor = await _context.Professor
+                .Include(p=> p.Escola)
                 .Include(p => p.Endereco)
                 .Include(p => p.Telefones)
                 .Include(p => p.Turmas!)
@@ -282,6 +294,11 @@ namespace MVCCamiloMentoria.Controllers
                 Foto = professor.Foto,
                 Matricula = professor.Matricula,
                 EscolaId = professor.Escola!.Id,
+                Escola = new EscolaViewModel
+                {
+                    Nome = professor.Escola.Nome, 
+                    Id = professor.Escola.Id,
+                },
                 Endereco = new EnderecoViewModel
                 {
                     NomeRua = professor.Endereco?.NomeRua,
@@ -373,7 +390,6 @@ namespace MVCCamiloMentoria.Controllers
                             _context.Telefone.Add(novoTel);
                         }
                     }
-
                     var turmasAtuais = professor.Turmas?.ToList() ?? new List<ProfessorTurma>();
                     var turmasSelecionadas = viewModel.TurmaIds ?? new List<int>();
 
@@ -495,6 +511,12 @@ namespace MVCCamiloMentoria.Controllers
                 Nome = professor.Nome,
                 Foto = professor.Foto,
                 Matricula = professor.Matricula,
+                Escola = new EscolaViewModel
+                {
+                    Nome = professor!.Escola.Nome, 
+                    Id = professor.Escola.Id,
+                },
+
                 EscolaId = professor.Escola!.Id,
                 Endereco = new EnderecoViewModel
                 {
@@ -512,10 +534,30 @@ namespace MVCCamiloMentoria.Controllers
                                          Id = pft?.Id ?? 0,
                                      }).ToList(),
 
-                TurmaIds = professor.Turmas?
-                                    .Select(t => t.TurmaId).ToList(),
-                DisciplinaIds = professor.Disciplinas?
-                                          .Select(d => d.DisciplinaId).ToList()
+                Turmas = professor.Turmas!
+                                  .Select(pt => new ProfessorTurmaViewModel
+                                  {
+                                      TurmaId = pt.TurmaId,
+                                      Turma = new TurmaViewModel
+                                      {
+                                          NomeTurma = pt.Turma!.NomeTurma,
+                                          TurmaId = pt.TurmaId,
+                                      }
+                                  }).ToList(),
+
+                Disciplinas = professor.Disciplinas!
+                                       .Select(pd => new ProfessorDisciplinaViewModel
+                                       {
+                                           DisciplinaId = pd.DisciplinaId,
+                                           ProfessorId = pd.ProfessorId,
+                                           Disciplina = new DisciplinaViewModel
+                                           {
+                                               Id = pd.DisciplinaId,
+                                               Nome = pd.Disciplina!.Nome
+                                           }
+
+                                       }).ToList(),
+
             };
 
             return View(viewModel);

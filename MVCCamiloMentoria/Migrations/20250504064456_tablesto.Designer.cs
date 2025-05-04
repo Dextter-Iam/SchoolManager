@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCCamiloMentoria.Migrations
 {
     [DbContext(typeof(EscolaContext))]
-    partial class EscolaContextModelSnapshot : ModelSnapshot
+    [Migration("20250504064456_tablesto")]
+    partial class tablesto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,6 +23,21 @@ namespace MVCCamiloMentoria.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("EscolaSupervisor", b =>
+                {
+                    b.Property<int>("EscolasId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SupervisorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EscolasId", "SupervisorId");
+
+                    b.HasIndex("SupervisorId");
+
+                    b.ToTable("EscolaSupervisor");
+                });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Aluno", b =>
                 {
@@ -811,6 +829,21 @@ namespace MVCCamiloMentoria.Migrations
                     b.HasIndex("DisciplinaId");
 
                     b.ToTable("TurmaDisciplina", (string)null);
+                });
+
+            modelBuilder.Entity("EscolaSupervisor", b =>
+                {
+                    b.HasOne("MVCCamiloMentoria.Models.Escola", null)
+                        .WithMany()
+                        .HasForeignKey("EscolasId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MVCCamiloMentoria.Models.Supervisor", null)
+                        .WithMany()
+                        .HasForeignKey("SupervisorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Aluno", b =>

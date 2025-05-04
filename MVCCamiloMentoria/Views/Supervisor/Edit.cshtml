@@ -1,5 +1,8 @@
 ﻿@model MVCCamiloMentoria.ViewModels.SupervisorViewModel
 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 @{
     ViewData["Title"] = "Editar Supervisor";
 }
@@ -19,7 +22,6 @@
 
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-                <!-- Informações Pessoais -->
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">Informações Pessoais</div>
                     <div class="card-body">
@@ -27,6 +29,18 @@
                             <label asp-for="Nome" class="form-label"></label>
                             <input asp-for="Nome" class="form-control" />
                             <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group mb-3">
+                                    <label class="fw-bold">Foto</label>
+                                    <input asp-for="FotoUrl" type="file" class="form-control" accept="image/png, image/jpeg" onchange="previewImage(this)" />
+                                    <small class="text-muted">Somente JPG/PNG. Máximo 2MB.</small>
+                                    <div class="mt-2">
+                                        <img id="preview" src="@(Model.FotoUrl ?? "/img/placeholder.png")" class="img-thumbnail" style="max-height: 200px;" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-group mb-3">
@@ -36,7 +50,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Endereço -->
+
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">Endereço</div>
                     <div class="card-body">
@@ -63,7 +77,6 @@
                     </div>
                 </div>
 
-                <!-- Telefone -->
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">Telefone</div>
                     <div class="card-body">
@@ -80,34 +93,13 @@
                     </div>
                 </div>
 
-                <!-- Escolas -->
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">Escolas</div>
                     <div class="card-body">
                         <div class="form-group mb-3">
-                            <label>Selecionar Escolas</label>
-                            <div class="form-check">
-                                @for (int i = 0; i < ((List<SelectListItem>)ViewBag.Escolas).Count; i++)
-                                {
-                                    var escola = ((List<SelectListItem>)ViewBag.Escolas)[i];
-                                    int escolaId = int.Parse(escola.Value);
-                                    bool isChecked = Model.Escolas != null && Model.Escolas.Any(e => e.EscolaId == escolaId);
-
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               name="EscolaIds"
-                                               id="escola_@i"
-                                               value="@escolaId"
-                                        @(isChecked ? "checked" : "") />
-
-                                        <label class="form-check-label" for="escola_@i">
-                                            @escola.Text
-                                        </label>
-                                    </div>
-                                }
-                            </div>
-                            <span asp-validation-for="Escolas" class="text-danger"></span>
+                            <label asp-for="EscolaIds">Selecionar Escolas</label>
+                            <select asp-for="EscolaIds" asp-items="(List<SelectListItem>)ViewBag.Escolas" class="form-control select2" multiple="multiple"></select>
+                            <span asp-validation-for="EscolaIds" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -123,9 +115,48 @@
     </div>
 </div>
 
+<script>
+    function previewImage(input) {
+        const file = input.files[0];
+        if (file) {
+            const maxSize = 2 * 1024 * 1024; // 2MB
+            const allowedTypes = ['image/jpeg', 'image/png'];
+
+            if (!allowedTypes.includes(file.type)) {
+                alert("Apenas arquivos JPG ou PNG são permitidos.");
+                input.value = "";
+                return;
+            }
+
+            if (file.size > maxSize) {
+                alert("O tamanho máximo do arquivo é 2MB.");
+                input.value = "";
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('preview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
+
+
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
 
+<script>
+    $(document).ready(function () {
+        $('.select2').select2({
+            placeholder: "Selecione as escolas",
+            width: '100%',
+            language: "pt-BR" 
+        });
+    });
+</script>

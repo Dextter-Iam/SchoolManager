@@ -67,10 +67,10 @@
                             <h5 class="mb-0">Escolas Vinculadas</h5>
                         </div>
                         <div class="card-body">
-                            @if (Model.Escolas != null && Model.Escolas.Any())
+                            @if (Model.SupervisorEscola != null && Model.SupervisorEscola.Any())
                             {
                                 <ul>
-                                    @foreach (var escola in Model.Escolas)
+                                    @foreach (var escola in Model.SupervisorEscola)
                                     {
                                         <li>@escola.Escola!.Nome</li>
                                     }
