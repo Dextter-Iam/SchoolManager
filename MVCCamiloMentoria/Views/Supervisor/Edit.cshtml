@@ -4,159 +4,165 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 @{
-    ViewData["Title"] = "Editar Supervisor";
+	ViewData["Title"] = "Editar Supervisor";
 }
 
 <div class="container">
-    <div class="justify-content-center">
-        <br />
-        <h3 class="mb-4">Editar Supervisor</h3>
-    </div>
+	<div class="justify-content-center">
+		<br />
+		<h3 class="mb-4">Editar Supervisor</h3>
+	</div>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <form asp-action="Edit">
-                <input type="hidden" asp-for="Id" />
+	<div class="row">
+		<div class="col-md-8 offset-md-2">
+			<form asp-action="Edit" enctype="multipart/form-data">
+				<input type="hidden" asp-for="Id" />
 
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+				<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">Informações Pessoais</div>
-                    <div class="card-body">
-                        <div class="form-group mb-3">
-                            <label asp-for="Nome" class="form-label"></label>
-                            <input asp-for="Nome" class="form-control" />
-                            <span asp-validation-for="Nome" class="text-danger"></span>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="form-group mb-3">
-                                    <label class="fw-bold">Foto</label>
-                                    <input asp-for="FotoUrl" type="file" class="form-control" accept="image/png, image/jpeg" onchange="previewImage(this)" />
-                                    <small class="text-muted">Somente JPG/PNG. Máximo 2MB.</small>
-                                    <div class="mt-2">
-                                        <img id="preview" src="@(Model.FotoUrl ?? "/img/placeholder.png")" class="img-thumbnail" style="max-height: 200px;" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+				<div class="card mb-4">
+					<div class="card-header bg-primary text-white">Informações Pessoais</div>
+					<div class="card-body">
+						<div class="form-group mb-3">
+							<label asp-for="Nome" class="form-label"></label>
+							<input asp-for="Nome" class="form-control" />
+							<span asp-validation-for="Nome" class="text-danger"></span>
+						</div>
 
-                        <div class="form-group mb-3">
-                            <label asp-for="Matricula" class="form-label"></label>
-                            <input asp-for="Matricula" class="form-control" />
-                            <span asp-validation-for="Matricula" class="text-danger"></span>
-                        </div>
-                    </div>
-                </div>
+						<div class="row">
+							<div class="col-md-8">
+								<div class="form-group mb-3">
+									<label class="fw-bold">Foto</label>
+									<input asp-for="FotoUpload" type="file" class="form-control" accept="image/png, image/jpeg" onchange="previewImage(this)" />
+									<small class="text-muted">Somente JPG/PNG. Máximo 2MB.</small>
+									<div class="mt-2">
+										<img id="preview" src="@(Model.FotoUrl ?? "/img/placeholder.png")" class="img-thumbnail" style="max-height: 200px;" />
+									</div>
+								</div>
+							</div>
+						</div>
 
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">Endereço</div>
-                    <div class="card-body">
-                        <div class="form-group mb-3">
-                            <label asp-for="Endereco.NomeRua"></label>
-                            <input asp-for="Endereco.NomeRua" class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="Endereco.NumeroRua"></label>
-                            <input asp-for="Endereco.NumeroRua" class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="Endereco.Complemento"></label>
-                            <input asp-for="Endereco.Complemento" class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="Endereco.CEP"></label>
-                            <input asp-for="Endereco.CEP" class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="Endereco.EstadoId"></label>
-                            <select asp-for="Endereco.EstadoId" class="form-select" asp-items="ViewBag.Estados"></select>
-                        </div>
-                    </div>
-                </div>
+						<div class="form-group mb-3">
+							<label asp-for="Matricula" class="form-label"></label>
+							<input asp-for="Matricula" class="form-control" />
+							<span asp-validation-for="Matricula" class="text-danger"></span>
+						</div>
+					</div>
+				</div>
+				<div class="card mb-4">
+					<div class="card-header bg-primary text-white">Telefones</div>
+					<div class="card-body">
+						@for (int i = 0; i < Model.Telefones!.Count; i++)
+						{
+							<div class="row mb-2">
+								<input type ="hidden" name="Telefones[@i].EscolaId" value="@Model.Telefones[i].EscolaId" />
+								<div class="col-md-6">
+									<label asp-for="Telefones[@i].DDD">DDD</label>
+									<input asp-for="Telefones[@i].DDD" class="form-control" />
+									<span asp-validation-for="Telefones[@i].DDD" class="text-danger"></span>
+								</div>
+								<div class="col-md-6">
+									<label asp-for="Telefones[@i].Numero">Número</label>
+									<input asp-for="Telefones[@i].Numero" class="form-control" />
+									<span asp-validation-for="Telefones[@i].Numero" class="text-danger"></span>
+								</div>
+							</div>
+						}
+					</div>
+				</div>
 
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">Telefone</div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label asp-for="Telefones[0].DDD"></label>
-                                <input asp-for="Telefones[0].DDD" class="form-control" />
-                            </div>
-                            <div class="col-md-8">
-                                <label asp-for="Telefones[0].Numero"></label>
-                                <input asp-for="Telefones[0].Numero" class="form-control" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+				<div class="card mb-4">
+					<div class="card-header bg-primary text-white">Escolas</div>
+					<div class="card-body">
+						<div class="form-group mb-3">
+							<label asp-for="EscolaIds">Selecionar Escolas</label>
+							<select asp-for="EscolaIds" asp-items="(List<SelectListItem>)ViewBag.Escolas" class="form-control select2" multiple="multiple">
+							</select>
+							<span asp-validation-for="EscolaIds" class="text-danger"></span>
+						</div>
+					</div>
+				</div>
 
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">Escolas</div>
-                    <div class="card-body">
-                        <div class="form-group mb-3">
-                            <label asp-for="EscolaIds">Selecionar Escolas</label>
-                            <select asp-for="EscolaIds" asp-items="(List<SelectListItem>)ViewBag.Escolas" class="form-control select2" multiple="multiple"></select>
-                            <span asp-validation-for="EscolaIds" class="text-danger"></span>
-                        </div>
-                    </div>
-                </div>
+				<div class="card mb-4">
+					<div class="card-header bg-primary text-white">Endereço</div>
+					<div class="card-body">
+						<div class="form-group mb-3">
+							<label asp-for="Endereco.NomeRua"></label>
+							<input asp-for="Endereco.NomeRua" class="form-control" />
+						</div>
+						<div class="form-group mb-3">
+							<label asp-for="Endereco.NumeroRua"></label>
+							<input asp-for="Endereco.NumeroRua" class="form-control" />
+						</div>
+						<div class="form-group mb-3">
+							<label asp-for="Endereco.Complemento"></label>
+							<input asp-for="Endereco.Complemento" class="form-control" />
+						</div>
+						<div class="form-group mb-3">
+							<label asp-for="Endereco.CEP"></label>
+							<input asp-for="Endereco.CEP" class="form-control" />
+						</div>
+						<div class="form-group mb-3">
+							<label asp-for="Endereco.EstadoId"></label>
+							<select asp-for="Endereco.EstadoId" class="form-select" asp-items="ViewBag.Estados"></select>
+						</div>
+					</div>
+				</div>
 
-                <!-- Botões -->
-                <div class="text-end">
-                    <input type="submit" value="Salvar" class="btn btn-success px-4" />
-                    <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
-                </div>
+				<div class="text-end">
+					<input type="submit" value="Salvar" class="btn btn-success px-4" />
+					<a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
+				</div>
 
-            </form>
-        </div>
-    </div>
+			</form>
+		</div>
+	</div>
 </div>
 
 <script>
-    function previewImage(input) {
-        const file = input.files[0];
-        if (file) {
-            const maxSize = 2 * 1024 * 1024; // 2MB
-            const allowedTypes = ['image/jpeg', 'image/png'];
+	function previewImage(input) {
+		const file = input.files[0];
+		if (file) {
+			const maxSize = 2 * 1024 * 1024; // 2MB
+			const allowedTypes = ['image/jpeg', 'image/png'];
 
-            if (!allowedTypes.includes(file.type)) {
-                alert("Apenas arquivos JPG ou PNG são permitidos.");
-                input.value = "";
-                return;
-            }
+			if (!allowedTypes.includes(file.type)) {
+				alert("Apenas arquivos JPG ou PNG são permitidos.");
+				input.value = "";
+				return;
+			}
 
-            if (file.size > maxSize) {
-                alert("O tamanho máximo do arquivo é 2MB.");
-                input.value = "";
-                return;
-            }
+			if (file.size > maxSize) {
+				alert("O tamanho máximo do arquivo é 2MB.");
+				input.value = "";
+				return;
+			}
 
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                document.getElementById('preview').src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    }
+			const reader = new FileReader();
+			reader.onload = function (e) {
+				document.getElementById('preview').src = e.target.result;
+			};
+			reader.readAsDataURL(file);
+		}
+	}
 </script>
 
 
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
 }
 
 <script>
-    $(document).ready(function () {
-        $('.select2').select2({
-            placeholder: "Selecione as escolas",
-            width: '100%',
-            language: "pt-BR" 
-        });
-    });
+	$(document).ready(function () {
+		$('.select2').select2({
+			placeholder: "Selecione as escolas",
+			width: '100%',
+			language: "pt-BR"
+		});
+	});
 </script>

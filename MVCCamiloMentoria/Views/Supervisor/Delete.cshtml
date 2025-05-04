@@ -4,94 +4,120 @@
     ViewData["Title"] = "Excluir Supervisor";
 }
 
-<div class="container">
-    <div class="justify-content-center">
-        <br />
-        <h3 class="text-danger mb-4">Tem certeza que deseja excluir este supervisor?</h3>
+<div class="container py-5">
+    <div class="justify-content-center text-center mb-4">
+        <h3 class="text-danger">Tem certeza que deseja excluir este supervisor?</h3>
     </div>
-
-    <hr />
+    <hr class="my-4" />
 
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <div class="card mb-4">
-                <div class="card-header bg-danger text-white">
+            <div class="card shadow-lg border-0 rounded-lg mb-4">
+                <div class="card-header bg-danger text-white rounded-top">
                     <h4 class="mb-0">Dados do Supervisor</h4>
                 </div>
                 <div class="card-body">
+                    <div class="row">
 
-                    <!-- Seção Informações Pessoais -->
-                    <div class="card mb-3">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">Informações Pessoais</h5>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <div class="mt-2 text-center">
+                                    <img id="preview"
+                                         src="@(string.IsNullOrEmpty(Model.FotoUrl) ? "/img/placeholder.png" : Model.FotoUrl)"
+                                         class="img-thumbnail rounded-square"
+                                         style="max-height: 280px; object-fit: cover;"
+                                         alt="Foto do Supervisor" />
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <dl class="row">
-                                <dt class="col-sm-4 fw-bold">Nome</dt>
-                                <dd class="col-sm-8">@Model.Nome</dd>
 
-                                <dt class="col-sm-4 fw-bold">Matrícula</dt>
-                                <dd class="col-sm-8">@Model.Matricula</dd>
-                            </dl>
-                        </div>
-                    </div>
+  
+                        <div class="col-md-8">
+                            <div class="card mb-3">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Informações Pessoais</h5>
+                                </div>
+                                <div class="card-body">
+                                    <dl class="row">
+                                        <dt class="col-sm-4 fw-bold">Nome</dt>
+                                        <dd class="col-sm-8">@Model.Nome</dd>
 
-                    <!-- Seção Endereço -->
-                    <div class="card mb-3">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">Endereço</h5>
-                        </div>
-                        <div class="card-body">
-                            @if (Model.Endereco != null)
-                            {
-                                <address>
-                                    @Model.Endereco.NomeRua, @Model.Endereco.NumeroRua<br />
-                                    @if (!string.IsNullOrEmpty(Model.Endereco.Complemento))
+                                        <dt class="col-sm-4 fw-bold">Matrícula</dt>
+                                        <dd class="col-sm-8">@Model.Matricula</dd>
+                                    </dl>
+                                </div>
+                            </div>
+
+                            <div class="card mb-3">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Endereço</h5>
+                                </div>
+                                <div class="card-body">
+                                    @if (Model.Endereco != null)
                                     {
-                                        @Model.Endereco.Complemento <br />
+                                        <address>
+                                            @Model.Endereco.NomeRua, @Model.Endereco.NumeroRua<br />
+                                            @if (!string.IsNullOrEmpty(Model.Endereco.Complemento))
+                                            {
+                                                @Model.Endereco.Complemento <br />
+                                            }
+                                            CEP: @Model.Endereco.CEP?.ToString("00000-000")<br />
+                                            @if (Model.Endereco != null && Model.Endereco.EstadoId != null)
+                                            {
+                                                var estado = Model.Endereco.ListaDeEstados?.FirstOrDefault(e => e.id == Model.Endereco.EstadoId);
+                                                if (estado != null)
+                                                {
+                                                    <span>@estado.Nome - @estado.Sigla</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">Estado não encontrado</span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">Estado não informado</span>
+                                            }
+                                        </address>
                                     }
-                                    CEP: @Model.Endereco.CEP?.ToString("00000-000")<br />
-                                    @Model.Endereco.ListaDeEstados? - @Model.Endereco.ListaDeEstados?
-                                </address>
-                            }
-                            else
-                            {
-                                <span class="text-muted">Endereço não cadastrado</span>
-                            }
-                        </div>
-                    </div>
-
-                    <!-- Seção Escolas -->
-                    <div class="card mb-3">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">Escolas Vinculadas</h5>
-                        </div>
-                        <div class="card-body">
-                            @if (Model.SupervisorEscola != null && Model.SupervisorEscola.Any())
-                            {
-                                <ul>
-                                    @foreach (var escola in Model.SupervisorEscola)
+                                    else
                                     {
-                                        <li>@escola.Escola!.Nome</li>
+                                        <span class="text-muted">Endereço não cadastrado</span>
                                     }
-                                </ul>
-                            }
-                            else
-                            {
-                                <span class="text-muted">Nenhuma escola vinculada</span>
-                            }
+                                </div>
+                            </div>
+
+                            <div class="card mb-3">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Escolas Vinculadas</h5>
+                                </div>
+                                <div class="card-body">
+                                    @if (Model.SupervisorEscola != null && Model.SupervisorEscola.Any())
+                                    {
+                                        <ul class="list-unstyled">
+                                            @foreach (var escola in Model.SupervisorEscola)
+                                            {
+                                                <li><i class="fas fa-school me-2"></i>@escola.Escola!.Nome</li>
+                                            }
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Nenhuma escola vinculada</span>
+                                    }
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
             <form asp-action="Delete" method="post" class="text-end">
                 <input type="hidden" asp-for="Id" />
-                <button type="submit" class="btn btn-danger px-4">
+                <button type="submit" class="btn btn-danger px-4 py-2 rounded-pill">
                     <i class="fas fa-trash-alt"></i> Confirmar Exclusão
                 </button>
-                <a asp-action="Index" class="btn btn-secondary ms-2">
+                <a asp-action="Index" class="btn btn-secondary ms-2 px-4 py-2 rounded-pill">
                     <i class="fas fa-times"></i> Cancelar
                 </a>
             </form>

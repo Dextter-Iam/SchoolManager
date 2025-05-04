@@ -10,6 +10,7 @@ namespace MVCCamiloMentoria.ViewModels
         public int Id { get; set; }
         public int DDD { get; set; }
         public int Numero { get; set; }
+        public int EscolaId { get; set; }
         public EscolaViewModel? Escola { get; set; }
         public PrestadorServicoViewModel? PrestadorServico { get; set; }
         public FornecedorViewModel? Fornecedor { get; set; }

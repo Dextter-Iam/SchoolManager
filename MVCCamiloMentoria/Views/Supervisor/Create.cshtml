@@ -17,7 +17,6 @@
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-                <!-- Informações Pessoais -->
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">Informações Pessoais</div>
                     <div class="card-body">
@@ -34,61 +33,43 @@
                     </div>
                 </div>
 
-                <!-- Escolas -->
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">Escolas</div>
                     <div class="card-body">
                         <div class="form-group mb-3">
-                            <label>Selecionar Escolas</label>
-                            <div class="form-check">
-                                @for (int i = 0; i < ((List<SelectListItem>)ViewBag.Escolas).Count; i++)
-                                {
-                                    var escola = ((List<SelectListItem>)ViewBag.Escolas)[i];
-                                    int escolaId = int.Parse(escola.Value);
-                                    bool isChecked = Model.SupervisorEscola != null && Model.SupervisorEscola.Any(e => e.EscolaId == escolaId);
-
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               name="EscolaIds"
-                                               id="escola_@i"
-                                               value="@escolaId"
-                                        @(isChecked ? "checked" : "") />
-
-                                        <label class="form-check-label" for="escola_@i">
-                                            @escola.Text
-                                        </label>
-                                    </div>
-                                }
-                            </div>
-                            <span asp-validation-for="SupervisorEscola" class="text-danger"></span>
+                            <label asp-for="EscolaIds">Selecionar Escolas</label>
+                            <select asp-for="EscolaIds" asp-items="(List<SelectListItem>)ViewBag.Escolas" class="form-control select2" multiple="multiple">
+                            </select>
+                            <span asp-validation-for="EscolaIds" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Telefone -->
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">Telefones</div>
                     <div class="card-body">
                         @for (int i = 0; i < Model.Telefones!.Count; i++)
                         {
                             <div class="row mb-2">
+                                <input asp-for="Telefones[@i].EscolaId" type="hidden" />
+
                                 <div class="col-md-6">
-                                    <label asp-for="Telefones[i].DDD"></label>
-                                    <input asp-for="Telefones[i].Numero" class="form-control" />
-                                    <span asp-validation-for="Telefones[i].Numero" class="text-danger"></span>
+                                    <label asp-for="Telefones[@i].DDD">DDD</label>
+                                    <input asp-for="Telefones[@i].DDD" class="form-control" />
+                                    <span asp-validation-for="Telefones[@i].DDD" class="text-danger"></span>
                                 </div>
+
                                 <div class="col-md-6">
-                                    <label asp-for="Telefones[i].Numero"></label>
-                                    <input asp-for="Telefones[i].Numero" class="form-control" />
-                                    <span asp-validation-for="Telefones[i].Numero" class="text-danger"></span>
+                                    <label asp-for="Telefones[@i].Numero">Número</label>
+                                    <input asp-for="Telefones[@i].Numero" class="form-control" />
+                                    <span asp-validation-for="Telefones[@i].Numero" class="text-danger"></span>
                                 </div>
                             </div>
                         }
                     </div>
                 </div>
-            
-                <!-- Endereço -->
+
+
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">Endereço</div>
                     <div class="card-body">

@@ -25,7 +25,6 @@ namespace MVCCamiloMentoria.Controllers
                 .Include(s => s.Telefones)
                 .ToListAsync();
 
-
             var viewModel = new List<SupervisorViewModel>();
 
             foreach (var s in supervisores)
@@ -97,50 +96,57 @@ namespace MVCCamiloMentoria.Controllers
                 Id = supervisor.Id,
                 Nome = supervisor.Nome,
                 Matricula = supervisor.Matricula,
+                Foto = supervisor.Foto,
+                FotoUrl = supervisor.FotoUrl,
 
-                Endereco = supervisor.Endereco != null ? new EnderecoViewModel
+                Endereco = new EnderecoViewModel
                 {
-                    NomeRua = supervisor.Endereco.NomeRua,
+                    NomeRua = supervisor.Endereco!.NomeRua,
                     NumeroRua = supervisor.Endereco.NumeroRua,
                     Complemento = supervisor.Endereco.Complemento,
                     CEP = supervisor.Endereco.CEP,
-                    ListaDeEstados = await AcessarEstados(),
-                } : null,
+                    EstadoId = supervisor.Endereco.EstadoId,
+                },
 
+                Telefones = new List<TelefoneViewModel>
+                {   new TelefoneViewModel
+                {
+                      DDD = supervisor.Telefones!.FirstOrDefault()?.DDD ?? 0,
+                      Numero = supervisor.Telefones!.FirstOrDefault()?.Numero ?? 0,
+                      Id = supervisor.Telefones!.FirstOrDefault()?.Id ?? 0
+                }
+                },
 
-                Telefones = supervisor.Telefones != null
-                    ? supervisor.Telefones.Select(st => new TelefoneViewModel
-                    {
-                        DDD = st.DDD,
-                        Numero = st.Numero,
-                        Id = st.Id,
-                    }).ToList()
-                    : new List<TelefoneViewModel>(),
+                SupervisorEscola = supervisor.SupervisorEscolas!
+                             .Select(se => new SupervisorEscolaViewModel
+                             {
+                                 SupervisorId = supervisor.Id,
 
+                                 Escola = new EscolaViewModel
+                                 {
+                                     Id = se.EscolaId,
+                                     Nome = se.Escola!.Nome,
+                                 }
+                             }).ToList(),
 
-                SupervisorEscola = supervisor.SupervisorEscolas != null
-                    ? supervisor.SupervisorEscolas.Select(se => new SupervisorEscolaViewModel
-                    {
-                        SupervisorId = supervisor.Id,
-                        Escola = se.Escola != null ? new EscolaViewModel
-                        {
-                            Id = se.Escola.Id,
-                            Nome = se.Escola.Nome,
-                        } : null,
-                    }).ToList()
-                    : new List<SupervisorEscolaViewModel>()
             };
-
 
             return View(viewModel);
         }
 
-
-
         // GET: Supervisor/Create
         public IActionResult Create()
         {
-            var viewModel = new SupervisorViewModel();
+            var viewModel = new SupervisorViewModel
+            {
+                Telefones = new List<TelefoneViewModel>
+        {
+            new TelefoneViewModel()
+        },
+                Endereco = new EnderecoViewModel(),
+                SupervisorEscola = new List<SupervisorEscolaViewModel>()
+            };
+
             CarregarDependencias(viewModel);
             return View(viewModel);
         }
@@ -154,12 +160,7 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
-
-                    if (viewModel.Endereco!.CEP == null)
-                    {
-                        Console.WriteLine("Erro, por favor Preencha o CEP");
-                    }
-                    else
+                    if (viewModel.Endereco == null)
                     {
                         ModelState.AddModelError("Endereco.CEP", "CEP inválido. Informe apenas números.");
                         CarregarDependencias(viewModel);
@@ -174,52 +175,59 @@ namespace MVCCamiloMentoria.Controllers
                         CEP = viewModel.Endereco.CEP,
                         EstadoId = viewModel.Endereco.EstadoId,
                     };
+
                     _context.Endereco.Add(endereco);
                     await _context.SaveChangesAsync();
 
-                    var supervisorViewModel = new Supervisor
+
+                    var supervisorCreate = new Supervisor
                     {
                         Nome = viewModel.Nome,
                         Matricula = viewModel.Matricula,
                         EnderecoId = endereco.Id
                     };
 
-                    _context.Supervisor.Add(supervisorViewModel);
+                    _context.Supervisor.Add(supervisorCreate);
+                    await _context.SaveChangesAsync();
+
+                    if (viewModel.EscolaIds != null && viewModel.EscolaIds.Any())
+                    {
+                        foreach (var escolaId in viewModel.EscolaIds)
+                        {
+                            _context.SupervisorEscola!.Add(new SupervisorEscola
+                            {
+                                SupervisorId = supervisorCreate.Id,
+                                EscolaId = escolaId
+                            });
+                        }
+                    }
                     await _context.SaveChangesAsync();
 
                     if (viewModel.Telefones != null && viewModel.Telefones.Any())
                     {
-                        foreach (var tel in viewModel.Telefones)
-                        {
-                            _context.Telefone.Add(new Telefone
+                        var escolaId = viewModel.EscolaIds!.First();
+
+                        var telefones = viewModel.Telefones
+                            .Where(t => t.Numero > 0)
+                            .Select(t => new Telefone
                             {
-                                DDD = tel.DDD,
-                                Numero = tel.Numero,
-                                SupervisorId = supervisorViewModel.Id,
-                                EscolaId = tel.Escola!.Id,
-                            });
-                        }
+                                DDD = t.DDD,
+                                Numero = t.Numero,
+                                EscolaId = escolaId,
+                                SupervisorId = supervisorCreate.Id
+                            }).ToList();
+
+                        _context.Telefone.AddRange(telefones);
+                        await _context.SaveChangesAsync();
                     }
 
-                    if (viewModel.SupervisorEscola != null && viewModel.SupervisorEscola.Any())
-                    {
-                        foreach (var escola in viewModel.SupervisorEscola)
-                        {
-                            _context.SupervisorEscola!.Add(new SupervisorEscola
-                            {
-                                SupervisorId = supervisorViewModel.Id,
-                                EscolaId = escola.EscolaId
-                            });
-                        }
-                    }
-
-                    await _context.SaveChangesAsync();
                     TempData["MensagemSucesso"] = "Supervisor cadastrado com sucesso!";
                     return RedirectToAction(nameof(Index));
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    TempData["MensagemErro"] = "Erro ao cadastrar supervisor.";
+
+                    TempData["MensagemErro"] = $"Erro ao cadastrar supervisor: {ex.Message}";
                 }
             }
 
@@ -241,7 +249,6 @@ namespace MVCCamiloMentoria.Controllers
                 .Include(s => s.SupervisorEscolas!)
                     .ThenInclude(se => se.Escola)
                 .Include(s => s.Telefones)
-                .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             if (supervisor == null)
@@ -250,148 +257,172 @@ namespace MVCCamiloMentoria.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var telefone = supervisor.Telefones?.FirstOrDefault();
-
             var viewModel = new SupervisorViewModel
             {
                 Id = supervisor.Id,
                 Nome = supervisor.Nome,
                 Matricula = supervisor.Matricula,
-
+                Foto = supervisor.Foto,
+                FotoUrl = supervisor.FotoUrl,
                 Endereco = new EnderecoViewModel
                 {
-                    NomeRua = supervisor.Endereco!.NomeRua,
-                    NumeroRua = supervisor.Endereco.NumeroRua,
-                    Complemento = supervisor.Endereco.Complemento,
-                    CEP = supervisor.Endereco.CEP,
-                    EstadoId = supervisor.Endereco.EstadoId,
+                    NomeRua = supervisor.Endereco?.NomeRua,
+                    NumeroRua = supervisor.Endereco?.NumeroRua ?? 0,
+                    Complemento = supervisor.Endereco?.Complemento,
+                    CEP = supervisor.Endereco?.CEP,
+                    EstadoId = supervisor.Endereco?.EstadoId ?? 0,
                 },
 
-                Telefones = supervisor.Telefones!
-                                      .Select(st => new TelefoneViewModel
-                                      {
-                                          Id = st.Id,
-                                          Numero = st.Numero,
-                                          DDD = st.DDD,
-                                      }).ToList(),
+                Telefones = new List<TelefoneViewModel>
+                {   new TelefoneViewModel
+                {
+                      DDD = supervisor.Telefones!.FirstOrDefault()?.DDD ?? 0,
+                      Numero = supervisor.Telefones!.FirstOrDefault()?.Numero ?? 0,
+                      Id = supervisor.Telefones!.FirstOrDefault()?.Id ?? 0
+                }
+                },
 
-                SupervisorEscola = supervisor.SupervisorEscolas!
-                                             .Select(spe => new SupervisorEscolaViewModel
-                                             {
-                                                 EscolaId = spe.EscolaId,
-                                                 SupervisorId = supervisor.Id,
-                                                 Escola = new EscolaViewModel
-                                                 {
-                                                     Nome = spe.Escola!.Nome,
-                                                     Id = spe.Escola.Id
-                                                 }
 
-                                             }).ToList(),
+                SupervisorEscola = supervisor.SupervisorEscolas!.Select(spe => new SupervisorEscolaViewModel
+                {
+                    EscolaId = spe.EscolaId,
+                    SupervisorId = supervisor.Id,
+                    Escola = new EscolaViewModel
+                    {
+                        Nome = spe.Escola!.Nome,
+                        Id = spe.Escola.Id
+                    }
+                }).ToList(),
+
+                EscolaIds = supervisor.SupervisorEscolas!.Select(se => se.EscolaId).ToList()
             };
-
 
             CarregarDependencias(viewModel);
             return View(viewModel);
         }
 
+
+
+        // POST: Supervisor/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, SupervisorViewModel viewModel)
+        public async Task<IActionResult> Edit(SupervisorViewModel viewModel)
         {
-            if (id != viewModel.Id)
-                return NotFound();
-
             if (ModelState.IsValid)
             {
-                try
+                var supervisor = await _context.Supervisor
+                    .Include(s => s.Endereco)
+                    .Include(s => s.Telefones)
+                    .Include(s => s.SupervisorEscolas)
+                    .FirstOrDefaultAsync(s => s.Id == viewModel.Id);
+
+                if (supervisor == null)
                 {
-                    var supervisor = await _context.Supervisor
-                        .Include(s => s.Endereco)
-                        .Include(s => s.SupervisorEscolas!)
-                                       .ThenInclude(se => se.Escola)
-                        .Include(s => s.Telefones)
-                        .FirstOrDefaultAsync(s => s.Id == id);
-
-                    if (supervisor == null)
-                    {
-                        TempData["MensagemErro"] = "Erro ao atualizar: Supervisor não encontrado.";
-                        return RedirectToAction(nameof(Index));
-                    }
-
-                    supervisor.Nome = viewModel.Nome;
-                    supervisor.Matricula = viewModel.Matricula;
-                    supervisor.SupervisorEscolas = viewModel.SupervisorEscola!
-                                                             .Select(spe => new SupervisorEscola
-                                                             {
-                                                                 EscolaId = spe.EscolaId,
-                                                                 SupervisorId = supervisor.Id,
-                                                                 Escola = new Escola
-                                                                 {
-                                                                     Nome = spe.Escola!.Nome,
-                                                                     Id = spe.Escola.Id
-                                                                 }
-
-                                                             }).ToList();
-
-                    if (supervisor.Endereco != null && viewModel.Endereco != null)
-                    {
-                        supervisor.Endereco.NomeRua = viewModel.Endereco.NomeRua;
-                        supervisor.Endereco.NumeroRua = viewModel.Endereco.NumeroRua;
-                        supervisor.Endereco.Complemento = viewModel.Endereco.Complemento;
-                        supervisor.Endereco.CEP = viewModel.Endereco.CEP;
-                        supervisor.Endereco.EstadoId = (int)viewModel.Endereco.EstadoId!;
-                    }
-
-                    if (viewModel.FotoUpload != null && viewModel.FotoUpload.Length > 0)
-                    {
-                        var extensao = Path.GetExtension(viewModel.FotoUpload.FileName).ToLowerInvariant();
-                        var permitidas = new[] { ".jpg", ".jpeg", ".png" };
-
-                        if (!permitidas.Contains(extensao) || viewModel.FotoUpload.Length > 2 * 1024 * 1024)
-                        {
-                            ModelState.AddModelError("FotoUpload", "Apenas imagens JPG ou PNG com no máximo 2MB são permitidas.");
-                            CarregarDependencias(viewModel);
-                            return View(viewModel);
-                        }
-
-                        var pastaDestino = Path.Combine("wwwroot", "uploads", supervisor.Id.ToString(), "imgperfil");
-                        Directory.CreateDirectory(pastaDestino);
-
-                        var nomeArquivo = $"foto{extensao}";
-                        var caminhoCompleto = Path.Combine(pastaDestino, nomeArquivo);
-
-                        using (var stream = new FileStream(caminhoCompleto, FileMode.Create))
-                        {
-                            await viewModel.FotoUpload.CopyToAsync(stream);
-                        }
-
-                        supervisor.FotoUrl = $"/uploads/{supervisor.Id}/imgperfil/{nomeArquivo}";
-                    }
-
-                    _context.Update(supervisor);
-                    await _context.SaveChangesAsync();
-
-                    if (supervisor.Telefones != null && supervisor.Telefones.Any())
-                        _context.Telefone.RemoveRange(supervisor.Telefones);
-
-                    await _context.SaveChangesAsync();
-
-                    TempData["MensagemSucesso"] = "Supervisor atualizado com sucesso!";
+                    TempData["MensagemErro"] = "Supervisor não encontrado.";
                     return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+
+                supervisor.Nome = viewModel.Nome;
+                supervisor.Matricula = viewModel.Matricula;
+
+                supervisor.Endereco!.NomeRua = viewModel.Endereco!.NomeRua;
+                supervisor.Endereco.NumeroRua = viewModel.Endereco.NumeroRua;
+                supervisor.Endereco.Complemento = viewModel.Endereco.Complemento;
+                supervisor.Endereco.CEP = viewModel.Endereco.CEP;
+                supervisor.Endereco.EstadoId = viewModel.Endereco.EstadoId;
+
+                var escolasAntigas = _context.SupervisorEscola!
+                                              .Where(se => se.SupervisorId == supervisor.Id)
+                                              .ToList();
+
+                _context.SupervisorEscola!.RemoveRange(escolasAntigas);
+
+                if (viewModel.EscolaIds != null && viewModel.EscolaIds.Any())
                 {
-                    if (!SupervisorExists(viewModel.Id))
+                    foreach (var escolaId in viewModel.EscolaIds)
                     {
-                        TempData["MensagemErro"] = "Erro de concorrência ao atualizar.";
-                        return RedirectToAction(nameof(Index));
+                        _context.SupervisorEscola.Add(new SupervisorEscola
+                        {
+                            SupervisorId = supervisor.Id,
+                            EscolaId = escolaId
+                        });
                     }
-                    throw;
                 }
-                catch (Exception)
+
+                var telefonesExistentes = await _context.Telefone
+                    .Where(t => t.SupervisorId == supervisor.Id)
+                    .ToListAsync();
+
+                foreach (var telefoneExistente in telefonesExistentes)
                 {
-                    TempData["MensagemErro"] = "Erro inesperado ao atualizar.";
+                    var correspondente = viewModel.Telefones!.FirstOrDefault(t =>
+                        t.Id == telefoneExistente.Id &&
+                        t.DDD == telefoneExistente.DDD &&
+                        t.Numero == telefoneExistente.Numero);
+
+                    if (correspondente == null)
+                    {
+                        _context.Telefone.Remove(telefoneExistente);
+                    }
                 }
+
+                if (viewModel.EscolaIds != null && viewModel.EscolaIds.Any())
+                {
+                    foreach (var escolaId in viewModel.EscolaIds)
+                    {
+                        foreach (var telefoneViewModel in viewModel.Telefones!.Where(t => t.Numero > 0))
+                        {
+                            var novoTel = new Telefone
+                            {
+                                DDD = telefoneViewModel.DDD,
+                                Numero = telefoneViewModel.Numero,
+                                EscolaId = escolaId,
+                                SupervisorId = supervisor.Id
+                            };
+
+                            _context.Telefone.Add(novoTel);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("ESCOLA NÃO ENCONTRADA!");
+
+                    throw new InvalidOperationException($"Escola com Id {viewModel.EscolaId} não existe.");
+                }
+
+
+                if (viewModel.FotoUpload != null && viewModel.FotoUpload.Length > 0)
+                {
+                    var extensao = Path.GetExtension(viewModel.FotoUpload.FileName).ToLowerInvariant();
+                    var permitidas = new[] { ".jpg", ".jpeg", ".png" };
+
+                    if (!permitidas.Contains(extensao) || viewModel.FotoUpload.Length > 2 * 1024 * 1024)
+                    {
+                        ModelState.AddModelError("FotoUpload", "Apenas imagens JPG ou PNG com no máximo 2MB são permitidas.");
+                        CarregarDependencias(viewModel);
+                        return View(viewModel);
+                    }
+
+                    var caminhoPasta = Path.Combine("wwwroot", "uploads", viewModel.Id.ToString(), "imgperfil");
+                    Directory.CreateDirectory(caminhoPasta);
+
+                    var nomeArquivo = $"foto{extensao}";
+                    var caminhoCompleto = Path.Combine(caminhoPasta, nomeArquivo);
+
+                    using (var stream = new FileStream(caminhoCompleto, FileMode.Create))
+                    {
+                        await viewModel.FotoUpload.CopyToAsync(stream);
+                    }
+
+                    supervisor.FotoUrl = $"/uploads/{viewModel.Id}/imgperfil/{nomeArquivo}";
+                }
+
+                await _context.SaveChangesAsync();
+
+                TempData["MensagemSucesso"] = "Supervisor atualizado com sucesso.";
+                return RedirectToAction(nameof(Index));
             }
 
             CarregarDependencias(viewModel);
@@ -427,21 +458,41 @@ namespace MVCCamiloMentoria.Controllers
                 Id = supervisor.Id,
                 Nome = supervisor.Nome,
                 Matricula = supervisor.Matricula,
+                Foto = supervisor.Foto,
+                FotoUrl = supervisor.FotoUrl,
+
                 Endereco = new EnderecoViewModel
                 {
-                    NumeroRua = supervisor.Endereco!.NumeroRua,
-                    NomeRua = supervisor.Endereco.NomeRua,
+                    NomeRua = supervisor.Endereco!.NomeRua,
+                    NumeroRua = supervisor.Endereco.NumeroRua,
                     Complemento = supervisor.Endereco.Complemento,
                     CEP = supervisor.Endereco.CEP,
+                    EstadoId = supervisor.Endereco.EstadoId,
+                    ListaDeEstados = await AcessarEstados(),
+
                 },
+
                 Telefones = new List<TelefoneViewModel>
+                {   new TelefoneViewModel
                 {
-                     new TelefoneViewModel
-                      {
-                            DDD = 0,
-                           Numero = 0
-                      }
+                      DDD = supervisor.Telefones!.FirstOrDefault()?.DDD ?? 0,
+                      Numero = supervisor.Telefones!.FirstOrDefault()?.Numero ?? 0,
+                      Id = supervisor.Telefones!.FirstOrDefault()?.Id ?? 0
+                }
                 },
+
+                SupervisorEscola = supervisor.SupervisorEscolas!
+                             .Select(se => new SupervisorEscolaViewModel
+                             {
+                                 SupervisorId = supervisor.Id,
+
+                                 Escola = new EscolaViewModel
+                                 {
+                                     Id = se.EscolaId,
+                                     Nome = se.Escola!.Nome,
+                                 }
+                             }).ToList(),
+
             };
 
             return View(viewModel);

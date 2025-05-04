@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
-builder.Services.AddDbContext<EscolaContext>(options => {
+builder.Services.AddDbContext<EscolaContext>(options =>     {
     options.UseSqlServer(builder.Configuration.GetConnectionString("SchoolMVCManagerConnectionString"));
 });
 

@@ -19,43 +19,51 @@
                     <h5 class="mb-0">Informações Pessoais</h5>
                 </div>
                 <div class="card-body">
-                    <dl class="row">
-                        <dt class="col-sm-3 fw-bold">Nome</dt>
-                        <dd class="col-sm-9">@Model.Nome</dd>
+                    <div class="row">
 
-                        <dt class="col-sm-3 fw-bold">Matrícula</dt>
-                        <dd class="col-sm-9">@Model.Matricula</dd>
-
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="form-group mb-3">
-                                    <label class="fw-bold">Foto</label>
-                                    <div class="mt-2">
-                                        <img id="preview" src="@(Model.FotoUrl ?? "/img/placeholder.png")" class="img-thumbnail" style="max-height: 200px;" alt="Foto do Supervisor" />
-                                    </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <div class="mt-2 text-center">
+                                    <img id="preview"
+                                         src="@(string.IsNullOrEmpty(Model.FotoUrl) ? "/img/placeholder.png" : Model.FotoUrl)"
+                                         class="img-thumbnail rounded-square"
+                                         style="max-height: 280px; object-fit: cover;"
+                                         alt="Foto do Supervisor" />
                                 </div>
                             </div>
                         </div>
 
-                        <dt class="col-sm-3">Telefone</dt>
-                        <dd class="col-sm-9">
-                            @foreach (var tel in Model.Telefones!)
-                            {
-                                <p>(@tel.DDD) @tel.Numero</p>
-                            }
 
-                        <dt class="col-sm-3 fw-bold">Endereço</dt>
-                        <dd class="col-sm-9">
-                                @if (Model.Endereco != null)
-                                {
-                                    @($"{Model.Endereco.NomeRua}, {Model.Endereco.NumeroRua}")
-                                }
-                                else
-                                {
-                                <span class="text-muted">Não informado</span>
-                                }
-                        </dd>
-                    </dl>
+                        <div class="col-md-8">
+                            <dl class="row">
+                                <dt class="col-sm-4 fw-bold">Nome</dt>
+                                <dd class="col-sm-8">@Model.Nome</dd>
+
+                                <dt class="col-sm-4 fw-bold">Matrícula</dt>
+                                <dd class="col-sm-8">@Model.Matricula</dd>
+
+                                <dt class="col-sm-4 fw-bold">Telefone</dt>
+                                <dd class="col-sm-8">
+                                    @foreach (var tel in Model.Telefones!)
+                                    {
+                                        <p>(@tel.DDD) @tel.Numero</p>
+                                    }
+                                </dd>
+
+                                <dt class="col-sm-4 fw-bold">Endereço</dt>
+                                <dd class="col-sm-8">
+                                    @if (Model.Endereco != null)
+                                    {
+                                        @($"{Model.Endereco.NomeRua}, {Model.Endereco.NumeroRua}")
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Não informado</span>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
                 </div>
             </div>
 

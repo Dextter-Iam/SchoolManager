@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using MVCCamiloMentoria.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace MVCCamiloMentoria.ViewModels
 {
@@ -27,9 +28,12 @@ namespace MVCCamiloMentoria.ViewModels
         public string? FotoUrl { get; set; } 
         [DisplayName("Endereço")]
         public EnderecoViewModel? Endereco { get; set; }
+        
         public List<int>? EscolaIds { get; set; }
+
         [Required(ErrorMessage = "Selecione pelo menos uma escola.")]
         [DisplayName("Escolas")]
+        public int EscolaId { get; set; }
         public List<SupervisorEscolaViewModel>? SupervisorEscola { get; set; }
         public List<TelefoneViewModel>? Telefones { get; set; }
     }
