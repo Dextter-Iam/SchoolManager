@@ -37,6 +37,7 @@ namespace MVCCamiloMentoria.ViewModels
 
         [DisplayName("Turma")]
         [Required(ErrorMessage = "A turma é obrigatória.")]
+        public TurmaViewModel? Turma { get; set; }
         public int TurmaId { get; set; }
         public List<TurmaViewModel>? Turmas { get; set; }
 

@@ -14,7 +14,7 @@
 				</div>
 			</div>
 				<div class="card-body">
-					<!-- Seção Informações Pessoais -->
+
 					<div class="card mb-3">
 						<div class="card-header bg-light">
 							<h5 class="mb-0">Informações Pessoais</h5>
@@ -28,7 +28,7 @@
 
 					</div>
 
-					<!-- Seção Endereço -->
+
 					<div class="card mb-3">
 						<div class="card-header bg-light">
 							<h5 class="mb-0">Endereço</h5>
@@ -89,7 +89,7 @@
 						</div>
 					</div>
 
-				<!-- Seção Alunos Relacionados -->
+
 				<div class="card mb-3">
 					<div class="card-header bg-light">
 						<h5 class="mb-0">Alunos Relacionados</h5>
@@ -113,7 +113,7 @@
 												<td>@alunoRel.Aluno?.Nome</td>
 												<td>@alunoRel.Aluno?.DataNascimento.ToString("dd/MM/yyyy")</td>
 												<td>
-													@string.Join(", ", alunoRel.Aluno?.Turmas?.Select(t => t.NomeTurma) ?? new List<string>())
+													@alunoRel.Aluno?.Turma?.NomeTurma
 												</td>
 											</tr>
 										}

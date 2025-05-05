@@ -17,7 +17,7 @@
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-                <!-- Seção Informações Pessoais -->
+
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">Informações Pessoais</h5>
@@ -31,7 +31,30 @@
                     </div>
                 </div>
 
-                <!-- Seção Endereço -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Telefone</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Telefones[0].DDD" class="form-label"></label>
+                                    <input asp-for="Telefones[0].DDD" class="form-control" />
+                                    <span asp-validation-for="Telefones[0].DDD" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Telefones[0].Numero" class="form-label"></label>
+                                    <input asp-for="Telefones[0].Numero" class="form-control" />
+                                    <span asp-validation-for="Telefones[0].Numero" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">Endereço</h5>
@@ -76,31 +99,6 @@
 
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Telefone</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label asp-for="Telefones[0].DDD" class="form-label"></label>
-                                    <input asp-for="Telefones[0].DDD" class="form-control" />
-                                    <span asp-validation-for="Telefones[0].DDD" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="form-group mb-3">
-                                    <label asp-for="Telefones[0].Numero" class="form-label"></label>
-                                    <input asp-for="Telefones[0].Numero" class="form-control" />
-                                    <span asp-validation-for="Telefones[0].Numero" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Seção Alunos -->
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">Alunos Relacionados</h5>
                     </div>
                     <div class="card-body">
@@ -111,7 +109,7 @@
                     </div>
                 </div>
 
-                <!-- Botões de Ação -->
+
                 <div class="form-group text-end">
                     <input type="submit" value="Cadastrar" class="btn btn-primary px-4" />
                     <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
