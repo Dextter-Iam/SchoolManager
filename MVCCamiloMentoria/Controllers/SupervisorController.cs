@@ -16,15 +16,21 @@ namespace MVCCamiloMentoria.Controllers
         }
 
         // GET: Supervisor
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pagina = 1)
         {
+            int registrosPorPagina = 10;
+            var totalRegistros = await _context.Supervisor.CountAsync();
+            var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
+
             var supervisores = await _context.Supervisor
                 .Include(s => s.Endereco)
                 .Include(s => s.SupervisorEscolas!)
                     .ThenInclude(se => se.Escola)
                 .Include(s => s.Telefones)
+                .Skip((pagina - 1) * registrosPorPagina)
+                .Take(registrosPorPagina)
                 .ToListAsync();
-
+            
             var viewModel = new List<SupervisorViewModel>();
 
             foreach (var s in supervisores)
@@ -63,6 +69,9 @@ namespace MVCCamiloMentoria.Controllers
 
                 viewModel.Add(supervisorViewModel);
             }
+
+            ViewBag.PaginaAtual = pagina;
+            ViewBag.TotalPaginas = totalPaginas;
 
             return View(viewModel);
         }
