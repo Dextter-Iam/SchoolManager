@@ -137,8 +137,8 @@ namespace MVCCamiloMentoria.Controllers
                                            ProfessorId = pd.ProfessorId,
                                            Disciplina = new DisciplinaViewModel
                                            {
-                                              Id = pd.DisciplinaId,
-                                              Nome = pd.Disciplina!.Nome 
+                                               Id = pd.DisciplinaId,
+                                               Nome = pd.Disciplina!.Nome
                                            }
 
                                        }).ToList(),
@@ -259,7 +259,7 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var professor = await _context.Professor
-                .Include(p=> p.Escola)
+                .Include(p => p.Escola)
                 .Include(p => p.Endereco)
                 .Include(p => p.Telefones)
                 .Include(p => p.Turmas!)
@@ -283,10 +283,10 @@ namespace MVCCamiloMentoria.Controllers
                 Nome = professor.Nome,
                 Foto = professor.Foto,
                 Matricula = professor.Matricula,
-                EscolaId = professor.Escola!.Id,
+                EscolaId = professor.EscolaId,
                 Escola = new EscolaViewModel
                 {
-                    Nome = professor.Escola.Nome, 
+                    Nome = professor.Escola.Nome,
                     Id = professor.Escola.Id,
                 },
                 Endereco = new EnderecoViewModel
@@ -295,15 +295,18 @@ namespace MVCCamiloMentoria.Controllers
                     NumeroRua = professor.Endereco?.NumeroRua ?? 0,
                     Complemento = professor.Endereco?.Complemento,
                     CEP = professor.Endereco?.CEP,
-                    EstadoId = professor.Endereco!.EstadoId
+                    EstadoId = professor.Endereco.EstadoId
                 },
-                Telefones = professor.Telefones!
-                                     .Select(pft => new TelefoneViewModel
-                                     {
-                                         DDD = pft?.DDD ?? 0,
-                                         Numero = pft?.Numero ?? 0,
-                                         Id = pft?.Id ?? 0,
-                                     }).ToList(),
+                Telefones = (professor.Telefones != null && professor.Telefones.Any())
+                            ? professor.Telefones
+                                      .Where(pft => pft != null && (pft.DDD > 0 || pft.Numero > 0))
+                                      .Select(pft => new TelefoneViewModel
+                                      {
+                                          DDD = pft.DDD,
+                                          Numero = pft.Numero,
+                                          Id = pft.Id
+                                      }).ToList()
+    : new List<TelefoneViewModel> { new TelefoneViewModel() },
 
                 TurmaIds = professor.Turmas?
                                     .Select(t => t.TurmaId).ToList(),
@@ -503,7 +506,7 @@ namespace MVCCamiloMentoria.Controllers
                 Matricula = professor.Matricula,
                 Escola = new EscolaViewModel
                 {
-                    Nome = professor!.Escola.Nome, 
+                    Nome = professor!.Escola.Nome,
                     Id = professor.Escola.Id,
                 },
 

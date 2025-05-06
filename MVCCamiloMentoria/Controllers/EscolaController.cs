@@ -61,7 +61,7 @@ namespace MVCCamiloMentoria.Controllers
 
             var escolas = await _context.Escola
                 .Include(e => e.Endereco)
-                .Include(e => e.Estado)
+                         .ThenInclude(e => e.Estado)
                 .Include(e => e.Professores)
                 .Include(e => e.Coordenadores)
                 .Include(e => e.Diretores)
@@ -94,6 +94,15 @@ namespace MVCCamiloMentoria.Controllers
                     NumeroRua = escolas.Endereco!.NumeroRua,
                     Complemento = escolas.Endereco!.Complemento,
                     EstadoId = escolas.Endereco.EstadoId,
+                    ListaDeEstados = new List<EstadoViewModel>
+                    {
+                        new EstadoViewModel
+                        {
+                            id = escolas.Endereco.Estado!.id,
+                            Nome = escolas.Endereco.Estado.Nome,
+                            Sigla = escolas.Endereco.Estado.Sigla,
+                        }
+                    }
                 },
 
                 Telefones = escolas.Telefones?
@@ -214,19 +223,15 @@ namespace MVCCamiloMentoria.Controllers
                         {
                             NomeRua = viewModel.Endereco!.NomeRua,
                             CEP = viewModel.Endereco.CEP,
-                            NumeroRua = viewModel.Endereco!.NumeroRua,
-                            Complemento = viewModel.Endereco!.Complemento,
-                            EstadoId = viewModel.Endereco!.EstadoId,
+                            NumeroRua = viewModel.Endereco.NumeroRua,
+                            Complemento = viewModel.Endereco.Complemento,
+                            EstadoId = viewModel.Endereco.EstadoId
                         },
-
-                        Telefones = new List<Telefone>()
-                        {   new Telefone
+                        Telefones = viewModel.Telefones?.Select(t => new Telefone
                         {
-                            DDD = viewModel.Telefones![0].DDD,
-                            Numero = viewModel.Telefones[0].Numero
-                        }
-
-                        }
+                            DDD = t.DDD,
+                            Numero = t.Numero
+                        }).ToList()
                     };
 
                     _context.Escola.Add(escola);
@@ -257,7 +262,7 @@ namespace MVCCamiloMentoria.Controllers
 
             var escola = await _context.Escola
                 .Include(e => e.Endereco)
-                .Include(e=>e.Estado)
+                    .ThenInclude(e => e.Estado)
                 .Include(e => e.Telefones)
                 .FirstOrDefaultAsync(e => e.Id == id);
 
@@ -310,7 +315,7 @@ namespace MVCCamiloMentoria.Controllers
             {
                 var escola = await _context.Escola
                     .Include(e => e.Endereco)
-                    .Include(e=>e.Estado)
+                    .Include(e => e.Estado)
                     .Include(e => e.Telefones)
                     .FirstOrDefaultAsync(e => e.Id == id);
 
@@ -371,8 +376,8 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var escola = await _context.Escola
-                .Include(e => e.Estado)
                 .Include(e => e.Endereco)
+                        .ThenInclude(e => e.Estado)
                 .Include(e => e.Telefones)
                 .FirstOrDefaultAsync(e => e.Id == id);
 
@@ -381,22 +386,110 @@ namespace MVCCamiloMentoria.Controllers
                 TempData["MensagemErro"] = "Escola não encontrada.";
                 return NotFound();
             }
-
-            var viewModel = new EscolaViewModel
+            var estados = await _context.Estado.ToListAsync();
+            var escolaViewModel = new EscolaViewModel
             {
                 Id = escola.Id,
                 Nome = escola.Nome,
-                Telefones = escola.Telefones?.Select(t => new TelefoneViewModel
+                Endereco = new EnderecoViewModel
                 {
-                    DDD = t.DDD,
-                    Numero = t.Numero
-                }).ToList() ?? new List<TelefoneViewModel>()
+                    NomeRua = escola.Endereco!.NomeRua,
+                    CEP = escola.Endereco!.CEP,
+                    NumeroRua = escola.Endereco!.NumeroRua,
+                    Complemento = escola.Endereco!.Complemento,
+                    EstadoId = escola.Endereco.EstadoId,
+                    ListaDeEstados = estados.Select(e => new EstadoViewModel
+                    {
+                        id = e.id,
+                        Nome = e.Nome,
+                        Sigla = e.Sigla
+                    }).ToList()
+                },
+
+                Telefones = escola.Telefones?
+                                     .Select(et => new TelefoneViewModel
+                                     {
+                                         Id = et.Id,
+                                         Numero = et.Numero,
+                                         DDD = et.DDD,
+                                     }).ToList(),
+
+                //Turmas = escola.Turmas?
+                //                .Select(t => new TurmaViewModel
+                //                {
+                //                    TurmaId = t.TurmaId,
+                //                    NomeTurma = t.NomeTurma,
+                //                }).ToList(),
+
+                //Disciplina = escola.Disciplina != null
+                //                    ? escola.Disciplina.Select(d => new DisciplinaViewModel
+                //                    {
+                //                        Id = d.Id,
+                //                        Nome = d.Nome,
+                //                    }).ToList()
+                //                    : new List<DisciplinaViewModel>(),
+
+                //Alunos = escola.Alunos != null
+                //                    ? escola.Alunos.Select(a => new AlunoViewModel
+                //                    {
+                //                        Id = a.Id,
+                //                        Nome = a.Nome,
+                //                    }).ToList()
+                //                    : new List<AlunoViewModel>(),
+
+                //Supervisores = escola.SupervisorEscolas!
+                //                      .Select(se => new SupervisorEscolaViewModel
+                //                      {
+                //                          SupervisorId = se.SupervisorId,
+                //                          EscolaId = se.EscolaId,
+                //                          Supervisor = se.Supervisor != null
+                //                                            ? new SupervisorViewModel
+                //                                            {
+                //                                                Id = se.Supervisor.Id,
+                //                                                Nome = se.Supervisor.Nome
+                //                                            }
+                //                      : null
+                //                      }).ToList(),
+
+                //Coordenadores = escola.Coordenadores?
+                //                       .Select(c => new CoordenadorViewModel
+                //                       {
+                //                           Id = c.Id,
+                //                           Nome = c.Nome,
+                //                           Escola = new EscolaViewModel
+                //                           {
+                //                               Id = c.EscolaId,
+                //                               Nome = c.Escola!.Nome,
+                //                           },
+                //                       }).ToList(),
+
+                //Diretores = escola.Diretores?
+                //                    .Select(d => new DiretorViewModel
+                //                    {
+                //                        Id = d.Id,
+                //                        Nome = d.Nome,
+                //                        Escola = new EscolaViewModel
+                //                        {
+                //                            Id = d.EscolaId,
+                //                            Nome = d.Escola!.Nome,
+                //                        }
+                //                    }).ToList(),
+
+                //Professores = escola.Professores?
+                //                     .Select(p => new ProfessorViewModel
+                //                     {
+                //                         Id = p.Id,
+                //                         Nome = p.Nome,
+                //                         Escola = new EscolaViewModel
+                //                         {
+                //                             Id = p.EscolaId,
+                //                             Nome = p.Escola!.Nome,
+                //                         },
+                //                     }).ToList(),
+
             };
-
-            TempData["MensagemInfo"] = "Confirme a exclusão da escola.";
-            return View(viewModel);
+            return View(escolaViewModel);
         }
-
         // POST: EscolaController/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -406,6 +499,7 @@ namespace MVCCamiloMentoria.Controllers
             {
                 var escola = await _context.Escola
                     .Include(e => e.Endereco)
+                        .ThenInclude(e => e.Estado)
                     .Include(e => e.Telefones)
                     .FirstOrDefaultAsync(e => e.Id == id);
 
@@ -415,28 +509,46 @@ namespace MVCCamiloMentoria.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-
-                if (escola.Telefones != null && escola.Telefones.Any())
+                using (var transaction = await _context.Database.BeginTransactionAsync())
                 {
-                    _context.Telefone.RemoveRange(escola.Telefones);
+                    try
+                    {
+                        if (escola.Telefones != null && escola.Telefones.Any())
+                        {
+                            _context.Telefone.RemoveRange(escola.Telefones);
+                        }
+
+                        if (escola.Endereco != null)
+                        {
+                            _context.Endereco.Remove(escola.Endereco);
+                        }
+
+                        _context.Escola.Remove(escola);
+
+                        await _context.SaveChangesAsync();
+
+                        await transaction.CommitAsync();
+
+                        TempData["MensagemSucesso"] = "Escola excluída com sucesso!";
+                        return RedirectToAction(nameof(Index));
+                    }
+                    catch (DbUpdateException dbEx)
+                    {
+
+                        await transaction.RollbackAsync();
+
+                        TempData["MensagemErro"] = $"Erro ao excluir a escola: {dbEx.Message}. Verifique se existem dados vinculados (coordenadores, telefones, etc.).";
+                        return RedirectToAction(nameof(Index));
+                    }
+                    catch (Exception ex)
+                    {
+
+                        await transaction.RollbackAsync();
+
+                        TempData["MensagemErro"] = $"Erro inesperado ao excluir a escola: {ex.Message}";
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
-
-
-                if (escola.Endereco != null)
-                {
-                    _context.Endereco.Remove(escola.Endereco);
-                }
-
-                _context.Escola.Remove(escola);
-                await _context.SaveChangesAsync();
-
-                TempData["MensagemSucesso"] = "Exclusão realizada com sucesso!";
-                return RedirectToAction(nameof(Index));
-            }
-            catch (DbUpdateException)
-            {
-                TempData["MensagemErro"] = "Não é possível excluir esta escola. Verifique se há coordenadores, telefones ou outros registros vinculados.";
-                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
@@ -444,6 +556,7 @@ namespace MVCCamiloMentoria.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
         private void CarregarViewBagsSync()
         {
             var estados = _context.Estado

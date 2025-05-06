@@ -218,7 +218,9 @@ namespace MVCCamiloMentoria.Controllers
                 TempData["MensagemErro"] = "Diretor não encontrado.";
                 return RedirectToAction(nameof(Index));
             }
-
+            var ultimoEstado = await _context.Estado
+                                             .OrderByDescending(e => e.id) 
+                                             .FirstOrDefaultAsync();
             var viewModel = new DiretorViewModel
             {
                 Id = diretor.Id,
@@ -231,11 +233,12 @@ namespace MVCCamiloMentoria.Controllers
                     Complemento = diretor.Endereco.Complemento,
                     NumeroRua = diretor.Endereco.NumeroRua,
                     CEP = diretor.Endereco.CEP,
+                    EstadoId = diretor.Endereco.EstadoId,
                     ListaDeEstados = new List<EstadoViewModel>
             {
                 new EstadoViewModel
                 {
-                    id = diretor.Endereco.EstadoId,
+                    id = ultimoEstado.id,
                     Nome = diretor.Endereco.Estado?.Nome,
                     Sigla = diretor.Endereco.Estado?.Sigla
                 }
@@ -273,6 +276,7 @@ namespace MVCCamiloMentoria.Controllers
                 {
                     var diretor = await _context.Diretor
                         .Include(d => d.Escola)
+                        .Include(d=>d.Endereco)
                         .Include(d => d.Endereco)
                         .Include(d => d.Telefones)
                         .FirstOrDefaultAsync(d => d.Id == id);
@@ -296,6 +300,8 @@ namespace MVCCamiloMentoria.Controllers
                         diretor.Endereco.EstadoId = (int)viewModel.Endereco.EstadoId!;
                     }
 
+                    await _context.SaveChangesAsync();
+
                     if (viewModel.Telefones != null && viewModel.Telefones.Any())
                     {
 
@@ -308,7 +314,7 @@ namespace MVCCamiloMentoria.Controllers
                             _context.Telefone.Remove(telefoneRemover);
                         }
 
-                        // Adiciona novos telefones
+
                         foreach (var telefoneViewModel in viewModel.Telefones)
                         {
                             var telefoneExistente = diretor.Telefones!
