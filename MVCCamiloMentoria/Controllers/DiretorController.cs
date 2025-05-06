@@ -21,10 +21,8 @@ namespace MVCCamiloMentoria.Controllers
             var diretores = await _context.Diretor
                 .Include(d => d.Endereco)
                 .Include(d => d.Telefones)
-                .Include(d=> d.Escola)
-                .ToListAsync(); 
-
-            var estados = await AcessarEstados(); 
+                .Include(d => d.Escola)
+                .ToListAsync();
 
             var viewModelList = diretores.Select(d => new DiretorViewModel
             {
@@ -37,7 +35,7 @@ namespace MVCCamiloMentoria.Controllers
                     NumeroRua = d.Endereco.NumeroRua,
                     Complemento = d.Endereco.Complemento,
                     CEP = d.Endereco.CEP,
-                    ListaDeEstados = estados,
+                    EstadoId = d.Endereco.EstadoId,
                 },
                 Telefones = d.Telefones!
                              .Select(td => new TelefoneViewModel
@@ -48,7 +46,7 @@ namespace MVCCamiloMentoria.Controllers
                              }).ToList(),
                 Escola = new EscolaViewModel
                 {
-                    Id = d.EscolaId, 
+                    Id = d.EscolaId,
                     Nome = d.Escola!.Nome,
                 }
             }).ToList();
@@ -71,7 +69,6 @@ namespace MVCCamiloMentoria.Controllers
                 .Include(d => d.Escola)
                 .Include(d => d.Endereco)
                 .Include(d => d.Telefones)
-                .AsNoTracking()
                 .FirstOrDefaultAsync(d => d.Id == id);
 
             if (diretor == null)
@@ -87,54 +84,81 @@ namespace MVCCamiloMentoria.Controllers
                 Id = diretor.Id,
                 Nome = diretor.Nome,
                 Matricula = diretor.Matricula,
-                NomeRua = diretor.Endereco?.NomeRua,
-                NumeroRua = diretor.Endereco?.NumeroRua ?? 0,
-                Complemento = diretor.Endereco?.Complemento,
-                CEP = diretor.Endereco?.CEP?.ToString("00000000"),
-                EstadoId = diretor.Endereco?.EstadoId,
                 EscolaId = diretor.EscolaId,
-                DDD = telefone?.DDD ?? 0,
-                Numero = telefone?.Numero ?? 0
+                Endereco = diretor.Endereco == null ? null : new EnderecoViewModel
+                {
+                    NomeRua = diretor.Endereco.NomeRua,
+                    Complemento = diretor.Endereco.Complemento,
+                    NumeroRua = diretor.Endereco.NumeroRua,
+                    CEP = diretor.Endereco.CEP,
+                    ListaDeEstados = new List<EstadoViewModel>
+            {
+                new EstadoViewModel
+                {
+                    id = diretor.Endereco.EstadoId,
+                    Nome = diretor.Endereco.Estado?.Nome,
+                    Sigla = diretor.Endereco.Estado?.Sigla
+                }
+            }
+                },
+                Escola = diretor.Escola == null ? null : new EscolaViewModel
+                {
+                    Id = diretor.EscolaId,
+                    Nome = diretor.Escola.Nome
+                },
+                Telefones = diretor.Telefones?
+                    .Select(t => new TelefoneViewModel
+                    {
+                        DDD = t.DDD,
+                        Numero = t.Numero
+                    }).ToList()
             };
 
             return View(viewModel);
         }
 
-
         // GET: Diretor/Create
         public IActionResult Create()
         {
+            var viewModel = new DiretorViewModel
+            {
+                Telefones = new List<TelefoneViewModel>
+                { 
+                    new TelefoneViewModel()
+                
+                }
+            };
             CarregarDependencias();
-            return View(new DiretorViewModel());
+            return View(viewModel);
         }
+
 
         // POST: Diretor/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(DiretorViewModel viewModel)
+        public async Task<IActionResult>    Create(DiretorViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (viewModel.DDD <= 0 || viewModel.Numero <= 0)
+                    if (viewModel.Endereco == null)
                     {
-                        TempData["MensagemErro"] = "DDD e Número do telefone são obrigatórios.";
+                        ModelState.AddModelError("", "Endereço é obrigatório.");
                         CarregarDependencias(viewModel);
                         return View(viewModel);
                     }
 
                     var endereco = new Endereco
                     {
-                        NomeRua = viewModel.Endereco!.NomeRua,
+                        NomeRua = viewModel.Endereco.NomeRua,
                         NumeroRua = viewModel.Endereco.NumeroRua,
                         Complemento = viewModel.Endereco.Complemento,
                         CEP = viewModel.Endereco.CEP,
-                        EstadoId = (int)viewModel.Endereco.EstadoId!
+                        EstadoId = viewModel.Endereco.EstadoId,
                     };
 
                     _context.Endereco.Add(endereco);
-
                     await _context.SaveChangesAsync();
 
                     var diretor = new Diretor
@@ -148,15 +172,22 @@ namespace MVCCamiloMentoria.Controllers
                     _context.Diretor.Add(diretor);
                     await _context.SaveChangesAsync();
 
-                    var telefone = new Telefone
+                    if (viewModel.Telefones == null || !viewModel.Telefones.Any())
                     {
-                        DDD = viewModel.DDD,
-                        Numero = viewModel.Numero,
-                        EscolaId = viewModel.EscolaId,
-                        DiretorId = diretor.Id
-                    };
+                        TempData["MensagemErro"] = "Telefone é obrigatório.";
+                        CarregarDependencias(viewModel);
+                        return View(viewModel);
+                    }
 
-                    _context.Telefone.Add(telefone);
+                    var telefones = viewModel.Telefones.Select(t => new Telefone
+                    {
+                        DDD = t.DDD,
+                        Numero = t.Numero,
+                        DiretorId = diretor.Id,
+                        EscolaId = viewModel.EscolaId
+                    }).ToList();
+
+                    _context.Telefone.AddRange(telefones);
                     await _context.SaveChangesAsync();
 
                     TempData["MensagemSucesso"] = "Diretor cadastrado com sucesso!";
@@ -170,17 +201,12 @@ namespace MVCCamiloMentoria.Controllers
 
             CarregarDependencias(viewModel);
             return View(viewModel);
+
         }
 
         // GET: Diretor/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                TempData["MensagemErro"] = "Diretor não encontrado.";
-                return RedirectToAction(nameof(Index));
-            }
-
             var diretor = await _context.Diretor
                 .Include(d => d.Escola)
                 .Include(d => d.Endereco)
@@ -193,31 +219,43 @@ namespace MVCCamiloMentoria.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var telefone = diretor.Telefones?.FirstOrDefault();
-
-            var escolad = new EscolaViewModel
-            {
-                Id = diretor.EscolaId,
-                Nome = diretor.Escola!.Nome,
-            };
-
             var viewModel = new DiretorViewModel
             {
                 Id = diretor.Id,
                 Nome = diretor.Nome,
                 Matricula = diretor.Matricula,
-                NomeRua = diretor.Endereco?.NomeRua,
-                NumeroRua = diretor.Endereco?.NumeroRua ?? 0,
-                Complemento = diretor.Endereco?.Complemento,
-                CEP = diretor.Endereco?.CEP?.ToString("00000000"),
-                EstadoId = diretor.Endereco?.EstadoId,
                 EscolaId = diretor.EscolaId,
-                DDD = telefone?.DDD ?? 0,
-                Numero = telefone?.Numero ?? 0,
-                Escola = escolad,
+                Endereco = diretor.Endereco == null ? null : new EnderecoViewModel
+                {
+                    NomeRua = diretor.Endereco.NomeRua,
+                    Complemento = diretor.Endereco.Complemento,
+                    NumeroRua = diretor.Endereco.NumeroRua,
+                    CEP = diretor.Endereco.CEP,
+                    ListaDeEstados = new List<EstadoViewModel>
+            {
+                new EstadoViewModel
+                {
+                    id = diretor.Endereco.EstadoId,
+                    Nome = diretor.Endereco.Estado?.Nome,
+                    Sigla = diretor.Endereco.Estado?.Sigla
+                }
+            }
+                },
+                Escola = diretor.Escola == null ? null : new EscolaViewModel
+                {
+                    Id = diretor.EscolaId,
+                    Nome = diretor.Escola.Nome
+                },
+                Telefones = diretor.Telefones?
+                    .Select(t => new TelefoneViewModel
+                    {
+                        DDD = t.DDD,
+                        Numero = t.Numero
+                    }).ToList()
             };
 
             CarregarDependencias(viewModel);
+
             return View(viewModel);
         }
 
@@ -234,6 +272,7 @@ namespace MVCCamiloMentoria.Controllers
                 try
                 {
                     var diretor = await _context.Diretor
+                        .Include(d => d.Escola)
                         .Include(d => d.Endereco)
                         .Include(d => d.Telefones)
                         .FirstOrDefaultAsync(d => d.Id == id);
@@ -250,20 +289,43 @@ namespace MVCCamiloMentoria.Controllers
 
                     if (diretor.Endereco != null)
                     {
-                        diretor.Endereco.NomeRua = viewModel.NomeRua;
-                        diretor.Endereco.NumeroRua = viewModel.NumeroRua;
-                        diretor.Endereco.Complemento = viewModel.Complemento;
-                        diretor.Endereco.CEP = string.IsNullOrWhiteSpace(viewModel.CEP) ? null : int.Parse(viewModel.CEP);
-                        diretor.Endereco.EstadoId = (int)viewModel.EstadoId!;
+                        diretor.Endereco.NomeRua = viewModel.Endereco!.NomeRua;
+                        diretor.Endereco.NumeroRua = viewModel.Endereco.NumeroRua;
+                        diretor.Endereco.Complemento = viewModel.Endereco.Complemento;
+                        diretor.Endereco.CEP = viewModel.Endereco.CEP;
+                        diretor.Endereco.EstadoId = (int)viewModel.Endereco.EstadoId!;
                     }
 
-                    if (diretor.Telefones != null && diretor.Telefones.Any())
+                    if (viewModel.Telefones != null && viewModel.Telefones.Any())
                     {
-                        foreach (var telefone in diretor.Telefones)
+
+                        var telefonesParaRemover = diretor.Telefones!
+                            .Where(t => !viewModel.Telefones.Any(v => v.DDD == t.DDD && v.Numero == t.Numero))
+                            .ToList();
+
+                        foreach (var telefoneRemover in telefonesParaRemover)
                         {
-                            telefone.DDD = viewModel.DDD;
-                            telefone.Numero = viewModel.Numero;
-                            telefone.EscolaId = viewModel.EscolaId;
+                            _context.Telefone.Remove(telefoneRemover);
+                        }
+
+                        // Adiciona novos telefones
+                        foreach (var telefoneViewModel in viewModel.Telefones)
+                        {
+                            var telefoneExistente = diretor.Telefones!
+                                .FirstOrDefault(t => t.DDD == telefoneViewModel.DDD && t.Numero == telefoneViewModel.Numero);
+
+                            if (telefoneExistente == null)
+                            {
+                                var telefone = new Telefone
+                                {
+                                    DDD = telefoneViewModel.DDD,
+                                    Numero = telefoneViewModel.Numero,
+                                    EscolaId = viewModel.EscolaId,
+                                    DiretorId = diretor.Id
+                                };
+
+                                _context.Telefone.Add(telefone);
+                            }
                         }
                     }
 
@@ -313,28 +375,40 @@ namespace MVCCamiloMentoria.Controllers
                 TempData["MensagemErro"] = "Diretor não encontrado.";
                 return RedirectToAction(nameof(Index));
             }
-            var escolad = new EscolaViewModel
-            {
-                Id = diretor.EscolaId,
-                Nome = diretor.Escola!.Nome,
-            };
+            var telefone = diretor.Telefones?.FirstOrDefault();
+
             var viewModel = new DiretorViewModel
             {
                 Id = diretor.Id,
                 Nome = diretor.Nome,
                 Matricula = diretor.Matricula,
-                NomeRua = diretor.Endereco!.NomeRua,
-                NumeroRua = diretor.Endereco.NumeroRua, 
-                Complemento = diretor.Endereco.Complemento,
-                EscolaId = diretor.EscolaId,
-                Escola = escolad,
-                Telefones = diretor.Telefones!
-                                   .Select(d => new TelefoneViewModel
-                                   { 
-                                       Numero = d.Numero,
-                                       DDD = d.DDD,
-
-                                   }).ToList(),
+                Endereco = diretor.Endereco == null ? null : new EnderecoViewModel
+                {
+                    NomeRua = diretor.Endereco.NomeRua,
+                    Complemento = diretor.Endereco.Complemento,
+                    NumeroRua = diretor.Endereco.NumeroRua,
+                    CEP = diretor.Endereco.CEP,
+                    ListaDeEstados = new List<EstadoViewModel>
+                     {
+                        new EstadoViewModel
+                        {
+                         id = diretor.Endereco.EstadoId,
+                         Nome = diretor.Endereco.Estado?.Nome,
+                         Sigla = diretor.Endereco.Estado?.Sigla,
+                         }
+                    }
+                },
+                Escola = new EscolaViewModel
+                {
+                    Id = diretor.EscolaId,
+                    Nome = diretor.Escola!.Nome,
+                },
+                Telefones = diretor.Telefones?
+                                    .Select(t => new TelefoneViewModel
+                                    {
+                                        DDD = t.DDD,
+                                        Numero = t.Numero
+                                    }).ToList()
             };
 
             return View(viewModel);
@@ -387,7 +461,7 @@ namespace MVCCamiloMentoria.Controllers
         }
         private void CarregarViewBags(DiretorViewModel viewModel = null)
         {
-            ViewBag.EscolaId = new SelectList(_context.Escola, "Id", "Nome");
+            ViewBag.Escolas = new SelectList(_context.Escola, "Id", "Nome");
             ViewBag.EnderecoId = new SelectList(_context.Endereco, "Id", "NomeRua");
         }
         private void CarregarViewBagsEstados(DiretorViewModel viewModel = null)

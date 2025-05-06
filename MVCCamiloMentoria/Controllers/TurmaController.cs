@@ -105,11 +105,14 @@ namespace MVCCamiloMentoria.Controllers
         }
 
         // GET: Turmas/Create
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            await CarregarViewBagsAsync();
-            return View();
+
+            ViewBag.Escolas = new SelectList(_context.Escola, "Id", "Nome");
+            var viewModel = new TurmaViewModel();
+            return View(viewModel);
         }
+
 
         // POST: Turmas/Create
         [HttpPost]
@@ -119,7 +122,8 @@ namespace MVCCamiloMentoria.Controllers
             if (ModelState.IsValid)
             {
                 var novaTurma = new Turma
-                {
+                {   Escola = turma.Escola.Nome,
+
                     NomeTurma = turma.NomeTurma,
                     AnoLetivo = turma.AnoLetivo,
                     Turno = turma.Turno,
