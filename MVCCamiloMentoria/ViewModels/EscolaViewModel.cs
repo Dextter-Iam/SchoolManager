@@ -14,10 +14,6 @@ namespace MVCCamiloMentoria.ViewModels
         [DisplayName("Nome da Escola")]
         [StringLength(200, ErrorMessage = "O nome deve ter no máximo 200 caracteres.")]
         public string? Nome { get; set; }
-
-        [Required(ErrorMessage = "Selecione um estado.")]
-        [DisplayName("Estado (UF)")]
-        public List<EstadoViewModel>? Estados { get; set; }
         public EnderecoViewModel? Endereco { get; set; }
         public List<SupervisorEscolaViewModel>? Supervisores { get; set; }
         public List<TelefoneViewModel>? Telefones { get; set; } = new List<TelefoneViewModel>();

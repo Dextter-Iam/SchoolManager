@@ -109,16 +109,6 @@ namespace MVCCamiloMentoria.Controllers
                                      Nome = ap.Nome,
                                      HorarioFim = ap.HorarioFim,
                                      HorarioInicio = ap.HorarioInicio,
-                                     Turma = new TurmaViewModel
-                                     {
-                                         TurmaId = ap.TurmaId,
-                                         NomeTurma = ap.Turma!.NomeTurma,
-                                     },
-                                     Escola = new EscolaViewModel
-                                     {
-                                         Id = ap.EscolaId,
-                                         Nome = ap.Escola!.Nome,
-                                     }
                                  }).ToList(),
 
                 Telefones = professor.Telefones!
