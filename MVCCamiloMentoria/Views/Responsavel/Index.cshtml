@@ -66,3 +66,31 @@
         </table>
     }
 </div>
+
+<div class="card-shadpw">
+    <br />
+    <nav aria-label="Paginação">
+        <ul class="pagination justify-content-center">
+            @if (ViewBag.PaginaAtual > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { pagina = ViewBag.PaginaAtual - 1 })">Anterior</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= ViewBag.TotalPaginas; i++)
+            {
+                <li class="page-item @(i == ViewBag.PaginaAtual ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { pagina = i })">@i</a>
+                </li>
+            }
+
+            @if (ViewBag.PaginaAtual < ViewBag.TotalPaginas)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { pagina = ViewBag.PaginaAtual + 1 })">Próxima</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>

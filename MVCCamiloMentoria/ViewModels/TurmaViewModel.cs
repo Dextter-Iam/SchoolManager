@@ -1,4 +1,5 @@
-﻿using MVCCamiloMentoria.Models;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using MVCCamiloMentoria.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -25,8 +26,9 @@ namespace MVCCamiloMentoria.ViewModels
 
         [DisplayName("Escola")]
         [Required(ErrorMessage = "A escola é obrigatória.")]
+        public int EscolaId { get; set; }
+        [BindNever]
         public EscolaViewModel? Escola { get; set; }
-
         [DisplayName("Aulas")]
         public List<AulaViewModel> Aulas { get; set; } = new();
 

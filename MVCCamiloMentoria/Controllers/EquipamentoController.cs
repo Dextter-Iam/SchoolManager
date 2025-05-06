@@ -15,12 +15,18 @@ namespace MVCCamiloMentoria.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pagina = 1)
         {
+            int registrosPorPagina = 10;
+            var totalRegistros = await _context.Equipamento.CountAsync();
+            var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
+
             var equipamentos = await _context.Equipamento
                 .Include(e => e.Marca)
                 .Include(e => e.Modelo)
                 .Include(e => e.Escola)
+                .Skip((pagina - 1) * registrosPorPagina)
+                .Take(registrosPorPagina)
                 .ToListAsync();
 
             var equipamentosViewModel = equipamentos.Select(e => new EquipamentoViewModel
@@ -36,6 +42,8 @@ namespace MVCCamiloMentoria.Controllers
                 Escola = e.Escola
             }).ToList();
 
+            ViewBag.PaginaAtual = pagina;
+            ViewBag.TotalPaginas = totalPaginas;
             return View(equipamentosViewModel);
         }
 

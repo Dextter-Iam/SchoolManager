@@ -19,12 +19,18 @@ namespace MVCCamiloMentoria.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pagina = 1)
         {
+            int registrosPorPagina = 10;
+            var totalRegistros = await _context.Aluno.CountAsync();
+            var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
+
             var alunos = await _context.Aluno
                 .Include(a => a.Turma)
                 .Include(a => a.Endereco)
                 .Include(a => a.Escola)
+                .Skip((pagina - 1) * registrosPorPagina)
+                .Take(registrosPorPagina)
                 .Select(a => new AlunoViewModel
                 {
                     Id = a.Id,
@@ -46,6 +52,8 @@ namespace MVCCamiloMentoria.Controllers
                 },
                 }).ToListAsync();
 
+            ViewBag.PaginaAtual = pagina;
+            ViewBag.TotalPaginas = totalPaginas;
             return View(alunos);
         }
 

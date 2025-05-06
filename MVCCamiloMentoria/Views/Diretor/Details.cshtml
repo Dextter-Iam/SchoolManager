@@ -20,6 +20,7 @@
                     <div class="card-header bg-light">
                         <h5 class="mb-0">Informações Pessoais</h5>
                     </div>
+
                     <div class="card-body">
                         <dl class="row">
                             <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Nome)</dt>
@@ -37,15 +38,14 @@
                     </div>
                     <div class="card-body">
                         <dl class="row">
-                            <dt class="col-sm-3 fw-bold">Escola</dt>
                             <dd class="col-sm-9">
                                 @if (Model.Escola != null)
                                 {
-                                    <span>@Model.Escola.Nome</span>
+                                    @Model.Escola.Nome
                                 }
                                 else
                                 {
-                                    <span class="text-muted">Escola não cadastrada</span>
+                                    <span class="text-muted">Nenhuma escola vinculada</span>
                                 }
                             </dd>
                         </dl>
@@ -58,7 +58,6 @@
                     </div>
                     <div class="card-body">
                         <dl class="row">
-                            <dt class="col-sm-3 fw-bold">Endereço</dt>
                             <dd class="col-sm-9">
                                 @if (Model.Endereco != null)
                                 {

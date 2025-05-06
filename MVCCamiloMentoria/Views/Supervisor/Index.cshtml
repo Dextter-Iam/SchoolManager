@@ -80,10 +80,9 @@
         </div>
     </div>
 
-    <div class="card-shadpw">
-        <br />
-        <nav aria-label="Paginação">
-            <ul class="pagination justify-content-center">
+    <div class="card shadow-sm mt-3">
+        <nav aria-label="Paginação" class="mt-4">
+            <ul class="pagination justify-content-center mb-0">
                 @if (ViewBag.PaginaAtual > 1)
                 {
                     <li class="page-item">
@@ -107,14 +106,10 @@
             </ul>
         </nav>
     </div>
-</div>
-
-
-
-
 
 
 <style>
+
 	html, body {
 		margin: 0;
 		padding: 0;
@@ -218,4 +213,18 @@
 	.gap-2 > * {
 		margin-right: 0.5rem;
 	}
+
+        .pagination .page-link {
+            color: #1976d2;
+            font-weight: 500;
+            border-radius: 0.5rem;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #1976d2;
+            border-color: #1976d2;
+            color: white;
+        }
+
+
 </style>

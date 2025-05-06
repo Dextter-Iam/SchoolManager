@@ -18,14 +18,20 @@ namespace MVCCamiloMentoria.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pagina = 1)
         {
+            int registrosPorPagina = 10;
+            var totalRegistros = await _context.Turma.CountAsync();
+            var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
+
             var turmas = await _context.Turma
                 .Include(t => t.Escola)
                 .Include(t => t.Alunos)
                 .Include(t => t.Professores)
                 .Include(t => t.TurmaDisciplinas)
                     .ThenInclude(td => td.Disciplina)
+                .Skip((pagina - 1) * registrosPorPagina)
+                .Take(registrosPorPagina)
                 .ToListAsync();
 
             var turmaViewModels = turmas.Select(t => new TurmaViewModel
@@ -48,6 +54,9 @@ namespace MVCCamiloMentoria.Controllers
                 }
 
             }).ToList();
+
+            ViewBag.PaginaAtual = pagina;
+            ViewBag.TotalPaginas = totalPaginas;
 
             return View(turmaViewModels);
         }
@@ -107,14 +116,11 @@ namespace MVCCamiloMentoria.Controllers
         // GET: Turmas/Create
         public IActionResult Create()
         {
-
-            ViewBag.Escolas = new SelectList(_context.Escola, "Id", "Nome");
-            var viewModel = new TurmaViewModel();
-            return View(viewModel);
+            CarregarViewBags();
+            return View();
         }
 
 
-        // POST: Turmas/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TurmaViewModel turma)
@@ -122,17 +128,15 @@ namespace MVCCamiloMentoria.Controllers
             if (ModelState.IsValid)
             {
                 var novaTurma = new Turma
-                {   Escola = turma.Escola.Nome,
-
+                {
                     NomeTurma = turma.NomeTurma,
                     AnoLetivo = turma.AnoLetivo,
                     Turno = turma.Turno,
-                    EscolaId = turma.Escola!.Id,
+                    EscolaId = turma.EscolaId,
                 };
 
                 _context.Add(novaTurma);
                 await _context.SaveChangesAsync();
-
 
                 foreach (var disciplina in turma.TurmaDisciplinas)
                 {
@@ -145,12 +149,14 @@ namespace MVCCamiloMentoria.Controllers
 
                 await _context.SaveChangesAsync();
 
+                TempData["MensagemSucesso"] = "Turma criada com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
 
             await CarregarViewBagsAsync(turma);
             return View(turma);
         }
+
 
         // GET: Turmas/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -160,7 +166,10 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            var turma = await _context.Turma.FindAsync(id);
+            var turma = await _context.Turma
+                                      .Include(t => t.Escola)
+                                      .FirstOrDefaultAsync(t => t.TurmaId == id);
+
             if (turma == null)
             {
                 return NotFound();
@@ -172,18 +181,18 @@ namespace MVCCamiloMentoria.Controllers
                 NomeTurma = turma.NomeTurma,
                 AnoLetivo = turma.AnoLetivo,
                 Turno = turma.Turno,
+                EscolaId = turma.EscolaId,
                 Escola = new EscolaViewModel
                 {
                     Nome = turma.Escola!.Nome,
-                    Id = turma.Escola.Id,
+                    Id = turma.EscolaId,
                 },
             };
 
-            await CarregarViewBagsAsync(turmaViewModel);
+            await CarregarViewBagsAsync();
             return View(turmaViewModel);
         }
 
-        // POST: Turmas/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, TurmaViewModel turma)
@@ -206,11 +215,12 @@ namespace MVCCamiloMentoria.Controllers
                     turmaExistente.NomeTurma = turma.NomeTurma;
                     turmaExistente.AnoLetivo = turma.AnoLetivo;
                     turmaExistente.Turno = turma.Turno;
-                    turmaExistente.EscolaId = turma.Escola!.Id;
+                    turmaExistente.EscolaId = turma.EscolaId;
 
                     _context.Update(turmaExistente);
                     await _context.SaveChangesAsync();
 
+                    TempData["MensagemSucesso"] = "Turma atualizada com sucesso!";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
@@ -225,8 +235,10 @@ namespace MVCCamiloMentoria.Controllers
                     }
                 }
             }
+
             return View(turma);
         }
+
 
         // GET: Turma/Delete/5
         [HttpGet]
@@ -250,6 +262,7 @@ namespace MVCCamiloMentoria.Controllers
                 NomeTurma = turma.NomeTurma,
                 AnoLetivo = turma.AnoLetivo,
                 Turno = turma.Turno,
+                EscolaId = turma.EscolaId,
                 Escola = new EscolaViewModel
                 {
                     Nome = turma.Escola!.Nome,
@@ -279,13 +292,11 @@ namespace MVCCamiloMentoria.Controllers
         }
 
 
-        // POST: Turma/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var turma = await _context.Turma
-                .Include(t => t.Escola)
                 .Include(t => t.Alunos)
                 .Include(t => t.TurmaDisciplinas)
                     .ThenInclude(td => td.Disciplina)
@@ -296,24 +307,42 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
+            foreach (var aluno in turma.Alunos!.ToList())
+            {
+                _context.Aluno.Remove(aluno);
+            }
+
+            foreach (var turmaDisciplina in turma.TurmaDisciplinas.ToList())
+            {
+                _context.TurmaDisciplina.Remove(turmaDisciplina);
+            }
+
             _context.Turma.Remove(turma);
             await _context.SaveChangesAsync();
 
+            TempData["MensagemSucesso"] = "Turma excluída com sucesso!";
             return RedirectToAction(nameof(Index));
         }
+
 
         private async Task CarregarViewBagsAsync(TurmaViewModel viewModel = null)
         {
             var escolas = await _context.Escola.ToListAsync();
             var disciplinas = await _context.Disciplina.ToListAsync();
 
-            ViewBag.Escolas = new SelectList(escolas, "Id", "Nome", viewModel?.Escola!.Id ?? escolas.FirstOrDefault()?.Id);
+            ViewBag.EscolaId = new SelectList(escolas, "Id", "Nome", viewModel?.Escola!.Id ?? escolas.FirstOrDefault()?.Id);
             ViewBag.Disciplinas = new SelectList(disciplinas, "Id", "Nome");
         }
 
         private bool TurmaExists(int id)
         {
             return _context.Turma.Any(e => e.TurmaId == id);
+        }
+
+        private void CarregarViewBags(TurmaViewModel viewModel = null)
+        {
+
+            ViewBag.EscolaId = new SelectList(_context.Escola, "Id", "Nome");
         }
     }
 }

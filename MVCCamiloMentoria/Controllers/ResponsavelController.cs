@@ -17,13 +17,19 @@ namespace MVCCamiloMentoria.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pagina = 1)
         {
+            int registrosPorPagina = 10;
+            var totalRegistros = await _context.Responsavel.CountAsync();
+            var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
+
             var responsaveis = await _context.Responsavel
                 .Include(r => r.Endereco)
                 .Include(r => r.Telefones)
                 .Include(r => r.AlunoResponsavel!)
                     .ThenInclude(ar => ar.Aluno)
+                .Skip((pagina - 1) * registrosPorPagina)
+                .Take(registrosPorPagina)
                 .ToListAsync();
             var responsavelViewModel = responsaveis.Select(r => new ResponsavelViewModel
             {
@@ -53,6 +59,9 @@ namespace MVCCamiloMentoria.Controllers
                                         ResponsavelId = ar.ResponsavelId,
                                     }).ToList(),
             }).ToList();
+
+            ViewBag.PaginaAtual = pagina;
+            ViewBag.TotalPaginas = totalPaginas;
 
             return View(responsavelViewModel);
         }

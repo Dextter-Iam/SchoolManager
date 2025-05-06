@@ -3,7 +3,7 @@
 <div class="container mt-1">
     <div class="card">
         <div class="card-header bg-primary text-white">
-            <h4 class= "mb-0">Disciplinas Cadastradas</h4>
+            <h4 class="mb-0">Disciplinas Cadastradas</h4>
         </div>
         <div class="card-body">
             <table class="table table-striped table-bordered">
@@ -39,6 +39,42 @@
         </div>
     </div>
 </div>
+
+
+<div class="card shadow-sm mt-3">
+    <nav aria-label="Paginação" class="mt-4">
+        <ul class="pagination justify-content-center mb-0">
+            @if (ViewBag.PaginaAtual > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { pagina = ViewBag.PaginaAtual - 1 })">Anterior</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= ViewBag.TotalPaginas; i++)
+            {
+                <li class="page-item @(i == ViewBag.PaginaAtual ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { pagina = i })">@i</a>
+                </li>
+            }
+
+            @if (ViewBag.PaginaAtual < ViewBag.TotalPaginas)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { pagina = ViewBag.PaginaAtual + 1 })">Próxima</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+
+
+
+
+
+
+
 
 <style>
     html, body {
@@ -152,5 +188,11 @@
     .mx-2 {
         margin-left: 0.5rem;
         margin-right: 0.5rem;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #1976d2;
+        border-color: #1976d2;
+        color: white;
     }
 </style>

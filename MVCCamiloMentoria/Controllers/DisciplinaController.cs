@@ -20,15 +20,24 @@ namespace MVCCamiloMentoria.Controllers
         }
 
         // GET: Disciplinas
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pagina = 1)
         {
-            return View(await _context.Disciplina
-                                      .Select(d => new DisciplinaViewModel 
-                                      { 
-                                        Nome = d.Nome, 
-                                        Id = d.Id 
+            int registrosPorPagina = 10;
+            var totalRegistros = await _context.Disciplina.CountAsync();
+            var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
+            ViewBag.PaginaAtual = pagina;
+            ViewBag.TotalPaginas = totalPaginas;
 
-                                      }).ToListAsync());
+            return View(await _context.Disciplina
+                                .Skip((pagina - 1) * registrosPorPagina)
+                                .Take(registrosPorPagina)
+                                .Select(d => new DisciplinaViewModel
+                                {
+                                    Nome = d.Nome,
+                                    Id = d.Id
+
+                                }).ToListAsync());
+
 
         }
 
@@ -47,10 +56,11 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var viewModel = new DisciplinaViewModel
-                                 { Id = disciplina.Id, 
-                                   Nome = disciplina.Nome,
-                                   EscolaId = disciplina.EscolaId,
-                                 };
+            {
+                Id = disciplina.Id,
+                Nome = disciplina.Nome,
+                EscolaId = disciplina.EscolaId,
+            };
 
             return View(viewModel);
         }
@@ -169,9 +179,10 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var viewModel = new DisciplinaViewModel
-                               { Id = disciplina.Id, 
-                                 Nome = disciplina.Nome,
-                               };
+            {
+                Id = disciplina.Id,
+                Nome = disciplina.Nome,
+            };
             return View(viewModel);
         }
 
