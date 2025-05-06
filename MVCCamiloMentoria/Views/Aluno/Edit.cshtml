@@ -14,7 +14,6 @@
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
                 <input type="hidden" asp-for="Id" />
 
-                <!-- Informações Pessoais -->
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">Informações Pessoais</h5>
@@ -28,14 +27,31 @@
                                     <span asp-validation-for="Nome" class="text-danger"></span>
                                 </div>
 
-                                <div class="form-group mb-3">
+                                <div class="form-group mb-4">
                                     <label asp-for="FotoUpload" class="form-label fw-semibold">
                                         <i class="fas fa-image me-2 text-primary"></i>Foto do Aluno
                                     </label>
-                                    <input asp-for="FotoUpload" type="file" class="form-control form-control-sm border-1 shadow-sm" />
-                                    <span asp-validation-for="FotoUpload" class="text-danger small"></span>
+
+                                    @if (Model.Foto != null && Model.Foto.Length > 0)
+                                    {
+                                        <div class="mb-3">
+                                            <label class="form-label">Foto Atual:</label><br />
+                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Foto)" class="img-thumbnail" style="max-height: 150px; border-radius: 12px; border: 2px solid #dee2e6;" />
+                                        </div>
+                                        <input type="hidden" asp-for="Foto" value="@Convert.ToBase64String(Model.Foto)" />
+                                    }
+
+                                    <div class="custom-file mb-3">
+                                        <input asp-for="FotoUpload" type="file" class="form-control form-control-sm border-2 shadow-sm rounded-3" id="FotoUpload" />
+                                        <label class="custom-file-label" for="FotoUpload"></label>
+                                        <small class="form-text text-muted mb-2">
+                                            A imagem deve ser clara e visível.
+                                        </small>
+                                        <span asp-validation-for="FotoUpload" class="text-danger small"></span>
+                                    </div>
                                 </div>
                             </div>
+
                             <div class="col-md-4">
                                 <div class="form-group mb-3">
                                     <label asp-for="DataNascimento" class="form-label"></label>
@@ -51,7 +67,6 @@
                             <span asp-validation-for="EmailEscolar" class="text-danger"></span>
                         </div>
 
-                        <!-- Responsáveis -->
                         <div class="card mb-3">
                             <div class="card-header bg-light">
                                 <h5 class="mb-0">Responsáveis</h5>
@@ -121,6 +136,7 @@
                                     <span asp-validation-for="TurmaId" class="text-danger"></span>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label asp-for="EscolaId" class="form-label"></label>
@@ -132,7 +148,7 @@
                     </div>
                 </div>
 
-                <!-- Telefones -->
+
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">Telefone</h5>
@@ -160,7 +176,7 @@
                     </div>
                 </div>
 
-                <!-- Endereço -->
+
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">Endereço</h5>
@@ -203,7 +219,7 @@
                     </div>
                 </div>
 
-                <!-- Botões -->
+
                 <div class="form-group text-end">
                     <input type="submit" value="Salvar" class="btn btn-primary px-4" />
                     <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>

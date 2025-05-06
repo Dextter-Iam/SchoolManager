@@ -34,7 +34,16 @@ namespace MVCCamiloMentoria.Controllers
                     NomeResponsavel1 = a.NomeResponsavel1,
                     Parentesco1 = a.Parentesco1,
                     NomeResponsavel2 = a.NomeResponsavel2,
-                    Parentesco2 = a.Parentesco2
+                    Parentesco2 = a.Parentesco2,
+                    Escolas = new List<EscolaViewModel>
+                {
+                    new EscolaViewModel
+                    {
+                        Nome = a.Escola!.Nome,
+                        Id = a.Escola.Id,
+                    }
+
+                },
                 }).ToListAsync();
 
             return View(alunos);
@@ -241,20 +250,38 @@ namespace MVCCamiloMentoria.Controllers
                         DDD = at.Telefone.DDD,
                         Numero = at.Telefone.Numero,
                     }
-                }).ToList();
+                })
+                .ToList() ?? new List<AlunoTelefoneViewModel>();
 
-            var primeiroTelefone = alunoTelefones?.FirstOrDefault()?.Telefones;
+            var primeiroTelefone = alunoTelefones.FirstOrDefault()?.Telefones;
 
             var viewModel = new AlunoViewModel
             {
                 Id = aluno.Id,
                 Nome = aluno.Nome,
+                Foto = aluno.Foto,
                 DataNascimento = aluno.DataNascimento,
                 EmailEscolar = aluno.EmailEscolar,
                 AnoInscricao = aluno.AnoInscricao,
                 BolsaEscolar = aluno.BolsaEscolar,
                 TurmaId = aluno.TurmaId,
+                Turma = new TurmaViewModel
+                {
+                    NomeTurma = aluno.Turma!.NomeTurma, 
+                    TurmaId = aluno.TurmaId,
+                },
+
                 EscolaId = aluno.EscolaId,
+                Escolas = new List<EscolaViewModel>
+                {
+                    new EscolaViewModel
+                    {
+                        Nome = aluno.Escola!.Nome,
+                        Id = aluno.Escola.Id,
+                    }
+
+                },
+
                 Telefones = alunoTelefones,
                 Endereco = new EnderecoViewModel
                 {
@@ -318,7 +345,6 @@ namespace MVCCamiloMentoria.Controllers
                     aluno.Parentesco1 = viewModel.Parentesco1;
                     aluno.NomeResponsavel2 = viewModel.NomeResponsavel2;
                     aluno.Parentesco2 = viewModel.Parentesco2;
-
                     aluno.Endereco ??= new Endereco();
                     aluno.Endereco.NomeRua = viewModel.Endereco!.NomeRua;
                     aluno.Endereco.NumeroRua = viewModel.Endereco.NumeroRua;
@@ -342,12 +368,15 @@ namespace MVCCamiloMentoria.Controllers
                             }).ToList();
                     }
 
-
                     if (fotoUpload != null && fotoUpload.Length > 0)
                     {
                         using var memoryStream = new MemoryStream();
                         await fotoUpload.CopyToAsync(memoryStream);
                         aluno.Foto = memoryStream.ToArray();
+                    }
+                    else
+                    {
+                        aluno.Foto = viewModel.Foto;
                     }
 
                     _context.Update(aluno);

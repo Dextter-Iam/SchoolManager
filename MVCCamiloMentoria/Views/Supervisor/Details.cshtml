@@ -24,15 +24,24 @@
                         <div class="col-md-4">
                             <div class="form-group mb-3">
                                 <div class="mt-2 text-center">
-                                    <img id="preview"
-                                         src="@(string.IsNullOrEmpty(Model.FotoUrl) ? "/img/placeholder.png" : Model.FotoUrl)"
-                                         class="img-thumbnail rounded-square"
-                                         style="max-height: 280px; object-fit: cover;"
-                                         alt="Foto do Supervisor" />
+                                    @if (!string.IsNullOrEmpty(Model.FotoUrl))
+                                    {
+                                        <img id="preview"
+                                             src="@Model.FotoUrl"
+                                             class="img-thumbnail rounded-square"
+                                             style="max-height: 230px; object-fit: cover;"
+                                             alt="Foto do Supervisor" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/images/sem-foto.png"
+                                             class="img-fluid rounded mb-3 shadow-sm"
+                                             style="max-height: 110px; object-fit: cover;"
+                                             alt="Sem Foto" />
+                                    }
                                 </div>
                             </div>
                         </div>
-
 
                         <div class="col-md-8">
                             <dl class="row">

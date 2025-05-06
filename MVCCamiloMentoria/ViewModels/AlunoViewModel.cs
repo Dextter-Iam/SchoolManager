@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace MVCCamiloMentoria.ViewModels
 {
@@ -35,10 +36,14 @@ namespace MVCCamiloMentoria.ViewModels
         [DisplayName("Bolsa Escolar")]
         public bool BolsaEscolar { get; set; }
 
+        [BindNever]
+        public TurmaViewModel? Turma { get; set; }
+
         [DisplayName("Turma")]
         [Required(ErrorMessage = "A turma é obrigatória.")]
-        public TurmaViewModel? Turma { get; set; }
+
         public int TurmaId { get; set; }
+
         public List<TurmaViewModel>? Turmas { get; set; }
 
         [DisplayName("Endereço")]

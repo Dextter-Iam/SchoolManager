@@ -24,25 +24,30 @@ namespace MVCCamiloMentoria.Controllers
                 .AsNoTracking()
                 .ToListAsync();
 
-            var viewModel = coordenadores.Select(async c => new CoordenadorViewModel
+            var viewModel = new List<CoordenadorViewModel>();
+
+            foreach (var c in coordenadores)
             {
-                Id = c.Id,
-                Nome = c.Nome,
-                Matricula = c.Matricula,
-                Endereco = new EnderecoViewModel
+                viewModel.Add(new CoordenadorViewModel
                 {
-                    NomeRua = c.Endereco!.NomeRua,
-                    Complemento = c.Endereco.Complemento,
-                    NumeroRua = c.Endereco.NumeroRua,
-                    CEP = c.Endereco.CEP,
-                    ListaDeEstados = await AcessarEstados(),
-                },
-                Escola = new EscolaViewModel
-                {
-                    Id = c.EscolaId,
-                    Nome = c.Escola!.Nome,
-                },
-            }).ToList();
+                    Id = c.Id,
+                    Nome = c.Nome,
+                    Matricula = c.Matricula,
+                    Endereco = c.Endereco == null ? null : new EnderecoViewModel
+                    {
+                        NomeRua = c.Endereco.NomeRua,
+                        Complemento = c.Endereco.Complemento,
+                        NumeroRua = c.Endereco.NumeroRua,
+                        CEP = c.Endereco.CEP,
+                        ListaDeEstados = await AcessarEstados()
+                    },
+                    Escola = c.Escola == null ? null : new EscolaViewModel
+                    {
+                        Id = c.EscolaId,
+                        Nome = c.Escola.Nome
+                    }
+                });
+            }
 
             return View(viewModel);
         }
@@ -80,7 +85,16 @@ namespace MVCCamiloMentoria.Controllers
                     Complemento = coordenador.Endereco.Complemento,
                     NumeroRua = coordenador.Endereco.NumeroRua,
                     CEP = coordenador.Endereco.CEP,
-                    ListaDeEstados = await AcessarEstados(),
+                    ListaDeEstados = new List<EstadoViewModel>
+                    {
+                        new EstadoViewModel
+                        {
+                            id = coordenador.Endereco.EstadoId,
+                            Nome = coordenador.Endereco.Estado?.Nome,
+                            Sigla = coordenador.Endereco.Estado?.Sigla,
+
+                        },
+                    }
                 },
                 Escola = new EscolaViewModel
                 {
@@ -115,8 +129,6 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
-                    var estadoSelecionado = viewModel.Endereco!.ListaDeEstados!
-                                            .FirstOrDefault(e => e.id == viewModel.Endereco.EstadoId);
 
                     var endereco = new Endereco
                     {
@@ -124,12 +136,7 @@ namespace MVCCamiloMentoria.Controllers
                         NumeroRua = viewModel.Endereco.NumeroRua,
                         Complemento = viewModel.Endereco.Complemento,
                         CEP = viewModel.Endereco!.CEP,
-                        Estado = new Estado
-                        {
-                            id = estadoSelecionado!.id,
-                            Nome = estadoSelecionado.Nome,
-                            Sigla = estadoSelecionado.Sigla
-                        }
+                        EstadoId = viewModel.Endereco.EstadoId,
                     };
 
                     _context.Endereco.Add(endereco);
@@ -199,13 +206,36 @@ namespace MVCCamiloMentoria.Controllers
                 Id = coordenador.Id,
                 Nome = coordenador.Nome,
                 Matricula = coordenador.Matricula,
-
                 EscolaId = coordenador.EscolaId,
+
+                Endereco = new EnderecoViewModel
+                {
+                    NomeRua = coordenador.Endereco!.NomeRua,
+                    Complemento = coordenador.Endereco.Complemento,
+                    NumeroRua = coordenador.Endereco.NumeroRua,
+                    CEP = coordenador.Endereco.CEP,
+                    EstadoId = coordenador.Endereco.EstadoId,
+                    ListaDeEstados = new List<EstadoViewModel>
+                    {
+                        new EstadoViewModel
+                        {
+                            id = coordenador.Endereco.EstadoId,
+                            Nome = coordenador.Endereco.Estado?.Nome,
+                            Sigla = coordenador.Endereco.Estado?.Sigla,
+
+                        },
+                    }
+                },
+                Escola = coordenador.Escola == null ? null : new EscolaViewModel
+                {
+                    Id = coordenador.EscolaId,
+                    Nome = coordenador.Escola.Nome
+                },
                 Telefones = coordenador.Telefones?
-                                       .Select(c=> new TelefoneViewModel
+                                       .Select(c => new TelefoneViewModel
                                        {
                                            DDD = c.DDD,
-                                           Numero = c.Numero,  
+                                           Numero = c.Numero,
 
                                        }).ToList(),
             };
@@ -249,17 +279,18 @@ namespace MVCCamiloMentoria.Controllers
                         coordenador.Endereco.CEP = viewModel.Endereco!.CEP;
                         coordenador.Endereco.EstadoId = (int)viewModel.Endereco!.EstadoId;
                     }
+                    await _context.SaveChangesAsync();
 
-                  
                     if (coordenador.Telefones != null && coordenador.Telefones.Any())
                         _context.Telefone.RemoveRange(coordenador.Telefones);
 
                     var telefones = coordenador.Telefones!
                         .Select(c => new Telefone
-                        {
+                        {   Id = c.Id,
                             DDD = c.DDD,
                             Numero = c.Numero,
-                            CoordenadorId = coordenador.Id
+                            CoordenadorId = coordenador.Id,
+                            EscolaId = coordenador.EscolaId,
                         }).ToList();
 
                     _context.Telefone.AddRange(telefones);
@@ -316,13 +347,33 @@ namespace MVCCamiloMentoria.Controllers
                 Id = coordenador.Id,
                 Nome = coordenador.Nome,
                 Matricula = coordenador.Matricula,
+                Endereco = new EnderecoViewModel
+                {
+                    NomeRua = coordenador.Endereco!.NomeRua,
+                    Complemento = coordenador.Endereco.Complemento,
+                    NumeroRua = coordenador.Endereco.NumeroRua,
+                    CEP = coordenador.Endereco.CEP,
+                    ListaDeEstados = new List<EstadoViewModel>
+                    {
+                        new EstadoViewModel
+                        {
+                            id = coordenador.Endereco.EstadoId,
+                            Nome = coordenador.Endereco.Estado?.Nome,
+                            Sigla = coordenador.Endereco.Estado?.Sigla,
 
-                EscolaId = coordenador.EscolaId,
+                        },
+                    }
+                },
+                Escola = new EscolaViewModel
+                {
+                    Id = coordenador.EscolaId,
+                    Nome = coordenador.Escola!.Nome,
+                },
                 Telefones = coordenador.Telefones?
-                                       .Select(c => new TelefoneViewModel
+                                       .Select(t => new TelefoneViewModel
                                        {
-                                           DDD = c.DDD,
-                                           Numero = c.Numero,
+                                           DDD = t.DDD,
+                                           Numero = t.Numero
 
                                        }).ToList(),
             };
