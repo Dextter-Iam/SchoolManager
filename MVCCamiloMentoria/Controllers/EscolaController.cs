@@ -559,14 +559,36 @@ namespace MVCCamiloMentoria.Controllers
 
         private void CarregarViewBagsSync()
         {
-            var estados = _context.Estado
-                .OrderBy(e => e.Nome)
-                .Select(e => new SelectListItem
-                {
-                    Value = e.id.ToString(),
-                    Text = $"{e.Nome} ({e.Sigla})"
-                })
-                .ToList();
+            var estados = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "12", Text = "AC" },
+        new SelectListItem { Value = "27", Text = "AL" },
+        new SelectListItem { Value = "16", Text = "AP" },
+        new SelectListItem { Value = "13", Text = "AM" },
+        new SelectListItem { Value = "29", Text = "BA" },
+        new SelectListItem { Value = "23", Text = "CE" },
+        new SelectListItem { Value = "53", Text = "DF" },
+        new SelectListItem { Value = "32", Text = "ES" },
+        new SelectListItem { Value = "52", Text = "GO" },
+        new SelectListItem { Value = "21", Text = "MA" },
+        new SelectListItem { Value = "51", Text = "MT" },
+        new SelectListItem { Value = "50", Text = "MS" },
+        new SelectListItem { Value = "31", Text = "MG" },
+        new SelectListItem { Value = "15", Text = "PA" },
+        new SelectListItem { Value = "25", Text = "PB" },
+        new SelectListItem { Value = "41", Text = "PR" },
+        new SelectListItem { Value = "26", Text = "PE" },
+        new SelectListItem { Value = "22", Text = "PI" },
+        new SelectListItem { Value = "33", Text = "RJ" },
+        new SelectListItem { Value = "24", Text = "RN" },
+        new SelectListItem { Value = "43", Text = "RS" },
+        new SelectListItem { Value = "11", Text = "RO" },
+        new SelectListItem { Value = "14", Text = "RR" },
+        new SelectListItem { Value = "42", Text = "SC" },
+        new SelectListItem { Value = "35", Text = "SP" },
+        new SelectListItem { Value = "28", Text = "SE" },
+        new SelectListItem { Value = "17", Text = "TO" }
+    };
 
             ViewBag.Estados = estados;
         }

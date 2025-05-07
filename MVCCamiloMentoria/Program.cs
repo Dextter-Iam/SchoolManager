@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using MVCCamiloMentoria.Data;
+using MVCCamiloMentoria.Integracao;
+using MVCCamiloMentoria.Integracao.Interfaces;
+using MVCCamiloMentoria.Integracao.Refit;
+using Refit;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -9,6 +13,12 @@ builder.Services.AddDbContext<EscolaContext>(options =>     {
     options.UseSqlServer(builder.Configuration.GetConnectionString("SchoolMVCManagerConnectionString"));
 });
 
+builder.Services.AddScoped<IViaCepIntegracao, ViaCepIntegracao>();
+builder.Services.AddRefitClient<IViaCepIntegracaoRefit>()
+    .ConfigureHttpClient(c =>
+    {
+        c.BaseAddress = new Uri("https://viacep.com.br");
+    });
 
 var app = builder.Build();
 
