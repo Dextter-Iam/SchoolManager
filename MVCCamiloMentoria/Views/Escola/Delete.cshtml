@@ -19,9 +19,9 @@
 
                         <dt class="col-sm-3 fw-bold">Estado</dt>
                         <dd class="col-sm-9">
-                            @if (Model.Endereco?.ListaDeEstados != null && Model.Endereco.EstadoId != null)
+                            @if (Model.Endereco?.Estado != null && Model.Endereco.EstadoId != null)
                             {
-                                var estadoSelecionado = Model.Endereco.ListaDeEstados
+                                var estadoSelecionado = Model.Endereco.Estado
                                 .FirstOrDefault(e => e.id == Model.Endereco.EstadoId);
 
                                 if (estadoSelecionado != null)

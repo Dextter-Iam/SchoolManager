@@ -64,7 +64,7 @@
                                             CEP: @Model.Endereco.CEP?.ToString("00000-000")<br />
                                             @if (Model.Endereco != null && Model.Endereco.EstadoId != null)
                                             {
-                                                var estado = Model.Endereco.ListaDeEstados?.FirstOrDefault(e => e.id == Model.Endereco.EstadoId);
+                                                var estado = Model.Endereco.Estado?.FirstOrDefault(e => e.id == Model.Endereco.EstadoId);
                                                 if (estado != null)
                                                 {
                                                     <span>@estado.Nome - @estado.Sigla</span>

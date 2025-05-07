@@ -45,8 +45,12 @@
 
                 <div class="form-group mb-3">
                     <label asp-for="Endereco.EstadoId" class="form-label">Estado</label>
-                    <select asp-for="Endereco.EstadoId" class="form-select" asp-items="ViewBag.Estados" id="estado">
-                        <option value="">Selecione um estado</option>
+                    <select asp-for="Endereco.EstadoId" class="form-control" id="Estado">
+                        <option value="">Selecione um Estado</option>
+                        @foreach (var estado in Model.Endereco.Estado)
+                        {
+                            <option value="@estado.id">@estado.Nome</option>
+                        }
                     </select>
                     <span asp-validation-for="Endereco.EstadoId" class="text-danger"></span>
                 </div>
@@ -68,37 +72,20 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
     <script>
-        const ufToId = {
-            "AC": 12, "AL": 27, "AP": 16, "AM": 13, "BA": 29,
-            "CE": 23, "DF": 53, "ES": 32, "GO": 52, "MA": 21,
-            "MT": 51, "MS": 50, "MG": 31, "PA": 15, "PB": 25,
-            "PR": 41, "PE": 26, "PI": 22, "RJ": 33, "RN": 24,
-            "RS": 43, "RO": 11, "RR": 14, "SC": 42, "SP": 35,
-            "SE": 28, "TO": 17
-        };
+        $(document).ready(function () {
+            $("#Endereco_CEP").blur(function () {
+                const cep = $(this).val().replace(/\D/g, '');
+                if (cep.length !== 8) return;
 
-        document.getElementById("Endereco_CEP").addEventListener("blur", async function () {
-            const cep = this.value.replace(/\D/g, '');
-            if (cep.length !== 8) return;
-
-            try {
-                const response = await fetch(`/api/cep/${cep}`);
-                if (!response.ok) throw new Error("CEP não encontrado.");
-
-                const data = await response.json();
-
-                document.getElementById("Endereco_NomeRua").value = data.logradouro;
-
-            const estadoNome = ufToName[data.uf.toUpperCase()];
-            document.getElementById("Endereco_ListaEstados").value = estadoNome;
-
-            } catch (err) {
-                alert("CEP não encontrado ou erro ao buscar.");
-                console.error(err);
-            }
+                $.getJSON(`/api/cep/${cep}`, function (data) {
+                    $("#Endereco_NomeRua").val(data.logradouro);
+                    $("#Estado").val(data.uf);
+                }).fail(function () {
+                    alert("CEP não encontrado ou erro ao buscar.");
+                });
+            });
         });
     </script>
-
-
 }

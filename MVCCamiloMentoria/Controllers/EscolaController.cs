@@ -37,7 +37,7 @@ namespace MVCCamiloMentoria.Controllers
                         CEP = e.Endereco.CEP,
                         Complemento = e.Endereco!.Complemento,
                         EstadoId = e.Endereco.EstadoId,
-                        ListaDeEstados = estados.Select(est => new EstadoViewModel
+                        Estado = estados.Select(est => new EstadoViewModel
                         {
                             id = est.id,
                             Nome = est.Nome,
@@ -94,7 +94,7 @@ namespace MVCCamiloMentoria.Controllers
                     NumeroRua = escolas.Endereco!.NumeroRua,
                     Complemento = escolas.Endereco!.Complemento,
                     EstadoId = escolas.Endereco.EstadoId,
-                    ListaDeEstados = new List<EstadoViewModel>
+                    Estado = new List<EstadoViewModel>
                     {
                         new EstadoViewModel
                         {
@@ -272,6 +272,7 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
+            var estado = _context.Estado.ToList();
 
             var viewModel = new EscolaViewModel
             {
@@ -284,17 +285,9 @@ namespace MVCCamiloMentoria.Controllers
                     Complemento = escola.Endereco!.Complemento,
                     CEP = escola.Endereco.CEP,
                     EstadoId = escola.Endereco.EstadoId,
-                    ListaDeEstados = new List<EstadoViewModel>
-                    {
-                        new EstadoViewModel
-                        {
-                            id = escola.Endereco.Estado!.id,
-                            Nome = escola.Endereco.Estado.Nome,
-                            Sigla = escola.Endereco.Estado.Sigla,
-                        }
-                    }
-                },
+                }
             };
+
 
             TempData["MensagemInfo"] = "Edite os dados da escola e clique em salvar.";
             CarregarViewBagsSync();
@@ -337,7 +330,6 @@ namespace MVCCamiloMentoria.Controllers
                 escola.Endereco.Complemento = viewModel.Endereco.Complemento;
                 escola.Endereco.CEP = viewModel.Endereco.CEP;
                 escola.Endereco.EstadoId = viewModel.Endereco.EstadoId;
-
                 await _context.SaveChangesAsync();
 
                 // if (viewModel.Telefones != null && viewModel.Telefones.Any())
@@ -398,7 +390,7 @@ namespace MVCCamiloMentoria.Controllers
                     NumeroRua = escola.Endereco!.NumeroRua,
                     Complemento = escola.Endereco!.Complemento,
                     EstadoId = escola.Endereco.EstadoId,
-                    ListaDeEstados = estados.Select(e => new EstadoViewModel
+                    Estado = estados.Select(e => new EstadoViewModel
                     {
                         id = e.id,
                         Nome = e.Nome,
@@ -559,36 +551,14 @@ namespace MVCCamiloMentoria.Controllers
 
         private void CarregarViewBagsSync()
         {
-            var estados = new List<SelectListItem>
-    {
-        new SelectListItem { Value = "12", Text = "AC" },
-        new SelectListItem { Value = "27", Text = "AL" },
-        new SelectListItem { Value = "16", Text = "AP" },
-        new SelectListItem { Value = "13", Text = "AM" },
-        new SelectListItem { Value = "29", Text = "BA" },
-        new SelectListItem { Value = "23", Text = "CE" },
-        new SelectListItem { Value = "53", Text = "DF" },
-        new SelectListItem { Value = "32", Text = "ES" },
-        new SelectListItem { Value = "52", Text = "GO" },
-        new SelectListItem { Value = "21", Text = "MA" },
-        new SelectListItem { Value = "51", Text = "MT" },
-        new SelectListItem { Value = "50", Text = "MS" },
-        new SelectListItem { Value = "31", Text = "MG" },
-        new SelectListItem { Value = "15", Text = "PA" },
-        new SelectListItem { Value = "25", Text = "PB" },
-        new SelectListItem { Value = "41", Text = "PR" },
-        new SelectListItem { Value = "26", Text = "PE" },
-        new SelectListItem { Value = "22", Text = "PI" },
-        new SelectListItem { Value = "33", Text = "RJ" },
-        new SelectListItem { Value = "24", Text = "RN" },
-        new SelectListItem { Value = "43", Text = "RS" },
-        new SelectListItem { Value = "11", Text = "RO" },
-        new SelectListItem { Value = "14", Text = "RR" },
-        new SelectListItem { Value = "42", Text = "SC" },
-        new SelectListItem { Value = "35", Text = "SP" },
-        new SelectListItem { Value = "28", Text = "SE" },
-        new SelectListItem { Value = "17", Text = "TO" }
-    };
+            var estados = _context.Estado
+                .OrderBy(e => e.Nome)
+                .Select(e => new SelectListItem
+                {
+                    Value = e.id.ToString(),
+                    Text = $"{e.Nome} ({e.Sigla})"
+                })
+                .ToList();
 
             ViewBag.Estados = estados;
         }

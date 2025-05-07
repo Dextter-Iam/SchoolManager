@@ -45,6 +45,6 @@ namespace MVCCamiloMentoria.ViewModels
         [DisplayName("Estado")]
         public int EstadoId { get; set; }
 
-        public List<EstadoViewModel>? ListaDeEstados { get; set; }
+        public List<EstadoViewModel>? Estado { get; set; }
     }
 }

@@ -101,7 +101,7 @@ namespace MVCCamiloMentoria.Controllers
                     Complemento = responsavel.Endereco.Complemento,
                     CEP = responsavel.Endereco.CEP,
                     EstadoId = responsavel.Endereco.EstadoId,
-                    ListaDeEstados = new List<EstadoViewModel>
+                    Estado = new List<EstadoViewModel>
                     {
                           new EstadoViewModel
                           {
@@ -430,7 +430,7 @@ namespace MVCCamiloMentoria.Controllers
                     Complemento = responsavel.Endereco.Complemento,
                     CEP = responsavel.Endereco.CEP,
                     EstadoId = responsavel.Endereco.EstadoId,
-                    ListaDeEstados = new List<EstadoViewModel>
+                    Estado = new List<EstadoViewModel>
                     {
                           new EstadoViewModel
                           {

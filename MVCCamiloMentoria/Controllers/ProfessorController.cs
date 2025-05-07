@@ -42,7 +42,7 @@ namespace MVCCamiloMentoria.Controllers
                     NumeroRua = p.Endereco!.NumeroRua,
                     Complemento = p.Endereco.Complemento,
                     EstadoId = p.Endereco.EstadoId,
-                    ListaDeEstados = estados
+                    Estado = estados
 
                 }
 
@@ -99,7 +99,7 @@ namespace MVCCamiloMentoria.Controllers
                     Complemento = professor.Endereco.Complemento,
                     CEP = professor.Endereco!.CEP,
                     EstadoId = professor.Endereco.EstadoId,
-                    ListaDeEstados = estados,
+                    Estado = estados,
                 },
 
                 Aulas = professor.Aulas!
