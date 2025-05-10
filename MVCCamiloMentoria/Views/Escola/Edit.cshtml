@@ -45,10 +45,13 @@
             <div class="form-group mb-3">
                 <label asp-for="Endereco.EstadoId" class="form-label">Estado</label>
                 <select asp-for="Endereco.EstadoId" class="form-control" id="Estado">
-                    <option value="">Selecione o Estado</option>
-                    @foreach (var estado in Model.Endereco.ListaDeEstados)
+                    <option value="">Selecione um Estado</option>
+                    @if (Model?.Endereco?.Estado != null)
                     {
-                        <option value="@estado.id">@estado.Nome - @estado.Sigla</option>
+                        @foreach (var estado in Model.Endereco.Estado)
+                        {
+                            <option value="@estado.id">@estado.Nome</option>
+                        }
                     }
                 </select>
                 <span asp-validation-for="Endereco.EstadoId" class="text-danger"></span>

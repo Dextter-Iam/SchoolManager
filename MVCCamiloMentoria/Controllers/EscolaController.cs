@@ -37,7 +37,7 @@ namespace MVCCamiloMentoria.Controllers
                         CEP = e.Endereco.CEP,
                         Complemento = e.Endereco!.Complemento,
                         EstadoId = e.Endereco.EstadoId,
-                        ListaDeEstados = estados.Select(est => new EstadoViewModel
+                        Estado = estados.Select(est => new EstadoViewModel
                         {
                             id = est.id,
                             Nome = est.Nome,
@@ -94,7 +94,7 @@ namespace MVCCamiloMentoria.Controllers
                     NumeroRua = escolas.Endereco!.NumeroRua,
                     Complemento = escolas.Endereco!.Complemento,
                     EstadoId = escolas.Endereco.EstadoId,
-                    ListaDeEstados = new List<EstadoViewModel>
+                    Estado = new List<EstadoViewModel>
                     {
                         new EstadoViewModel
                         {
@@ -285,9 +285,14 @@ namespace MVCCamiloMentoria.Controllers
                     Complemento = escola.Endereco!.Complemento,
                     CEP = escola.Endereco.CEP,
                     EstadoId = escola.Endereco.EstadoId,
+                    Estado = estado.Select(e => new EstadoViewModel
+                    {
+                        id = e.id,
+                        Nome = e.Nome,
+                        Sigla = e.Sigla
+                    }).ToList()
                 }
             };
-
 
             TempData["MensagemInfo"] = "Edite os dados da escola e clique em salvar.";
             CarregarViewBagsSync();
@@ -390,7 +395,7 @@ namespace MVCCamiloMentoria.Controllers
                     NumeroRua = escola.Endereco!.NumeroRua,
                     Complemento = escola.Endereco!.Complemento,
                     EstadoId = escola.Endereco.EstadoId,
-                    ListaDeEstados = estados.Select(e => new EstadoViewModel
+                    Estado = estados.Select(e => new EstadoViewModel
                     {
                         id = e.id,
                         Nome = e.Nome,
