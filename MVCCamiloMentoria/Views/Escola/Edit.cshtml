@@ -46,7 +46,7 @@
                 <label asp-for="Endereco.EstadoId" class="form-label">Estado</label>
                 <select asp-for="Endereco.EstadoId" class="form-control" id="Estado">
                     <option value="">Selecione o Estado</option>
-                    @foreach (var estado in Model.Endereco.Estado)
+                    @foreach (var estado in Model.Endereco.ListaDeEstados)
                     {
                         <option value="@estado.id">@estado.Nome - @estado.Sigla</option>
                     }
