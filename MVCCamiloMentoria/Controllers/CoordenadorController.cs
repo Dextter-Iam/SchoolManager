@@ -429,7 +429,7 @@ namespace MVCCamiloMentoria.Controllers
                 //if (coordenador.Endereco != null)
                 //    _context.Endereco.Remove(coordenador.Endereco);
 
-                 coordenador.Excluido = false;
+                 coordenador.Excluido = true;
                 _context.Coordenador.Update(coordenador);
                 await _context.SaveChangesAsync();
 
