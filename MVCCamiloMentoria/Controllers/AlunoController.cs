@@ -174,7 +174,7 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
-
+                    var estados = _context.Estado.ToList();
                     var endereco = viewModel.Endereco != null ? new Endereco
                     {
                         NomeRua = viewModel.Endereco.NomeRua,
@@ -197,7 +197,6 @@ namespace MVCCamiloMentoria.Controllers
                         Parentesco1 = viewModel.Parentesco1,
                         NomeResponsavel2 = viewModel.NomeResponsavel2,
                         Parentesco2 = viewModel.Parentesco2,
-                        Endereco = endereco,
 
                         AlunoTelefone = viewModel.Telefones?.Select(t => new AlunoTelefone
                         {
