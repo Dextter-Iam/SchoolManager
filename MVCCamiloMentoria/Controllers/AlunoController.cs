@@ -26,6 +26,7 @@ namespace MVCCamiloMentoria.Controllers
             var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
 
             var alunos = await _context.Aluno
+                .Include(a =>!a.Excluido)
                 .Include(a => a.Turma)
                 .Include(a => a.Endereco)
                 .Include(a => a.Escola)

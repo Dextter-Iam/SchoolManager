@@ -14,6 +14,7 @@ namespace MVCCamiloMentoria.Models
     {
         public int TurmaId { get; set; }
         public string? NomeTurma {  get; set; }
+        public bool Excluido { get; set; } = false;
         public int AnoLetivo { get; set; }
         public string? Turno { get; set; }
 

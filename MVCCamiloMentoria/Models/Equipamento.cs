@@ -6,6 +6,7 @@ namespace MVCCamiloMentoria.Models
     {
         public int Id { get; set; }
         public string? Nome { get; set; }
+        public bool Excluido { get; set; } = false;
         public bool StatusOperacional { get; set; }
         public int MarcaId { get; set; }
         public Marca? Marca {get; set; }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCCamiloMentoria.Migrations
 {
     [DbContext(typeof(EscolaContext))]
-    partial class EscolaContextModelSnapshot : ModelSnapshot
+    [Migration("20250511034800_excludeTables")]
+    partial class excludeTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,8 +86,7 @@ namespace MVCCamiloMentoria.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnderecoId")
-                        .IsUnique();
+                    b.HasIndex("EnderecoId");
 
                     b.HasIndex("EscolaId");
 
@@ -854,8 +856,8 @@ namespace MVCCamiloMentoria.Migrations
             modelBuilder.Entity("MVCCamiloMentoria.Models.Aluno", b =>
                 {
                     b.HasOne("MVCCamiloMentoria.Models.Endereco", "Endereco")
-                        .WithOne()
-                        .HasForeignKey("MVCCamiloMentoria.Models.Aluno", "EnderecoId")
+                        .WithMany("Alunos")
+                        .HasForeignKey("EnderecoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1335,6 +1337,11 @@ namespace MVCCamiloMentoria.Migrations
                     b.Navigation("Professores");
 
                     b.Navigation("TurmaDisciplinas");
+                });
+
+            modelBuilder.Entity("MVCCamiloMentoria.Models.Endereco", b =>
+                {
+                    b.Navigation("Alunos");
                 });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Escola", b =>

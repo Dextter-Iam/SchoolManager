@@ -16,6 +16,8 @@ public class AlunoConfiguration : IEntityTypeConfiguration<Aluno>
         builder.Property(a => a.EmailEscolar)
                .HasMaxLength(200);
 
+        builder.Property(p => p.Excluido)
+                .HasDefaultValue(false);
 
         builder.Property(a => a.BolsaEscolar)
                .IsRequired()

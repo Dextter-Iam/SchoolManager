@@ -16,6 +16,9 @@ namespace MVCCamiloMentoria.Data
                    .IsRequired()
                    .HasMaxLength(200);
 
+            builder.Property(p => p.Excluido)
+                   .HasDefaultValue(false);
+
             builder.Property(p => p.Matricula)
                    .IsRequired();
 

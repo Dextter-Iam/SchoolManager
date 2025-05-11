@@ -12,6 +12,5 @@ namespace MVCCamiloMentoria.Models
         public string? Complemento { get; set; }
         public int EstadoId { get; set; }
         public Estado? Estado {  get; set; }
-        public List<Aluno>? Alunos { get; set; }
     }
 }
