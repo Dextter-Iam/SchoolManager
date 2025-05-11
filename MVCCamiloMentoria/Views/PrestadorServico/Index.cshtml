@@ -29,15 +29,17 @@
 					<td>@Html.DisplayFor(modelItem => item.EmpresaNome)</td>
 					<td>@Html.DisplayFor(modelItem => item.Escola.Nome)</td>
 					<td class="d-flex justify-content-around">
-						<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
-							<i class="fas fa-eye"></i> Detalhes
-						</a>
-						<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
-							<i class="fas fa-edit"></i> Editar
-						</a>
-						<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
-							<i class="fas fa-trash"></i> Excluir
-						</a>
+						<div class="d-flex justify-content-center gap-2">
+							<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm px-3" title="Detalhes">
+								<i class="fas fa-eye"></i>
+							</a>
+							<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm px-3" title="Editar">
+								<i class="fas fa-pencil-alt"></i>
+							</a>
+							<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm px-3" title="Excluir">
+								<i class="fas fa-trash-alt"></i>
+							</a>
+						</div>
 					</td>
 				</tr>
 			}

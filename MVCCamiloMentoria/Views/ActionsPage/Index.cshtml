@@ -1,321 +1,236 @@
 ﻿@{
 	ViewData["Title"] = "Painel - School Manager";
 }
-<div class="admin-panel">
-	<div class="container">
-		<h2 class="section-title">Painel Administrativo</h2>
-		<div class="grid-cards">
-
-			<!-- Dropdown: Alunos -->
-			<div class="action-card dropdown-card" title="Ver todos os alunos">
-				<div class="icon">
-					<i class="fas fa-user-graduate"></i>
-				</div>
-				<div class="label">Alunos</div>
-				<div class="dropdown-content">
-					<a href="/Aluno/Index"><i class="fas fa-users"></i> Ver Alunos</a>
-					<a href="/Aluno/Create"><i class="fas fa-user-plus"></i> Novo Aluno</a>
-				</div>
-			</div>
-
-			<!-- Dropdown: Responsável -->
-			<div class="action-card dropdown-card" title="Ver todos os responsáveis">
-				<div class="icon">
-					<i class="fas fa-user"></i>
-				</div>
-				<div class="label">Responsável</div>
-				<div class="dropdown-content">
-					<a href="/Responsavel/Index"><i class="fas fa-users"></i> Ver Responsáveis</a>
-					<a href="/Responsavel/Create"><i class="fas fa-user-plus"></i> Novo Responsável</a>
-				</div>
-			</div>
-
-			<!-- Dropdown: Professores -->
-			<div class="action-card dropdown-card" title="Ver todos os professores">
-				<div class="icon">
-					<i class="fas fa-chalkboard-teacher"></i>
-				</div>
-				<div class="label">Professores</div>
-				<div class="dropdown-content">
-					<a href="/Professor/Index"><i class="fas fa-users"></i> Ver Professores</a>
-					<a href="/Professor/Create"><i class="fas fa-user-plus"></i> Novo Professor</a>
-				</div>
-			</div>
-
-			<!-- Dropdown: Supervisores -->
-			<div class="action-card dropdown-card" title="Ver todos os supervisores">
-				<div class="icon">
-					<i class="fas fa-user-tie"></i>
-				</div>
-				<div class="label">Supervisores</div>
-				<div class="dropdown-content">
-					<a href="/Supervisor/Index"><i class="fas fa-users"></i> Ver Supervisores</a>
-					<a href="/Supervisor/Create"><i class="fas fa-user-plus"></i> Novo Supervisor</a>
-				</div>
-			</div>
-
-			<!-- Dropdown: Coordenador -->
-			<div class="action-card dropdown-card" title="Ver todos os coordenadores">
-				<div class="icon">
-					<i class="fas fa-users"></i>
-				</div>
-				<div class="label">Coordenadores</div>
-				<div class="dropdown-content">
-					<a href="/Coordenador/Index"><i class="fas fa-users"></i> Ver Coordenadores</a>
-					<a href="/Coordenador/Create"><i class="fas fa-user-plus"></i> Novo Coordenador</a>
-				</div>
-			</div>
-
-			<!-- Dropdown: Diretores -->
-			<div class="action-card dropdown-card" title="Ver todos os Diretores">
-				<div class="icon">
-					<i class="fas fa-users-cog"></i>
-				</div>
-				<div class="label">Diretores</div>
-				<div class="dropdown-content">
-					<a href="/Diretor/Index"><i class="fas fa-users"></i> Ver Diretores</a>
-					<a href="/Diretor/Create"><i class="fas fa-user-plus"></i> Novo Diretor</a>
-				</div>
-			</div>
-
-			<!-- Dropdown: Disciplinas -->
-			<div class="action-card dropdown-card" title="Gerenciar disciplinas">
-				<div class="icon">
-					<i class="fas fa-book-open"></i>
-				</div>
-				<div class="label">Disciplinas</div>
-				<div class="dropdown-content">
-					<a href="/Disciplina"><i class="fas fa-book"></i> Ver Disciplinas</a>
-					<a href="/Disciplina/Create"><i class="fas fa-plus-circle"></i> Nova Disciplina</a>
-				</div>
-			</div>
-
-			<!-- Dropdown: Turmas -->
-			<div class="action-card dropdown-card" title="Ver todas as Turmas">
-				<div class="icon">
-					<i class="fas fa-user"></i>
-				</div>
-				<div class="label">Turmas</div>
-				<div class="dropdown-content">
-					<a href="/Turma/Index"><i class="fas fa-users"></i> Ver Turmas</a>
-					<a href="/Turma/Create"><i class="fas fa-user-plus"></i> Nova Turma</a>
-				</div>
-			</div>
-
-			<!-- Dropdown: Aulas -->
-			<div class="action-card dropdown-card" title="Configurações das escolas">
-				<div class="icon">
-					<i class="fas fa-book-reader"></i>
-				</div>
-				<div class="label">Aulas</div>
-				<div class="dropdown-content">
-					<a href="/Aula"><i class="fas fa-list-ul"></i> Ver Aulas</a>
-					<a href="/Aula/Create"><i class="fas fa-plus-circle"></i> Nova Aula</a>
-				</div>
-			</div>
-
-			<!-- Dropdown: Escolas -->
-			<div class="action-card dropdown-card" title="Configurações das escolas">
-				<div class="icon">
-					<i class="fas fa-school"></i>
-				</div>
-				<div class="label">Escolas</div>
-				<div class="dropdown-content">
-					<a href="/Escola"><i class="fas fa-list-ul"></i> Ver Escolas</a>
-					<a href="/Escola/Create"><i class="fas fa-plus-circle"></i> Nova Escola</a>
-				</div>
-			</div>
-
-			<!-- Dropdown: Fornecedores -->
-			<div class="action-card dropdown-card" title="Lista de fornecedores">
-				<div class="icon">
-					<i class="fas fa-truck"></i>
-				</div>
-				<div class="label">Fornecedores</div>
-				<div class="dropdown-content">
-					<a href="/Fornecedor"><i class="fas fa-clipboard-list"></i> Ver Fornecedores</a>
-					<a href="/Fornecedor/Create"><i class="fas fa-plus"></i> Novo Fornecedor</a>
-				</div>
-			</div>
-
-			<!-- Dropdown: Prestadores de Serviço -->
-			<div class="action-card dropdown-card" title="Lista de trabalhadores">
-				<div class="icon">
-					<i class="fas fa-hands-helping"></i>
-				</div>
-				<div class="label">Prestadores de Serviço</div>
-				<div class="dropdown-content">
-					<a href="/PrestadorServico/Index"><i class="fas fa-clipboard-list"></i> Ver Funcionário</a>
-					<a href="/PrestadorServico/Create"><i class="fas fa-plus"></i> Novo Funcionário</a>
-				</div>
-			</div>
-
-			<!-- Dropdown: Equipamentos -->
-			<div class="action-card dropdown-card" title="Ver Equipamentos">
-				<div class="icon">
-					<i class="fas fa-desktop"></i>
-				</div>
-				<div class="label">Equipamentos</div>
-				<div class="dropdown-content">
-					<a href="/Equipamento/Index"><i class="fas fa-list"></i>  Ver Equipamentos</a>
-					<a href="/Equipamento/Create"><i class="fas fa-plus"></i> Novo Equipamento</a>
-				</div>
-			</div>
-
-
-			<!-- Dropdown: Gestão -->
-@* 			<div class="action-card dropdown-card" title="Mais opções administrativas">
-				<div class="icon">
-					<i class="fas fa-cogs"></i>
-				</div>
-				<div class="label">Gestão</div>
-				<div class="dropdown-content">
-					<a href="/Funcionarios"><i class="fas fa-users-cog"></i> Funcionários</a>
-					<a href="/Financeiro"><i class="fas fa-file-invoice-dollar"></i> Financeiro</a>
-					<a href="/Relatorios"><i class="fas fa-chart-line"></i> Relatórios</a>
-				</div>
-			</div> *@
-
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<div class="layout-wrapper">
+	<header class="topbar">
+		<div class="container">
+			<h1 class="logo">Painel Administrativo</h1>
 		</div>
-	</div>
+	</header>
+
+	<main class="dashboard">
+		<div class="container">
+			<div class="category-block">
+				<h3><i class="fas fa-users"></i> Gestão de Pessoas</h3>
+				<div class="card-grid">
+					@Html.Raw(RenderCard("Alunos", "fas fa-user-graduate", "/Aluno/Index", "/Aluno/Create"))
+					@Html.Raw(RenderCard("Professores", "fas fa-chalkboard-teacher", "/Professor/Index", "/Professor/Create"))
+					@Html.Raw(RenderCard("Responsáveis", "fas fa-user-friends", "/Responsavel/Index", "/Responsavel/Create"))
+					@Html.Raw(RenderCard("Coordenadores", "fas fa-user-tie", "/Coordenador/Index", "/Coordenador/Create"))
+					@Html.Raw(RenderCard("Diretores", "fas fa-user-shield", "/Diretor/Index", "/Diretor/Create"))
+				</div>
+			</div>
+
+			<div class="category-block">
+				<h3><i class="fas fa-graduation-cap"></i> Acadêmico</h3>
+				<div class="card-grid">
+					@Html.Raw(RenderCard("Disciplinas", "fas fa-book-open", "/Disciplina", "/Disciplina/Create"))
+					@Html.Raw(RenderCard("Turmas", "fas fa-users", "/Turma/Index", "/Turma/Create"))
+					@Html.Raw(RenderCard("Aulas", "fas fa-book-reader", "/Aula", "/Aula/Create"))
+				</div>
+			</div>
+
+			<div class="category-block">
+				<h3><i class="fas fa-building"></i> Infraestrutura</h3>
+				<div class="card-grid">
+					@Html.Raw(RenderCard("Escolas", "fas fa-school", "/Escola", "/Escola/Create"))
+					@Html.Raw(RenderCard("Equipamentos", "fas fa-laptop", "/Equipamento/Index", "/Equipamento/Create"))
+				</div>
+			</div>
+
+			<div class="category-block">
+				<h3><i class="fas fa-cogs"></i> Serviços</h3>
+				<div class="card-grid">
+					@Html.Raw(RenderCard("Fornecedores", "fas fa-truck", "/Fornecedor", "/Fornecedor/Create"))
+					@Html.Raw(RenderCard("Prestadores", "fas fa-hands-helping", "/PrestadorServico/Index", "/PrestadorServico/Create"))
+				</div>
+			</div>
+		</div>
+
+	</main>
 </div>
 
 
+@functions {
+	public string RenderCard(string title, string icon, string listUrl, string createUrl)
+	{
+		return $@"
+        <div class='card'>
+            <div class='icon'><i class='{icon}'></i></div>
+            <div class='label'>{title}</div>
+            <div class='actions'>
+			<a href='{listUrl}'><i class='fas fa-eye'></i> Ver Todos</a>
+			<a href='{createUrl}'><i class='fas fa-plus-circle'></i> Novo</a>
+            </div>
+        </div>";
+	}
+}
+
 <style>
-	body {
-		background: linear-gradient(to right, #eef2f7, #ffffff);
-		font-family: 'Segoe UI', sans-serif;
-		margin: 0;
-		padding: 0;
+	* {
+		box-sizing: border-box;
 	}
 
-	.admin-panel {
-		padding: 4rem 1rem;
-		min-height: 100vh;
+	html, body {
+		margin: 0;
+		padding: 0;
+		height: 100%;
+		font-family: 'Segoe UI', sans-serif;
+		background: linear-gradient(to right, #f8f9fa, #e9eff5);
+		color: #2d3748;
 		display: flex;
-		justify-content: center;
+		flex-direction: column;
+	}
+
+	.layout-wrapper {
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+	}
+
+	.topbar {
+		background: #1b6ec2;
+		padding: 1rem 0;
+		box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+		border-radius: 10px;
+	}
+
+	.logo {
+		color: #fff;
+		font-size: 1.5rem;
+		text-align: center;
+		margin: 0;
+	}
+
+	.dashboard {
+		flex: 1;
 	}
 
 	.container {
-		max-width: 1200px;
-		width: 100%;
+		max-width: 1280px;
+		margin: 2rem auto;
+		padding: 0 1rem;
 	}
 
-	.section-title {
+	.page-title {
 		font-size: 2.5rem;
-		font-weight: 700;
 		color: #1b6ec2;
-		margin-bottom: 2rem;
-		text-align: left;
-	}
-
-	.grid-cards {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-		gap: 2.5rem;
-	}
-
-	.action-card {
-		position: relative;
-		background-color: #f1f5f8;
-		border-radius: 1rem;
-		padding: 2rem 1.5rem;
+		margin-bottom: 2.5rem;
 		text-align: center;
-		text-decoration: none;
-		color: #1b6ec2;
-		transition: all 0.3s ease;
-		box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
-		min-height: 140px;
-		margin-bottom: 5rem; /* Adiciona espaçamento entre cards */
 	}
 
-	.actions-grid {
+	.category-block {
+		margin-bottom: 3rem;
+		animation: fadeInUp 0.6s ease both;
+	}
+
+		.category-block h3 {
+			font-size: 1.5rem;
+			margin-bottom: 1rem;
+			color: #1b6ec2;
+			border-left: 6px solid #1b6ec2;
+			padding-left: 1rem;
+		}
+
+	.card-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-		gap: 3rem; /* Aqui também é essencial */
+		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+		gap: 1.5rem;
 	}
 
-
-	.action-card:hover {
-		background-color: #f0f8ff;
-		transform: translateY(-6px);
-		box-shadow: 0 12px 35px rgba(27, 110, 194, 0.12);
+	.card {
+		background: #fff;
+		border-radius: 16px;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+		padding: 1.5rem;
+		text-align: center;
+		transition: all 0.3s ease;
+		animation: fadeIn 0.5s ease forwards;
 	}
 
-	.action-card .icon {
-		font-size: 2.5rem;
-		position: relative;
-	}
-
-	.action-card .label {
-		margin-top: 0.75rem;
-		font-size: 1.2rem;
-		font-weight: 600;
-	}
-
-	.badge {
-		background-color: #dc3545;
-		color: white;
-		font-size: 0.75rem;
-		padding: 0.25rem 0.5rem;
-		border-radius: 999px;
-		position: absolute;
-		top: -10px;
-		right: -10px;
-	}
-
-	/* Dropdown card */
-	.dropdown-card {
-		position: relative;
-		margin-bottom: 5.5rem; /* Garante espaço para o dropdown não ser cortado */
-		z-index: 10; /* Coloca o card acima de outros */
-		overflow: visible; /* Permite que o conteúdo transborde */
-	}
-
-		.dropdown-card .dropdown-content {
-			display: none;
-			position: absolute;
-			top: 100%;
-			left: 50%;
-			transform: translateX(-50%);
-			background: #fff;
-			padding: 0.5rem;
-			border-radius: 0.75rem;
-			box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-			z-index: 100; /* Garante que o dropdown fique acima de tudo */
-			width: 220px;
-			white-space: nowrap;
+		.card:hover {
+			transform: translateY(-6px);
+			box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
 		}
 
-		.dropdown-card:hover .dropdown-content {
+		.card .icon {
+			font-size: 2.5rem;
+			color: #1b6ec2;
+			margin-bottom: 1rem;
+			transition: transform 0.3s;
+		}
+
+		.card:hover .icon {
+			transform: scale(1.1);
+		}
+
+		.card .label {
+			font-weight: 600;
+			font-size: 1.1rem;
+			margin-bottom: 1rem;
+		}
+
+		.card .actions a {
 			display: block;
+			text-decoration: none;
+			color: #2d3748;
+			margin: 0.3rem 0;
+			font-size: 0.95rem;
+			transition: all 0.2s ease;
 		}
 
-	/* Links internos do dropdown */
-	.dropdown-content a {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		padding: 0.75rem 1rem;
-		font-size: 0.95rem;
-		color: #1b6ec2;
-		text-decoration: none;
-		border-radius: 0.5rem;
-		transition: background 0.2s ease;
+			.card .actions a i {
+				margin-right: 0.4rem;
+				color: #1b6ec2;
+			}
+
+			.card .actions a:hover {
+				color: #1b6ec2;
+				font-weight: bold;
+			}
+
+	.footer {
+		background: #1b6ec2;
+		color: white;
+		text-align: center;
+		padding: 0.5rem 0;
+		font-size: 0.9rem;
 	}
 
-		.dropdown-content a:hover {
-			background-color: #f1f5f9;
+	@@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(30px);
 		}
 
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
 
-	@@media (max-width: 768px) {
-		.section-title {
-			text-align: center;
+	@@keyframes fadeIn {
+		from {
+			opacity: 0;
 		}
 
-		.grid-cards {
-			grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+		to {
+			opacity: 1;
+		}
+	}
+
+	@@media (max-width: 600px) {
+		.card-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.page-title {
+			font-size: 2rem;
+		}
+
+		.logo {
+			font-size: 1.2rem;
 		}
 	}
 </style>
