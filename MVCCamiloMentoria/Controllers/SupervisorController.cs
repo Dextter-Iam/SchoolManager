@@ -542,8 +542,7 @@ namespace MVCCamiloMentoria.Controllers
                     .Include(s => s.SupervisorEscolas)
                     .FirstOrDefaultAsync(s => s.Id == id);
 
-                //var telefone = _context.Telefone
-                //                        .Include(t => t.Excluido);
+
                 if (supervisor == null)
                 {
                     TempData["MensagemErro"] = "Supervisor não encontrado.";
@@ -551,13 +550,13 @@ namespace MVCCamiloMentoria.Controllers
                 }
 
 
-                if (supervisor.Telefones != null && supervisor.Telefones.Any())
-                    _context.Telefone.RemoveRange(supervisor.Telefones);
+                //if (supervisor.Telefones != null && supervisor.Telefones.Any())
+                //    _context.Telefone.RemoveRange(supervisor.Telefones);
 
 
-                if (supervisor.SupervisorEscolas != null && supervisor.SupervisorEscolas.Any())
+                //if (supervisor.SupervisorEscolas != null && supervisor.SupervisorEscolas.Any())
                     
-                    _context.SupervisorEscola!.RemoveRange(supervisor.SupervisorEscolas);
+                //    _context.SupervisorEscola!.RemoveRange(supervisor.SupervisorEscolas);
 
                     supervisor.Excluido = true;
                 _context.Supervisor.Update(supervisor);
