@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCCamiloMentoria.Migrations
 {
     [DbContext(typeof(EscolaContext))]
-    partial class EscolaContextModelSnapshot : ModelSnapshot
+    [Migration("20250511162702_AUTHUSERTABLE")]
+    partial class AUTHUSERTABLE
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -178,32 +181,6 @@ namespace MVCCamiloMentoria.Migrations
                     b.HasIndex("TurmaId");
 
                     b.ToTable("Aula", (string)null);
-                });
-
-            modelBuilder.Entity("MVCCamiloMentoria.Models.AuthUserModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserName")
-                        .IsUnique();
-
-                    b.ToTable("AuthUser", (string)null);
                 });
 
             modelBuilder.Entity("MVCCamiloMentoria.Models.Coordenador", b =>
@@ -805,6 +782,32 @@ namespace MVCCamiloMentoria.Migrations
                     b.HasIndex("EscolaId");
 
                     b.ToTable("Turma", (string)null);
+                });
+
+            modelBuilder.Entity("MVCCamiloMentoria.ViewModels.AuthUserModelViewModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserName")
+                        .IsUnique();
+
+                    b.ToTable("AuthUser", (string)null);
                 });
 
             modelBuilder.Entity("PresencaAula", b =>

@@ -8,6 +8,7 @@ public class EscolaContext : DbContext
     {
     }
     public DbSet<Turma> Turma { get; set; }
+    public DbSet<AuthUserModel>AuthUser { get; set; }
     public DbSet<AlunoTelefone> AlunoTelefone { get; set; }
     public DbSet<Aluno> Aluno { get; set; }
     public DbSet<AlunoResponsavel> AlunoResponsavel { get; set; }

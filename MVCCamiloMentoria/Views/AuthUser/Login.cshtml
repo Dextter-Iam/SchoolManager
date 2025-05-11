@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<MVCCamiloMentoria.ViewModels.AuthUserViewModel>
+
+@{
     ViewData["Title"] = "Login - School Manager";
 }
 
@@ -10,7 +12,17 @@
                 Acesse sua plataforma de gestão escolar para controlar alunos, professores, disciplinas e muito mais.
             </p>
 
-            <form method="post" action="@Url.Action("Login", "Auth")" class="login-form">
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Error"]</div>
+            }
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">@TempData["Success"]</div>
+            }
+
+            <form method="post" class="login-form">
                 <div class="input-group">
                     <label for="username">Usuário</label>
                     <input type="text" id="username" name="username" required placeholder="Digite seu usuário">
@@ -33,6 +45,7 @@
         </div>
     </div>
 </div>
+
 
 <style>
     html, body {
