@@ -19,6 +19,7 @@ namespace MVCCamiloMentoria.Controllers
         public async Task<IActionResult> Index()
         {
             var diretores = await _context.Diretor
+                .Where(d => !d.Excluido)
                 .Include(d => d.Endereco)
                 .Include(d => d.Telefones)
                 .Include(d => d.Escola)
@@ -66,6 +67,7 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var diretor = await _context.Diretor
+                .Where(d => !d.Excluido)
                 .Include(d => d.Escola)
                 .Include(d => d.Endereco)
                     .ThenInclude(d=> d!.Estado)
@@ -229,6 +231,7 @@ namespace MVCCamiloMentoria.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var diretor = await _context.Diretor
+                .Where(d => !d.Excluido)
                 .Include(d => d.Escola)
                 .Include(d => d.Endereco)
                 .Include(d => d.Telefones)
@@ -391,6 +394,7 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var diretor = await _context.Diretor
+                .Where(d => !d.Excluido)
                 .Include(d => d.Escola)
                 .Include(d => d.Telefones)
                 .Include(d => d.Endereco)
@@ -449,6 +453,7 @@ namespace MVCCamiloMentoria.Controllers
             try
             {
                 var diretor = await _context.Diretor
+                    .Where(d => !d.Excluido)
                     .Include(d => d.Endereco)
                     .Include(d => d.Telefones)
                     .FirstOrDefaultAsync(d => d.Id == id);
@@ -459,12 +464,8 @@ namespace MVCCamiloMentoria.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                if (diretor.Telefones != null && diretor.Telefones.Any())
-                {
-                    _context.Telefone.RemoveRange(diretor.Telefones);
-                }
-
-                _context.Diretor.Remove(diretor);
+                 diretor.Excluido = true;
+                _context.Diretor.Update(diretor);
                 await _context.SaveChangesAsync();
                 TempData["MensagemSucesso"] = "Diretor excluído com sucesso!";
             }

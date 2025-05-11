@@ -25,6 +25,7 @@ namespace MVCCamiloMentoria.Controllers
             var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
 
             var turmas = await _context.Turma
+                .Where(t => !t.Excluido)
                 .Include(t => t.Escola)
                 .Include(t => t.Alunos)
                 .Include(t => t.Professores)
@@ -70,6 +71,7 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var turma = await _context.Turma
+                .Where(t => !t.Excluido)
                 .Include(t => t.Escola)
                 .Include(t => t.Aulas)
                 .Include(t => t.Alunos)
@@ -167,9 +169,10 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var turma = await _context.Turma
+                                      .Where(t => !t.Excluido)
                                       .Include(t => t.Escola)
                                       .FirstOrDefaultAsync(t => t.TurmaId == id);
-
+                                      
             if (turma == null)
             {
                 return NotFound();
@@ -245,6 +248,7 @@ namespace MVCCamiloMentoria.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var turma = await _context.Turma
+                .Where(t => !t.Excluido)
                 .Include(t => t.Escola)
                 .Include(t => t.Alunos)
                 .Include(t => t.TurmaDisciplinas)
@@ -297,6 +301,7 @@ namespace MVCCamiloMentoria.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var turma = await _context.Turma
+                .Where(t=>!t.Excluido)
                 .Include(t => t.Alunos)
                 .Include(t => t.TurmaDisciplinas)
                     .ThenInclude(td => td.Disciplina)
@@ -309,15 +314,18 @@ namespace MVCCamiloMentoria.Controllers
 
             foreach (var aluno in turma.Alunos!.ToList())
             {
-                _context.Aluno.Remove(aluno);
+                 aluno.Excluido = true;
+                _context.Aluno.Update(aluno);
             }
 
             foreach (var turmaDisciplina in turma.TurmaDisciplinas.ToList())
             {
-                _context.TurmaDisciplina.Remove(turmaDisciplina);
+                 turmaDisciplina.Excluido = true;
+                _context.TurmaDisciplina.Update(turmaDisciplina);
             }
 
-            _context.Turma.Remove(turma);
+             turma.Excluido = true;
+            _context.Turma.Update(turma);
             await _context.SaveChangesAsync();
 
             TempData["MensagemSucesso"] = "Turma excluída com sucesso!";

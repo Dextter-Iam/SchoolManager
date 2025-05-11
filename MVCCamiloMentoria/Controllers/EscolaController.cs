@@ -26,6 +26,7 @@ namespace MVCCamiloMentoria.Controllers
             var estados = new List<EstadoViewModel>();
             TempData["MensagemInfo"] = "Lista de escolas carregada com sucesso.";
             var escolas = await _context.Escola
+                                        .Where(e => !e.Excluido)
                 .Select(e => new EscolaViewModel
                 {
                     Id = e.Id,
@@ -60,6 +61,7 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var escolas = await _context.Escola
+                .Where(e => !e.Excluido)
                 .Include(e => e.Endereco)
                          .ThenInclude(e => e.Estado)
                 .Include(e => e.Professores)
@@ -278,6 +280,7 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var escola = await _context.Escola
+                .Where(e => !e.Excluido)
                 .Include(e => e.Endereco)
                     .ThenInclude(e => e.Estado)
                 .Include(e => e.Telefones)
@@ -390,6 +393,7 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var escola = await _context.Escola
+                .Where(e => !e.Excluido)
                 .Include(e => e.Endereco)
                         .ThenInclude(e => e.Estado)
                 .Include(e => e.Telefones)
@@ -512,6 +516,7 @@ namespace MVCCamiloMentoria.Controllers
             try
             {
                 var escola = await _context.Escola
+                    .Where(e => !e.Excluido)
                     .Include(e => e.Endereco)
                         .ThenInclude(e => e.Estado)
                     .Include(e => e.Telefones)
@@ -527,17 +532,18 @@ namespace MVCCamiloMentoria.Controllers
                 {
                     try
                     {
-                        if (escola.Telefones != null && escola.Telefones.Any())
-                        {
-                            _context.Telefone.RemoveRange(escola.Telefones);
-                        }
+                        //if (escola.Telefones != null && escola.Telefones.Any())
+                        //{
+                        //    _context.Telefone.RemoveRange(escola.Telefones);
+                        //}
 
-                        if (escola.Endereco != null)
-                        {
-                            _context.Endereco.Remove(escola.Endereco);
-                        }
+                        //if (escola.Endereco != null)
+                        //{
+                        //    _context.Endereco.Remove(escola.Endereco);
+                        //}
 
-                        _context.Escola.Remove(escola);
+                        escola.Excluido = true;
+                        _context.Escola.Update(escola);
 
                         await _context.SaveChangesAsync();
 

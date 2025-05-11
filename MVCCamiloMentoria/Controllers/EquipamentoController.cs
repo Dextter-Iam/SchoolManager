@@ -22,6 +22,7 @@ namespace MVCCamiloMentoria.Controllers
             var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
 
             var equipamentos = await _context.Equipamento
+                .Where(e => !e.Excluido)
                 .Include(e => e.Marca)
                 .Include(e => e.Modelo)
                 .Include(e => e.Escola)
@@ -53,6 +54,7 @@ namespace MVCCamiloMentoria.Controllers
             if (id == null) return NotFound();
 
             var equipamento = await _context.Equipamento
+                .Where(e => !e.Excluido)
                 .Include(e => e.Escola)
                 .Include(e => e.Marca)
                 .Include(e => e.Modelo)
@@ -112,7 +114,13 @@ namespace MVCCamiloMentoria.Controllers
         {
             if (id == null) return NotFound();
 
-            var equipamento = await _context.Equipamento.FindAsync(id);
+            var equipamento = await _context.Equipamento
+                                            .Where(e => !e.Excluido)
+                                            .Include(e => e.Escola)
+                                            .Include(e => e.Marca)
+                                            .Include(e => e.Modelo)
+                                            .FirstOrDefaultAsync(m => m.Id == id);
+
             if (equipamento == null) return NotFound();
 
             var viewModel = new EquipamentoViewModel
@@ -174,6 +182,7 @@ namespace MVCCamiloMentoria.Controllers
             if (id == null) return NotFound();
 
             var equipamento = await _context.Equipamento
+                .Where(e => !e.Excluido)
                 .Include(e => e.Escola)
                 .Include(e => e.Marca)
                 .Include(e => e.Modelo)
@@ -201,7 +210,8 @@ namespace MVCCamiloMentoria.Controllers
             var equipamento = await _context.Equipamento.FindAsync(id);
             if (equipamento != null)
             {
-                _context.Equipamento.Remove(equipamento);
+                equipamento.Excluido = true;
+                _context.Equipamento.Update(equipamento);
                 await _context.SaveChangesAsync();
 
                 TempData["MensagemSucesso"] = "Equipamento excluído com sucesso!";

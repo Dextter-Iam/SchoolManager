@@ -26,7 +26,7 @@ namespace MVCCamiloMentoria.Controllers
             var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
 
             var alunos = await _context.Aluno
-                .Include(a =>!a.Excluido)
+                .Where(a =>!a.Excluido)
                 .Include(a => a.Turma)
                 .Include(a => a.Endereco)
                 .Include(a => a.Escola)
@@ -42,6 +42,14 @@ namespace MVCCamiloMentoria.Controllers
                     Parentesco1 = a.Parentesco1,
                     NomeResponsavel2 = a.NomeResponsavel2,
                     Parentesco2 = a.Parentesco2,
+                    Turmas = new List<TurmaViewModel>
+                {
+                    new TurmaViewModel
+                    {
+                        NomeTurma = a.Turma!.NomeTurma,
+                        TurmaId = a.TurmaId,
+                    },
+                },
                     Escolas = new List<EscolaViewModel>
                 {
                     new EscolaViewModel
@@ -66,6 +74,7 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
 
             var aluno = await _context.Aluno
+                .Where(a => !a.Excluido)
                 .Include(a => a.Turma)
                 .Include(a => a.Endereco)
                     .ThenInclude(e => e!.Estado)
@@ -263,6 +272,7 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
 
             var aluno = await _context.Aluno
+                .Where(a => !a.Excluido)
                 .Include(a => a.AlunoTelefone!)
                     .ThenInclude(at => at.Telefone)
                 .Include(a => a.Turma)
@@ -445,6 +455,7 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
 
             var aluno = await _context.Aluno
+                .Where(a => !a.Excluido)
                 .Include(a => a.Turma)
                 .Include(a => a.Endereco)
                     .ThenInclude(e => e!.Estado)
@@ -541,7 +552,8 @@ namespace MVCCamiloMentoria.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                _context.Aluno.Remove(aluno);
+                 aluno.Excluido = true;
+                _context.Aluno.Update(aluno);
                 await _context.SaveChangesAsync();
 
                 TempData["MensagemSucesso"] = "Aluno excluído com sucesso!";

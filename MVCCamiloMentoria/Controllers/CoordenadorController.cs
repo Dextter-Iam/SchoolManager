@@ -19,6 +19,7 @@ namespace MVCCamiloMentoria.Controllers
         public async Task<IActionResult> Index()
         {
             var coordenadores = await _context.Coordenador
+                .Where(c=>!c.Excluido)
                 .Include(c => c.Endereco)
                 .Include(c => c.Escola)
                 .AsNoTracking()
@@ -62,6 +63,7 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var coordenador = await _context.Coordenador
+                .Where(c => !c.Excluido)
                 .Include(c => c.Endereco)
                 .Include(c => c.Escola)
                 .Include(c => c.Telefones)
@@ -208,6 +210,7 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var coordenador = await _context.Coordenador
+                .Where(c => !c.Excluido)
                 .Include(c => c.Endereco)
                 .Include(c => c.Escola)
                 .Include(c => c.Telefones)
@@ -349,6 +352,7 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var coordenador = await _context.Coordenador
+                .Where(c => !c.Excluido)
                 .Include(c => c.Endereco)
                 .Include(c => c.Escola)
                 .Include(c => c.Telefones)
@@ -408,6 +412,7 @@ namespace MVCCamiloMentoria.Controllers
             try
             {
                 var coordenador = await _context.Coordenador
+                    .Where(c => !c.Excluido)
                     .Include(c => c.Endereco)
                     .Include(c => c.Telefones)
                     .FirstOrDefaultAsync(c => c.Id == id);
@@ -418,13 +423,14 @@ namespace MVCCamiloMentoria.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                if (coordenador.Telefones != null && coordenador.Telefones.Any())
-                    _context.Telefone.RemoveRange(coordenador.Telefones);
+                //if (coordenador.Telefones != null && coordenador.Telefones.Any())
+                //    _context.Telefone.RemoveRange(coordenador.Telefones);
 
-                if (coordenador.Endereco != null)
-                    _context.Endereco.Remove(coordenador.Endereco);
+                //if (coordenador.Endereco != null)
+                //    _context.Endereco.Remove(coordenador.Endereco);
 
-                _context.Coordenador.Remove(coordenador);
+                 coordenador.Excluido = false;
+                _context.Coordenador.Update(coordenador);
                 await _context.SaveChangesAsync();
 
                 TempData["MensagemSucesso"] = "Coordenador excluído com sucesso!";

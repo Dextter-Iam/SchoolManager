@@ -19,6 +19,9 @@ namespace MVCCamiloMentoria.Data
                     .IsRequired()
                     .HasMaxLength(3);
 
+            builder.Property(t => t.Excluido)
+                   .HasDefaultValue(false);
+
             builder.HasOne(t => t.Escola)
                    .WithMany(e => e.Telefones)
                    .HasForeignKey(t => t.EscolaId)

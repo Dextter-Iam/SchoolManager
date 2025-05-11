@@ -23,6 +23,7 @@ namespace MVCCamiloMentoria.Controllers
             var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
 
             var supervisores = await _context.Supervisor
+                  .Where(s => !s.Excluido)
                 .Include(s => s.Endereco)
                 .Include(s => s.SupervisorEscolas!)
                     .ThenInclude(se => se.Escola)
@@ -87,6 +88,7 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var supervisor = await _context.Supervisor
+                  .Where(s => !s.Excluido)
                 .Include(s => s.Endereco)
                 .Include(s => s.SupervisorEscolas!)
                     .ThenInclude(se => se.Escola)
@@ -264,6 +266,7 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var supervisor = await _context.Supervisor
+                  .Where(s => !s.Excluido)
                 .Include(s => s.Endereco)
                 .Include(s => s.SupervisorEscolas!)
                     .ThenInclude(se => se.Escola)
@@ -466,6 +469,7 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var supervisor = await _context.Supervisor
+                .Where(s => !s.Excluido)
                 .Include(s => s.Endereco)
                 .Include(s => s.SupervisorEscolas!)
                     .ThenInclude(se => se.Escola)
@@ -531,11 +535,15 @@ namespace MVCCamiloMentoria.Controllers
         {
             try
             {
+
                 var supervisor = await _context.Supervisor
+                      .Where(s => !s.Excluido)
                     .Include(s => s.Telefones)
                     .Include(s => s.SupervisorEscolas)
                     .FirstOrDefaultAsync(s => s.Id == id);
 
+                //var telefone = _context.Telefone
+                //                        .Include(t => t.Excluido);
                 if (supervisor == null)
                 {
                     TempData["MensagemErro"] = "Supervisor não encontrado.";
@@ -548,9 +556,11 @@ namespace MVCCamiloMentoria.Controllers
 
 
                 if (supervisor.SupervisorEscolas != null && supervisor.SupervisorEscolas.Any())
+                    
                     _context.SupervisorEscola!.RemoveRange(supervisor.SupervisorEscolas);
 
-                _context.Supervisor.Remove(supervisor);
+                    supervisor.Excluido = true;
+                _context.Supervisor.Update(supervisor);
                 await _context.SaveChangesAsync();
 
                 TempData["MensagemSucesso"] = "Supervisor excluído com sucesso!";

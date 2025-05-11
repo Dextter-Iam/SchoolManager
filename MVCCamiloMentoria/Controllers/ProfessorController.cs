@@ -18,7 +18,6 @@ namespace MVCCamiloMentoria.Controllers
         // GET: Professor
         public async Task<IActionResult> Index()
         {
-            var estados = await AcessarEstados();
 
             var professores = await _context.Professor
                 .Where(p => !p.Excluido)
@@ -42,8 +41,6 @@ namespace MVCCamiloMentoria.Controllers
                     NumeroRua = p.Endereco!.NumeroRua,
                     Complemento = p.Endereco.Complemento,
                     EstadoId = p.Endereco.EstadoId,
-                    Estado = estados
-
                 }
 
             }).ToList();
@@ -584,8 +581,7 @@ namespace MVCCamiloMentoria.Controllers
         {
             try
             {
-                var professor = await _context.Professor
-                    .FirstOrDefaultAsync(p => p.Id == id);
+                var professor = await _context.Professor.FindAsync(id);
 
                 if (professor == null)
                 {
