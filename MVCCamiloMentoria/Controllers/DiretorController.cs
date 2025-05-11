@@ -68,6 +68,7 @@ namespace MVCCamiloMentoria.Controllers
             var diretor = await _context.Diretor
                 .Include(d => d.Escola)
                 .Include(d => d.Endereco)
+                    .ThenInclude(d=> d!.Estado)
                 .Include(d => d.Telefones)
                 .FirstOrDefaultAsync(d => d.Id == id);
 
@@ -85,22 +86,25 @@ namespace MVCCamiloMentoria.Controllers
                 Nome = diretor.Nome,
                 Matricula = diretor.Matricula,
                 EscolaId = diretor.EscolaId,
-                Endereco = diretor.Endereco == null ? null : new EnderecoViewModel
+                Endereco = diretor.Endereco != null ? new EnderecoViewModel
                 {
+                    Id = diretor.Endereco.Id,
                     NomeRua = diretor.Endereco.NomeRua,
-                    Complemento = diretor.Endereco.Complemento,
                     NumeroRua = diretor.Endereco.NumeroRua,
+                    Complemento = diretor.Endereco.Complemento,
                     CEP = diretor.Endereco.CEP,
+                    EstadoId = diretor.Endereco.EstadoId,
                     Estado = new List<EstadoViewModel>
-            {
-                new EstadoViewModel
-                {
-                    id = diretor.Endereco.EstadoId,
-                    Nome = diretor.Endereco.Estado?.Nome,
-                    Sigla = diretor.Endereco.Estado?.Sigla
-                }
-            }
-                },
+                    {
+                          new EstadoViewModel
+                          {
+                            Nome = diretor.Endereco.Estado!.Nome,
+                            id = diretor.Endereco.Estado.id,
+                            Sigla = diretor.Endereco.Estado.Sigla,
+                           }
+                    }
+                } : null,
+
                 Escola = diretor.Escola == null ? null : new EscolaViewModel
                 {
                     Id = diretor.EscolaId,
@@ -120,15 +124,32 @@ namespace MVCCamiloMentoria.Controllers
         // GET: Diretor/Create
         public IActionResult Create()
         {
+            var estados = _context.Estado
+                                    .Select(e => new EstadoViewModel
+                                    {
+                                        id = e.id,
+                                        Nome = e.Nome,
+                                        Sigla = e.Sigla
+                                    })
+                                    .OrderBy(e => e.Nome)
+                                    .ToList();
             var viewModel = new DiretorViewModel
             {
                 Telefones = new List<TelefoneViewModel>
                 { 
                     new TelefoneViewModel()
                 
-                }
+                },
+
+                Endereco = new EnderecoViewModel
+                {
+
+                },
+                
             };
-            CarregarDependencias();
+
+            ViewData["Estados"] = new SelectList(_context.Estado.ToList(), "id", "Nome");
+            CarregarViewBags(viewModel);
             return View(viewModel);
         }
 
@@ -221,6 +242,8 @@ namespace MVCCamiloMentoria.Controllers
             var ultimoEstado = await _context.Estado
                                              .OrderByDescending(e => e.id) 
                                              .FirstOrDefaultAsync();
+
+            var estado = _context.Estado.ToList();
             var viewModel = new DiretorViewModel
             {
                 Id = diretor.Id,
@@ -234,15 +257,13 @@ namespace MVCCamiloMentoria.Controllers
                     NumeroRua = diretor.Endereco.NumeroRua,
                     CEP = diretor.Endereco.CEP,
                     EstadoId = diretor.Endereco.EstadoId,
-                    Estado = new List<EstadoViewModel>
-            {
-                new EstadoViewModel
-                {
-                    id = ultimoEstado.id,
-                    Nome = diretor.Endereco.Estado?.Nome,
-                    Sigla = diretor.Endereco.Estado?.Sigla
-                }
-            }
+                    Estado = estado.Select(e => new EstadoViewModel
+                    {
+                        id = e.id,
+                        Nome = e.Nome,
+                        Sigla = e.Sigla
+                    }).ToList()
+
                 },
                 Escola = diretor.Escola == null ? null : new EscolaViewModel
                 {

@@ -7,14 +7,25 @@
             <h4 class="mb-0">Equipamentos Cadastrados</h4>
         </div>
         <div class="card-body">
-            <table class="table table-bordered table-striped">
+            <table id ="equipamentosTable" class="table table-bordered table-striped">
                 <thead class="thead-dark">
                     <tr>
-                        <th>@Html.DisplayNameFor(model => model.Nome)</th>
-                        <th>@Html.DisplayNameFor(model => model.StatusOperacional)</th>
-                        <th>@Html.DisplayNameFor(model => model.Marca)</th>
-                        <th>@Html.DisplayNameFor(model => model.Modelo)</th>
-                        <th>@Html.DisplayNameFor(model => model.Escola)</th>
+                        <th class="sortable-column" data-column="0">@Html.DisplayNameFor(model => model.Nome)
+                            <input type ="text" class="form-control column-filter" data-column="0" placeholder="Filtrar por Nome" />
+                        </th>
+                        <th class="sortable-column" data column = "1"> @Html.DisplayNameFor(model => model.StatusOperacional)
+                        </th>
+                        <th class="sortable-column" data-column = "2" >@Html.DisplayNameFor(model => model.Marca)
+                            <input type="text" class="form-control column-filter" data-column="2" placeholder="Filtrar por Marca"/>
+                        </th>
+                        <th class="sortable-column" data-column="3">
+                            @Html.DisplayNameFor(model => model.Modelo)
+                            <input type="text" class="form-control column-filter" data-column="3" placeholder="Filtrar por Modelo"/>
+                        </th>
+                        <th class="sortable-column" data-column="4">
+                            @Html.DisplayNameFor(model => model.Escola)
+                            <input type="text" class="form-control column-filter" data-column="4" placeholder="Filtrar por Escola" />
+                        </th>
                         <th class="text-center">Ações</th>
                     </tr>
                 </thead>
@@ -76,6 +87,62 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const sortDirection = {};
+
+            $('.sortable-column').each(function () {
+                const colIndex = $(this).data('column');
+                if (colIndex !== undefined) {
+                    sortDirection[colIndex] = 1;
+                    $(this).append(' <i class="fas fa-sort"></i>');
+                }
+            });
+
+            $('.column-filter').on('keyup', function () {
+                const columnIndex = $(this).data('column');
+                const searchText = $(this).val().toLowerCase();
+
+                $('#equipamentosTable tbody tr').each(function () {
+                    const cellText = $(this).find('td').eq(columnIndex).text().toLowerCase();
+                    const match = cellText.includes(searchText);
+                    $(this).toggle(match);
+                });
+            });
+
+            $('.sortable-column').on('click', function () {
+                const columnIndex = $(this).data('column');
+                if (columnIndex === undefined) return;
+
+                sortDirection[columnIndex] *= -1;
+
+                $('.sortable-column i').removeClass('fa-sort-up fa-sort-down').addClass('fa-sort');
+
+                const icon = $(this).find('i');
+                icon.removeClass('fa-sort');
+                icon.addClass(sortDirection[columnIndex] === 1 ? 'fa-sort-up' : 'fa-sort-down');
+
+                sortTable(columnIndex, sortDirection[columnIndex]);
+            });
+
+            function sortTable(columnIndex, direction) {
+                const rows = $('#equipamentosTable tbody tr').get();
+
+                rows.sort(function (a, b) {
+                    const aText = $(a).find('td').eq(columnIndex).text().toLowerCase();
+                    const bText = $(b).find('td').eq(columnIndex).text().toLowerCase();
+                    return aText.localeCompare(bText) * direction;
+                });
+
+                $.each(rows, function (index, row) {
+                    $('#equipamentosTable tbody').append(row);
+                });
+            }
+        });
+    </script>
+}
 
 
 <style>

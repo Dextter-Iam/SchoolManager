@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                <!-- Escola -->
+
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">Escola</div>
                     <div class="card-body">
@@ -64,33 +64,51 @@
                     </div>
                 </div>
 
-                <!-- Endereço -->
+ 
                 <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">Endereço</div>
-                    <div class="card-body">
-                        <div class="form-group mb-3">
-                            <label asp-for="Endereco.NomeRua"></label>
-                            <input asp-for="Endereco.NomeRua" class="form-control" />
-                            <span asp-validation-for="Endereco.NomeRua" class="text-danger"></span>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="Endereco.NumeroRua"></label>
-                            <input asp-for="Endereco.NumeroRua" class="form-control" />
-                            <span asp-validation-for="Endereco.NumeroRua" class="text-danger"></span>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="Endereco.Complemento"></label>
-                            <input asp-for="Endereco.Complemento" class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="Endereco.CEP"></label>
-                            <input asp-for="Endereco.CEP" class="form-control" />
-                            <span asp-validation-for="Endereco.CEP" class="text-danger"></span>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="Endereco.EstadoId"></label>
-                            <select asp-for="Endereco.EstadoId" class="form-select" asp-items="ViewBag.Estados"></select>
-                            <span asp-validation-for="Endereco.EstadoId" class="text-danger"></span>
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mt-4">Endereço</h5>
+                    </div>
+                    <div>
+                        <div class="card-body">
+                            <div class="form-group mb-3">
+                                <label asp-for="Endereco.NomeRua" class="form-label">Rua</label>
+                                <input asp-for="Endereco.NomeRua" class="form-control" id="Endereco_NomeRua" />
+                                <span asp-validation-for="Endereco.NomeRua" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="Endereco.NumeroRua" class="form-label">Número</label>
+                                <input asp-for="Endereco.NumeroRua" class="form-control" id="Endereco_NumeroRua" />
+                                <span asp-validation-for="Endereco.NumeroRua" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="Endereco.Complemento" class="form-label">Complemento</label>
+                                <input asp-for="Endereco.Complemento" class="form-control" id="Endereco_Complemento" />
+                                <span asp-validation-for="Endereco.Complemento" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="Endereco.CEPMascara" class="form-label">CEP</label>
+                                <input asp-for="Endereco.CEPMascara" class="form-control" id="Endereco_CEP" />
+                                <span asp-validation-for="Endereco.CEPMascara" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="Endereco.EstadoId" class="form-label">Estado</label>
+                                <select asp-for="Endereco.EstadoId" class="form-control" id="Estado">
+                                    <option value="">Selecione um Estado</option>
+                                    @if (Model?.Endereco?.Estado != null)
+                                    {
+                                        @foreach (var estado in Model.Endereco.Estado)
+                                        {
+                                            <option value="@estado.id">@estado.Nome</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="Endereco.EstadoId" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -104,4 +122,51 @@
         </div>
     </div>
 </div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#Endereco_CEP').blur(function() {
+            const cep = $(this).val().replace(/\D/g, '');
+            if (cep.length !== 8) return;
+
+
+            $.getJSON(`/api/cep/${cep}`, function(data) {
+                // console.log("Dados da API:", data);
+
+
+                if (data.logradouro) {
+                    $("#Endereco_NomeRua").val(data.logradouro).trigger('change');
+                }
+
+                // if (data.localidade) {
+                //     $("#Endereco_Cidade").val(data.localidade).trigger('change');
+                // }
+
+                const estadoSelect = $("#Estado");
+                if (data.uf || data.estado) {
+                    const estadoParaBuscar = data.estado || data.uf;
+                    const estadoEncontrado = estadoSelect.find("option").filter(function() {
+                        return $(this).text().trim() === estadoParaBuscar;
+                    }).val();
+
+                    if (estadoEncontrado) {
+                        estadoSelect.val(estadoEncontrado).trigger('change');
+                    } else {
+                        console.warn("Estado não encontrado:", estadoParaBuscar);
+                    }
+                }
+            }).fail(function() {
+                alert('CEP não encontrado ou erro na consulta!');
+
+                $("#Endereco_NomeRua, #Endereco_Cidade").val('');
+                $("#Estado").val('');
+            });
+        });
+    });
+</script>

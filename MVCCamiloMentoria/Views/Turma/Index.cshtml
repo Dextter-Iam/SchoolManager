@@ -10,14 +10,21 @@
             <h4 class="mb-0">Turmas</h4>
         </div>
         <div class="card-body">
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered table-striped" id="turmaTable">
                 <thead class="thead-dark">
                     <tr>
-                        <th>Nome da Turma</th>
-                        <th>Ano Letivo</th>
-                        <th>Turno</th>
-                        <th>Escola</th>
+                        <th class="sortable-column" data-column="0">Nome da Turma</th>
+                        <th class="sortable-column" data-column="1">Ano Letivo</th>
+                        <th class="sortable-column" data-column="2">Turno</th>
+                        <th class="sortable-column" data-column="3">Escola</th>
                         <th class="text-center">Ações</th>
+                    </tr>
+                    <tr>
+                        <th><input type="text" class="form-control form-control-sm column-filter" data-column="0" placeholder="Filtrar..." /></th>
+                        <th><input type="text" class="form-control form-control-sm column-filter" data-column="1" placeholder="Filtrar..." /></th>
+                        <th><input type="text" class="form-control form-control-sm column-filter" data-column="2" placeholder="Filtrar..." /></th>
+                        <th><input type="text" class="form-control form-control-sm column-filter" data-column="3" placeholder="Filtrar..." /></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,6 +53,7 @@
         </div>
     </div>
 </div>
+
 
 <div class="card-shadpw">
     <br />
@@ -76,3 +84,65 @@
          </<div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let sortDirection = {};
+
+            $('.sortable-column').each(function () {
+                const colIndex = $(this).data('column');
+                sortDirection[colIndex] = 1;
+                $(this).append(' <i class="fas fa-sort"></i>');
+            });
+
+            $('.column-filter').on('keyup', function () {
+                const columnIndex = $(this).data('column');
+                const searchText = $(this).val().toLowerCase();
+
+                $('#turmaTable tbody tr').filter(function () {
+                    const cellText = $(this).find('td').eq(columnIndex).text().toLowerCase();
+                    $(this).toggle(cellText.includes(searchText));
+                });
+            });
+
+
+            $('.sortable-column').on('click', function () {
+                const columnIndex = $(this).data('column');
+                sortDirection[columnIndex] *= -1;
+
+                $('.sortable-column i').removeClass('fa-sort-up fa-sort-down').addClass('fa-sort');
+                const sortIcon = $(this).find('i');
+                sortIcon.removeClass('fa-sort');
+                sortIcon.addClass(sortDirection[columnIndex] === 1 ? 'fa-sort-up' : 'fa-sort-down');
+
+                sortTable(columnIndex, sortDirection[columnIndex]);
+            });
+
+
+            function sortTable(columnIndex, direction) {
+                const $table = $('#turmaTable');
+                const $rows = $table.find('tbody tr').get();
+
+                $rows.sort(function (a, b) {
+                    const aText = $(a).find('td').eq(columnIndex).text().trim();
+                    const bText = $(b).find('td').eq(columnIndex).text().trim();
+
+
+                    if (columnIndex === 1) {
+                        const aNum = parseInt(aText) || 0;
+                        const bNum = parseInt(bText) || 0;
+                        return (aNum - bNum) * direction;
+                    }
+
+                    return aText.toLowerCase().localeCompare(bText.toLowerCase()) * direction;
+                });
+
+                $.each($rows, function (index, row) {
+                    $table.children('tbody').append(row);
+                });
+            }
+        });
+    </script>
+}
+

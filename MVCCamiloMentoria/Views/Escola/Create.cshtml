@@ -37,26 +37,20 @@
                     <span asp-validation-for="Endereco.Complemento" class="text-danger"></span>
                 </div>
 
-                <div class="form-group mb-3">
-                    <label asp-for="Endereco.CEP" class="form-label">CEP</label>
-                    <input asp-for="Endereco.CEP" class="form-control" id="Endereco_CEP" />
-                    <span asp-validation-for="Endereco.CEP" class="text-danger"></span>
+                <div class="form-group">
+                    <label>CEP</label>
+                    @Html.TextBoxFor(model => model.Endereco.CEP,
+                             new { @class = "form-control", id = "Endereco_CEP" })
                 </div>
 
-                <div class="form-group mb-3">
-                    <label asp-for="Endereco.EstadoId" class="form-label">Estado</label>
-                    <select asp-for="Endereco.EstadoId" class="form-control" id="Estado">
-                        <option value="">Selecione um Estado</option>
-                        @if (Model?.Endereco?.Estado != null)
-                        {
-                            @foreach (var estado in Model.Endereco.Estado)
-                            {
-                                <option value="@estado.id">@estado.Nome</option>
-                            }
-                        }
-                    </select>
-                    <span asp-validation-for="Endereco.EstadoId" class="text-danger"></span>
+                <div class="form-group">
+                    <label>Estado</label>
+                    @Html.DropDownListFor(model => model.Endereco.EstadoId,
+                             (SelectList)ViewBag.Estados,
+                             "Selecione um estado",
+                             new { @class = "form-control", id = "Estado" })
                 </div>
+
             </fieldset>
 
             <div class="form-group text-end">
@@ -76,16 +70,43 @@
     }
 
     <script>
-        $(document).ready(function () {
-            $("#Endereco_CEP").blur(function () {
+        $(document).ready(function() {
+            $('#Endereco_CEP').blur(function() {
                 const cep = $(this).val().replace(/\D/g, '');
                 if (cep.length !== 8) return;
 
-                $.getJSON(`/api/cep/${cep}`, function (data) {
-                    $("#Endereco_NomeRua").val(data.logradouro);
-                    $("#Estado").val(data.uf);
-                }).fail(function () {
-                    alert("CEP não encontrado ou erro ao buscar.");
+
+                $.getJSON(`/api/cep/${cep}`, function(data) {
+                    // console.log("Dados da API:", data); 
+
+
+                    if (data.logradouro) {
+                        $("#Endereco_NomeRua").val(data.logradouro).trigger('change');
+                    }
+
+                    if (data.localidade) {
+                        $("#Endereco_Cidade").val(data.localidade).trigger('change');
+                    }
+
+
+                    const estadoSelect = $("#Estado");
+                    if (data.uf || data.estado) {
+                        const estadoParaBuscar = data.estado || data.uf;
+                        const estadoEncontrado = estadoSelect.find("option").filter(function() {
+                            return $(this).text().trim() === estadoParaBuscar;
+                        }).val();
+
+                        if (estadoEncontrado) {
+                            estadoSelect.val(estadoEncontrado).trigger('change');
+                        } else {
+                            console.warn("Estado não encontrado:", estadoParaBuscar);
+                        }
+                    }
+                }).fail(function() {
+                    alert('CEP não encontrado ou erro na consulta!');
+
+                    $("#Endereco_NomeRua, #Endereco_Cidade").val('');
+                    $("#Estado").val('');
                 });
             });
         });

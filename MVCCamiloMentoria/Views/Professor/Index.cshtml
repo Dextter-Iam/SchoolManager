@@ -1,43 +1,110 @@
 ﻿@model IEnumerable<MVCCamiloMentoria.ViewModels.ProfessorViewModel>
 
 @{
-    ViewData["Title"] = "Professores";
+	ViewData["Title"] = "Professores";
 }
 
 <div class="card shadow-sm mb-5">
-    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-        <h4 class="mb-0">Professores</h4>
-    </div>
-        <table class="table table-bordered table-striped">
-            <thead class="thead-dark">
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.Nome)</th>
-                    <th>@Html.DisplayNameFor(model => model.Matricula)</th>
-                    <th>@Html.DisplayNameFor(model => model.Escola)</th>
-                    <th class="text-center">Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.Nome)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Matricula)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Escola.Nome)</td>
-                        <td class="d-flex justify-content-around">
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
-                                <i class="fas fa-eye"></i> Detalhes
-                            </a>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
-                                <i class="fas fa-edit"></i> Editar
-                            </a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
-                                <i class="fas fa-trash"></i> Excluir
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+	<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+		<h4 class="mb-0">Professores</h4>
+	</div>
+
+	<div class="card-body p-0">
+		<table id="professoresTable" class="table table-bordered table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th class="sortable-column" data-column="0">
+						@Html.DisplayNameFor(model => model.First().Nome)
+						<input type="text" class="form-control column-filter" data-column="0" placeholder="Filtrar por Nome" />
+					</th>
+					<th class="sortable-column" data-column="1">
+						@Html.DisplayNameFor(model => model.First().Matricula)
+						<input type="text" class="form-control column-filter" data-column="1" placeholder="Filtrar por Matrícula" />
+					</th>
+					<th class="sortable-column" data-column="2">
+						@Html.DisplayName("Escola")
+						<input type="text" class="form-control column-filter" data-column="2" placeholder="Filtrar por Escola" />
+					</th>
+					<th class="text-center">Ações</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					<tr>
+						<td>@item.Nome</td>
+						<td>@item.Matricula</td>
+						<td>@item.Escola?.Nome</td>
+						<td class="d-flex justify-content-around">
+							<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
+								<i class="fas fa-eye"></i> Detalhes
+							</a>
+							<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+								<i class="fas fa-edit"></i> Editar
+							</a>
+							<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+								<i class="fas fa-trash"></i> Excluir
+							</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
 </div>
+
+@section Scripts {
+	<script>
+		$(document).ready(function () {
+			const sortDirection = {};
+
+			$('.sortable-column').each(function () {
+				const colIndex = $(this).data('column');
+				sortDirection[colIndex] = 1;
+				$(this).append(' <i class="fas fa-sort"></i>');
+			});
+
+			$('.column-filter').on('keyup', function () {
+				const columnIndex = $(this).data('column');
+				const searchText = $(this).val().toLowerCase();
+
+				$('#professoresTable tbody tr').filter(function () {
+					const cellText = $(this).find('td').eq(columnIndex).text().toLowerCase();
+					$(this).toggle(cellText.includes(searchText));
+				});
+			});
+
+			$('.sortable-column').on('click', function () {
+				const columnIndex = $(this).data('column');
+				sortDirection[columnIndex] *= -1;
+
+				$('.sortable-column i').removeClass('fa-sort-up fa-sort-down').addClass('fa-sort');
+
+				const sortIcon = $(this).find('i');
+				sortIcon.removeClass('fa-sort');
+				if (sortDirection[columnIndex] === 1) {
+					sortIcon.addClass('fa-sort-up');
+				} else {
+					sortIcon.addClass('fa-sort-down');
+				}
+
+				sortTable(columnIndex, sortDirection[columnIndex]);
+			});
+
+			function sortTable(columnIndex, direction) {
+				const $table = $('#professoresTable');
+				const $rows = $table.find('tbody tr').get();
+
+				$rows.sort(function (a, b) {
+					const aText = $(a).find('td').eq(columnIndex).text().toLowerCase();
+					const bText = $(b).find('td').eq(columnIndex).text().toLowerCase();
+					return aText.localeCompare(bText) * direction;
+				});
+
+				$.each($rows, function (index, row) {
+					$table.children('tbody').append(row);
+				});
+			}
+		});
+	</script>
+}

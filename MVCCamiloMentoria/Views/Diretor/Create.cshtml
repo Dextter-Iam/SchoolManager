@@ -76,23 +76,26 @@
 					<div class="card-body">
 						<div class="form-group mb-3">
 							<label asp-for="Endereco.NomeRua"></label>
-							<input asp-for="Endereco.NomeRua" class="form-control" />
+							<input asp-for="Endereco.NomeRua" class="form-control" id="Endereco_NomeRua" />
 						</div>
 						<div class="form-group mb-3">
 							<label asp-for="Endereco.NumeroRua"></label>
-							<input asp-for="Endereco.NumeroRua" class="form-control" />
+							<input asp-for="Endereco.NumeroRua" class="form-control" id="Endereco_NumeroRua" />
 						</div>
 						<div class="form-group mb-3">
 							<label asp-for="Endereco.Complemento"></label>
-							<input asp-for="Endereco.Complemento" class="form-control" />
+							<input asp-for="Endereco.Complemento" class="form-control" id="Endereco_Complemento" />
 						</div>
 						<div class="form-group mb-3">
-							<label asp-for="Endereco.CEP"></label>
-							<input asp-for="Endereco.CEP" class="form-control" />
+							<label asp-for="Endereco.CEPMascara"></label>
+							<input asp-for="Endereco.CEPMascara" class="form-control" id="Endereco_CEP" />
 						</div>
-						<div class="form-group mb-3">
-							<label asp-for="Endereco.EstadoId"></label>
-							<select asp-for="Endereco.EstadoId" class="form-select" asp-items="ViewBag.Estados"></select>
+						<div class="form-group">
+							<label>Estado</label>
+							@Html.DropDownListFor(model => model.Endereco.EstadoId,
+																(SelectList)ViewBag.Estados,
+																"Selecione um estado",
+																new { @class = "form-control", id = "Estado" })
 						</div>
 					</div>
 				</div>
@@ -106,3 +109,46 @@
 		</div>
 	</div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+	$(document).ready(function() {
+		$('#Endereco_CEP').blur(function() {
+			const cep = $(this).val().replace(/\D/g, '');
+			if (cep.length !== 8) return;
+
+
+			$.getJSON(`/api/cep/${cep}`, function(data) {
+				// console.log("Dados da API:", data);
+
+
+				if (data.logradouro) {
+					$("#Endereco_NomeRua").val(data.logradouro).trigger('change');
+				}
+
+				// if (data.localidade) {
+				//     $("#Endereco_Cidade").val(data.localidade).trigger('change');
+				// }
+
+
+				const estadoSelect = $("#Estado");
+				if (data.uf || data.estado) {
+					const estadoParaBuscar = data.estado || data.uf;
+					const estadoEncontrado = estadoSelect.find("option").filter(function() {
+						return $(this).text().trim() === estadoParaBuscar;
+					}).val();
+
+					if (estadoEncontrado) {
+						estadoSelect.val(estadoEncontrado).trigger('change');
+					} else {
+						console.warn("Estado não encontrado:", estadoParaBuscar);
+					}
+				}
+			}).fail(function() {
+				alert('CEP não encontrado ou erro na consulta!');
+
+				$("#Endereco_NomeRua, #Endereco_Cidade").val('');
+				$("#Estado").val('');
+			});
+		});
+	});
+</script>

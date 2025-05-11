@@ -1,217 +1,353 @@
 ﻿@model MVCCamiloMentoria.ViewModels.AlunoViewModel
 
-<div class="container">
-
+<div class="container-fluid py-4">
     <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-lg-10">
             <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Detalhes do aluno</h4>
+                <div class="card-header bg-primary text-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="fas fa-user-graduate me-2"></i>Detalhes do Aluno
+                        </h4>
+                        <div>
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-light btn-sm">
+                                <i class="fas fa-edit me-1"></i> Editar
+                            </a>
+                            <a asp-action="Index" class="btn btn-outline-light btn-sm ms-2">
+                                <i class="fas fa-arrow-left me-1"></i> Voltar
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="card-body">
-
-
-                    <div class="card mb-4 shadow-sm">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">Informações Pessoais</h5>
+                <div class="card-body p-0">
+                    <!-- Seção Informações Pessoais -->
+                    <div class="card mb-4 border-0">
+                        <div class="card-header bg-light py-3">
+                            <h5 class="mb-0">
+                                <i class="fas fa-id-card me-2 text-primary"></i>Informações Pessoais
+                            </h5>
                         </div>
-                        <div class="card-body row">
-                            <div class="col-md-4 text-center">
-                                @if (Model.Foto != null && Model.Foto.Length > 0)
-                                {
-                                    <img src="@Url.Action("GetFoto", "Aluno", new { id = Model.Id })" class="img-fluid rounded mb-3 shadow-sm" alt="Foto do Aluno" style="max-height: 250px;" />
-                                }
-                                else
-                                {
-                                    <img src="~/images/sem-foto.png" class="img-fluid rounded mb-3 shadow-sm" alt="Sem Foto" style="max-height: 250px;" />
-                                }
-                            </div>
-                            <div class="col-md-8">
-                                <dl class="row">
-                                    <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Nome)</dt>
-                                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Nome)</dd>
-
-                                    <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.DataNascimento)</dt>
-                                    <dd class="col-sm-8">@Model.DataNascimento.ToString("dd/MM/yyyy")</dd>
-
-                                    <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.EmailEscolar)</dt>
-                                    <dd class="col-sm-8">@Html.DisplayFor(model => model.EmailEscolar)</dd>
-
-                                    <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.AnoInscricao)</dt>
-                                    <dd class="col-sm-8">@Model.AnoInscricao.ToString("yyyy")</dd>
-
-                                    <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.BolsaEscolar)</dt>
-                                    <dd class="col-sm-8">
-                                        @if (Model.BolsaEscolar)
-                                        {
-                                            <span class="badge bg-success">Bolsista</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-secondary">Não Bolsista</span>
-                                        }
-                                    </dd>
-                                </dl>
+                        <div class="card-body px-4 py-3">
+                            <div class="row align-items-center">
+                                <div class="col-md-4 text-center mb-4 mb-md-0">
+                                    @if (Model.Foto != null && Model.Foto.Length > 0)
+                                    {
+                                        <img src="@Url.Action("GetFoto", "Aluno", new { id = Model.Id })"
+                                             class="img-thumbnail shadow"
+                                             style="max-height: 250px; border-radius: 12px;"
+                                             alt="Foto do Aluno" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/images/sem-foto.png"
+                                             class="img-thumbnail shadow"
+                                             style="max-height: 250px; border-radius: 12px;"
+                                             alt="Sem Foto" />
+                                    }
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="info-item">
+                                                <span class="info-label">@Html.DisplayNameFor(model => model.Nome)</span>
+                                                <span class="info-value">@Html.DisplayFor(model => model.Nome)</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="info-item">
+                                                <span class="info-label">@Html.DisplayNameFor(model => model.DataNascimento)</span>
+                                                <span class="info-value">@Model.DataNascimento.ToString("dd/MM/yyyy")</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="info-item">
+                                                <span class="info-label">@Html.DisplayNameFor(model => model.EmailEscolar)</span>
+                                                <span class="info-value">@Html.DisplayFor(model => model.EmailEscolar)</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="info-item">
+                                                <span class="info-label">@Html.DisplayNameFor(model => model.AnoInscricao)</span>
+                                                <span class="info-value">@Model.AnoInscricao.ToString("yyyy")</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="info-item">
+                                                <span class="info-label">@Html.DisplayNameFor(model => model.BolsaEscolar)</span>
+                                                <span class="info-value">
+                                                    @if (Model.BolsaEscolar)
+                                                    {
+                                                        <span class="badge bg-success rounded-pill">Bolsista</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-secondary rounded-pill">Não Bolsista</span>
+                                                    }
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Seção Contato -->
-                    <div class="card mb-4 shadow-sm">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">Contato</h5>
+                    <div class="card mb-4 border-0">
+                        <div class="card-header bg-light py-3">
+                            <h5 class="mb-0">
+                                <i class="fas fa-phone me-2 text-primary"></i>Contato
+                            </h5>
                         </div>
-                        <div class="card-body">
-                            <dl class="row">
-                                <dt class="col-sm-3 fw-bold">Telefone</dt>
-                                <dd class="col-sm-9">
-                                    @if (Model.Telefones != null && Model.Telefones.Any())
-                                    {
-                                        foreach (var alunoTelefone in Model.Telefones)
+                        <div class="card-body px-4 py-3">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <span class="info-label">Telefone</span>
+                                        @if (Model.Telefones != null && Model.Telefones.Any())
                                         {
-                                            if (alunoTelefone.Telefones != null)
+                                            foreach (var alunoTelefone in Model.Telefones)
                                             {
-                                                <p>(@alunoTelefone.Telefones.DDD) @alunoTelefone.Telefones.Numero.ToString("00000-0000")</p>
+                                                if (alunoTelefone.Telefones != null)
+                                                {
+                                                    <span class="info-value">(@alunoTelefone.Telefones.DDD) @alunoTelefone.Telefones.Numero.ToString("00000-0000")</span>
+                                                }
                                             }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">Telefone não cadastrado</span>
-                                    }
-                                </dd>
-                            </dl>
-                        </div>
-
-                    <!-- Seção Responsáveis -->
-                    <div class="card mb-4 shadow-sm">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">Responsáveis</h5>
-                        </div>
-                        <div class="card-body">
-                            <dl class="row">
-                                <dt class="col-sm-3 fw-bold">Responsável 1</dt>
-                                <dd class="col-sm-9">
-                                    @if (!string.IsNullOrEmpty(Model.NomeResponsavel1))
-                                    {
-                                        <p>@Model.NomeResponsavel1 <span class="text-muted">(@Model.Parentesco1)</span></p>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">Não informado</span>
-                                    }
-                                </dd>
-
-                                <dt class="col-sm-3 fw-bold">Responsável 2</dt>
-                                <dd class="col-sm-9">
-                                    @if (!string.IsNullOrEmpty(Model.NomeResponsavel2))
-                                    {
-                                        <p>@Model.NomeResponsavel2 <span class="text-muted">(@Model.Parentesco2)</span></p>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">Não informado</span>
-                                    }
-                                </dd>
-                            </dl>
-                        </div>
-                    </div>
-
-                        <!-- Seção Endereço -->
-                        <div class="card mb-4 shadow-sm">
-                            <div class="card-header bg-light">
-                                <h5 class="mb-0">Endereço</h5>
-                            </div>
-                            <div class="card-body">
-                                @if (Model.Endereco != null)
-                                {
-                                    <address>
-                                        @Model.Endereco.NomeRua, @Model.Endereco.NumeroRua<br />
-                                        @if (!string.IsNullOrEmpty(Model.Endereco.Complemento))
-                                        {
-                                            @Model.Endereco.Complemento
-
-                                            <br />
-                                        }
-                                        CEP: @Model.Endereco.CEP?.ToString("00000-000")<br />
-                                        @{
-                                            var estado = Model.Endereco.Estado?
-                                            .FirstOrDefault(e => e.id == Model.Endereco.EstadoId);
-                                        }
-                                        @if (estado != null)
-                                        {
-                                            @($"{estado.Nome} - {estado.Sigla}")
                                         }
                                         else
                                         {
-                                            <span class="text-muted">Estado não encontrado</span>
+                                            <span class="info-value text-muted">Não cadastrado</span>
                                         }
-                                    </address>
-                                }
-                                else
-                                {
-                                    <span class="text-muted">Endereço não cadastrado</span>
-                                }
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Seção Responsáveis -->
+                    <div class="card mb-4 border-0">
+                        <div class="card-header bg-light py-3">
+                            <h5 class="mb-0">
+                                <i class="fas fa-users me-2 text-primary"></i>Responsáveis
+                            </h5>
+                        </div>
+                        <div class="card-body px-4 py-3">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <span class="info-label">Responsável 1</span>
+                                        @if (!string.IsNullOrEmpty(Model.NomeResponsavel1))
+                                        {
+                                            <span class="info-value">
+                                                @Model.NomeResponsavel1 <small class="text-muted">(@Model.Parentesco1)</small>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="info-value text-muted">Não informado</span>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <span class="info-label">Responsável 2</span>
+                                        @if (!string.IsNullOrEmpty(Model.NomeResponsavel2))
+                                        {
+                                            <span class="info-value">
+                                                @Model.NomeResponsavel2 <small class="text-muted">(@Model.Parentesco2)</small>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="info-value text-muted">Não informado</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção Endereço -->
+                    <div class="card mb-4 border-0">
+                        <div class="card-header bg-light py-3">
+                            <h5 class="mb-0">
+                                <i class="fas fa-map-marker-alt me-2 text-primary"></i>Endereço
+                            </h5>
+                        </div>
+                        <div class="card-body px-4 py-3">
+                            @if (Model.Endereco != null)
+                            {
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="info-item">
+                                            <span class="info-label">Logradouro</span>
+                                            <span class="info-value">
+                                                @Model.Endereco.NomeRua, @Model.Endereco.NumeroRua
+                                                @if (!string.IsNullOrEmpty(Model.Endereco.Complemento))
+                                                {
+                                                    <span> - @Model.Endereco.Complemento</span>
+                                                }
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="info-item">
+                                            <span class="info-label">CEP</span>
+                                            <span class="info-value">@Model.Endereco.CEP?.ToString("00000-000")</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="info-item">
+                                            <span class="info-label">Estado</span>
+                                            @{
+                                                var estado = Model.Endereco.Estado?
+                                                .FirstOrDefault(e => e.id == Model.Endereco.EstadoId);
+                                            }
+                                            @if (estado != null)
+                                            {
+                                                <span class="info-value">@estado.Nome - @estado.Sigla</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="info-value text-muted">Não encontrado</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-light">
+                                    <i class="fas fa-info-circle me-2"></i>Endereço não cadastrado
+                                </div>
+                            }
+                        </div>
+                    </div>
 
                     <!-- Seção Informações Escolares -->
-                    <div class="card mb-4 shadow-sm">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">Informações Escolares</h5>
+                    <div class="card mb-4 border-0">
+                        <div class="card-header bg-light py-3">
+                            <h5 class="mb-0">
+                                <i class="fas fa-school me-2 text-primary"></i>Informações Escolares
+                            </h5>
                         </div>
-                        <div class="card-body">
-                            <dl class="row">
-                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Turmas)</dt>
-                                <dd class="col-sm-9">
-                                    @if (Model.Turmas != null && Model.Turmas.Any())
-                                    {
-                                        foreach (var turma in Model.Turmas)
+                        <div class="card-body px-4 py-3">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <span class="info-label">@Html.DisplayNameFor(model => model.Turmas)</span>
+                                        @if (Model.Turmas != null && Model.Turmas.Any())
                                         {
-                                            <p>@turma.NomeTurma</p>
+                                            foreach (var turma in Model.Turmas)
+                                            {
+                                                <span class="info-value d-block">@turma.NomeTurma</span>
+                                            }
                                         }
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">Turma não informada</span>
-                                    }
-                                </dd>
-
-                                <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Escolas)</dt>
-                                <dd class="col-sm-9">
-                                    @if (Model.Escolas != null && Model.Escolas.Any())
-                                    {
-                                        foreach (var escola in Model.Escolas)
+                                        else
                                         {
-                                            <p>@escola.Nome</p>
+                                            <span class="info-value text-muted">Não informada</span>
                                         }
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">Escola não informada</span>
-                                    }
-                                </dd>
-                            </dl>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <span class="info-label">@Html.DisplayNameFor(model => model.Escolas)</span>
+                                        @if (Model.Escolas != null && Model.Escolas.Any())
+                                        {
+                                            foreach (var escola in Model.Escolas)
+                                            {
+                                                <span class="info-value d-block">@escola.Nome</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="info-value text-muted">Não informada</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Botões -->
-                    <div class="text-end mt-4">
-                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning px-4">
-                            <i class="fas fa-edit"></i> Editar
+                    <!-- Botões de Ação -->
+                    <div class="d-flex justify-content-end gap-3 px-4 pb-4">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning px-4 py-2">
+                            <i class="fas fa-edit me-2"></i> Editar
                         </a>
-                        <a asp-action="Index" class="btn btn-secondary ms-2">
-                            <i class="fas fa-list"></i> Voltar à Lista
+                        <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2">
+                            <i class="fas fa-list me-2"></i> Voltar à Lista
                         </a>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-@section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial")
-}
+
+    <style>
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .card-header {
+            border-radius: 12px 12px 0 0 !important;
+        }
+
+        .info-item {
+            margin-bottom: 1rem;
+        }
+
+        .info-label {
+            display: block;
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            display: block;
+            font-size: 1rem;
+            color: #212529;
+            padding: 0.5rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .badge {
+            padding: 0.5em 0.75em;
+            font-weight: 600;
+        }
+
+        .img-thumbnail {
+            border: 2px solid #dee2e6;
+            padding: 0.25rem;
+        }
+
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #212529;
+        }
+
+        .btn-outline-secondary {
+            border-color: #6c757d;
+            color: #6c757d;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>

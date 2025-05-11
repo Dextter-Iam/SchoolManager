@@ -144,8 +144,25 @@ namespace MVCCamiloMentoria.Controllers
 
         public IActionResult Create()
         {
-            var viewModel = new ResponsavelViewModel();
-            CarregarDependencias();
+            var estados = _context.Estado
+                                    .Select(e => new EstadoViewModel
+                                    {
+                                        id = e.id,
+                                        Nome = e.Nome,
+                                        Sigla = e.Sigla
+                                    })
+                                    .OrderBy(e => e.Nome)
+                                    .ToList();
+            var viewModel = new ResponsavelViewModel
+            {
+                Endereco = new EnderecoViewModel
+                {
+
+                }
+            };
+            
+            ViewData["Estados"] = new SelectList(_context.Estado.ToList(), "id", "Nome");
+            CarregarViewBags(viewModel);
             return View(viewModel);
         }
 
@@ -242,6 +259,7 @@ namespace MVCCamiloMentoria.Controllers
             if (responsavel == null)
                 return NotFound();
 
+            var estado = _context.Estado.ToList();
             var viewModel = new ResponsavelViewModel
             {
                 Id = responsavel.Id,
@@ -253,6 +271,12 @@ namespace MVCCamiloMentoria.Controllers
                     Complemento = responsavel.Endereco?.Complemento,
                     CEP = responsavel.Endereco!.CEP,
                     EstadoId = responsavel.Endereco!.EstadoId,
+                    Estado = estado.Select(e => new EstadoViewModel
+                    {
+                        id = e.id,
+                        Nome = e.Nome,
+                        Sigla = e.Sigla
+                    }).ToList()
                 },
 
                 Telefones = responsavel.Telefones!

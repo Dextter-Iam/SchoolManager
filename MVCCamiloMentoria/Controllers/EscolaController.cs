@@ -195,14 +195,30 @@ namespace MVCCamiloMentoria.Controllers
         {
             try
             {
-                CarregarViewBagsSync();
+                var estados = _context.Estado
+                                    .Select(e => new EstadoViewModel
+                                    {
+                                        id = e.id,
+                                        Nome = e.Nome,
+                                        Sigla = e.Sigla
+                                    })
+                                    .OrderBy(e => e.Nome)
+                                    .ToList();
+
+                var viewModel = new EscolaViewModel
+                {
+                    Endereco = new EnderecoViewModel() 
+                };
+
+                ViewBag.Estados = new SelectList(estados, "id", "Nome");
+
                 TempData["MensagemInfo"] = "Preencha o formulário para cadastrar uma nova escola.";
-                return View();
+                return View(viewModel); 
             }
             catch (Exception ex)
             {
-                TempData["MensagemErro"] = "Erro ao carregar formulário de criação: " + ex.Message;
-                return View();
+                TempData["MensagemErro"] = $"Erro ao carregar formulário: {ex.Message}";
+                return RedirectToAction("Index");
             }
         }
 
@@ -215,6 +231,7 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
+
 
                     var escola = new Escola
                     {

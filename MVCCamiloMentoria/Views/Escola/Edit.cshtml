@@ -37,9 +37,9 @@
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="Endereco.CEP" class="form-label">CEP</label>
-                <input asp-for="Endereco.CEP" class="form-control" id="Endereco_CEP" />
-                <span asp-validation-for="Endereco.CEP" class="text-danger"></span>
+                <label asp-for="Endereco.CEPMascara" class="form-label">CEP</label>
+                <input asp-for="Endereco.CEPMascara" class="form-control" id="Endereco_CEP" />
+                <span asp-validation-for="Endereco.CEPMascara" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
@@ -74,29 +74,46 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $("#Endereco_CEP").blur(function () {
+        $(document).ready(function() {
+            $('#Endereco_CEP').blur(function() {
                 const cep = $(this).val().replace(/\D/g, '');
-                if (cep.length !== 8) return;  
-
-                $.getJSON(`/api/cep/${cep}`, function (data) {
-
-                    $("#Endereco_NomeRua").val(data.logradouro);
+                if (cep.length !== 8) return;
 
 
-                    const estadoId = $("#Estado option").filter(function() {
-                        return $(this).text() === data.uf; 
-                    }).val(); 
+                $.getJSON(`/api/cep/${cep}`, function(data) {
+                    // console.log("Dados da API:", data);
 
 
-                    $("#Estado").val(estadoId);
-                }).fail(function () {
-                    alert("CEP não encontrado ou erro ao buscar.");
+                    if (data.logradouro) {
+                        $("#Endereco_NomeRua").val(data.logradouro).trigger('change');
+                    }
+
+                    // if (data.localidade) {
+                    //     $("#Endereco_Cidade").val(data.localidade).trigger('change');
+                    // }
+
+                    const estadoSelect = $("#Estado");
+                    if (data.uf || data.estado) {
+                        const estadoParaBuscar = data.estado || data.uf;
+                        const estadoEncontrado = estadoSelect.find("option").filter(function() {
+                            return $(this).text().trim() === estadoParaBuscar;
+                        }).val();
+
+                        if (estadoEncontrado) {
+                            estadoSelect.val(estadoEncontrado).trigger('change');
+                        } else {
+                            console.warn("Estado não encontrado:", estadoParaBuscar);
+                        }
+                    }
+                }).fail(function() {
+                    alert('CEP não encontrado ou erro na consulta!');
+
+                    $("#Endereco_NomeRua, #Endereco_Cidade").val('');
+                    $("#Estado").val('');
                 });
             });
         });
-
     </script>
-
 }

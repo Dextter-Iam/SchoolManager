@@ -116,8 +116,28 @@ namespace MVCCamiloMentoria.Controllers
         // GET: Coordenador/Create
         public IActionResult Create()
         {
-            CarregarDependencias();
-            return View(new CoordenadorViewModel());
+            var estados = _context.Estado
+                                    .Select(e => new EstadoViewModel
+                                    {
+                                        id = e.id,
+                                        Nome = e.Nome,
+                                        Sigla = e.Sigla
+                                    })
+                                    .OrderBy(e => e.Nome)
+                                    .ToList();
+            var viewModel = new CoordenadorViewModel
+            {
+                Endereco = new EnderecoViewModel
+                {
+
+                }
+            };
+
+            ViewData["Estados"] = new SelectList(_context.Estado.ToList(), "id", "Nome");
+
+            TempData["MensagemInfo"] = "Preencha o formulário para cadastrar um novo Aluno.";
+            CarregarViewBags(viewModel);
+            return View(viewModel);
         }
 
         // POST: Coordenador/Create
@@ -200,6 +220,7 @@ namespace MVCCamiloMentoria.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            var estados = _context.Estado.ToList(); 
             var telefone = coordenador.Telefones?.FirstOrDefault();
             var viewModel = new CoordenadorViewModel
             {
@@ -215,16 +236,13 @@ namespace MVCCamiloMentoria.Controllers
                     NumeroRua = coordenador.Endereco.NumeroRua,
                     CEP = coordenador.Endereco.CEP,
                     EstadoId = coordenador.Endereco.EstadoId,
-                    Estado = new List<EstadoViewModel>
+                    Estado = estados.Select(e => new EstadoViewModel
                     {
-                        new EstadoViewModel
-                        {
-                            id = coordenador.Endereco.EstadoId,
-                            Nome = coordenador.Endereco.Estado?.Nome,
-                            Sigla = coordenador.Endereco.Estado?.Sigla,
+                        id = e.id,
+                        Nome = e.Nome,
+                        Sigla = e.Sigla
+                    }).ToList()
 
-                        },
-                    }
                 },
                 Escola = coordenador.Escola == null ? null : new EscolaViewModel
                 {
@@ -286,7 +304,8 @@ namespace MVCCamiloMentoria.Controllers
 
                     var telefones = coordenador.Telefones!
                         .Select(c => new Telefone
-                        {   Id = c.Id,
+                        {
+                            Id = c.Id,
                             DDD = c.DDD,
                             Numero = c.Numero,
                             CoordenadorId = coordenador.Id,
@@ -420,6 +439,17 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private void CarregarViewBags(CoordenadorViewModel viewModel = null)
+        {
+            ViewBag.Escolas = _context.Escola
+                .OrderBy(e => e.Nome)
+                .Select(e => new SelectListItem
+                {
+                    Value = e.Id.ToString(),
+                    Text = e.Nome
+                }).ToList();
         }
 
         private void CarregarDependencias(CoordenadorViewModel viewModel = null)

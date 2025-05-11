@@ -57,44 +57,52 @@
                         <h5 class="mb-0">Endereço</h5>
                     </div>
                     <div class="card-body">
-                        <dl class="row">
-                            <dd class="col-sm-9">
-                                @if (Model.Endereco != null)
-                                {
-                                    <address>
-                                        @Model.Endereco.NomeRua, @Model.Endereco.NumeroRua<br />
-                                        @if (!string.IsNullOrEmpty(Model.Endereco.Complemento))
-                                        {
-                                            @Model.Endereco.Complemento <br />
-                                        }
-                                        CEP: @Model.Endereco.CEP?.ToString("00000-000")<br />
-                                        @if (Model.Endereco.Estado != null && Model.Endereco?.EstadoId != null)
-                                        {
-                                            var estado = Model.Endereco.Estado.FirstOrDefault(e => e.id == Model.Endereco.EstadoId);
-                                            if (estado != null)
+                        @if (Model.Endereco != null)
+                        {
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <span class="info-label">Logradouro</span>
+                                        <span class="info-value">
+                                            @Model.Endereco.NomeRua, @Model.Endereco.NumeroRua
+                                            @if (!string.IsNullOrEmpty(Model.Endereco.Complemento))
                                             {
-                                                @estado.Nome
-                                                @estado.Sigla
-                                              }
-                                            else
-                                            {
-                                                <span class="text-muted">Estado não encontrado</span>
+                                                <span> - @Model.Endereco.Complemento</span>
                                             }
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="info-item">
+                                        <span class="info-label">CEP</span>
+                                        <span class="info-value">@Model.Endereco.CEP?.ToString("00000-000")</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="info-item">
+                                        <span class="info-label">Estado</span>
+                                        @{
+                                            var estado = Model.Endereco.Estado?
+                                            .FirstOrDefault(e => e.id == Model.Endereco.EstadoId);
+                                        }
+                                        @if (estado != null)
+                                        {
+                                            <span class="info-value">@estado.Nome - @estado.Sigla</span>
                                         }
                                         else
                                         {
-                                            <span class="text-muted">Estado não cadastrado</span>
+                                            <span class="info-value text-muted">Não encontrado</span>
                                         }
-                                    </address>
-
-
-                                }
-                                else
-                                {
-                                    <span class="text-muted">Endereço não cadastrado</span>
-                                }
-                            </dd>
-                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-light">
+                                <i class="fas fa-info-circle me-2"></i>Endereço não cadastrado
+                            </div>
+                        }
                     </div>
                 </div>
 

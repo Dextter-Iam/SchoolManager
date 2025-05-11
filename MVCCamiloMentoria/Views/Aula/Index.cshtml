@@ -1,20 +1,31 @@
 ﻿@model IEnumerable<MVCCamiloMentoria.ViewModels.AulaViewModel>
 
 <div class="container">
-
     <p></p>
     <div class="card shadow-sm mb-5">
         <div class="card-header bg-primary text-white">
             <h4 class="mb-0">Aulas Cadastradas</h4>
         </div>
         <div class="card-body">
-            <table class="table table-bordered table-striped">
+            <table id="aulaTable" class="table table-bordered table-striped">
                 <thead class="thead-dark">
                     <tr>
-                        <th>@Html.DisplayNameFor(model => model.Nome)</th>
-                        <th>@Html.DisplayNameFor(model => model.HorarioInicio)</th>
-                        <th>@Html.DisplayNameFor(model => model.HorarioFim)</th>
-                        <th>@Html.DisplayNameFor(model => model.Escola)</th>
+                        <th class="sortable-column" data-column="0">
+                            @Html.DisplayNameFor(model => model.Nome)
+                            <input type="text" class="form-control form-control-sm column-filter mt-1" data-column="0" placeholder="Filtrar">
+                        </th>
+                        <th class="sortable-column" data-column="1">
+                            @Html.DisplayNameFor(model => model.HorarioInicio)
+                            <input type="text" class="form-control form-control-sm column-filter mt-1" data-column="1" placeholder="Filtrar">
+                        </th>
+                        <th class="sortable-column" data-column="2">
+                            @Html.DisplayNameFor(model => model.HorarioFim)
+                            <input type="text" class="form-control form-control-sm column-filter mt-1" data-column="2" placeholder="Filtrar">
+                        </th>
+                        <th class="sortable-column" data-column="3">
+                            @Html.DisplayNameFor(model => model.Escola)
+                            <input type="text" class="form-control form-control-sm column-filter mt-1" data-column="3" placeholder="Filtrar">
+                        </th>
                         <th class="text-center">Ações</th>
                     </tr>
                 </thead>
@@ -27,7 +38,6 @@
                             <td>@Html.DisplayFor(modelItem => item.HorarioFim)</td>
                             <td>@Html.DisplayFor(modelItem => item.Escola.Nome)</td>
                             <td class="text-center">
-
                                 <div class="d-flex justify-content-center">
                                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm mx-2">
                                         <i class="fas fa-eye"></i> Detalhes
@@ -47,6 +57,88 @@
         </div>
     </div>
 </div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let sortDirection = {};
+
+
+            $('.sortable-column').each(function () {
+                const colIndex = $(this).data('column');
+                sortDirection[colIndex] = 1;
+                $(this).append(' <i class="fas fa-sort"></i>');
+            });
+
+
+            $('.column-filter').on('keyup', function () {
+                const columnIndex = $(this).data('column');
+                const searchText = $(this).val().toLowerCase();
+
+                $('#aulaTable tbody tr').filter(function () {
+                    const cellText = $(this).find('td').eq(columnIndex).text().toLowerCase();
+                    $(this).toggle(cellText.includes(searchText));
+                });
+            });
+
+
+            $('.sortable-column').on('click', function () {
+                const columnIndex = $(this).data('column');
+                sortDirection[columnIndex] *= -1;
+
+                $('.sortable-column i').removeClass('fa-sort-up fa-sort-down').addClass('fa-sort');
+
+                const sortIcon = $(this).find('i');
+                sortIcon.removeClass('fa-sort');
+                if (sortDirection[columnIndex] === 1) {
+                    sortIcon.addClass('fa-sort-up');
+                } else {
+                    sortIcon.addClass('fa-sort-down');
+                }
+
+                sortTable(columnIndex, sortDirection[columnIndex]);
+            });
+
+            function sortTable(columnIndex, direction) {
+                const $table = $('#aulaTable');
+                const $rows = $table.find('tbody tr').get();
+
+                $rows.sort(function (a, b) {
+                    const aText = $(a).find('td').eq(columnIndex).text().trim().toLowerCase();
+                    const bText = $(b).find('td').eq(columnIndex).text().trim().toLowerCase();
+
+                    if (columnIndex === 1 || columnIndex === 2) {
+                        const aDate = parseTime(aText);
+                        const bDate = parseTime(bText);
+                        return (aDate - bDate) * direction;
+                    }
+
+                    return aText.localeCompare(bText) * direction;
+                });
+
+                $.each($rows, function (index, row) {
+                    $table.children('tbody').append(row);
+                });
+            }
+
+            function parseTime(timeStr) {
+
+                const parts = timeStr.split(':');
+                if (parts.length === 2) {
+                    const date = new Date();
+                    date.setHours(parseInt(parts[0]));
+                    date.setMinutes(parseInt(parts[1]));
+                    date.setSeconds(0);
+                    return date;
+                }
+                return new Date(timeStr); 
+            }
+        });
+    </script>
+}
+
+
 <style>
     html, body {
         margin: 0;
@@ -150,5 +242,24 @@
 
     .justify-content-between {
         justify-content: space-between;
+    }
+
+    .sortable-column {
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+        .sortable-column:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+    .fa-sort, .fa-sort-up, .fa-sort-down {
+        margin-left: 5px;
+        font-size: 0.8rem;
+        opacity: 0.7;
+    }
+
+    .sortable-column:hover .fa-sort {
+        opacity: 1;
     }
 </style>

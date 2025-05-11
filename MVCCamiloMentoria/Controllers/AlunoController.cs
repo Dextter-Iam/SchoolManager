@@ -150,19 +150,46 @@ namespace MVCCamiloMentoria.Controllers
         }
         public IActionResult Create()
         {
-            var viewModel = new AlunoViewModel
+            try
             {
-                Telefones = new List<AlunoTelefoneViewModel>
-        {
-            new AlunoTelefoneViewModel
-            {
-                Telefones = new TelefoneViewModel()
-            }
-        }
-            };
+                var estados = _context.Estado
+                                    .Select(e => new EstadoViewModel
+                                    {
+                                        id = e.id,
+                                        Nome = e.Nome,
+                                        Sigla = e.Sigla
+                                    })
+                                    .OrderBy(e => e.Nome)
+                                    .ToList();
 
-            CarregarDependencias(viewModel);
-            return View(viewModel);
+                var viewModel = new AlunoViewModel
+                {
+                    Telefones = new List<AlunoTelefoneViewModel>
+                {
+                     new AlunoTelefoneViewModel 
+                { Telefones = new TelefoneViewModel() 
+                    
+                }
+                },
+                    Endereco = new EnderecoViewModel
+                    {
+
+                    }
+
+                };
+
+                ViewData["Estados"] = new SelectList(estados.ToList(), "id", "Nome");
+
+                TempData["MensagemInfo"] = "Preencha o formulário para cadastrar um novo Aluno.";
+                CarregarViewBags(viewModel);
+                return View(viewModel);
+                
+            }
+            catch (Exception ex)
+            {
+                TempData["MensagemErro"] = $"Erro ao carregar formulário: {ex.Message}";
+                return RedirectToAction("Index");
+            }
         }
 
 
@@ -175,6 +202,7 @@ namespace MVCCamiloMentoria.Controllers
                 try
                 {
                     var estados = _context.Estado.ToList();
+                    var estadoViewModel = estados.FirstOrDefault();
                     var endereco = viewModel.Endereco != null ? new Endereco
                     {
                         NomeRua = viewModel.Endereco.NomeRua,
@@ -197,6 +225,7 @@ namespace MVCCamiloMentoria.Controllers
                         Parentesco1 = viewModel.Parentesco1,
                         NomeResponsavel2 = viewModel.NomeResponsavel2,
                         Parentesco2 = viewModel.Parentesco2,
+                        Endereco = endereco,
 
                         AlunoTelefone = viewModel.Telefones?.Select(t => new AlunoTelefone
                         {
@@ -210,11 +239,11 @@ namespace MVCCamiloMentoria.Controllers
                     };
 
                     _context.Add(aluno);
-                        await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
 
-                        TempData["MensagemSucesso"] = "Aluno cadastrado com sucesso!";
-                        return RedirectToAction(nameof(Index));
-                    }
+                    TempData["MensagemSucesso"] = "Aluno cadastrado com sucesso!";
+                    return RedirectToAction(nameof(Index));
+                }
                 catch (Exception ex)
                 {
 
@@ -262,6 +291,7 @@ namespace MVCCamiloMentoria.Controllers
 
             var primeiroTelefone = alunoTelefones.FirstOrDefault()?.Telefones;
 
+            var estado = _context.Estado.ToList();
             var viewModel = new AlunoViewModel
             {
                 Id = aluno.Id,
@@ -274,7 +304,7 @@ namespace MVCCamiloMentoria.Controllers
                 TurmaId = aluno.TurmaId,
                 Turma = new TurmaViewModel
                 {
-                    NomeTurma = aluno.Turma!.NomeTurma, 
+                    NomeTurma = aluno.Turma!.NomeTurma,
                     TurmaId = aluno.TurmaId,
                 },
 
@@ -293,19 +323,16 @@ namespace MVCCamiloMentoria.Controllers
                 Endereco = new EnderecoViewModel
                 {
                     NomeRua = aluno.Endereco!.NomeRua,
-                    NumeroRua = aluno.Endereco.NumeroRua,
-                    Complemento = aluno.Endereco.Complemento,
+                    NumeroRua = aluno.Endereco!.NumeroRua,
+                    Complemento = aluno.Endereco!.Complemento,
                     CEP = aluno.Endereco.CEP,
                     EstadoId = aluno.Endereco.EstadoId,
-                    Estado = new List<EstadoViewModel>
-            {
-                new EstadoViewModel
-                {
-                    Nome = aluno.Endereco.Estado!.Nome,
-                    id = aluno.Endereco.Estado.id,
-                    Sigla = aluno.Endereco.Estado.Sigla
-                }
-            }
+                    Estado = estado.Select(e => new EstadoViewModel
+                    {
+                        id = e.id,
+                        Nome = e.Nome,
+                        Sigla = e.Sigla
+                    }).ToList()
                 },
                 NomeResponsavel1 = aluno.NomeResponsavel1,
                 Parentesco1 = aluno.Parentesco1,

@@ -30,7 +30,7 @@ namespace MVCCamiloMentoria.Controllers
                 .Skip((pagina - 1) * registrosPorPagina)
                 .Take(registrosPorPagina)
                 .ToListAsync();
-            
+
             var viewModel = new List<SupervisorViewModel>();
 
             foreach (var s in supervisores)
@@ -146,17 +146,27 @@ namespace MVCCamiloMentoria.Controllers
         // GET: Supervisor/Create
         public IActionResult Create()
         {
+            var estados = _context.Estado.Select(e => new EstadoViewModel
+            {
+
+                id = e.id,
+                Nome = e.Nome,
+                Sigla = e.Sigla
+
+            }).ToList();
             var viewModel = new SupervisorViewModel
             {
                 Telefones = new List<TelefoneViewModel>
-        {
-            new TelefoneViewModel()
-        },
+                 {
+                     new TelefoneViewModel()
+                },
                 Endereco = new EnderecoViewModel(),
                 SupervisorEscola = new List<SupervisorEscolaViewModel>()
             };
 
-            CarregarDependencias(viewModel);
+            ViewData["Estados"] = new SelectList(estados.ToList(), "id", "Nome");
+            TempData["MensagemInfo"] = "Preencha o formulário para cadastrar um novo Supervisor.";
+            CarregarViewBags(viewModel);
             return View(viewModel);
         }
 
@@ -265,7 +275,7 @@ namespace MVCCamiloMentoria.Controllers
                 TempData["MensagemErro"] = "Supervisor não encontrado.";
                 return RedirectToAction(nameof(Index));
             }
-
+            var estados = _context.Estado.ToList();
             var viewModel = new SupervisorViewModel
             {
                 Id = supervisor.Id,
@@ -280,6 +290,12 @@ namespace MVCCamiloMentoria.Controllers
                     Complemento = supervisor.Endereco?.Complemento,
                     CEP = supervisor.Endereco?.CEP,
                     EstadoId = supervisor.Endereco?.EstadoId ?? 0,
+                    Estado = estados.Select(e => new EstadoViewModel
+                    {
+                        id = e.id,
+                        Nome = e.Nome,
+                        Sigla = e.Sigla
+                    }).ToList(),
                 },
 
                 Telefones = new List<TelefoneViewModel>
@@ -307,6 +323,7 @@ namespace MVCCamiloMentoria.Controllers
             };
 
             CarregarDependencias(viewModel);
+            CarregarViewBags(viewModel);
             return View(viewModel);
         }
 
@@ -551,15 +568,21 @@ namespace MVCCamiloMentoria.Controllers
         }
 
 
-        private void CarregarDependencias(SupervisorViewModel viewModel = null)
+        private void CarregarViewBags(SupervisorViewModel viewModel = null)
         {
             ViewBag.Escolas = _context.Escola
-                    .OrderBy(e => e.Nome)
-                    .Select(e => new SelectListItem
-                    {
-                        Value = e.Id.ToString(),
-                        Text = e.Nome
-                    }).ToList();
+                            .OrderBy(e => e.Nome)
+                            .Select(e => new SelectListItem
+                            {
+                                Value = e.Id.ToString(),
+                                Text = e.Nome
+                            }).ToList();
+
+        }
+
+        private void CarregarDependencias(SupervisorViewModel viewModel = null)
+        {
+
 
 
             ViewBag.Estados = _context.Estado

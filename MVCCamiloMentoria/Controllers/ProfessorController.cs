@@ -150,18 +150,30 @@ namespace MVCCamiloMentoria.Controllers
         // GET: Professor/Create
         public IActionResult Create()
         {
+            var estados = _context.Estado.Select(e => new EstadoViewModel
+            {
+                id = e.id,
+                Nome = e.Nome,
+                Sigla = e.Sigla
+
+            })
+            .OrderBy(e => e.Nome)
+            .ToList();
+
             var viewModel = new ProfessorViewModel
             {
                 Telefones = new List<TelefoneViewModel>
-        {
-            new TelefoneViewModel()
-        },
+                {
+                    new TelefoneViewModel()
+                },
                 Endereco = new EnderecoViewModel(),
                 TurmaIds = new List<int>(),
                 DisciplinaIds = new List<int>()
             };
 
-            CarregarDependencias(viewModel);
+            ViewData["Estados"] = new SelectList(estados.ToList(), "id", "Nome");
+
+            CarregarViewBags(viewModel);
             return View(viewModel);
         }
 
@@ -276,7 +288,7 @@ namespace MVCCamiloMentoria.Controllers
             }
 
             var telefone = professor.Telefones?.FirstOrDefault();
-
+            var estados = _context.Estado.ToList();
             var viewModel = new ProfessorViewModel
             {
                 Id = professor.Id,
@@ -295,7 +307,14 @@ namespace MVCCamiloMentoria.Controllers
                     NumeroRua = professor.Endereco?.NumeroRua ?? 0,
                     Complemento = professor.Endereco?.Complemento,
                     CEP = professor.Endereco?.CEP,
-                    EstadoId = professor.Endereco.EstadoId
+                    EstadoId = professor.Endereco.EstadoId,
+                    Estado = estados.Select(e => new EstadoViewModel
+                    {
+                        id = e.id,
+                        Nome = e.Nome, 
+                        Sigla = e.Sigla
+
+                    }).ToList(),
                 },
                 Telefones = (professor.Telefones != null && professor.Telefones.Any())
                             ? professor.Telefones
@@ -314,7 +333,8 @@ namespace MVCCamiloMentoria.Controllers
                                           .Select(d => d.DisciplinaId).ToList()
             };
 
-            CarregarDependencias(viewModel);
+
+            CarregarViewBags(viewModel);
 
             return View(viewModel);
         }
@@ -604,7 +624,7 @@ namespace MVCCamiloMentoria.Controllers
             return Json(turmas);
         }
 
-        private void CarregarDependencias(ProfessorViewModel viewModel = null)
+        private void CarregarViewBags(ProfessorViewModel viewModel = null)
         {
             ViewBag.EscolaId = new SelectList(_context.Escola.OrderBy(e => e.Nome), "Id", "Nome", viewModel?.EscolaId);
 
@@ -624,6 +644,10 @@ namespace MVCCamiloMentoria.Controllers
                 _context.Disciplina.OrderBy(d => d.Nome),
                 "Id", "Nome", viewModel?.DisciplinaIds
             );
+        }
+        private void CarregarDependencias(ProfessorViewModel viewModel = null)
+        {
+
 
             ViewBag.Estados = _context.Estado
                 .OrderBy(e => e.Nome)
