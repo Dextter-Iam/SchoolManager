@@ -10,23 +10,18 @@
             <table id="aulaTable" class="table table-bordered table-striped">
                 <thead class="thead-dark">
                     <tr>
-                        <th class="sortable-column" data-column="0">
-                            @Html.DisplayNameFor(model => model.Nome)
-                            <input type="text" class="form-control form-control-sm column-filter mt-1" data-column="0" placeholder="Filtrar">
-                        </th>
-                        <th class="sortable-column" data-column="1">
-                            @Html.DisplayNameFor(model => model.HorarioInicio)
-                            <input type="text" class="form-control form-control-sm column-filter mt-1" data-column="1" placeholder="Filtrar">
-                        </th>
-                        <th class="sortable-column" data-column="2">
-                            @Html.DisplayNameFor(model => model.HorarioFim)
-                            <input type="text" class="form-control form-control-sm column-filter mt-1" data-column="2" placeholder="Filtrar">
-                        </th>
-                        <th class="sortable-column" data-column="3">
-                            @Html.DisplayNameFor(model => model.Escola)
-                            <input type="text" class="form-control form-control-sm column-filter mt-1" data-column="3" placeholder="Filtrar">
-                        </th>
+                        <th class="sortable-column" data-column="0">@Html.DisplayNameFor(model => model.Nome)</th>
+                        <th class="sortable-column" data-column="1">@Html.DisplayNameFor(model => model.HorarioInicio)</th>
+                        <th class="sortable-column" data-column="2">@Html.DisplayNameFor(model => model.HorarioFim)</th>
+                        <th class="column" data-column="3">@Html.DisplayNameFor(model => model.Escola)</th>
                         <th class="text-center">Ações</th>
+                    </tr>
+                    <tr>
+                        <th><input type="text" class="form-control form-control-sm column-filter" data-column="0" placeholder="Filtrar..." /></th>
+                        <th><input type="text" class="form-control form-control-sm column-filter" data-column="1" placeholder="Filtrar..." /></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>

@@ -14,18 +14,18 @@
 			<thead class="thead-dark">
 				<tr>
 					<th class="sortable-column" data-column="0">
-						@Html.DisplayNameFor(model => model.First().Nome)
-						<input type="text" class="form-control column-filter" data-column="0" placeholder="Filtrar por Nome" />
-					</th>
+						@Html.DisplayNameFor(model => model.First().Nome)</th>
 					<th class="sortable-column" data-column="1">
-						@Html.DisplayNameFor(model => model.First().Matricula)
-						<input type="text" class="form-control column-filter" data-column="1" placeholder="Filtrar por Matrícula" />
-					</th>
-					<th class="sortable-column" data-column="2">
-						@Html.DisplayName("Escola")
-						<input type="text" class="form-control column-filter" data-column="2" placeholder="Filtrar por Escola" />
-					</th>
+						@Html.DisplayNameFor(model => model.First().Matricula)</th>
+						<th class="sortable-column" data-column="2">
+						@Html.DisplayName("Escola")</th>
 					<th class="text-center">Ações</th>
+				</tr>
+				<tr>
+					<th><input type="text" class="form-control form-control-sm column-filter" data-column="0" placeholder="Filtrar..." /></th>
+					<th><input type="text" class="form-control form-control-sm column-filter" data-column="1" placeholder="Filtrar..." /></th>
+					<th><input type="text" class="form-control form-control-sm column-filter" data-column="2" placeholder="Filtrar..." /></th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>

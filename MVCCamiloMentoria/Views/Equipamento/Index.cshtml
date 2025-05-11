@@ -1,32 +1,29 @@
 ﻿@model IEnumerable<MVCCamiloMentoria.ViewModels.EquipamentoViewModel>
 
-<div class="container">
+<div class="container-fluid">
     <p></p>
     <div class="card shadow-sm mb-5">
         <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Equipamentos Cadastrados</h4>
+            <h4 class="mb-4">Equipamentos Cadastrados</h4>
         </div>
         <div class="card-body">
             <table id ="equipamentosTable" class="table table-bordered table-striped">
                 <thead class="thead-dark">
                     <tr>
-                        <th class="sortable-column" data-column="0">@Html.DisplayNameFor(model => model.Nome)
-                            <input type ="text" class="form-control column-filter" data-column="0" placeholder="Filtrar por Nome" />
-                        </th>
-                        <th class="sortable-column" data column = "1"> @Html.DisplayNameFor(model => model.StatusOperacional)
-                        </th>
-                        <th class="sortable-column" data-column = "2" >@Html.DisplayNameFor(model => model.Marca)
-                            <input type="text" class="form-control column-filter" data-column="2" placeholder="Filtrar por Marca"/>
-                        </th>
-                        <th class="sortable-column" data-column="3">
-                            @Html.DisplayNameFor(model => model.Modelo)
-                            <input type="text" class="form-control column-filter" data-column="3" placeholder="Filtrar por Modelo"/>
-                        </th>
-                        <th class="sortable-column" data-column="4">
-                            @Html.DisplayNameFor(model => model.Escola)
-                            <input type="text" class="form-control column-filter" data-column="4" placeholder="Filtrar por Escola" />
-                        </th>
+                        <th class="sortable-column" data-column="0">@Html.DisplayNameFor(model => model.Nome)</th>
+                        <th class="sortable-column" data column = "1"> @Html.DisplayNameFor(model => model.StatusOperacional)</th>
+                        <th class="sortable-column" data-column = "2" >@Html.DisplayNameFor(model => model.Marca)</th>
+                        <th class="sortable-column" data-column="3">@Html.DisplayNameFor(model => model.Modelo)</th>
+                        <th class="sortable-column" data-column="4">@Html.DisplayNameFor(model => model.Escola)</th>
                         <th class="text-center">Ações</th>
+                    </tr>
+                    <tr>
+                        <th><input type="text" class="form-control form-control-sm column-filter" data-column="0" placeholder="Filtrar..." /></th>
+                        <th></th>
+                        <th><input type="text" class="form-control form-control-sm column-filter" data-column="2" placeholder="Filtrar..." /></th>
+                        <th><input type="text" class="form-control form-control-sm column-filter" data-column="3" placeholder="Filtrar..." /></th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -144,140 +141,72 @@
     </script>
 }
 
-
 <style>
-    html, body {
-        margin: 0;
-        padding: 0;
-        background: #f4f6f9;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        color: #333;
-    }
-
-    .container {
-        max-width: 1100px;
-        margin: 0 auto;
-        padding: 2rem 1rem;
-    }
-
     .card {
-        border: none;
-        border-radius: 12px;
-        background-color: #ffffff;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        overflow: hidden;
+        border-radius: 0.25rem;
     }
 
     .card-header {
-        background-color: #1976d2;
-        color: white;
         padding: 1rem 1.5rem;
-        font-size: 1.25rem;
-        font-weight: 600;
-        border-bottom: 1px solid rgba(0,0,0,0.05);
-    }
-
-    .card-body {
-        padding: 1.5rem;
     }
 
     .table {
-        width: 100%;
-        border-collapse: collapse;
+        margin-bottom: 0;
     }
 
-        .table thead {
-            background-color: #1976d2;
-            color: white;
-        }
-
-        .table th, .table td {
-            text-align: left;
-            padding: 0.85rem 1rem;
+        .table thead th {
             vertical-align: middle;
-            font-size: 0.95rem;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-            .table th:first-child,
-            .table td:first-child {
-                text-align: left;
-            }
-
-        .table td {
-            background-color: #fafafa;
-        }
-
-    .d-flex {
-        display: flex;
-        gap: 0.5rem;
-        justify-content: center;
-    }
-
-    .btn {
-        border-radius: 8px;
-        padding: 6px 12px;
-        font-size: 0.875rem;
-        transition: all 0.2s ease-in-out;
-        border: none;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-
-        .btn i {
-            font-size: 0.85rem;
-        }
-
-    .btn-info {
-        background-color: #0288d1;
-        color: #fff;
-    }
-
-    .btn-warning {
-        background-color: #fbc02d;
-        color: #212121;
-    }
-
-    .btn-danger {
-        background-color: #d32f2f;
-        color: #fff;
-    }
-
-    .btn:hover {
-        opacity: 0.9;
-        transform: translateY(-1px);
-    }
-
-
-    .pagination {
-        padding-bottom: 1rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        padding-left: 0;
-        list-style: none;
-    }
-
-        .pagination .page-item .page-link {
-            color: #1976d2;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 0.5rem 0.75rem;
-            margin: 0 0.25rem;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .pagination .page-item.active .page-link {
-            background-color: #1976d2;
-            border-color: #1976d2;
+            background-color: #343a40;
             color: white;
-            font-weight: bold;
         }
 
-        .pagination .page-item .page-link:hover {
-            background-color: #e3f2fd;
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.075);
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0.2rem;
+    }
+
+    .column-filter {
+        max-width: 150px;
+        margin: 0 auto;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        border-radius: 0.2rem;
+        border: 1px solid #ced4da;
+    }
+
+    .sortable-column {
+        cursor: pointer;
+        position: relative;
+    }
+
+        .sortable-column:hover {
+            background-color: rgba(13, 110, 253, 1);
         }
 
+    .fa-sort, .fa-sort-up, .fa-sort-down {
+        margin-left: 5px;
+    }
+
+    .page-item.active .page-link {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .page-link {
+        color: #007bff;
+    }
 </style>

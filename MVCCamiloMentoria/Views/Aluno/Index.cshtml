@@ -4,139 +4,111 @@
     ViewData["Title"] = "Alunos Cadastrados";
 }
 
-<div class="container-fluid py-4">
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
-                    <h4 class="mb-0">
-                        <i class="fas fa-users me-2"></i>Alunos Cadastrados
-                    </h4>
-                    <a asp-action="Create" class="btn btn-light btn-sm">
-                        <i class="fas fa-plus me-1"></i> Novo Aluno
-                    </a>
-                </div>
-
-                <div class="card-body px-0 pb-2">
-                    <div class="table-responsive text-center">
-                        <table id="alunosTable" class="table align-items-center mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 sortable-column" data-column="0">
-                                        <div class="d-flex flex-column">
-                                            <span>Aluno</span>
-                                            <input type="text" class="form-control form-control-sm mt-1 column-filter" data-column="0" placeholder="Filtrar...">
-                                        </div>
-                                    </th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 sortable-column" data-column="1">
-                                        <div class="d-flex flex-column">
-                                            <span>Nascimento</span>
-                                        </div>
-                                    </th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 sortable-column" data-column="2">
-                                        <div class="d-flex flex-column">
-                                            <span>E-mail</span>
-                                        </div>
-                                    </th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 sortable-column" data-column="3">
-                                        <div class="d-flex flex-column">
-                                            <span>Escola</span>
-                                            <input type="text" class="form-control form-control-sm mt-1 column-filter" data-column="3" placeholder="Filtrar...">
-                                        </div>
-                                    </th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex px-2 py-1">
-                                                <div class="d-flex flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm">@Html.DisplayFor(modelItem => item.Nome)</h6>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-sm">
-                                            <span class="text-secondary">@item.DataNascimento.ToString("dd/MM/yyyy")</span>
-                                        </td>
-                                        <td class="text-sm">
-                                            <span class="text-secondary">@Html.DisplayFor(modelItem => item.EmailEscolar)</span>
-                                        </td>
-                                        <td class="text-sm">
-                                            <span class="text-secondary">@Html.DisplayFor(modelItem => item.Escolas!.FirstOrDefault().Nome)</span>
-                                        </td>
-                                        <td class="align-middle text-center">
-                                            <div class="d-flex justify-content-center gap-2">
-                                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm px-3 py-1 mb-0">
-                                                    <i class="fas fa-eye fa-xs"></i>
-                                                </a>
-                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm px-3 py-1 mb-0">
-                                                    <i class="fas fa-edit fa-xs"></i>
-                                                </a>
-                                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm px-3 py-1 mb-0">
-                                                    <i class="fas fa-trash fa-xs"></i>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="card-footer py-3">
-                    <nav aria-label="Paginação">
-                        <ul class="pagination justify-content-center mb-0">
-                            @if (ViewBag.PaginaAtual > 1)
-                            {
-                                <li class="page-item">
-                                    <a class="page-link" href="@Url.Action("Index", new { pagina = ViewBag.PaginaAtual - 1 })">
-                                        <i class="fas fa-chevron-left"></i>
-                                    </a>
-                                </li>
-                            }
-
-                            @for (int i = 1; i <= ViewBag.TotalPaginas; i++)
-                            {
-                                <li class="page-item @(i == ViewBag.PaginaAtual ? "active" : "")">
-                                    <a class="page-link" href="@Url.Action("Index", new { pagina = i })">@i</a>
-                                </li>
-                            }
-
-                            @if (ViewBag.PaginaAtual < ViewBag.TotalPaginas)
-                            {
-                                <li class="page-item">
-                                    <a class="page-link" href="@Url.Action("Index", new { pagina = ViewBag.PaginaAtual + 1 })">
-                                        <i class="fas fa-chevron-right"></i>
-                                    </a>
-                                </li>
-                            }
-                        </ul>
-                    </nav>
-                </div>
-            </div>
+<div class="card shadow-sm mb-5">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">
+            <i class="fas fa-users me-2"></i>Alunos Cadastrados
+        </h4>
         </div>
+
+    <div class="card-body px-0">
+        <div class="table-responsive">
+            <table id="alunosTable" class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th class="sortable-column" data-column="0">
+                            <div class="d-flex flex-column">
+                                <span>Aluno</span>
+                                <input type="text" class="form-control form-control-sm mt-1 column-filter" data-column="0" placeholder="Filtrar...">
+                            </div>
+                        </th>
+                        <th class="sortable-column" data-column="1">
+                            <div class="d-flex flex-column">
+                                <span>Nascimento</span>
+                            </div>
+                        </th>
+                        <th class="sortable-column" data-column="2">
+                            <div class="d-flex flex-column">
+                                <span>E-mail</span>
+                            </div>
+                        </th>
+                        <th class="sortable-column" data-column="3">
+                            <div class="d-flex flex-column">
+                                <span>Escola</span>
+                                <input type="text" class="form-control form-control-sm mt-1 column-filter" data-column="3" placeholder="Filtrar...">
+                            </div>
+                        </th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                            <td>@item.DataNascimento.ToString("dd/MM/yyyy")</td>
+                            <td>@Html.DisplayFor(modelItem => item.EmailEscolar)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Escolas!.FirstOrDefault()!.Nome)</td>
+                            <td class="d-flex justify-content-around">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash"></i> Excluir
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <nav aria-label="Paginação">
+            <ul class="pagination justify-content-center mb-0">
+                @if (ViewBag.PaginaAtual > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { pagina = ViewBag.PaginaAtual - 1 })">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                }
+
+                @for (int i = 1; i <= ViewBag.TotalPaginas; i++)
+                {
+                    <li class="page-item @(i == ViewBag.PaginaAtual ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { pagina = i })">@i</a>
+                    </li>
+                }
+
+                @if (ViewBag.PaginaAtual < ViewBag.TotalPaginas)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { pagina = ViewBag.PaginaAtual + 1 })">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
     </div>
 </div>
 
 @section Scripts {
     <script>
         $(document).ready(function() {
-
             let sortDirection = {};
-
 
             $('.sortable-column').each(function() {
                 const colIndex = $(this).data('column');
-                sortDirection[colIndex] = 1; 
+                sortDirection[colIndex] = 1;
+                $(this).append(' <i class="fas fa-sort"></i>');
             });
-
-
-            $('.sortable-column').append(' <i class="fas fa-sort"></i>');
-
 
             $('.column-filter').on('keyup', function() {
                 const columnIndex = $(this).data('column');
@@ -148,14 +120,11 @@
                 });
             });
 
-
             $('.sortable-column').on('click', function() {
                 const columnIndex = $(this).data('column');
-                sortDirection[columnIndex] *= -1; 
-
+                sortDirection[columnIndex] *= -1;
 
                 $('.sortable-column i').removeClass('fa-sort-up fa-sort-down').addClass('fa-sort');
-
 
                 const sortIcon = $(this).find('i');
                 sortIcon.removeClass('fa-sort');
@@ -165,7 +134,6 @@
                 } else {
                     sortIcon.addClass('fa-sort-down');
                 }
-
 
                 sortTable(columnIndex, sortDirection[columnIndex]);
             });
@@ -192,7 +160,6 @@
                 });
             }
 
-
             function parseDate(dateStr) {
                 const parts = dateStr.split('/');
                 return new Date(parts[2], parts[1] - 1, parts[0]);
@@ -202,31 +169,12 @@
 }
 
 <style>
-    :root {
-        --primary-color: #1976d2;
-        --secondary-color: #f8f9fa;
-        --text-color: #495057;
-        --border-color: #e0e0e0;
-    }
-
-    body {
-        background-color: #f8f9fa;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        color: var(--text-color);
-    }
-
     .card {
-        border: none;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        overflow: hidden;
+        border-radius: 0.25rem;
     }
 
     .card-header {
-        background-color: var(--primary-color);
-        color: white;
         padding: 1rem 1.5rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .table {
@@ -234,126 +182,58 @@
     }
 
         .table thead th {
-            border-bottom: 1px solid var(--border-color);
-            font-weight: 600;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 1rem;
-            color: white;
-            vertical-align: top;
-        }
-
-        .table tbody tr {
-            transition: all 0.2s ease;
-        }
-
-            .table tbody tr:hover {
-                background-color: rgba(25, 118, 210, 0.05);
-            }
-
-        .table td {
-            padding: 1rem;
             vertical-align: middle;
-            border-bottom: 1px solid var(--border-color);
+            background-color: #343a40;
+            color: white;
         }
+
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.075);
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0.2rem;
+    }
 
     .column-filter {
         max-width: 150px;
         margin: 0 auto;
         padding: 0.25rem 0.5rem;
         font-size: 0.75rem;
-        border-radius: 4px;
-        border: 1px solid #dee2e6;
-    }
-
-    .avatar {
-        width: 36px;
-        height: 36px;
-        object-fit: cover;
-    }
-
-    .btn {
-        border-radius: 8px;
-        padding: 0.5rem 0.75rem;
-        font-size: 0.75rem;
-        font-weight: 500;
-        transition: all 0.2s ease;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 32px;
-    }
-
-    .btn-info {
-        background-color: #17a2b8;
-        color: white;
-    }
-
-    .btn-warning {
-        background-color: #ffc107;
-        color: #212529;
-    }
-
-    .btn-danger {
-        background-color: #dc3545;
-        color: white;
-    }
-
-    .btn-light {
-        background-color: #f8f9fa;
-        color: #212529;
-    }
-
-    .btn:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        opacity: 0.9;
-    }
-
-    .pagination .page-item .page-link {
-        border-radius: 8px;
-        margin: 0 2px;
-        border: none;
-        color: var(--primary-color);
-        min-width: 36px;
-        text-align: center;
-    }
-
-    .pagination .page-item.active .page-link {
-        background-color: var(--primary-color);
-        color: white;
-    }
-
-    .pagination .page-item .page-link:hover {
-        background-color: rgba(25, 118, 210, 0.1);
-    }
-
-    .text-xxs {
-        font-size: 0.65rem;
-        color: white;
-    }
-
-    .gap-2 {
-        gap: 0.5rem;
+        border-radius: 0.2rem;
+        border: 1px solid #ced4da;
     }
 
     .sortable-column {
         cursor: pointer;
-        transition: background-color 0.2s;
+        position: relative;
     }
 
         .sortable-column:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(13, 110, 253, 1);
         }
 
     .fa-sort, .fa-sort-up, .fa-sort-down {
         margin-left: 5px;
-        font-size: 0.8rem;
-        opacity: 0.7;
     }
 
-    .sortable-column:hover .fa-sort {
-        opacity: 1;
+    .page-item.active .page-link {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .page-link {
+        color: #007bff;
     }
 </style>

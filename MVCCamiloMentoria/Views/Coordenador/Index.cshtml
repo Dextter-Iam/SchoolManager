@@ -14,17 +14,18 @@
 			<table id ="coordenadoresTable" class="table table-bordered table-striped">
 				<thead class="thead-dark">
 					<tr>
-						<th class="sortable-column" data-column="0">@Html.DisplayNameFor(model => model.Nome)
-							<input type="text" class="form-control column-filter" data-column="0" placeholder="Filtrar por Nome" />
-						</th>
-						<th class="sortable-column" data-column="1">@Html.DisplayName("Matrícula")
-							<input type="text" class="form-control column-filter" data-column="1" placeholder="Filtrar por Matrícula" />
-						</th>
+						<th class="sortable-column" data-column="0">@Html.DisplayNameFor(model => model.Nome)</th>
+						<th class="sortable-column" data-column="1">@Html.DisplayName("Matrícula")</th>
 						<th class="sortable-column" data-column="2">@Html.DisplayName("Endereço")</th>
-						<th class="sortable-column" data-column="3">@Html.DisplayName("Escola")
-							<input type="text" class="form-control column-filter" data-column="3" placeholder="Filtrar por Escola" />
-						</th>
+						<th class="sortable-column" data-column="3">@Html.DisplayName("Escola")</th>
 						<th class="text-center">Ações</th>
+					</tr>
+					<tr>
+						<th><input type="text" class="form-control form-control-sm column-filter" data-column="0" placeholder="Filtrar..." /></th>
+						<th><input type="text" class="form-control form-control-sm column-filter" data-column="1" placeholder="Filtrar..." /></th>
+						<th></th>
+						<th><input type="text" class="form-control form-control-sm column-filter" data-column="3" placeholder="Filtrar..." /></th>
+						<th></th>
 					</tr>
 				</thead>
 
