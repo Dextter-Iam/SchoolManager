@@ -40,11 +40,9 @@ namespace MVCCamiloMentoria.Controllers
                 return View();
             }
 
-            
-
-            if (PasswordHasher.Verify(password, user.Password))
+            if (PasswordHasher.Verify(password, user.Password!))
             {
-                HttpContext.Session.SetString("UserName", user.UserName);
+                HttpContext.Session.SetString("UserName", user.UserName!);
                 TempData["Success"] = "Login realizado com sucesso!";
                 return RedirectToAction("Index", "ActionsPage");
             }
@@ -54,7 +52,6 @@ namespace MVCCamiloMentoria.Controllers
                 return View();
             }
         }
-
 
         public IActionResult Logout()
         {

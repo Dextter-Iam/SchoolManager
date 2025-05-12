@@ -14,6 +14,7 @@
 
             @if (TempData["Error"] != null)
             {
+                <div class="alert alert-danger">@TempData["Error"]</div>
             }
 
             @if (TempData["Success"] != null)
@@ -23,11 +24,11 @@
 
             <form method="post" class="login-form">
                 <div class="input-group">
-                    <label for="username">Usuário</label>
+                    <label for="username"><b>Usuário</b></label>
                     <input type="text" id="username" name="username" required placeholder="Digite seu usuário">
                 </div>
                 <div class="input-group">
-                    <label for="password">Senha</label>
+                    <label for="password"><b>Senha</b></label>
                     <input type="password" id="password" name="password" required placeholder="Digite sua senha">
                 </div>
                 <button type="submit" class="btn-login">Entrar</button>
@@ -40,7 +41,7 @@
         </div>
 
         <div class="login-illustration">
-            <img src="/images/school-illustration.png" alt="Ilustração do sistema School Manager">
+            <img src="/images/login-school-manager.png" alt="Ilustração do sistema School Manager">
         </div>
     </div>
 </div>

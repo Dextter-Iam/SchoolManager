@@ -5,6 +5,11 @@ namespace MVCCamiloMentoria.Data
 {
     public static class PasswordHasher
     {
+        public static bool Verify(string password, string hashedPassword)
+        {
+            var hashedInput = Hash(password); 
+            return hashedInput == hashedPassword;
+        }
 
         public static string Hash(string password)
         {
@@ -14,10 +19,5 @@ namespace MVCCamiloMentoria.Data
             return Convert.ToBase64String(hash); 
         }
 
-        public static bool Verify(string password, string hashedPassword)
-        {
-            var hashedInput = Hash(password); 
-            return hashedInput == hashedPassword;
-        }
     }
 }
