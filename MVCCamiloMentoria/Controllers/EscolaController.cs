@@ -64,7 +64,7 @@ namespace MVCCamiloMentoria.Controllers
                 .Where(e => !e.Excluido)
                 .Include(e => e.Endereco)
                          .ThenInclude(e => e.Estado)
-                .Include(e => e.Professores)
+                .Include(e => e.Professores.Where(p=> !p.Excluido))
                 .Include(e => e.Coordenadores)
                 .Include(e => e.Diretores)
                 .Include(e => e.Turmas)
