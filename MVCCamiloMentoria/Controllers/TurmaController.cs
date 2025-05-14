@@ -72,9 +72,9 @@ namespace MVCCamiloMentoria.Controllers
 
             var turma = await _context.Turma
                 .Where(t => !t.Excluido)
-                .Include(t => t.Escola)
+                .Include(t => t.Escola.Excluido == false)
                 .Include(t => t.Aulas)
-                .Include(t => t.Alunos)
+                .Include(t => t.Alunos.Where(al=>!al.Excluido))
                 .Include(t => t.TurmaDisciplinas)
                 .ThenInclude(td => td.Disciplina)
                 .FirstOrDefaultAsync(m => m.TurmaId == id);
