@@ -89,9 +89,9 @@ namespace MVCCamiloMentoria.Controllers
 
             var supervisor = await _context.Supervisor
                   .Where(s => !s.Excluido)
+                //.Include(s => s.SupervisorEscolas.Where(se => se.Escola)
                 .Include(s => s.Endereco)
                 .Include(s => s.SupervisorEscolas!)
-                    .ThenInclude(se => se.Escola)
                 .Include(s => s.Telefones)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == id);
