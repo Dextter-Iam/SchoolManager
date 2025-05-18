@@ -1,9 +1,14 @@
 ﻿@model IEnumerable<MVCCamiloMentoria.ViewModels.DisciplinaViewModel>
 
-<div class="container mt-1">
-    <div class="card">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Disciplinas Cadastradas</h4>
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Disciplinas</h4>
+            <br>
+            <form asp-action="Index" method="get" class="d-flex w-100 w-md-auto" style="max-width: 720px;">
+                <input type="text" name="FiltroGeral" class="form-control form-control-md me-2" placeholder="Pesquisar por nome..." />
+                <button type="submit" class="btn btn-light btn-md text-primary">🔍 Pesquisar</button>
+            </form>
         </div>
         <div class="card-body">
             <table id="disciplinasTable" class="table table-bordered table-striped">
@@ -12,10 +17,6 @@
                         <th class="sortable-column" data-column="0">
                             @Html.DisplayName("Nome")</th>
                         <th class="text-center">Ações</th>
-                    </tr>
-                    <tr>
-                        <th><input type="text" class="form-control form-control-sm column-filter" data-column="0" placeholder="Filtrar..." /></th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>

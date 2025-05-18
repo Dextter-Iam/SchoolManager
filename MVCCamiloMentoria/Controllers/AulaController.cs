@@ -17,13 +17,22 @@ namespace MVCCamiloMentoria.Controllers
         }
 
         // GET: AulaController
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(AulaViewModel filtro = null)
         {
-            var aulas = await _context.Aula
-                .Include(a => a.Escola)
-                .Include(a => a.Turma)
-                .Include(a => a.Professor)
-                .Include(a => a.Disciplina)
+
+
+            var query = _context.Aula
+                                .Include(a => a.Escola)
+                                .Include(a => a.Turma)
+                                .Include(a => a.Professor)
+                                .Include(a => a.Disciplina)
+                                .AsQueryable();
+
+            var aulasDb = await query.ToListAsync();
+
+            var aulasFiltradas = AplicarFiltros(aulasDb, filtro);
+
+            var aulas = aulasFiltradas
                 .Select(a => new AulaViewModel
                 {
                     Nome = a.Nome,
@@ -39,8 +48,9 @@ namespace MVCCamiloMentoria.Controllers
                     TurmaId = a.TurmaId,
                     ProfessorId = a.ProfessorId,
                     DisciplinaId = a.DisciplinaId
-                }).ToListAsync();
+                }).ToList();
 
+            ViewBag.AplicarFiltros = filtro;
             return View(aulas);
         }
 
@@ -351,5 +361,50 @@ namespace MVCCamiloMentoria.Controllers
         {
             return _context.Aula.Any(e => e.Id == id);
         }
+
+        private IEnumerable<Aula> AplicarFiltros(IEnumerable<Aula> query, AulaViewModel filtro)
+        {
+            if (filtro == null)
+                return query;
+
+            if (!string.IsNullOrWhiteSpace(filtro.NomeNormalizado))
+            {
+                query = query.Where(a => a.Nome != null && a.Nome.ToLower().Contains(filtro.NomeNormalizado));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.HorarioInicioNormalizado))
+            {
+                query = query.Where(a => a.HorarioInicio.ToString("HH:mm").Contains(filtro.HorarioInicioNormalizado));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.HorarioFimNormalizado))
+            {
+                query = query.Where(a => a.HorarioFim.ToString("HH:mm").Contains(filtro.HorarioFimNormalizado));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.EscolaNormalizado))
+            {
+                query = query.Where(a => a.Escola != null &&
+                    a.Escola.Nome != null &&
+                    a.Escola.Nome.ToLower().Contains(filtro.EscolaNormalizado));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.FiltroGeralNormalizado) && filtro.FiltroGeralNormalizado.Length >= 3)
+            {
+                var termo = filtro.FiltroGeralNormalizado;
+
+                query = query.Where(c =>
+                    (c.Nome != null && c.Nome.ToLower().Contains(termo)) ||
+                    (c.Escola != null && c.Escola.Nome != null && c.Escola.Nome.ToLower().Contains(termo)) ||
+                    c.HorarioInicio.ToString("HH:mm").Contains(termo) ||
+                    c.HorarioFim.ToString("HH:mm").Contains(termo)
+                );
+            }
+
+            return query;
+        }
+
+
+
     }
 }

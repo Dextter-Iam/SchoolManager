@@ -26,5 +26,28 @@ namespace MVCCamiloMentoria.ViewModels
 
         [DisplayName("IDs dos Alunos")]
         public List<int>? AlunoIds { get; set; }
+
+
+
+        //FILTROS 
+        [NotMapped]
+        [DisplayName("Filtrar por Nome")]
+        public string? FiltroNome { get; set; }
+
+        [NotMapped]
+        [DisplayName("Buscar por qualquer campo")]
+        public string? FiltroGeral { get; set; }
+
+        [NotMapped]
+        public string FiltroGeralNormalizado => string.IsNullOrWhiteSpace(FiltroGeral) ? string.Empty : FiltroGeral.Trim().ToLower();
+
+        [NotMapped]
+        public string NomeNormalizado => NormalizarFiltro(FiltroNome);
+
+        private string NormalizarFiltro(string input)
+        {
+            return string.IsNullOrWhiteSpace(input) ? string.Empty : input.Trim().ToLower();
+        }
+
     }
 }

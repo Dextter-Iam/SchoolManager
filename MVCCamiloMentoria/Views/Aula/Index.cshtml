@@ -3,8 +3,12 @@
 <div class="container">
     <p></p>
     <div class="card shadow-sm mb-5">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h4 class="mb-0">Aulas Cadastradas</h4>
+            <form asp-action="Index" method="get" class="d-flex w-100 w-md-auto" style="max-width: 720px;">
+                <input type="text" name="FiltroGeral" class="form-control form-control-md me-2" placeholder="Pesquisar por nome, horário fim, horário início, escola etc." />
+                <button type="submit" class="btn btn-light btn-md text-primary">🔍 Pesquisar</button>
+            </form>
         </div>
         <div class="card-body">
             <table id="aulaTable" class="table table-bordered table-striped">
@@ -15,13 +19,6 @@
                         <th class="sortable-column" data-column="2">@Html.DisplayNameFor(model => model.HorarioFim)</th>
                         <th class="column" data-column="3">@Html.DisplayNameFor(model => model.Escola)</th>
                         <th class="text-center">Ações</th>
-                    </tr>
-                    <tr>
-                        <th><input type="text" class="form-control form-control-sm column-filter" data-column="0" placeholder="Filtrar..." /></th>
-                        <th><input type="text" class="form-control form-control-sm column-filter" data-column="1" placeholder="Filtrar..." /></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>

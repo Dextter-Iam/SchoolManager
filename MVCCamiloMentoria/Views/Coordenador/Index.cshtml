@@ -5,29 +5,25 @@
 }
 
 <div class="card shadow-sm mb-5">
-	<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-		<h4 class="mb-0">Coordenadores</h4>
+	<div class="card-header bg-primary text-white d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+		<h4 class="mb-2 mb-md-0">Coordenadores</h4>
+		<form asp-action="Index" method="get" class="d-flex w-100 w-md-auto" style="max-width: 720px;">
+			<input type="text" name="FiltroGeral" class="form-control form-control-md me-2" placeholder="Pesquisar por nome, matrícula, escola etc." />
+			<button type="submit" class="btn btn-light btn-md text-primary">🔍 Pesquisar</button>
+		</form>
 	</div>
-
-	<div class="card">
-		<div class="card-body p-0">
-			<table id ="coordenadoresTable" class="table table-bordered table-striped">
-				<thead class="thead-dark">
-					<tr>
-						<th class="sortable-column" data-column="0">@Html.DisplayNameFor(model => model.Nome)</th>
-						<th class="sortable-column" data-column="1">@Html.DisplayName("Matrícula")</th>
-						<th class="sortable-column" data-column="2">@Html.DisplayName("Endereço")</th>
-						<th class="sortable-column" data-column="3">@Html.DisplayName("Escola")</th>
-						<th class="text-center">Ações</th>
-					</tr>
-					<tr>
-						<th><input type="text" class="form-control form-control-sm column-filter" data-column="0" placeholder="Filtrar..." /></th>
-						<th><input type="text" class="form-control form-control-sm column-filter" data-column="1" placeholder="Filtrar..." /></th>
-						<th></th>
-						<th><input type="text" class="form-control form-control-sm column-filter" data-column="3" placeholder="Filtrar..." /></th>
-						<th></th>
-					</tr>
-				</thead>
+<div class="card">
+	<div class="card-body p-0">
+		<table id="coordenadoresTable" class="table table-bordered table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th class="sortable-column" data-column="0">@Html.DisplayNameFor(model => model.Nome)</th>
+					<th class="sortable-column" data-column="1">@Html.DisplayName("Matrícula")</th>
+					<th class="sortable-column" data-column="2">@Html.DisplayName("Endereço")</th>
+					<th class="sortable-column" data-column="3">@Html.DisplayName("Escola")</th>
+					<th class="text-center">Ações</th>
+				</tr>
+			</thead>
 
 				<tbody>
 					@if (Model.Any())
@@ -84,7 +80,7 @@
 		</div>
 	</div>
 </div>
-
+</div>
 @section Scripts {
 	<script>
 		$(document).ready(function () {

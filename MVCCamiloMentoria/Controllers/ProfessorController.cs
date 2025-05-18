@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCCamiloMentoria.Models;
 using MVCCamiloMentoria.ViewModels;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MVCCamiloMentoria.Controllers
 {
@@ -16,15 +17,18 @@ namespace MVCCamiloMentoria.Controllers
         }
 
         // GET: Professor
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(ProfessorViewModel filtro)
         {
 
-            var professores = await _context.Professor
+            
+            var query = _context.Professor
                 .Where(p => !p.Excluido)
                 .Include(p => p.Escola)
                 .Include(p => p.Endereco)
-                .ToListAsync();
+                .AsQueryable();
+            query = AplicarFiltros(query, filtro);
 
+            var professores = await query.ToListAsync();
             var viewModelList = professores.Select(p => new ProfessorViewModel
             {
                 Id = p.Id,
@@ -679,5 +683,49 @@ namespace MVCCamiloMentoria.Controllers
 
             return estados;
         }
+
+        private IQueryable<Professor> AplicarFiltros(IQueryable<Professor> query, ProfessorViewModel filtro)
+        {
+            if (filtro == null)
+                return query;
+
+            if (!string.IsNullOrEmpty(filtro.NomeNormalizado))
+            {
+                query = query.Where(a => a.Nome.ToLower().Contains(filtro.NomeNormalizado));
+            }
+
+            if (!string.IsNullOrEmpty(filtro.FiltroEscola))
+            {
+                var escolaFiltro = filtro.FiltroEscola.ToLower();
+                query = query.Where(a => a.Escola != null &&
+                    a.Escola.Nome!.ToLower().Contains(escolaFiltro));
+            }
+
+            if (!string.IsNullOrEmpty(filtro.FiltroMatricula))
+            {
+                if (int.TryParse(filtro.FiltroMatricula, out int matriculaFiltro))
+                {
+                    query = query.Where(a => a.Matricula == matriculaFiltro);
+                }
+                else
+                {
+
+                }
+            }
+
+            if (!string.IsNullOrEmpty(filtro.FiltroGeralNormalizado) && filtro.FiltroGeralNormalizado.Length >= 3)
+            {
+                var termo = filtro.FiltroGeralNormalizado.ToLower();
+
+                query = query.Where(c =>
+                    (c.Nome != null && c.Nome.ToLower().Contains(termo)) ||
+                    (c.Escola != null && c.Escola.Nome.ToLower().Contains(termo)) ||
+                    c.Matricula.ToString().Contains(termo)
+                );
+            }
+
+            return query;
+        }
+
     }
 }

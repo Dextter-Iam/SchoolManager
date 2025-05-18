@@ -1,4 +1,5 @@
 ﻿using MVCCamiloMentoria.Models;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -51,6 +52,51 @@ namespace MVCCamiloMentoria.ViewModels
 
         [Display(Name = "Alunos Presentes")]
         public List<AlunoViewModel>? AlunosPresentes { get; set; }
+
+        //FILTROS
+
+        [NotMapped]
+        [DisplayName("Filtrar por Nome")]
+        public string? FiltroNome { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Horario Inicio")]
+        public string? FiltroHorarioInicio { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Horario Inicio")]
+        public string? FiltroHorarioFim { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Escola")]
+        public string? FiltroEscola { get; set; }
+
+        [NotMapped]
+        [DisplayName("Buscar por qualquer campo")]
+        public string? FiltroGeral { get; set; }
+
+        [NotMapped]
+        public string FiltroGeralNormalizado => string.IsNullOrWhiteSpace(FiltroGeral) ? string.Empty : FiltroGeral.Trim().ToLower();
+
+
+        [NotMapped]
+        public string HorarioInicioNormalizado => NormalizarFiltro(FiltroHorarioInicio);
+
+        [NotMapped]
+        public string HorarioFimNormalizado => NormalizarFiltro(FiltroHorarioFim);
+
+        [NotMapped]
+        public string NomeNormalizado => NormalizarFiltro(FiltroNome);
+
+        [NotMapped]
+        public string EscolaNormalizado => NormalizarFiltro(FiltroEscola);
+
+        private string NormalizarFiltro(string? input)
+        {
+            return string.IsNullOrWhiteSpace(input) ? string.Empty : input.Trim().ToLower();
+        }
+
+
     }
 }
     

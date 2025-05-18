@@ -40,5 +40,49 @@ namespace MVCCamiloMentoria.ViewModels
 
         [DisplayName("Disciplinas da Turma")]
         public ICollection<TurmaDisciplinaViewModel> TurmaDisciplinas { get; set; } = new List<TurmaDisciplinaViewModel>();
+
+        //FILTROS
+
+        [NotMapped]
+        [DisplayName("Filtrar por Nome")]
+        public string? FiltroNome { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Turno")]
+        public string? FiltroTurno { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Escola")]
+        public string? FiltroEscola { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Ano Letivo")]
+        public string? FiltroAnoLetivo { get; set; }
+
+        [NotMapped]
+        [DisplayName("Buscar por qualquer campo")]
+        public string? FiltroGeral { get; set; }
+
+        [NotMapped]
+        public string FiltroGeralNormalizado => string.IsNullOrWhiteSpace(FiltroGeral) ? string.Empty : FiltroGeral.Trim().ToLower();
+
+
+        [NotMapped]
+        public string TurnoNormalizado => NormalizarFiltro(FiltroTurno);
+
+        [NotMapped]
+        public string NomeNormalizado => NormalizarFiltro(FiltroNome);
+
+        [NotMapped]
+        public string EscolaNormalizado => NormalizarFiltro(FiltroEscola);
+
+        [NotMapped]
+        public string AnoLetivoNormalizado => NormalizarFiltro(FiltroAnoLetivo);
+
+        private string NormalizarFiltro(string? input)
+        {
+            return string.IsNullOrWhiteSpace(input) ? string.Empty : input.Trim().ToLower();
+        }
+
     }
 }

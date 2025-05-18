@@ -1,4 +1,5 @@
 ﻿using MVCCamiloMentoria.Models;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -39,5 +40,49 @@ namespace MVCCamiloMentoria.ViewModels
         public int EscolaId { get; set; }
 
         public Escola? Escola { get; set; }
+
+
+        //FILTROS 
+        [NotMapped]
+        [DisplayName("Filtrar por Nome")]
+        public string? FiltroNome { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Escola")]
+        public string? FiltroEscola { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Marca")]
+        public string? FiltroMarca { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Modelo")]
+        public string? FiltroModelo { get; set; }
+
+        [NotMapped]
+        [DisplayName("Buscar por qualquer campo")]
+        public string? FiltroGeral { get; set; }
+
+        [NotMapped]
+        public string FiltroGeralNormalizado => string.IsNullOrWhiteSpace(FiltroGeral) ? string.Empty : FiltroGeral.Trim().ToLower();
+
+
+        [NotMapped]
+        public string ModeloNormalizado => NormalizarFiltro(FiltroModelo);
+
+        [NotMapped]
+        public string MarcaNormalizada => NormalizarFiltro(FiltroMarca);
+
+        [NotMapped]
+        public string EscolaNormalizada => NormalizarFiltro(FiltroEscola);
+
+
+        [NotMapped]
+        public string NomeNormalizado => NormalizarFiltro(FiltroNome);
+
+        private string NormalizarFiltro(string input)
+        {
+            return string.IsNullOrWhiteSpace(input) ? string.Empty : input.Trim().ToLower();
+        }
     }
 }

@@ -17,54 +17,67 @@ namespace MVCCamiloMentoria.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int pagina = 1)
+        public async Task<IActionResult> Index(int pagina = 1, ResponsavelViewModel filtro = null)
         {
             int registrosPorPagina = 10;
-            var totalRegistros = await _context.Responsavel.CountAsync();
+
+            // Query com includes e filtros
+            var query = _context.Responsavel
+                                .Include(r => r.Endereco)
+                                .Include(r => r.Telefones)
+                                .Include(r => r.AlunoResponsavel!)
+                                    .ThenInclude(ar => ar.Aluno)
+                                .AsQueryable();
+
+            query = AplicarFiltros(query, filtro);
+
+
+            var totalRegistros = await query.CountAsync();
             var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
 
-            var responsaveis = await _context.Responsavel
-                .Include(r => r.Endereco)
-                .Include(r => r.Telefones)
-                .Include(r => r.AlunoResponsavel!)
-                    .ThenInclude(ar => ar.Aluno)
+
+            var responsaveis = await query
                 .Skip((pagina - 1) * registrosPorPagina)
                 .Take(registrosPorPagina)
                 .ToListAsync();
+
+
             var responsavelViewModel = responsaveis.Select(r => new ResponsavelViewModel
             {
                 Id = r.Id,
                 Nome = r.Nome,
-                Endereco = new EnderecoViewModel
+                Endereco = r.Endereco != null ? new EnderecoViewModel
                 {
-                    NomeRua = r.Endereco!.NomeRua,
+                    NomeRua = r.Endereco.NomeRua,
                     NumeroRua = r.Endereco.NumeroRua,
                     CEP = r.Endereco.CEP,
                     Complemento = r.Endereco.Complemento
-                },
+                } : null,
 
-                Telefones = r.Telefones!
-                             .Select(tr => new TelefoneViewModel
-                             {
-                                 Numero = tr.Numero,
-                                 DDD = tr.DDD,
-                                 Id = tr.Id,
+                Telefones = r.Telefones?
+                    .Select(tr => new TelefoneViewModel
+                    {
+                        Numero = tr.Numero,
+                        DDD = tr.DDD,
+                        Id = tr.Id,
+                    }).ToList(),
 
-                             }).ToList(),
-
-                AlunoResponsavel = r.AlunoResponsavel!
-                                    .Select(ar => new AlunoResponsavelViewModel
-                                    {
-                                        AlunoId = ar.AlunoId,
-                                        ResponsavelId = ar.ResponsavelId,
-                                    }).ToList(),
+                AlunoResponsavel = r.AlunoResponsavel?
+                    .Select(ar => new AlunoResponsavelViewModel
+                    {
+                        AlunoId = ar.AlunoId,
+                        ResponsavelId = ar.ResponsavelId,
+                    }).ToList(),
             }).ToList();
+
 
             ViewBag.PaginaAtual = pagina;
             ViewBag.TotalPaginas = totalPaginas;
+            ViewBag.AplicarFiltros = filtro;
 
             return View(responsavelViewModel);
         }
+
 
         //GET: DETAILS
 
@@ -577,5 +590,28 @@ namespace MVCCamiloMentoria.Controllers
 
             return estados;
         }
+
+        private IQueryable<Responsavel> AplicarFiltros(IQueryable<Responsavel> query, ResponsavelViewModel filtro)
+        {
+            if (filtro == null)
+                return query;
+
+            if (!string.IsNullOrEmpty(filtro.NomeNormalizado))
+            {
+                query = query.Where(a => a.Nome.ToLower().Contains(filtro.NomeNormalizado));
+            }
+
+            if (!string.IsNullOrEmpty(filtro.FiltroGeralNormalizado) && filtro.FiltroGeralNormalizado.Length >= 3)
+            {
+                var termo = filtro.FiltroGeralNormalizado.ToLower();
+
+                query = query.Where(c =>
+                    (c.Nome != null && c.Nome.ToLower().Contains(termo))
+                );
+            }
+
+            return query;
+        }
+
     }
 }

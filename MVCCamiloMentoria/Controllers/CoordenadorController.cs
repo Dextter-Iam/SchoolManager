@@ -16,14 +16,17 @@ namespace MVCCamiloMentoria.Controllers
         }
 
         // GET: Coordenador
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CoordenadorViewModel filtro = null)
         {
-            var coordenadores = await _context.Coordenador
-                .Where(c=>!c.Excluido)
+            var query =  _context.Coordenador
+                .Where(c => !c.Excluido)
                 .Include(c => c.Endereco)
                 .Include(c => c.Escola)
-                .AsNoTracking()
-                .ToListAsync();
+                .AsQueryable();
+
+            query = AplicarFiltros(query, filtro);
+
+            var coordenadores = await query.ToListAsync();
 
             var viewModel = new List<CoordenadorViewModel>();
 
@@ -49,7 +52,7 @@ namespace MVCCamiloMentoria.Controllers
                     }
                 });
             }
-
+            ViewBag.FiltroAtual = filtro;
             return View(viewModel);
         }
 
@@ -493,6 +496,50 @@ namespace MVCCamiloMentoria.Controllers
 
             return estados;
         }
+
+        private IQueryable<Coordenador> AplicarFiltros(IQueryable<Coordenador> query, CoordenadorViewModel filtro)
+        {
+            if (filtro == null)
+                return query;
+
+            if (!string.IsNullOrEmpty(filtro.NomeNormalizado))
+            {
+                query = query.Where(a => a.Nome.ToLower().Contains(filtro.NomeNormalizado));
+            }
+
+            if (!string.IsNullOrEmpty(filtro.FiltroEscola))
+            {
+                var escolaFiltro = filtro.FiltroEscola.ToLower();
+                query = query.Where(a => a.Escola != null &&
+                    a.Escola.Nome!.ToLower().Contains(escolaFiltro));
+            }
+
+            if (!string.IsNullOrEmpty(filtro.FiltroMatricula))
+            {
+                if (int.TryParse(filtro.FiltroMatricula, out int matriculaFiltro))
+                {
+                    query = query.Where(a => a.Matricula == matriculaFiltro);
+                }
+                else
+                {
+
+                }
+            }
+
+            if (!string.IsNullOrEmpty(filtro.FiltroGeralNormalizado) && filtro.FiltroGeralNormalizado.Length >= 3)
+            {
+                var termo = filtro.FiltroGeralNormalizado.ToLower();
+
+                query = query.Where(c =>
+                    (c.Nome != null && c.Nome.ToLower().Contains(termo)) ||
+                    (c.Escola != null && c.Escola.Nome.ToLower().Contains(termo)) ||
+                    c.Matricula.ToString().Contains(termo)
+                );
+            }
+
+            return query;
+        }
+
 
     }
 }

@@ -86,5 +86,51 @@ namespace MVCCamiloMentoria.ViewModels
 
         [NotMapped]
         public int ResponsavelIdValue => ResponsavelId ?? 0;
+
+
+        //FILTROS 
+        [NotMapped]
+        [DisplayName("Filtrar por Nome")]
+        public string? FiltroNome { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por E-mail")]
+        public string? FiltroEmail { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Turma")]
+        public string? FiltroTurma { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Escola")]
+        public string? FiltroEscola { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Responsável")]
+        public string? FiltroResponsavel { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Matrícula")]
+        public string? FiltroMatricula { get; set; }
+
+        [NotMapped]
+        [DisplayName("Buscar por qualquer campo")]
+        public string? FiltroGeral { get; set; }
+
+        [NotMapped]
+        public string FiltroGeralNormalizado => string.IsNullOrWhiteSpace(FiltroGeral) ? string.Empty : FiltroGeral.Trim().ToLower();
+
+        [NotMapped]
+        public string NomeNormalizado => NormalizarFiltro(FiltroNome);
+
+        [NotMapped]
+        public string EmailNormalizado => NormalizarFiltro(FiltroEmail);
+
+        private string NormalizarFiltro(string input)
+        {
+            return string.IsNullOrWhiteSpace(input) ? string.Empty : input.Trim().ToLower();
+        }
+
+
     }
 }

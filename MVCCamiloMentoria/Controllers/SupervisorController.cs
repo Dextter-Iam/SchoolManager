@@ -16,21 +16,27 @@ namespace MVCCamiloMentoria.Controllers
         }
 
         // GET: Supervisor
-        public async Task<IActionResult> Index(int pagina = 1)
+        public async Task<IActionResult> Index(int pagina = 1, SupervisorViewModel filtro = null)
         {
             int registrosPorPagina = 10;
-            var totalRegistros = await _context.Supervisor.CountAsync();
+
+            var query = _context.Supervisor
+                                .Where(s => !s.Excluido)
+                                .Include(s => s.Endereco)
+                                .Include(s => s.SupervisorEscolas!)
+                                .ThenInclude(se => se.Escola)
+                                .Include(s => s.Telefones)
+                                .AsQueryable();
+                
+            query = AplicarFiltros(query, filtro);
+
+            var totalRegistros = await query.CountAsync();
             var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
 
-            var supervisores = await _context.Supervisor
-                  .Where(s => !s.Excluido)
-                .Include(s => s.Endereco)
-                .Include(s => s.SupervisorEscolas!)
-                    .ThenInclude(se => se.Escola)
-                .Include(s => s.Telefones)
-                .Skip((pagina - 1) * registrosPorPagina)
-                .Take(registrosPorPagina)
-                .ToListAsync();
+            var supervisores = await query
+                                     .Skip((pagina - 1) * registrosPorPagina)
+                                     .Take(registrosPorPagina)
+                                     .ToListAsync();
 
             var viewModel = new List<SupervisorViewModel>();
 
@@ -70,7 +76,7 @@ namespace MVCCamiloMentoria.Controllers
 
                 viewModel.Add(supervisorViewModel);
             }
-
+            ViewBag.AplicarFiltros = filtro;
             ViewBag.PaginaAtual = pagina;
             ViewBag.TotalPaginas = totalPaginas;
 
@@ -618,5 +624,58 @@ namespace MVCCamiloMentoria.Controllers
         {
             return _context.Supervisor.Any(e => e.Id == id);
         }
+
+        private IQueryable<Supervisor> AplicarFiltros(IQueryable<Supervisor> query, SupervisorViewModel filtro)
+        {
+            if (filtro == null)
+                return query;
+
+            if (!string.IsNullOrEmpty(filtro.NomeNormalizado))
+            {
+                query = query.Where(a => a.Nome.ToLower().Contains(filtro.NomeNormalizado));
+            }
+
+            if (!string.IsNullOrEmpty(filtro.FiltroEscola) && filtro.FiltroEscola.Length >= 3)
+            {
+                var escolaFiltro = filtro.FiltroEscola.ToLower();
+                query = query.Where(a =>
+                    a.SupervisorEscolas != null &&
+                    a.SupervisorEscolas.Any(se =>
+                        se.Escola != null &&
+                        se.Escola.Nome!.ToLower().Contains(escolaFiltro)
+                    )
+                );
+            }
+
+            if (!string.IsNullOrEmpty(filtro.FiltroMatricula))
+            {
+                if (int.TryParse(filtro.FiltroMatricula, out int matriculaFiltro))
+                {
+                    query = query.Where(a => a.Matricula == matriculaFiltro);
+                }
+                else
+                {
+
+                }
+            }
+
+            if (!string.IsNullOrEmpty(filtro.FiltroGeralNormalizado) && filtro.FiltroGeralNormalizado.Length >= 3)
+            {
+                var termo = filtro.FiltroGeralNormalizado.ToLower();
+                bool termoEhNumero = int.TryParse(termo, out int termoNumero);
+
+                query = query.Where(c =>
+                    (c.Nome != null && c.Nome.ToLower().Contains(termo)) ||
+                    (c.SupervisorEscolas != null && c.SupervisorEscolas.Any(se =>
+                        se.Escola != null &&
+                        se.Escola.Nome.ToLower().Contains(termo)
+                    )) ||
+                    (c.Matricula.ToString().Contains(termo))
+                );
+            }
+
+            return query;
+        }
+
     }
 }

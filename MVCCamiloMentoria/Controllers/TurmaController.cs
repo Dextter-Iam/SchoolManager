@@ -18,19 +18,25 @@ namespace MVCCamiloMentoria.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int pagina = 1)
+        public async Task<IActionResult> Index(int pagina = 1, TurmaViewModel filtro = null)
         {
             int registrosPorPagina = 10;
+
+            var query = _context.Turma
+                                .Where(t => !t.Excluido)
+                                .Include(t => t.Escola)
+                                .Include(t => t.Alunos)
+                                .Include(t => t.Professores)
+                                .Include(t => t.TurmaDisciplinas)
+                                .ThenInclude(td => td.Disciplina)
+                                .AsQueryable();
+
+            query = AplicarFiltros(query, filtro);
+
             var totalRegistros = await _context.Turma.CountAsync();
             var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
 
-            var turmas = await _context.Turma
-                .Where(t => !t.Excluido)
-                .Include(t => t.Escola)
-                .Include(t => t.Alunos)
-                .Include(t => t.Professores)
-                .Include(t => t.TurmaDisciplinas)
-                    .ThenInclude(td => td.Disciplina)
+            var turmas = await query
                 .Skip((pagina - 1) * registrosPorPagina)
                 .Take(registrosPorPagina)
                 .ToListAsync();
@@ -56,6 +62,7 @@ namespace MVCCamiloMentoria.Controllers
 
             }).ToList();
 
+            ViewBag.AplicarFiltros = filtro;
             ViewBag.PaginaAtual = pagina;
             ViewBag.TotalPaginas = totalPaginas;
 
@@ -352,5 +359,50 @@ namespace MVCCamiloMentoria.Controllers
 
             ViewBag.EscolaId = new SelectList(_context.Escola, "Id", "Nome");
         }
+
+        private IQueryable<Turma> AplicarFiltros(IQueryable<Turma> query, TurmaViewModel filtro)
+        {
+            if (filtro == null)
+                return query;
+
+            if (!string.IsNullOrWhiteSpace(filtro.NomeNormalizado))
+            {
+                query = query.Where(a => a.NomeTurma.ToLower().Contains(filtro.NomeNormalizado));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.TurnoNormalizado))
+            {
+                query = query.Where(a => a.Turno.ToLower().Contains(filtro.TurnoNormalizado));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.EscolaNormalizado))
+            {
+                query = query.Where(a => a.Escola != null &&
+                    a.Escola.Nome!.ToLower().Contains(filtro.EscolaNormalizado));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.AnoLetivoNormalizado) &&
+                int.TryParse(filtro.AnoLetivoNormalizado, out int anoLetivoFiltro))
+            {
+                query = query.Where(a => a.AnoLetivo == anoLetivoFiltro);
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.FiltroGeralNormalizado) && filtro.FiltroGeralNormalizado.Length >= 3)
+            {
+                var termo = filtro.FiltroGeralNormalizado;
+
+                query = query.Where(c =>
+                    (c.NomeTurma != null && c.NomeTurma.ToLower().Contains(termo)) ||
+                    (c.Escola != null && c.Escola.Nome.ToLower().Contains(termo)) ||
+                    (c.AnoLetivo.ToString().Contains(termo)) ||
+                    (c.Turno.ToString().Contains(termo))
+
+                );
+            }
+
+            return query;
+        }
+
+
     }
 }

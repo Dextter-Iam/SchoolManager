@@ -39,5 +39,55 @@ namespace MVCCamiloMentoria.ViewModels
         [DisplayName("Escola")]
         [Required(ErrorMessage = "A escola é obrigatória.")]
         public Escola? Escola { get; set; }
+
+
+
+        //FILTROS
+
+        [NotMapped]
+        [DisplayName("Buscar por qualquer campo")]
+        public string? FiltroGeral { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Nome")]
+        public string? FiltroNome { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por CNPJ")]
+        public string? FiltroCNPJ { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por CPF")]
+        public string? FiltroCPF { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Nome Empresa")]
+        public string? FiltroEmpresaNome { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Escola")]
+        public string? FiltroEscola { get; set; }
+
+        [NotMapped]
+        public string NomeNormalizado => NormalizarFiltro(FiltroNome);
+
+        [NotMapped]
+        public string CNPJNormalizado => NormalizarFiltro(FiltroCNPJ);
+
+        [NotMapped]
+        public string CPFNormalizado => NormalizarFiltro(FiltroCPF);
+
+        [NotMapped]
+        public string EmpresaNomeNormalizado => NormalizarFiltro(FiltroEmpresaNome);
+
+        [NotMapped]
+        public string EscolaNormalizada => NormalizarFiltro(FiltroEscola);
+
+        [NotMapped]
+        public string FiltroGeralNormalizado => string.IsNullOrWhiteSpace(FiltroGeral) ? string.Empty : FiltroGeral.Trim().ToLower();
+        private string NormalizarFiltro(string? input)
+        {
+            return string.IsNullOrWhiteSpace(input) ? string.Empty : input.Trim().ToLower();
+        }
     }
 }

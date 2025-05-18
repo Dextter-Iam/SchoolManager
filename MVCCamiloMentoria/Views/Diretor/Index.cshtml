@@ -12,6 +12,10 @@
 				<div class="card-header bg-primary text-white">
 					<div class="d-flex justify-content-between align-items-center">
 						<h5 class="mb-0">Diretores</h5>
+						<form asp-action="Index" method="get" class="d-flex w-100 w-md-auto" style="max-width: 720px;">
+							<input type="text" name="FiltroGeral" class="form-control form-control-md me-2" placeholder="Pesquisar por nome, matrícula, escola etc." />
+							<button type="submit" class="btn btn-light btn-md text-primary">🔍 Pesquisar</button>
+						</form>
 					</div>
 				</div>
 				<div class="table-responsive">
@@ -25,12 +29,6 @@
 								<th class="sortable-column" data-column="2">
 									@Html.DisplayName("Escola")</th>
 								<th class="text-center">Ações</th>
-							</tr>
-							<tr>
-								<th><input type="text" class="form-control form-control-sm column-filter" data-column="0" placeholder="Filtrar..." /></th>
-								<th><input type="text" class="form-control form-control-sm column-filter" data-column="1" placeholder="Filtrar..." /></th>
-								<th><input type="text" class="form-control form-control-sm column-filter" data-column="2" placeholder="Filtrar..." /></th>
-								<th></th>
 							</tr>
 						</thead>
 						<tbody>

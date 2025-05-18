@@ -19,17 +19,23 @@ namespace MVCCamiloMentoria.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int pagina = 1)
+        public async Task<IActionResult> Index(int pagina = 1, AlunoViewModel filtro = null)
         {
             int registrosPorPagina = 10;
-            var totalRegistros = await _context.Aluno.CountAsync();
-            var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
 
-            var alunos = await _context.Aluno
-                .Where(a =>!a.Excluido)
+            var query = _context.Aluno
+                .Where(a => !a.Excluido)
                 .Include(a => a.Turma)
                 .Include(a => a.Endereco)
                 .Include(a => a.Escola)
+                .AsQueryable();
+
+            query = AplicarFiltros(query, filtro);
+
+            var totalRegistros = await query.CountAsync();
+            var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
+
+            var alunos = await query
                 .Skip((pagina - 1) * registrosPorPagina)
                 .Take(registrosPorPagina)
                 .Select(a => new AlunoViewModel
@@ -43,28 +49,31 @@ namespace MVCCamiloMentoria.Controllers
                     NomeResponsavel2 = a.NomeResponsavel2,
                     Parentesco2 = a.Parentesco2,
                     Turmas = new List<TurmaViewModel>
-                {
-                    new TurmaViewModel
                     {
-                        NomeTurma = a.Turma!.NomeTurma,
-                        TurmaId = a.TurmaId,
+                new TurmaViewModel
+                {
+                    NomeTurma = a.Turma!.NomeTurma,
+                    TurmaId = a.TurmaId,
+                },
                     },
-                },
                     Escolas = new List<EscolaViewModel>
-                {
-                    new EscolaViewModel
                     {
-                        Nome = a.Escola!.Nome,
-                        Id = a.Escola.Id,
-                    }
+                new EscolaViewModel
+                {
+                    Nome = a.Escola!.Nome,
+                    Id = a.Escola.Id,
+                }
+                    },
+                })
+                .ToListAsync();
 
-                },
-                }).ToListAsync();
-
+            ViewBag.FiltroAtual = filtro;
             ViewBag.PaginaAtual = pagina;
             ViewBag.TotalPaginas = totalPaginas;
+
             return View(alunos);
         }
+
 
 
         //HTTP/GET/DETAILS
@@ -176,9 +185,9 @@ namespace MVCCamiloMentoria.Controllers
                 {
                     Telefones = new List<AlunoTelefoneViewModel>
                 {
-                     new AlunoTelefoneViewModel 
-                { Telefones = new TelefoneViewModel() 
-                    
+                     new AlunoTelefoneViewModel
+                { Telefones = new TelefoneViewModel()
+
                 }
                 },
                     Endereco = new EnderecoViewModel
@@ -193,7 +202,7 @@ namespace MVCCamiloMentoria.Controllers
                 TempData["MensagemInfo"] = "Preencha o formulário para cadastrar um novo Aluno.";
                 CarregarViewBags(viewModel);
                 return View(viewModel);
-                
+
             }
             catch (Exception ex)
             {
@@ -552,7 +561,7 @@ namespace MVCCamiloMentoria.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                 aluno.Excluido = true;
+                aluno.Excluido = true;
                 _context.Aluno.Update(aluno);
                 await _context.SaveChangesAsync();
 
@@ -619,7 +628,57 @@ namespace MVCCamiloMentoria.Controllers
 
             return File(aluno.Foto, "image/jpeg");
         }
+        private IQueryable<Aluno> AplicarFiltros(IQueryable<Aluno> query, AlunoViewModel filtro)
+        {
+            if (filtro == null)
+                return query;
 
+            if (!string.IsNullOrEmpty(filtro.NomeNormalizado))
+            {
+                query = query.Where(a => a.Nome.ToLower().Contains(filtro.NomeNormalizado));
+            }
+
+            if (!string.IsNullOrEmpty(filtro.EmailNormalizado))
+            {
+                query = query.Where(a => a.EmailEscolar.ToLower().Contains(filtro.EmailNormalizado));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.FiltroTurma))
+            {
+                query = query.Where(a => a.Turma != null &&
+                    (a.Turma.NomeTurma.ToLower().Contains(filtro.FiltroTurma.ToLower()) ||
+                     a.Turma.NomeTurma.Contains(filtro.FiltroTurma)));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.FiltroEscola))
+            {
+                query = query.Where(a => a.Escola != null &&
+                    (a.Escola.Nome.ToLower().Contains(filtro.FiltroEscola.ToLower()) ||
+                     (a.Escola.Id != null && a.Escola.Nome.Contains(filtro.FiltroEscola))));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.FiltroResponsavel))
+            {
+                query = query.Where(a =>
+                    (a.NomeResponsavel1 != null && a.NomeResponsavel1.ToLower().Contains(filtro.FiltroResponsavel.ToLower())) ||
+                    (a.NomeResponsavel2 != null && a.NomeResponsavel2.ToLower().Contains(filtro.FiltroResponsavel.ToLower())));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.FiltroGeralNormalizado) && filtro.FiltroGeralNormalizado.Length >= 3)
+            {
+                var termo = filtro.FiltroGeralNormalizado;
+                query = query.Where(a =>
+                    (a.Nome != null && a.Nome.ToLower().Contains(termo)) ||
+                    (a.EmailEscolar != null && a.EmailEscolar.ToLower().Contains(termo)) ||
+                    (a.Turma != null && a.Turma.NomeTurma.ToLower().Contains(termo)) ||
+                    (a.Escola != null && a.Escola.Nome.ToLower().Contains(termo)) ||
+                    (a.NomeResponsavel1 != null && a.NomeResponsavel1.ToLower().Contains(termo)) ||
+                    (a.NomeResponsavel2 != null && a.NomeResponsavel2.ToLower().Contains(termo))
+                );
+            }
+
+            return query;
+        }
         private async Task<List<EstadoViewModel>> AcessarEstados()
         {
             var estados = await _context.Estado

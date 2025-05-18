@@ -7,8 +7,12 @@
 <div class="container">
     <p></p>
     <div class="card shadow-sm mb-5">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h4 class="mb-0">Escolas Cadastradas</h4>
+            <form asp-action="Index" method="get" class="d-flex w-100 w-md-auto" style="max-width: 720px;">
+                <input type="text" name="FiltroGeral" class="form-control form-control-md me-2" placeholder="Pesquisar por nome..." />
+                <button type="submit" class="btn btn-light btn-md text-primary">🔍 Pesquisar</button>
+            </form>
         </div>
         <div class="card-body">
             <table id="escolaTable" class="table table-bordered table-striped">
@@ -18,10 +22,6 @@
                             Nome
                         </th>
                         <th class="text-center">Ações</th>
-                    </tr>
-                    <tr>
-                        <th><input type="text" class="form-control form-control-sm column-filter" data-column="0" placeholder="Filtrar..." /></th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>

@@ -21,12 +21,16 @@ namespace MVCCamiloMentoria.Controllers
         }
 
         // GET: EscolaController/Index
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(EscolaViewModel filtro)
         {
             var estados = new List<EstadoViewModel>();
             TempData["MensagemInfo"] = "Lista de escolas carregada com sucesso.";
-            var escolas = await _context.Escola
-                                        .Where(e => !e.Excluido)
+
+            var query = _context.Escola.AsQueryable();
+            query = AplicarFiltros(query, filtro);
+
+            var escolas = await query
+                .Where(e => !e.Excluido)
                 .Select(e => new EscolaViewModel
                 {
                     Id = e.Id,
@@ -48,6 +52,7 @@ namespace MVCCamiloMentoria.Controllers
                 })
                 .ToListAsync();
 
+            ViewBag.AplicarFiltros = filtro;
             return View(escolas);
         }
 
@@ -590,5 +595,28 @@ namespace MVCCamiloMentoria.Controllers
 
             ViewBag.Estados = estados;
         }
+
+        private IQueryable<Escola> AplicarFiltros(IQueryable<Escola> query, EscolaViewModel filtro)
+        {
+            if (filtro == null)
+                return query;
+
+            if (!string.IsNullOrEmpty(filtro.NomeNormalizado))
+            {
+                query = query.Where(a => a.Nome.ToLower().Contains(filtro.NomeNormalizado));
+            }
+
+            if (!string.IsNullOrEmpty(filtro.FiltroGeralNormalizado) && filtro.FiltroGeralNormalizado.Length >= 3)
+            {
+                var termo = filtro.FiltroGeralNormalizado.ToLower();
+
+                query = query.Where(e =>
+                    (e.Nome != null && e.Nome.ToLower().Contains(termo))
+                );
+            }
+
+            return query;
+        }
+
     }
 }

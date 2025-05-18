@@ -5,12 +5,15 @@
 }
 
 <div class="card shadow-sm mb-5">
-    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-        <h4 class="mb-0">
+    <div class="card-header bg-primary text-white d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <h4 class="mb-2 mb-md-0">
             <i class="fas fa-users me-2"></i>Alunos Cadastrados
         </h4>
-        </div>
-
+        <form asp-action="Index" method="get" class="d-flex w-100 w-md-auto" style="max-width: 720px;">
+            <input type="text" name="FiltroGeral" class="form-control form-control-md me-2" placeholder="Pesquisar por nome, email, escola etc." />
+            <button type="submit" class="btn btn-light btn-md text-primary">🔍 Pesquisar</button>
+        </form>
+    </div>
     <div class="card-body px-0">
         <div class="table-responsive">
             <table id="alunosTable" class="table table-bordered table-striped">
@@ -37,13 +40,6 @@
                             </div>
                         </th>
                         <th class="text-center">Ações</th>
-                    </tr>
-                    <tr>
-                        <th><input type="text" class="form-control form-control-sm column-filter" data-column="0" placeholder="Filtrar..." /></th>
-                        <th></th>
-                        <th></th>
-                        <th><input type="text" class="form-control form-control-sm column-filter" data-column="3" placeholder="Filtrar..." /></th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -73,7 +69,7 @@
             </table>
         </div>
     </div>
-
+</div>
     <div class="card-footer">
         <nav aria-label="Paginação">
             <ul class="pagination justify-content-center mb-0">
