@@ -173,29 +173,26 @@
                             <div class="card-header bg-primary text-white">
                                 <h5 class="mb-0">Telefone</h5>
                             </div>
-                            <div class="card-body">
-                                @for (int i = 0; i < Model.Telefones!.Count; i++)
-                                {
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-3">
-                                                <label asp-for="Telefones[@i].Telefones.DDD" class="form-label"></label>
-                                                <input asp-for="Telefones[@i].Telefones.DDD" class="form-control" />
-                                                <span asp-validation-for="Telefones[@i].Telefones.DDD" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="form-group mb-3">
-                                                <label asp-for="Telefones[@i].Telefones.Numero" class="form-label"></label>
-                                                <input asp-for="Telefones[@i].Telefones.Numero" class="form-control" />
-                                                <span asp-validation-for="Telefones[@i].Telefones.Numero" class="text-danger"></span>
-                                            </div>
+                            @for (int i = 0; i < Model.Telefones!.Count; i++)
+                            {
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group mb-3">
+                                            <label asp-for="Telefones[@i].Telefones.DDD" class="form-label"></label>
+                                            <input asp-for="Telefones[@i].Telefones.DDD" class="form-control" />
+                                            <span asp-validation-for="Telefones[@i].Telefones.DDD" class="text-danger"></span>
                                         </div>
                                     </div>
-                                }
-                            </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group mb-3">
+                                            <label asp-for="Telefones[@i].Telefones.Numero" class="form-label"></label>
+                                            <input asp-for="Telefones[@i].Telefones.Numero" class="form-control" />
+                                            <span asp-validation-for="Telefones[@i].Telefones.Numero" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
-
                         <!-- Seção Endereço -->
                         <div class="card mb-4 border-0">
                             <div class="card-header bg-primary text-white py-3">
@@ -206,16 +203,40 @@
                             <div class="card-body px-4 py-3">
                                 <div class="row g-3">
                                     <div class="col-md-8">
+
+                                        <div class="form-group mb-3">
+                                            <label asp-for="Endereco.CEPMascara" class="form-label fw-semibold">CEP</label>
+                                            <div class="input-group">
+                                                <input asp-for="Endereco.CEPMascara" class="form-control rounded-3 py-2" id="Endereco_CEP" placeholder="00000-000" />
+                                            </div>
+                                            <span asp-validation-for="Endereco.CEPMascara" class="text-danger small"></span>
+                                        </div>
+
+                                        <div class="form-group mb-3">
+                                            <label asp-for="Endereco.Cidade" class="form-label fw-semibold">Cidade</label>
+                                            <input asp-for="Endereco.Cidade" class="form-control rounded-3 py-2" id="Endereco_Cidade" readonly />
+                                            <span asp-validation-for="Endereco.Cidade" class="text-danger small"></span>
+                                        </div>
+
+
+                                        <div class="form-group mb-3">
+                                            <label asp-for="Endereco.Bairro" class="form-label fw-semibold">Bairro</label>
+                                            <input asp-for="Endereco.Bairro" class="form-control rounded-3 py-2" id="Endereco_Bairro" readonly />
+                                            <span asp-validation-for="Endereco.Bairro" class="text-danger small"></span>
+                                        </div>
+
+
                                         <div class="form-group mb-3">
                                             <label asp-for="Endereco.NomeRua" class="form-label fw-semibold">Rua</label>
-                                            <input asp-for="Endereco.NomeRua" class="form-control rounded-3 py-2" id="Endereco_NomeRua" />
+                                            <input asp-for="Endereco.NomeRua" class="form-control rounded-3 py-2" id="Endereco_NomeRua" placeholder="Nome da rua" readonly />
                                             <span asp-validation-for="Endereco.NomeRua" class="text-danger small"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
+
                                         <div class="form-group mb-3">
                                             <label asp-for="Endereco.NumeroRua" class="form-label fw-semibold">Número</label>
-                                            <input asp-for="Endereco.NumeroRua" class="form-control rounded-3 py-2" id="Endereco_NumeroRua" />
+                                            <input asp-for="Endereco.NumeroRua" class="form-control rounded-3 py-2" id="Endereco_NumeroRua" placeholder="Nº" />
                                             <span asp-validation-for="Endereco.NumeroRua" class="text-danger small"></span>
                                         </div>
                                     </div>
@@ -223,34 +244,16 @@
 
                                 <div class="form-group mb-3">
                                     <label asp-for="Endereco.Complemento" class="form-label fw-semibold">Complemento</label>
-                                    <input asp-for="Endereco.Complemento" class="form-control rounded-3 py-2" id="Endereco_Complemento" />
+                                    <input asp-for="Endereco.Complemento" class="form-control rounded-3 py-2" id="Endereco_Complemento" placeholder="Apto, bloco, etc." />
                                     <span asp-validation-for="Endereco.Complemento" class="text-danger small"></span>
                                 </div>
 
-                                <div class="form-group mb-3">
-                                    <label asp-for="Endereco.CEPMascara" class="form-label fw-semibold">CEP</label>
-                                    <div class="input-group">
-                                        <input asp-for="Endereco.CEPMascara" class="form-control rounded-3 py-2" id="Endereco_CEP" />
-                                        <button class="btn btn-outline-secondary" type="button" id="btnBuscarCEP">
-                                            <i class="fas fa-search"></i> Buscar
-                                        </button>
-                                    </div>
-                                    <span asp-validation-for="Endereco.CEP" class="text-danger small"></span>
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label asp-for="Endereco.EstadoId" class="form-label fw-semibold">Estado</label>
-                                    <select asp-for="Endereco.EstadoId" class="form-select rounded-3 py-2" id="Estado">
-                                        <option value="">Selecione um Estado</option>
-                                        @if (Model?.Endereco?.Estado != null)
-                                        {
-                                            @foreach (var estado in Model.Endereco.Estado)
-                                            {
-                                                <option value="@estado.id">@estado.Nome</option>
-                                            }
-                                        }
-                                    </select>
-                                    <span asp-validation-for="Endereco.EstadoId" class="text-danger small"></span>
+                                <div class="form-group">
+                                    <label>Estado</label>
+                                    @Html.DropDownListFor(model => model.Endereco.EstadoId,
+                                    (SelectList)ViewBag.Estados,
+                                                                        "Selecione um estado",
+                                                                        new { @class = "form-control", id = "Estado", disabled = "disabled" })
                                 </div>
                             </div>
                         </div>
@@ -271,82 +274,86 @@
     </div>
 </div>
 
-	<style>
-		.card {
-			border-radius: 12px;
-			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-			margin-bottom: 1.5rem;
-			border: 1px solid rgba(0, 0, 0, 0.08);
-		}
+<style>
+    .card {
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+    }
 
-		.card-header {
-			border-radius: 12px 12px 0 0 !important;
-		}
+    .card-header {
+        border-radius: 12px 12px 0 0 !important;
+    }
 
-		.form-control, .form-select {
-			transition: all 0.3s;
-			border: 1px solid #ced4da;
-		}
+    .form-control, .form-select {
+        transition: all 0.3s;
+        border: 1px solid #ced4da;
+    }
 
-			.form-control:focus, .form-select:focus {
-				border-color: #86b7fe;
-				box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
-			}
+        .form-control:focus, .form-select:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+        }
 
-		.btn {
-			transition: all 0.3s;
-		}
+    .btn {
+        transition: all 0.3s;
+    }
 
-		.form-label {
-			font-weight: 500;
-			color: #495057;
-		}
-	</style>
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+    }
+</style>
 
 @section Scripts {
-	@{
-		await Html.RenderPartialAsync("_ValidationScriptsPartial");
-	}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-	$(document).ready(function() {
-		$('#Endereco_CEP').blur(function() {
-			const cep = $(this).val().replace(/\D/g, '');
-			if (cep.length !== 8) return;
+    $(document).ready(function() {
+        $('#Endereco_CEP').blur(function() {
+            const cep = $(this).val().replace(/\D/g, '');
+            if (cep.length !== 8) return;
 
 
-			$.getJSON(`/api/cep/${cep}`, function(data) {
-				// console.log("Dados da API:", data);
+            $.getJSON(`/api/cep/${cep}`, function(data) {
+                // console.log("Dados da API:", data);
 
 
-				if (data.logradouro) {
-					$("#Endereco_NomeRua").val(data.logradouro).trigger('change');
-				}
+                if (data.logradouro) {
+                    $("#Endereco_NomeRua").val(data.logradouro).trigger('change');
+                }
 
-				// if (data.localidade) {
-				//     $("#Endereco_Cidade").val(data.localidade).trigger('change');
-				// }
+                if (data.localidade) {
+                    $("#Endereco_Cidade").val(data.localidade).trigger('change');
+                }
 
-				const estadoSelect = $("#Estado");
-				if (data.uf || data.estado) {
-					const estadoParaBuscar = data.estado || data.uf;
-					const estadoEncontrado = estadoSelect.find("option").filter(function() {
-						return $(this).text().trim() === estadoParaBuscar;
-					}).val();
+                if (data.bairro) {
+                    $("#Endereco_Bairro").val(data.bairro).trigger('change');
+                }
 
-					if (estadoEncontrado) {
-						estadoSelect.val(estadoEncontrado).trigger('change');
-					} else {
-						console.warn("Estado não encontrado:", estadoParaBuscar);
-					}
-				}
-			}).fail(function() {
-				alert('CEP não encontrado ou erro na consulta!');
+                const estadoSelect = $("#Estado");
+                if (data.uf || data.estado) {
+                    const estadoParaBuscar = data.estado || data.uf;
+                    const estadoEncontrado = estadoSelect.find("option").filter(function() {
+                        return $(this).text().trim() === estadoParaBuscar;
+                    }).val();
 
-				$("#Endereco_NomeRua, #Endereco_Cidade").val('');
-				$("#Estado").val('');
-			});
-		});
-	});
+                    if (estadoEncontrado) {
+                        estadoSelect.val(estadoEncontrado).trigger('change');
+                    } else {
+                        console.warn("Estado não encontrado:", estadoParaBuscar);
+                    }
+                }
+            }).fail(function() {
+                alert('CEP não encontrado ou erro na consulta!');
+
+                $("#Endereco_NomeRua, #Endereco_Cidade").val('');
+                $("#Estado").val('');
+            });
+        });
+    });
 </script>

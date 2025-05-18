@@ -7,6 +7,8 @@ namespace MVCCamiloMentoria.Models
         [Key]
         public int Id { get; set; }
         public string? NomeRua { get; set; }
+        public string? Cidade { get; set; }
+        public string? Bairro { get; set; }
         public int? CEP { get; set; }
         public int NumeroRua {get; set;}
         public string? Complemento { get; set; }

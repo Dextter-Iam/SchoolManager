@@ -13,7 +13,15 @@ namespace MVCCamiloMentoria.Data
             builder.HasKey(e => e.Id);
 
             builder.Property(e => e.Complemento)
-                   .HasMaxLength(30);
+                   .HasMaxLength(200);
+
+            builder.Property(e => e.Cidade)
+                   .HasMaxLength(200)
+                   .IsRequired();
+
+            builder.Property(e => e.Bairro)
+                   .HasMaxLength(200)
+                   .IsRequired();
 
             builder.Property(e => e.NomeRua)
                    .HasMaxLength(200)

@@ -32,8 +32,18 @@ namespace MVCCamiloMentoria.ViewModels
         [ScaffoldColumn(false)] 
         public int? CEP { get; set; }
 
+        [Required(ErrorMessage = "O nome da Cidade é obrigatório")]
+        [StringLength(200, ErrorMessage = "A cidade não pode ter mais que 200 caracteres.")]
+        [DisplayName("Cidade")]
+        public string? Cidade { get; set; }
+
+        [Required(ErrorMessage = "O nome do Bairro é obrigatório")]
+        [StringLength(200, ErrorMessage = "O bairro não pode ter mais que 200 caracteres.")]
+        [DisplayName("Bairro")]
+        public string? Bairro { get; set; }
+
         [Required(ErrorMessage = "O número da rua é obrigatório.")]
-        [Range(1, int.MaxValue, ErrorMessage = "O número da rua deve ser um valor positivo.")]
+        [Range(1, int.MaxValue, ErrorMessage = "O número da rua deve ser um número maior que 0.")]
         [DisplayName("Número da Rua")]
         public int NumeroRua { get; set; }
 

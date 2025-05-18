@@ -188,13 +188,38 @@
 							<div class="card-body px-4 py-3">
 								<div class="row g-3">
 									<div class="col-md-8">
+
+										<div class="form-group mb-3">
+											<label asp-for="Endereco.CEP" class="form-label fw-semibold">CEP</label>
+											<div class="input-group">
+												<input asp-for="Endereco.CEP" class="form-control rounded-3 py-2" id="Endereco_CEP" placeholder="00000-000" />
+											</div>
+											<span asp-validation-for="Endereco.CEP" class="text-danger small"></span>
+										</div>
+
+
+										<div class="form-group mb-3">
+											<label asp-for="Endereco.Cidade" class="form-label fw-semibold">Cidade</label>
+											<input asp-for="Endereco.Cidade" class="form-control rounded-3 py-2" id="Endereco_Cidade" readonly />
+											<span asp-validation-for="Endereco.Cidade" class="text-danger small"></span>
+										</div>
+
+	
+										<div class="form-group mb-3">
+											<label asp-for="Endereco.Bairro" class="form-label fw-semibold">Bairro</label>
+											<input asp-for="Endereco.Bairro" class="form-control rounded-3 py-2" id="Endereco_Bairro" readonly />
+											<span asp-validation-for="Endereco.Bairro" class="text-danger small"></span>
+										</div>
+
+
 										<div class="form-group mb-3">
 											<label asp-for="Endereco.NomeRua" class="form-label fw-semibold">Rua</label>
-											<input asp-for="Endereco.NomeRua" class="form-control rounded-3 py-2" id="Endereco_NomeRua" placeholder="Nome da rua" />
+											<input asp-for="Endereco.NomeRua" class="form-control rounded-3 py-2" id="Endereco_NomeRua" placeholder="Nome da rua" readonly />
 											<span asp-validation-for="Endereco.NomeRua" class="text-danger small"></span>
 										</div>
 									</div>
 									<div class="col-md-4">
+
 										<div class="form-group mb-3">
 											<label asp-for="Endereco.NumeroRua" class="form-label fw-semibold">Número</label>
 											<input asp-for="Endereco.NumeroRua" class="form-control rounded-3 py-2" id="Endereco_NumeroRua" placeholder="Nº" />
@@ -209,26 +234,17 @@
 									<span asp-validation-for="Endereco.Complemento" class="text-danger small"></span>
 								</div>
 
-								<div class="form-group mb-3">
-									<label asp-for="Endereco.CEP" class="form-label fw-semibold">CEP</label>
-									<div class="input-group">
-										<input asp-for="Endereco.CEP" class="form-control rounded-3 py-2" id="Endereco_CEP" placeholder="00000-000" />
-										<button class="btn btn-outline-secondary" type="button" id="btnBuscarCEP">
-											<i class="fas fa-search"></i> Buscar
-										</button>
-									</div>
-									<span asp-validation-for="Endereco.CEP" class="text-danger small"></span>
-								</div>
 
 								<div class="form-group">
 									<label>Estado</label>
 									@Html.DropDownListFor(model => model.Endereco.EstadoId,
-																		(SelectList)ViewBag.Estados,
+									(SelectList)ViewBag.Estados,
 																		"Selecione um estado",
-																		new { @class = "form-control", id = "Estado" })
+																		new { @class = "form-control", id = "Estado", disabled = "disabled" })
 								</div>
 							</div>
 						</div>
+
 
 						<!-- Botões de Ação -->
 						<div class="d-flex justify-content-between mt-4">
@@ -301,9 +317,13 @@
 					$("#Endereco_NomeRua").val(data.logradouro).trigger('change');
 				}
 
-				// if (data.localidade) {
-				//     $("#Endereco_Cidade").val(data.localidade).trigger('change');
-				// }
+				if (data.localidade) {
+					$("#Endereco_Cidade").val(data.localidade).trigger('change');
+				}
+
+				if (data.bairro) {
+					$("#Endereco_Bairro").val(data.bairro).trigger('change');
+				}
 
 
 				const estadoSelect = $("#Estado");
