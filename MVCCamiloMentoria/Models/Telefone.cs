@@ -9,6 +9,7 @@ namespace MVCCamiloMentoria.Models
         public int Id { get; set; }
         public int DDD { get; set; }
         public int Numero { get; set; }
+        public bool Excluido { get; set; } = false;
         public int EscolaId { get; set; }
 
         [ForeignKey("EscolaId")]

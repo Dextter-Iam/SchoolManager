@@ -1,0 +1,145 @@
+﻿@model MVCCamiloMentoria.ViewModels.ResponsavelViewModel
+
+@{
+    ViewData["Title"] = "Detalhes do Responsável";
+}
+    <br />
+
+<div class="row">
+	<div class="col-md-10 offset-md-1">
+		<div class="card mb-4">
+			<div class="card-header bg-primary text-white">
+				<div class="d-flex justify-content-between align-items-center">
+					<h5 class="mb-0">Informações do responsável</h5>
+				</div>
+			</div>
+				<div class="card-body">
+
+					<div class="card mb-3">
+						<div class="card-header bg-light">
+							<h5 class="mb-0">Informações Pessoais</h5>
+						</div>
+						<div class="card-body">
+							<dl class="row">
+								<dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Nome)</dt>
+								<dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
+							</dl>
+						</div>
+
+					</div>
+
+
+					<div class="card mb-3">
+						<div class="card-header bg-light">
+							<h5 class="mb-0">Endereço</h5>
+						</div>
+						<div class="card-body">
+							<dl class="row">
+								<dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Endereco)</dt>
+
+							<dd class="col-sm-9">
+									@if (Model.Endereco != null && Model.Endereco.Estado != null && Model.Endereco.Estado.Any())
+									{
+									<address>
+											@Model.Endereco.NomeRua, @Model.Endereco.NumeroRua
+										<br />
+											@if (!string.IsNullOrEmpty(Model.Endereco.Complemento))
+											{
+												@Model.Endereco.Complemento <br />
+											}
+										CEP: @Model.Endereco.CEP?.ToString("00000-000") <br />
+
+											@foreach (var estado in Model.Endereco.Estado)
+											{
+											<div>@estado.Nome - @estado.Sigla</div>
+											}
+									</address>
+									}
+									else
+									{
+									<span class="text-muted">Endereço ou estado não informado</span>
+									}
+
+								</dd>
+							</dl>
+						</div>
+					</div>
+
+					<div class="card mb-3">
+						<div class="card-header bg-light">
+							<h5 class="mb-0">Contato</h5>
+						</div>
+						<div class="card-body">
+							<dl class="row">
+								<dt class="col-sm-3 fw-bold">Telefone</dt>
+								<dd class="col-sm-9">
+									@if (Model.Telefones != null && Model.Telefones.Any())
+									{
+										foreach (var telefone in Model.Telefones)
+										{
+											<p>(@telefone.DDD) @telefone.Numero.ToString("00000-0000")</p>
+										}
+									}
+									else
+									{
+										<span class="text-muted">Telefone não cadastrado</span>
+									}
+								</dd>
+							</dl>
+						</div>
+					</div>
+
+
+				<div class="card mb-3">
+					<div class="card-header bg-light">
+						<h5 class="mb-0">Alunos Relacionados</h5>
+					</div>
+					<div class="card-body">
+						@if (Model.AlunoResponsavel != null && Model.AlunoResponsavel.Any())
+						{
+							<div class="table-responsive">
+								<table class="table table-striped table-bordered">
+									<thead class="table-light">
+										<tr>
+											<th>Nome do Aluno</th>
+											<th>Data de Nascimento</th>
+											<th>Turma</th>
+										</tr>
+									</thead>
+									<tbody>
+										@foreach (var alunoRel in Model.AlunoResponsavel)
+										{
+											<tr>
+												<td>@alunoRel.Aluno?.Nome</td>
+												<td>@alunoRel.Aluno?.DataNascimento.ToString("dd/MM/yyyy")</td>
+												<td>
+													@alunoRel.Aluno?.Turma?.NomeTurma
+												</td>
+											</tr>
+										}
+									</tbody>
+								</table>
+							</div>
+						}
+						else
+						{
+							<span class="text-muted">Nenhum aluno relacionado</span>
+						}
+					</div>
+				</div>
+
+				<div class="text-end mt-3">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning px-4">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+                <a asp-action="Index" class="btn btn-secondary ms-2">
+                    <i class="fas fa-list"></i> Voltar à Lista
+                </a>
+            </div>
+        </div>
+    </div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

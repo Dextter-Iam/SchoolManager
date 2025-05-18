@@ -20,10 +20,38 @@ namespace MVCCamiloMentoria.Controllers
         }
 
         // GET: Disciplinas
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pagina = 1, DisciplinaViewModel filtro = null)
         {
-            return View(await _context.Disciplina.Select(d => new DisciplinaViewModel { Nome = d.Nome, Id = d.Id }).ToListAsync());
+            int registrosPorPagina = 10;
+
+            var query = _context.Disciplina.AsQueryable();
+
+
+            query = AplicarFiltros(query, filtro);
+
+
+            var totalRegistros = await query.CountAsync();
+            var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
+
+
+            ViewBag.AplicarFiltros = filtro;
+            ViewBag.PaginaAtual = pagina;
+            ViewBag.TotalPaginas = totalPaginas;
+
+
+            var disciplinas = await query
+                .Skip((pagina - 1) * registrosPorPagina)
+                .Take(registrosPorPagina)
+                .Select(d => new DisciplinaViewModel
+                {
+                    Id = d.Id,
+                    Nome = d.Nome
+                })
+                .ToListAsync();
+
+            return View(disciplinas);
         }
+
 
         // GET: Disciplinas/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -39,7 +67,13 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            var viewModel = new DisciplinaViewModel { Id = disciplina.Id, Nome = disciplina.Nome };
+            var viewModel = new DisciplinaViewModel
+            {
+                Id = disciplina.Id,
+                Nome = disciplina.Nome,
+                EscolaId = disciplina.EscolaId,
+            };
+
             return View(viewModel);
         }
 
@@ -149,13 +183,18 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            var disciplina = await _context.Disciplina.FirstOrDefaultAsync(m => m.Id == id);
+            var disciplina = await _context.Disciplina
+                                           .FirstOrDefaultAsync(m => m.Id == id);
             if (disciplina == null)
             {
                 return NotFound();
             }
 
-            var viewModel = new DisciplinaViewModel { Id = disciplina.Id, Nome = disciplina.Nome };
+            var viewModel = new DisciplinaViewModel
+            {
+                Id = disciplina.Id,
+                Nome = disciplina.Nome,
+            };
             return View(viewModel);
         }
 
@@ -189,5 +228,37 @@ namespace MVCCamiloMentoria.Controllers
         {
             ViewBag.EscolaId = new SelectList(_context.Escola, "Id", "Nome", viewModel?.EscolaId);
         }
+
+        private IQueryable<Disciplina> AplicarFiltros(IQueryable<Disciplina> query, DisciplinaViewModel filtro)
+        {
+            if (filtro == null)
+                return query;
+
+            if (!string.IsNullOrEmpty(filtro.NomeNormalizado))
+            {
+                query = query.Where(a => a.Nome.ToLower().Contains(filtro.NomeNormalizado));
+            }
+
+            if (!string.IsNullOrEmpty(filtro.FiltroEscola))
+            {
+                var escolaFiltro = filtro.FiltroEscola.ToLower();
+                query = query.Where(a => a.Escola != null &&
+                    a.Escola.Nome!.ToLower().Contains(escolaFiltro));
+            }
+
+            if (!string.IsNullOrEmpty(filtro.FiltroGeralNormalizado) && filtro.FiltroGeralNormalizado.Length >= 3)
+            {
+                var termo = filtro.FiltroGeralNormalizado.ToLower();
+
+                query = query.Where(c =>
+                    (c.Nome != null && c.Nome.ToLower().Contains(termo)) ||
+                    (c.Escola != null && c.Escola.Nome.ToLower().Contains(termo))
+                );
+            }
+
+            return query;
+        }
+
+
     }
 }

@@ -1,0 +1,44 @@
+﻿@model MVCCamiloMentoria.Models.PrestadorServico
+
+@{
+    ViewData["Title"] = "Excluir Prestador de Serviço";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-danger text-white">
+        <h4 class="mb-0">Excluir Prestador de Serviço</h4>
+    </div>
+    <div class="card-body">
+        <h5>Tem certeza que deseja excluir este prestador de serviço?</h5>
+        <hr />
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Nome do Prestador</dt>
+                <dd class="col-sm-9">@Model.Nome</dd>
+
+                <dt class="col-sm-3">CPF</dt>
+                <dd class="col-sm-9">@Model.CPF</dd>
+
+                <dt class="col-sm-3">CNPJ</dt>
+                <dd class="col-sm-9">@Model.CNPJ</dd>
+
+                <dt class="col-sm-3">Nome da Empresa</dt>
+                <dd class="col-sm-9">@Model.EmpresaNome</dd>
+
+                <dt class="col-sm-3">Finalidade do Serviço</dt>
+                <dd class="col-sm-9">@Model.ServicoFinalidade</dd>
+
+                <dt class="col-sm-3">Escola</dt>
+                <dd class="col-sm-9">@Model.Escola?.Nome</dd>
+            </dl>
+        <form asp-action="Delete" class="mt-4">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Confirmar Exclusão
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Cancelar
+            </a>
+        </form>
+    </div>
+</div>

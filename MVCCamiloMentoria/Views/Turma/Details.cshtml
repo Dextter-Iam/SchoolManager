@@ -1,0 +1,57 @@
+﻿@model MVCCamiloMentoria.ViewModels.TurmaViewModel
+
+@{
+    ViewData["Title"] = "Detalhes da Turma";
+}
+
+<div class="container">
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Detalhes da Turma</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3 fw-bold">Nome da Turma</dt>
+                <dd class="col-sm-9">@Model.NomeTurma</dd>
+
+                <dt class="col-sm-3 fw-bold">Ano Letivo</dt>
+                <dd class="col-sm-9">@Model.AnoLetivo</dd>
+
+                <dt class="col-sm-3 fw-bold">Turno</dt>
+                <dd class="col-sm-9">@Model.Turno</dd>
+
+                <dt class="col-sm-3 fw-bold">Escola</dt>
+                <dd class="col-sm-9">@Model.Escola?.Nome</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">Alunos da Turma</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Nome</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var aluno in Model.Alunos!)
+                    {
+                        <tr>
+                            <td>@aluno.Nome</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="text-end mt-3">
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

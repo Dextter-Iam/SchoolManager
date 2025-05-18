@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using MVCCamiloMentoria.Models;
 using MVCCamiloMentoria.ViewModels;
+using System.Collections.Immutable;
+using System.Linq.Expressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MVCCamiloMentoria.Controllers
 {
@@ -15,88 +19,199 @@ namespace MVCCamiloMentoria.Controllers
             _context = context;
         }
 
-        // GET: Aluno
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pagina = 1, AlunoViewModel filtro = null)
         {
-            var alunos = await _context.Aluno
+            int registrosPorPagina = 10;
+
+            var query = _context.Aluno
+                .Where(a => !a.Excluido)
                 .Include(a => a.Turma)
                 .Include(a => a.Endereco)
                 .Include(a => a.Escola)
+                .AsQueryable();
+
+            query = AplicarFiltros(query, filtro);
+
+            var totalRegistros = await query.CountAsync();
+            var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
+
+            var alunos = await query
+                .Skip((pagina - 1) * registrosPorPagina)
+                .Take(registrosPorPagina)
                 .Select(a => new AlunoViewModel
                 {
-                    Nome = a.Nome,
                     Id = a.Id,
+                    Nome = a.Nome,
                     EmailEscolar = a.EmailEscolar,
-                    Escola = a.Escola,
                     DataNascimento = a.DataNascimento,
-                }).ToListAsync();
+                    NomeResponsavel1 = a.NomeResponsavel1,
+                    Parentesco1 = a.Parentesco1,
+                    NomeResponsavel2 = a.NomeResponsavel2,
+                    Parentesco2 = a.Parentesco2,
+                    Turmas = new List<TurmaViewModel>
+                    {
+                new TurmaViewModel
+                {
+                    NomeTurma = a.Turma!.NomeTurma,
+                    TurmaId = a.TurmaId,
+                },
+                    },
+                    Escolas = new List<EscolaViewModel>
+                    {
+                new EscolaViewModel
+                {
+                    Nome = a.Escola!.Nome,
+                    Id = a.Escola.Id,
+                }
+                    },
+                })
+                .ToListAsync();
+
+            ViewBag.FiltroAtual = filtro;
+            ViewBag.PaginaAtual = pagina;
+            ViewBag.TotalPaginas = totalPaginas;
 
             return View(alunos);
         }
 
-        // GET: Aluno/Details/5
+
+
+        //HTTP/GET/DETAILS
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
                 return NotFound();
 
             var aluno = await _context.Aluno
+                .Where(a => !a.Excluido)
                 .Include(a => a.Turma)
                 .Include(a => a.Endereco)
+                    .ThenInclude(e => e!.Estado)
+                .Include(e => e.Estado)
                 .Include(a => a.Escola)
-                .Include(a => a.AlunoResponsavel)
                 .Include(a => a.Aulas)
                 .Include(a => a.AlunoTelefone!)
                     .ThenInclude(at => at.Telefone)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (aluno == null)
                 return NotFound();
 
+            var alunoTel = aluno.AlunoTelefone?
+                          .Where(at => at.Telefone != null)
+                          .Select(at => new AlunoTelefoneViewModel
+                          {
+                              AlunoId = at.AlunoId,
+                              TelefoneId = at.TelefoneId,
+                              Telefones = new TelefoneViewModel
+                              {
+                                  Id = at.Telefone!.Id,
+                                  DDD = at.Telefone.DDD,
+                                  Numero = at.Telefone.Numero,
+                              }
+                          }).ToList();
+
             var viewModel = new AlunoViewModel
             {
                 Id = aluno.Id,
                 Nome = aluno.Nome,
+                Foto = aluno.Foto,
                 DataNascimento = aluno.DataNascimento,
                 EmailEscolar = aluno.EmailEscolar,
                 AnoInscricao = aluno.AnoInscricao,
                 BolsaEscolar = aluno.BolsaEscolar,
-                TurmaId = aluno.TurmaId,
-                Turma = aluno.Turma,
-                AlunoTelefone = aluno.AlunoTelefone?
-                .Select(at => new AlunoTelefone
+                NomeResponsavel1 = aluno.NomeResponsavel1,
+                Parentesco1 = aluno.Parentesco1,
+                NomeResponsavel2 = aluno.NomeResponsavel2,
+                Parentesco2 = aluno.Parentesco2,
+                Endereco = aluno.Endereco != null ? new EnderecoViewModel
                 {
-                    DDD = at.Telefone?.DDD ?? 0,
-                    Numero = at.Telefone?.Numero ?? 0
-                }).ToList(),
-                Endereco = aluno.Endereco != null ? new Endereco
-                {
+                    Id = aluno.Endereco.Id,
                     NomeRua = aluno.Endereco.NomeRua,
                     NumeroRua = aluno.Endereco.NumeroRua,
                     Complemento = aluno.Endereco.Complemento,
                     CEP = aluno.Endereco.CEP,
                     EstadoId = aluno.Endereco.EstadoId,
-                    Estado = aluno.Endereco.Estado
+                    Estado = new List<EstadoViewModel>
+                    {
+                          new EstadoViewModel
+                          {
+                            Nome = aluno.Endereco.Estado!.Nome,
+                            id = aluno.Endereco.Estado.id,
+                            Sigla = aluno.Endereco.Estado.Sigla,
+                           }
+                    }
                 } : null,
 
-                EscolaId = aluno.EscolaId,
-                Escola = aluno.Escola,
-                AlunoResponsavel = aluno.AlunoResponsavel,
-                Aulas = aluno.Aulas
+
+                Escolas = new List<EscolaViewModel>
+                {   new EscolaViewModel
+                 {
+                    Nome = aluno.Escola!.Nome,
+                    Id = aluno.EscolaId,
+                 }
+                },
+                Turmas = new List<TurmaViewModel>
+                {
+                    new TurmaViewModel
+                    {
+                        NomeTurma = aluno.Turma!.NomeTurma,
+                        TurmaId = aluno.TurmaId,
+                    },
+                },
+                Telefones = alunoTel,
+
             };
+
 
             return View(viewModel);
         }
-
-        // GET: Aluno/Create
         public IActionResult Create()
         {
-            CarregarViewBags();
-            CarregarViewBagsEstados();
-            return View();
+            try
+            {
+                var estados = _context.Estado
+                                    .Select(e => new EstadoViewModel
+                                    {
+                                        id = e.id,
+                                        Nome = e.Nome,
+                                        Sigla = e.Sigla
+                                    })
+                                    .OrderBy(e => e.Nome)
+                                    .ToList();
+
+                var viewModel = new AlunoViewModel
+                {
+                    Telefones = new List<AlunoTelefoneViewModel>
+                {
+                     new AlunoTelefoneViewModel
+                { Telefones = new TelefoneViewModel()
+
+                }
+                },
+                    Endereco = new EnderecoViewModel
+                    {
+
+                    }
+
+                };
+
+                ViewData["Estados"] = new SelectList(estados.ToList(), "id", "Nome");
+
+                TempData["MensagemInfo"] = "Preencha o formulário para cadastrar um novo Aluno.";
+                CarregarViewBags(viewModel);
+                return View(viewModel);
+
+            }
+            catch (Exception ex)
+            {
+                TempData["MensagemErro"] = $"Erro ao carregar formulário: {ex.Message}";
+                return RedirectToAction("Index");
+            }
         }
 
-        // POST: Aluno/Create
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(AlunoViewModel viewModel)
@@ -105,24 +220,16 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
-                    var endereco = new Endereco
+                    var estados = _context.Estado.ToList();
+                    var estadoViewModel = estados.FirstOrDefault();
+                    var endereco = viewModel.Endereco != null ? new Endereco
                     {
-                        NomeRua = viewModel.NomeRua,
-                        NumeroRua = viewModel.NumeroRua,
-                        Complemento = viewModel.Complemento,
-                        CEP = viewModel.CEP,
-                        EstadoId = (int)viewModel.EstadoId
-                    };
-
-                    var telefone = new Telefone
-                    {
-                        DDD = viewModel.DDD,
-                        Numero = viewModel.Numero,
-                        EscolaId = viewModel.EscolaId
-                    };
-
-                    _context.Telefone.Add(telefone);
-                    await _context.SaveChangesAsync();
+                        NomeRua = viewModel.Endereco.NomeRua,
+                        NumeroRua = viewModel.Endereco.NumeroRua,
+                        CEP = viewModel.Endereco.CEP,
+                        Complemento = viewModel.Endereco.Complemento,
+                        EstadoId = viewModel.Endereco.EstadoId,
+                    } : null;
 
                     var aluno = new Aluno
                     {
@@ -132,103 +239,152 @@ namespace MVCCamiloMentoria.Controllers
                         AnoInscricao = viewModel.AnoInscricao,
                         BolsaEscolar = viewModel.BolsaEscolar,
                         TurmaId = viewModel.TurmaId,
-                        Endereco = endereco,
-                        EstadoId = (int)viewModel.EstadoId,
                         EscolaId = viewModel.EscolaId,
+                        NomeResponsavel1 = viewModel.NomeResponsavel1,
+                        Parentesco1 = viewModel.Parentesco1,
+                        NomeResponsavel2 = viewModel.NomeResponsavel2,
+                        Parentesco2 = viewModel.Parentesco2,
+                        Endereco = endereco,
+
+                        AlunoTelefone = viewModel.Telefones?.Select(t => new AlunoTelefone
+                        {
+                            Telefone = new Telefone
+                            {
+                                DDD = t.Telefones!.DDD,
+                                Numero = t.Telefones!.Numero,
+                                EscolaId = viewModel.EscolaId,
+                            }
+                        }).ToList()
                     };
 
                     _context.Add(aluno);
                     await _context.SaveChangesAsync();
-
-                    var alunoTelefone = new AlunoTelefone
-                    {
-                        AlunoId = aluno.Id,
-                        TelefoneId = telefone.Id
-                    };
-
-                    _context.Add(alunoTelefone);
-                    await _context.SaveChangesAsync();
-
 
                     TempData["MensagemSucesso"] = "Aluno cadastrado com sucesso!";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
+
                     TempData["MensagemErro"] = $"Erro ao cadastrar aluno: {ex.Message}";
                 }
             }
 
-            CarregarViewBags(viewModel);
-            CarregarViewBagsEstados(viewModel);
+            CarregarDependencias(viewModel);
             return View(viewModel);
         }
 
-        // GET: Aluno/Edit/5
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
                 return NotFound();
 
             var aluno = await _context.Aluno
+                .Where(a => !a.Excluido)
                 .Include(a => a.AlunoTelefone!)
                     .ThenInclude(at => at.Telefone)
                 .Include(a => a.Turma)
                 .Include(a => a.Escola)
                 .Include(a => a.Endereco)
+                    .ThenInclude(a => a!.Estado)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (aluno == null)
                 return NotFound();
 
-            var telefone = aluno.AlunoTelefone?
-                .FirstOrDefault(at => at.Telefone != null)?.Telefone;
+            var alunoTelefones = aluno.AlunoTelefone?
+                .Where(at => at.Telefone != null)
+                .Select(at => new AlunoTelefoneViewModel
+                {
+                    AlunoId = at.AlunoId,
+                    TelefoneId = at.TelefoneId,
+                    Telefones = new TelefoneViewModel
+                    {
+                        Id = at.Telefone!.Id,
+                        DDD = at.Telefone.DDD,
+                        Numero = at.Telefone.Numero,
+                    }
+                })
+                .ToList() ?? new List<AlunoTelefoneViewModel>();
 
+            var primeiroTelefone = alunoTelefones.FirstOrDefault()?.Telefones;
+
+            var estado = _context.Estado.ToList();
             var viewModel = new AlunoViewModel
             {
                 Id = aluno.Id,
                 Nome = aluno.Nome,
+                Foto = aluno.Foto,
                 DataNascimento = aluno.DataNascimento,
                 EmailEscolar = aluno.EmailEscolar,
                 AnoInscricao = aluno.AnoInscricao,
                 BolsaEscolar = aluno.BolsaEscolar,
                 TurmaId = aluno.TurmaId,
+                Turma = new TurmaViewModel
+                {
+                    NomeTurma = aluno.Turma!.NomeTurma,
+                    TurmaId = aluno.TurmaId,
+                },
+
                 EscolaId = aluno.EscolaId,
+                Escolas = new List<EscolaViewModel>
+                {
+                    new EscolaViewModel
+                    {
+                        Nome = aluno.Escola!.Nome,
+                        Id = aluno.Escola.Id,
+                    }
 
-                DDD = telefone?.DDD ?? 0,
-                Numero = telefone?.Numero ?? 0,
+                },
 
-                NomeRua = aluno.Endereco?.NomeRua,
-                NumeroRua = aluno.Endereco?.NumeroRua ?? 0,
-                Complemento = aluno.Endereco?.Complemento,
-                CEP = aluno.Endereco?.CEP ?? 0,
-                EstadoId = aluno.Endereco?.EstadoId ?? 0,
-                Estado = aluno.Endereco?.Estado,
-
-                Turma = aluno.Turma,
-                Escola = aluno.Escola,
-                AlunoResponsavel = aluno.AlunoResponsavel,
-                Aulas = aluno.Aulas
+                Telefones = alunoTelefones,
+                Endereco = new EnderecoViewModel
+                {
+                    NomeRua = aluno.Endereco!.NomeRua,
+                    NumeroRua = aluno.Endereco!.NumeroRua,
+                    Complemento = aluno.Endereco!.Complemento,
+                    CEP = aluno.Endereco.CEP,
+                    EstadoId = aluno.Endereco.EstadoId,
+                    Estado = estado.Select(e => new EstadoViewModel
+                    {
+                        id = e.id,
+                        Nome = e.Nome,
+                        Sigla = e.Sigla
+                    }).ToList()
+                },
+                NomeResponsavel1 = aluno.NomeResponsavel1,
+                Parentesco1 = aluno.Parentesco1,
+                NomeResponsavel2 = aluno.NomeResponsavel2,
+                Parentesco2 = aluno.Parentesco2
             };
 
-            CarregarViewBags(viewModel);
-            CarregarViewBagsEstados(viewModel);
+            CarregarDependencias(viewModel);
 
             return View(viewModel);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, AlunoViewModel viewModel)
+        public async Task<IActionResult> Edit(int id, AlunoViewModel viewModel, IFormFile fotoUpload)
         {
             if (id != viewModel.Id)
                 return NotFound();
+
+            ModelState.Remove("FotoUpload");
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var aluno = await _context.Aluno.FindAsync(id);
+                    var aluno = await _context.Aluno
+                        .Include(a => a.Endereco)
+                        .Include(a => a.AlunoTelefone!)
+                            .ThenInclude(at => at.Telefone)
+                        .FirstOrDefaultAsync(a => a.Id == id);
+
                     if (aluno == null)
                         return NotFound();
 
@@ -238,41 +394,46 @@ namespace MVCCamiloMentoria.Controllers
                     aluno.AnoInscricao = viewModel.AnoInscricao;
                     aluno.BolsaEscolar = viewModel.BolsaEscolar;
                     aluno.TurmaId = viewModel.TurmaId;
-                    aluno.Endereco = viewModel.Endereco;
                     aluno.EscolaId = viewModel.EscolaId;
+                    aluno.NomeResponsavel1 = viewModel.NomeResponsavel1;
+                    aluno.Parentesco1 = viewModel.Parentesco1;
+                    aluno.NomeResponsavel2 = viewModel.NomeResponsavel2;
+                    aluno.Parentesco2 = viewModel.Parentesco2;
+                    aluno.Endereco ??= new Endereco();
+                    aluno.Endereco.NomeRua = viewModel.Endereco!.NomeRua;
+                    aluno.Endereco.NumeroRua = viewModel.Endereco.NumeroRua;
+                    aluno.Endereco.Complemento = viewModel.Endereco.Complemento;
+                    aluno.Endereco.CEP = viewModel.Endereco.CEP;
+                    aluno.Endereco.EstadoId = viewModel.Endereco.EstadoId;
 
-                    var alunoTelefone = _context.AlunoTelefone.FirstOrDefault(at => at.AlunoId == aluno.Id);
-                    if (alunoTelefone != null)
+                    aluno.AlunoTelefone?.Clear();
+                    if (viewModel.Telefones != null)
                     {
-                        var telefone = await _context.Telefone.FindAsync(alunoTelefone.TelefoneId);
-                        if (telefone != null)
-                        {
-                            telefone.DDD = viewModel.DDD;
-                            telefone.Numero = viewModel.Numero;
-                            _context.Telefone.Update(telefone);
-                        }
+                        aluno.AlunoTelefone = viewModel.Telefones
+                            .Where(t => t.Telefones != null)
+                            .Select(t => new AlunoTelefone
+                            {
+                                Telefone = new Telefone
+                                {
+                                    DDD = t.Telefones!.DDD,
+                                    Numero = t.Telefones.Numero,
+                                    EscolaId = viewModel.EscolaId,
+                                }
+                            }).ToList();
+                    }
+
+                    if (fotoUpload != null && fotoUpload.Length > 0)
+                    {
+                        using var memoryStream = new MemoryStream();
+                        await fotoUpload.CopyToAsync(memoryStream);
+                        aluno.Foto = memoryStream.ToArray();
                     }
                     else
                     {
-                        var telefone = new Telefone
-                        {
-                            DDD = viewModel.DDD,
-                            Numero = viewModel.Numero,
-                            EscolaId = viewModel.EscolaId,
-                        };
-
-                        _context.Telefone.Add(telefone);
-                        await _context.SaveChangesAsync();
-
-                        var novoAlunoTelefone = new AlunoTelefone
-                        {
-                            AlunoId = aluno.Id,
-                            TelefoneId = telefone.Id
-                        };
-
-                        _context.Add(novoAlunoTelefone);
+                        aluno.Foto = viewModel.Foto;
                     }
 
+                    _context.Update(aluno);
                     await _context.SaveChangesAsync();
 
                     TempData["MensagemSucesso"] = "Aluno atualizado com sucesso!";
@@ -282,7 +443,6 @@ namespace MVCCamiloMentoria.Controllers
                 {
                     if (!AlunoExists(viewModel.Id))
                         return NotFound();
-
                     throw;
                 }
                 catch (Exception ex)
@@ -291,63 +451,103 @@ namespace MVCCamiloMentoria.Controllers
                 }
             }
 
-            CarregarViewBags(viewModel);
-            CarregarViewBagsEstados(viewModel);
+
+            CarregarDependencias(viewModel);
             return View(viewModel);
         }
 
 
-        // GET: Aluno/Delete/5
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
                 return NotFound();
 
             var aluno = await _context.Aluno
+                .Where(a => !a.Excluido)
                 .Include(a => a.Turma)
                 .Include(a => a.Endereco)
+                    .ThenInclude(e => e!.Estado)
+                .Include(e => e.Estado)
                 .Include(a => a.Escola)
-                .FirstOrDefaultAsync(a => a.Id == id);
+                .Include(a => a.Aulas)
+                .Include(a => a.AlunoTelefone!)
+                    .ThenInclude(at => at.Telefone)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (aluno == null)
                 return NotFound();
+
+            var alunoTel = aluno.AlunoTelefone?
+                          .Where(at => at.Telefone != null)
+                          .Select(at => new AlunoTelefoneViewModel
+                          {
+                              AlunoId = at.AlunoId,
+                              TelefoneId = at.TelefoneId,
+                              Telefones = new TelefoneViewModel
+                              {
+                                  Id = at.Telefone!.Id,
+                                  DDD = at.Telefone.DDD,
+                                  Numero = at.Telefone.Numero,
+                              }
+                          }).ToList();
 
             var viewModel = new AlunoViewModel
             {
                 Id = aluno.Id,
                 Nome = aluno.Nome,
+                Foto = aluno.Foto,
                 DataNascimento = aluno.DataNascimento,
                 EmailEscolar = aluno.EmailEscolar,
                 AnoInscricao = aluno.AnoInscricao,
                 BolsaEscolar = aluno.BolsaEscolar,
-                TurmaId = aluno.TurmaId,
-                Turma = aluno.Turma,
-                AlunoTelefone = aluno.AlunoTelefone?
-                .Select(at => new AlunoTelefone
+                NomeResponsavel1 = aluno.NomeResponsavel1,
+                Parentesco1 = aluno.Parentesco1,
+                NomeResponsavel2 = aluno.NomeResponsavel2,
+                Parentesco2 = aluno.Parentesco2,
+                Endereco = aluno.Endereco != null ? new EnderecoViewModel
                 {
-                    DDD = at.Telefone?.DDD ?? 0,
-                    Numero = at.Telefone?.Numero ?? 0
-                }).ToList(),
-                Endereco = aluno.Endereco != null ? new Endereco
-                {
+                    Id = aluno.Endereco.Id,
                     NomeRua = aluno.Endereco.NomeRua,
                     NumeroRua = aluno.Endereco.NumeroRua,
                     Complemento = aluno.Endereco.Complemento,
                     CEP = aluno.Endereco.CEP,
                     EstadoId = aluno.Endereco.EstadoId,
-                    Estado = aluno.Endereco.Estado
+                    Estado = new List<EstadoViewModel>
+                    {
+                          new EstadoViewModel
+                          {
+                            Nome = aluno.Endereco.Estado!.Nome,
+                            id = aluno.Endereco.Estado.id,
+                            Sigla = aluno.Endereco.Estado.Sigla,
+                           }
+                    }
                 } : null,
 
-                EscolaId = aluno.EscolaId,
-                Escola = aluno.Escola,
-                AlunoResponsavel = aluno.AlunoResponsavel,
-                Aulas = aluno.Aulas
+
+                Escolas = new List<EscolaViewModel>
+                {   new EscolaViewModel
+                 {
+                    Nome = aluno.Escola!.Nome,
+                    Id = aluno.EscolaId,
+                 }
+                },
+                Turmas = new List<TurmaViewModel>
+                {
+                    new TurmaViewModel
+                    {
+                        NomeTurma = aluno.Turma!.NomeTurma,
+                        TurmaId = aluno.TurmaId,
+                    },
+                },
+                Telefones = alunoTel,
+
             };
 
             return View(viewModel);
         }
 
-        // POST: Aluno/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -361,7 +561,8 @@ namespace MVCCamiloMentoria.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                _context.Aluno.Remove(aluno);
+                aluno.Excluido = true;
+                _context.Aluno.Update(aluno);
                 await _context.SaveChangesAsync();
 
                 TempData["MensagemSucesso"] = "Aluno excluído com sucesso!";
@@ -383,6 +584,13 @@ namespace MVCCamiloMentoria.Controllers
             return _context.Aluno.Any(e => e.Id == id);
         }
 
+        private void CarregarDependencias(AlunoViewModel viewModel = null)
+        {
+            CarregarViewBags(viewModel);
+            CarregarViewBagsEstados(viewModel);
+            CarregarParentescoOptions(viewModel);
+        }
+
         private void CarregarViewBags(AlunoViewModel viewModel = null)
         {
             ViewBag.EscolaId = new SelectList(_context.Escola, "Id", "Nome", viewModel?.EscolaId);
@@ -397,12 +605,92 @@ namespace MVCCamiloMentoria.Controllers
                 {
                     Value = e.id.ToString(),
                     Text = $"{e.Nome} ({e.Sigla})"
-                })
-                .ToList();
+                }).ToList();
 
             ViewBag.Estados = estados;
         }
+
+        private void CarregarParentescoOptions(AlunoViewModel viewModel)
+        {
+            var parentescos = new List<string> { "PAI", "MÃE", "IRMÃO", "TIO", "AVÔ", "AVÓ", "TIA", "CUIDADOR" };
+            viewModel.ParentescoOptions = new SelectList(parentescos);
+        }
+
+        public IActionResult GetFoto(int id)
+        {
+            var aluno = _context.Aluno
+                                .FirstOrDefault(a => a.Id == id);
+
+            if (aluno == null || aluno.Foto == null || aluno.Foto.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(aluno.Foto, "image/jpeg");
+        }
+        private IQueryable<Aluno> AplicarFiltros(IQueryable<Aluno> query, AlunoViewModel filtro)
+        {
+            if (filtro == null)
+                return query;
+
+            if (!string.IsNullOrEmpty(filtro.NomeNormalizado))
+            {
+                query = query.Where(a => a.Nome.ToLower().Contains(filtro.NomeNormalizado));
+            }
+
+            if (!string.IsNullOrEmpty(filtro.EmailNormalizado))
+            {
+                query = query.Where(a => a.EmailEscolar.ToLower().Contains(filtro.EmailNormalizado));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.FiltroTurma))
+            {
+                query = query.Where(a => a.Turma != null &&
+                    (a.Turma.NomeTurma.ToLower().Contains(filtro.FiltroTurma.ToLower()) ||
+                     a.Turma.NomeTurma.Contains(filtro.FiltroTurma)));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.FiltroEscola))
+            {
+                query = query.Where(a => a.Escola != null &&
+                    (a.Escola.Nome.ToLower().Contains(filtro.FiltroEscola.ToLower()) ||
+                     (a.Escola.Id != null && a.Escola.Nome.Contains(filtro.FiltroEscola))));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.FiltroResponsavel))
+            {
+                query = query.Where(a =>
+                    (a.NomeResponsavel1 != null && a.NomeResponsavel1.ToLower().Contains(filtro.FiltroResponsavel.ToLower())) ||
+                    (a.NomeResponsavel2 != null && a.NomeResponsavel2.ToLower().Contains(filtro.FiltroResponsavel.ToLower())));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.FiltroGeralNormalizado) && filtro.FiltroGeralNormalizado.Length >= 3)
+            {
+                var termo = filtro.FiltroGeralNormalizado;
+                query = query.Where(a =>
+                    (a.Nome != null && a.Nome.ToLower().Contains(termo)) ||
+                    (a.EmailEscolar != null && a.EmailEscolar.ToLower().Contains(termo)) ||
+                    (a.Turma != null && a.Turma.NomeTurma.ToLower().Contains(termo)) ||
+                    (a.Escola != null && a.Escola.Nome.ToLower().Contains(termo)) ||
+                    (a.NomeResponsavel1 != null && a.NomeResponsavel1.ToLower().Contains(termo)) ||
+                    (a.NomeResponsavel2 != null && a.NomeResponsavel2.ToLower().Contains(termo))
+                );
+            }
+
+            return query;
+        }
+        private async Task<List<EstadoViewModel>> AcessarEstados()
+        {
+            var estados = await _context.Estado
+             .Select(ac => new EstadoViewModel
+             {
+                 id = ac.id,
+                 Nome = ac.Nome,
+                 Sigla = ac.Sigla,
+             }).ToListAsync();
+
+            return estados;
+        }
+
     }
-
 }
-

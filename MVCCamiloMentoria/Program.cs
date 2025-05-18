@@ -1,16 +1,35 @@
 using Microsoft.EntityFrameworkCore;
 using MVCCamiloMentoria.Data;
+using MVCCamiloMentoria.Integracao;
+using MVCCamiloMentoria.Integracao.Interfaces;
+using MVCCamiloMentoria.Integracao.Refit;
+using Refit;
 
 var builder = WebApplication.CreateBuilder(args);
-// Add services to the container.
+
+builder.Services.AddDistributedMemoryCache(); 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
-builder.Services.AddDbContext<EscolaContext>(options => {
+builder.Services.AddDbContext<EscolaContext>(options =>     {
     options.UseSqlServer(builder.Configuration.GetConnectionString("SchoolMVCManagerConnectionString"));
 });
 
+builder.Services.AddScoped<IViaCepIntegracao, ViaCepIntegracao>();
+builder.Services.AddRefitClient<IViaCepIntegracaoRefit>()
+    .ConfigureHttpClient(c =>
+    {
+        c.BaseAddress = new Uri("https://viacep.com.br");
+    });
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -24,7 +43,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthorization();
-
+app.UseSession();
 app.MapStaticAssets();
 
 app.MapControllerRoute(

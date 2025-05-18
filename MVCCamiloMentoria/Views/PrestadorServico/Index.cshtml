@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MVCCamiloMentoria.ViewModels.PrestadorServicoViewModel>
+
+@{
+	ViewData["Title"] = "Prestadores de Serviço";
+}
+
+<div class="card shadow-sm mb-5">
+	<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+		<h4 class="mb-0">Prestadores de Serviço</h4>
+		<form asp-action="Index" method="get" class="d-flex w-100 w-md-auto" style="max-width: 720px;">
+			<input type="text" name="FiltroGeral" class="form-control form-control-md me-2" placeholder="Pesquisar por nome, cnpj, cpf, empresa etc." />
+			<button type="submit" class="btn btn-light btn-md text-primary">🔍 Pesquisar</button>
+		</form>
+	</div>
+	<table class="table table-bordered table-striped">
+		<thead class="thead-dark">
+			<tr>
+				<th>@Html.DisplayNameFor(model => model.Nome)</th>
+				<th>@Html.DisplayNameFor(model => model.CPF)</th>
+				<th>@Html.DisplayNameFor(model => model.CNPJ)</th>
+				<th>@Html.DisplayNameFor(model => model.EmpresaNome)</th>
+				<th>@Html.DisplayNameFor(model => model.Escola)</th>
+				<th class="text-center">Ações</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>@Html.DisplayFor(modelItem => item.Nome)</td>
+					<td>@Html.DisplayFor(modelItem => item.CPF)</td>
+					<td>@Html.DisplayFor(modelItem => item.CNPJ)</td>
+					<td>@Html.DisplayFor(modelItem => item.EmpresaNome)</td>
+					<td>@Html.DisplayFor(modelItem => item.Escola.Nome)</td>
+					<td class="d-flex justify-content-around">
+						<div class="d-flex justify-content-center gap-2">
+							<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm px-3" title="Detalhes">
+								<i class="fas fa-eye"></i>
+							</a>
+							<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm px-3" title="Editar">
+								<i class="fas fa-pencil-alt"></i>
+							</a>
+							<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm px-3" title="Excluir">
+								<i class="fas fa-trash-alt"></i>
+							</a>
+						</div>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+

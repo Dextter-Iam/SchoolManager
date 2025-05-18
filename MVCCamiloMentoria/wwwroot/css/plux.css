@@ -185,13 +185,11 @@ thead.thead-dark th {
 
 /* --- Footer --- */
 .footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    line-height: 60px;
+    background: #1b6ec2;
+    color: white;
     text-align: center;
-    background-color: #f8f9fa;
-    border-top: 1px solid #dee2e6;
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
 }
 
 /* --- Transições suaves --- */

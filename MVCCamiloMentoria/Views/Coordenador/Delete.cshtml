@@ -1,0 +1,75 @@
+﻿@model MVCCamiloMentoria.ViewModels.CoordenadorViewModel
+
+@{
+    ViewData["Title"] = "Excluir Coordenador";
+}
+
+<div class="card shadow-sm mb-5">
+    <div class="card-header bg-danger text-white">
+        <h4 class="mb-0">Confirmação de Exclusão</h4>
+    </div>
+    <div class="card-body">
+        <h5 class="text-danger">Você tem certeza que deseja excluir o coordenador abaixo?</h5>
+        <hr />
+
+        <dl class="row">
+            <dt class="col-sm-3">Nome</dt>
+            <dd class="col-sm-9">@Model.Nome</dd>
+
+            <dt class="col-sm-3">Matrícula</dt>
+            <dd class="col-sm-9">@Model.Matricula</dd>
+
+            <dt class="col-sm-3">Escola</dt>
+            <dd class="col-sm-9">
+                @if (Model.Escola != null)
+                {
+                    @Model.Escola.Nome
+                }
+                else
+                {
+                    <span class="text-muted">Nenhuma escola vinculada</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Endereço</dt>
+            <dd class="col-sm-9">
+                @if (Model.Endereco != null)
+                {
+                    @($"{Model.Endereco.NomeRua}, {Model.Endereco.NumeroRua}")
+                }
+                else
+                {
+                    <span class="text-muted">Endereço não informado</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Telefone</dt>
+            <dd class="col-sm-9">
+                @if (Model.Telefones != null && Model.Telefones.Any())
+                {
+                    foreach (var telefone in Model.Telefones)
+                    {
+                        <p>(@telefone.DDD) @telefone.Numero.ToString("00000-0000")</p>
+                    }
+                }
+                else
+                {
+                    <span class="text-muted">Telefone não cadastrado</span>
+                }
+            </dd>
+        </dl>
+
+        <div class="text-end mt-4">
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger px-4">
+                    <i class="fas fa-trash-alt"></i> Confirmar Exclusão
+                </button>
+                <a asp-action="Index" class="btn btn-secondary ms-2">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+

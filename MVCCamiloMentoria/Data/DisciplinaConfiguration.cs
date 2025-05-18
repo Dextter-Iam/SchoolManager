@@ -16,11 +16,7 @@ namespace MVCCamiloMentoria.Data
                    .IsRequired()
                    .HasMaxLength(50);
 
-            builder.HasMany(d => d.Professores)
-                   .WithMany(p => p.Disciplinas)
-                   .UsingEntity(pd => pd.ToTable("ProfessorDisciplina"));
-
-            builder.HasMany(d => d.Aula)
+            builder.HasMany(d => d.Aulas)
                    .WithOne(a => a.Disciplina)
                    .HasForeignKey(a => a.DisciplinaId)
                    .OnDelete(DeleteBehavior.Cascade);

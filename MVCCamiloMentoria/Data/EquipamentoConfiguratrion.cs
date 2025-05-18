@@ -20,6 +20,9 @@ namespace MVCCamiloMentoria.Data
                    .IsRequired()
                    .HasDefaultValue(true);
 
+            builder.Property(p => p.Excluido)
+                    .HasDefaultValue(false);
+
             builder.HasOne(e => e.Modelo)
                    .WithMany(m => m.Equipamentos)
                    .HasForeignKey(e => e.ModeloId)

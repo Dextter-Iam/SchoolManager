@@ -1,0 +1,41 @@
+﻿@model MVCCamiloMentoria.Models.PrestadorServico
+
+@{
+    ViewData["Title"] = "Detalhes do Prestador de Serviço";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Detalhes do Prestador de Serviço</h4>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Nome do Prestador</dt>
+            <dd class="col-sm-9">@Model.Nome</dd>
+
+            <dt class="col-sm-3">CPF</dt>
+            <dd class="col-sm-9">@Model.CPF</dd>
+
+            <dt class="col-sm-3">CNPJ</dt>
+            <dd class="col-sm-9">@Model.CNPJ</dd>
+
+            <dt class="col-sm-3">Nome da Empresa</dt>
+            <dd class="col-sm-9">@Model.EmpresaNome</dd>
+
+            <dt class="col-sm-3">Finalidade do Serviço</dt>
+            <dd class="col-sm-9">@Model.ServicoFinalidade</dd>
+
+            <dt class="col-sm-3">Escola</dt>
+            <dd class="col-sm-9">@Model.Escola?.Nome</dd>
+        </dl>
+
+        <div class="mt-4 text-end">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Editar
+            </a>
+            <a asp-action="Index" class="btn btn-secondary ms-2">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+        </div>
+    </div>
+</div>

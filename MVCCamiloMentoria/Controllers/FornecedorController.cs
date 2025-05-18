@@ -1,6 +1,4 @@
-﻿// ... using directives mantidos
-
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVCCamiloMentoria.Models;
@@ -18,9 +16,13 @@ namespace MVCCamiloMentoria.Controllers
         }
 
         // GET: FornecedorController
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(FornecedorViewModel filtro = null)
         {
-            var fornecedores = await _context.Fornecedor
+            var query = _context.Fornecedor.AsQueryable();
+            query = AplicarFiltros(query, filtro);
+
+
+            var fornecedores = await query
                                  .Select(f => new FornecedorViewModel
                                  {
                                      Nome = f.Nome,
@@ -31,6 +33,8 @@ namespace MVCCamiloMentoria.Controllers
                                      FinalidadeFornecedor = f.FinalidadeFornecedor,
                                      Id = f.Id,
                                  }).ToListAsync();
+
+            ViewBag.AplicarFiltros = filtro;
             return View(fornecedores);
         }
 
@@ -236,5 +240,61 @@ namespace MVCCamiloMentoria.Controllers
         {
             ViewBag.EscolaId = new SelectList(_context.Escola, "Id", "Nome", viewModel?.EscolaId);
         }
+        private IQueryable<Fornecedor> AplicarFiltros(IQueryable<Fornecedor> query, FornecedorViewModel filtro)
+        {
+            if (filtro == null)
+                return query;
+
+            if (!string.IsNullOrWhiteSpace(filtro.Nome))
+            {
+                var nomeFiltro = filtro.Nome.Trim().ToLower();
+                query = query.Where(a => a.Nome != null && a.Nome.ToLower().Contains(nomeFiltro));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.CNPJ))
+            {
+                var cnpjFiltro = filtro.CNPJ.Trim().ToLower();
+                query = query.Where(a => a.CNPJ != null && a.CNPJ.ToLower().Contains(cnpjFiltro));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.CPF))
+            {
+                var cpfFiltro = filtro.CPF.Trim().ToLower();
+                query = query.Where(a => a.CPF != null && a.CPF.ToLower().Contains(cpfFiltro));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.FinalidadeFornecedor))
+            {
+                var finalidadeFiltro = filtro.FinalidadeFornecedor.Trim().ToLower();
+                query = query.Where(a => a.FinalidadeFornecedor != null && a.FinalidadeFornecedor.ToLower().Contains(finalidadeFiltro));
+            }
+
+            if (filtro.EscolaId > 0)
+            {
+                query = query.Where(a => a.EscolaId == filtro.EscolaId);
+            }
+            else if (filtro.Escola != null && !string.IsNullOrWhiteSpace(filtro.Escola.Nome))
+            {
+                var escolaFiltro = filtro.Escola.Nome.Trim().ToLower();
+                query = query.Where(a => a.Escola != null && a.Escola.Nome.ToLower().Contains(escolaFiltro));
+            }
+
+            if (!string.IsNullOrEmpty(filtro.FiltroGeralNormalizado) && filtro.FiltroGeralNormalizado.Length >= 3)
+            {
+                var termo = filtro.FiltroGeralNormalizado;
+                bool termoEhNumero = long.TryParse(termo, out long termoNumero);
+
+                query = query.Where(c =>
+                    (c.Nome != null && c.Nome.ToLower().Contains(termo)) ||
+                    (c.CNPJ != null && c.CNPJ.ToLower().Contains(termo)) ||
+                    (c.CPF != null && c.CPF.ToLower().Contains(termo)) ||
+                    (c.FinalidadeFornecedor != null && c.FinalidadeFornecedor.ToLower().Contains(termo)) ||
+                    (c.Escola != null && c.Escola.Nome.ToLower().Contains(termo))
+                );
+            }
+
+            return query;
+        }
+
     }
 }

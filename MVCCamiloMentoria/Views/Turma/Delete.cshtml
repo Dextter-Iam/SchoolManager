@@ -1,0 +1,35 @@
+﻿@model MVCCamiloMentoria.ViewModels.TurmaViewModel
+
+@{
+    ViewData["Title"] = "Excluir Turma";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">Confirmação de Exclusão</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning d-flex align-items-center" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <div>
+                            <strong>Atenção:</strong> Ao excluir esta turma, todos os alunos associados a ela também serão excluídos permanentemente.
+                        </div>
+                    </div>
+
+                    <p>Tem certeza que deseja excluir a turma <strong>@Model.NomeTurma</strong>?</p>
+
+                    <form asp-action="Delete" method="post" class="text-end">
+                        <input type="hidden" name="id" value="@Model.TurmaId" />
+                        <button type="submit" class="btn btn-danger px-4">
+                            <i class="fas fa-trash-alt"></i> Confirmar
+                        </button>
+                        <a href="@Url.Action("Index")" class="btn btn-secondary ms-2">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

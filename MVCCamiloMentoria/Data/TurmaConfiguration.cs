@@ -21,6 +21,9 @@ public class TurmaConfiguration : IEntityTypeConfiguration<Turma>
                .IsRequired()
                .HasMaxLength(10);
 
+        builder.Property(p => p.Excluido)
+                .HasDefaultValue(false);
+
         builder.HasOne(t => t.Escola)
                .WithMany(e => e.Turmas)
                .HasForeignKey(t => t.EscolaId)

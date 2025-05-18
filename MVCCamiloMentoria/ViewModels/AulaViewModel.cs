@@ -1,4 +1,5 @@
 ﻿using MVCCamiloMentoria.Models;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -28,28 +29,74 @@ namespace MVCCamiloMentoria.ViewModels
         [Display(Name = "Escola")]
         [Required(ErrorMessage = "A escola é obrigatória.")]
         public int EscolaId { get; set; }
-        public Escola? Escola { get; set; }
+        public EscolaViewModel? Escola { get; set; }
 
         [Display(Name = "Professor")]
         [Required(ErrorMessage = "O professor é obrigatório.")]
+
         public int ProfessorId { get; set; }
-        public Professor? Professor { get; set; }
+        public ProfessorViewModel? Professor { get; set; }
 
         [Display(Name = "Turma")]
         [Required(ErrorMessage = "A turma é obrigatória.")]
         public int TurmaId { get; set; }
-        public Turma? Turma { get; set; }
+        public TurmaViewModel? Turma { get; set; }
 
         [Display(Name = "Disciplina")]
         [Required(ErrorMessage = "A disciplina é obrigatória.")]
         public int DisciplinaId { get; set; }
-        public Disciplina? Disciplina { get; set; }
+        public DisciplinaViewModel? Disciplina { get; set; }
 
         [Display(Name = "Confirmação de Presença")]
         public bool ConfirmacaoPresenca { get; set; }
 
         [Display(Name = "Alunos Presentes")]
-        public List<Aluno>? AlunosPresentes { get; set; }
+        public List<AlunoViewModel>? AlunosPresentes { get; set; }
+
+        //FILTROS
+
+        [NotMapped]
+        [DisplayName("Filtrar por Nome")]
+        public string? FiltroNome { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Horario Inicio")]
+        public string? FiltroHorarioInicio { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Horario Inicio")]
+        public string? FiltroHorarioFim { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Escola")]
+        public string? FiltroEscola { get; set; }
+
+        [NotMapped]
+        [DisplayName("Buscar por qualquer campo")]
+        public string? FiltroGeral { get; set; }
+
+        [NotMapped]
+        public string FiltroGeralNormalizado => string.IsNullOrWhiteSpace(FiltroGeral) ? string.Empty : FiltroGeral.Trim().ToLower();
+
+
+        [NotMapped]
+        public string HorarioInicioNormalizado => NormalizarFiltro(FiltroHorarioInicio);
+
+        [NotMapped]
+        public string HorarioFimNormalizado => NormalizarFiltro(FiltroHorarioFim);
+
+        [NotMapped]
+        public string NomeNormalizado => NormalizarFiltro(FiltroNome);
+
+        [NotMapped]
+        public string EscolaNormalizado => NormalizarFiltro(FiltroEscola);
+
+        private string NormalizarFiltro(string? input)
+        {
+            return string.IsNullOrWhiteSpace(input) ? string.Empty : input.Trim().ToLower();
+        }
+
+
     }
 }
     

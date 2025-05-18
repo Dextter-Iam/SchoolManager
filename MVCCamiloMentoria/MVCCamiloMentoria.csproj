@@ -7,46 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Views\Coordenador\**" />
-    <Compile Remove="Views\Diretor\**" />
     <Compile Remove="Views\Endereco\**" />
     <Compile Remove="Views\Marca\**" />
     <Compile Remove="Views\Modelo\**" />
-    <Compile Remove="Views\PrestadorServico\**" />
-    <Compile Remove="Views\Professor\**" />
-    <Compile Remove="Views\Responsavel\**" />
-    <Compile Remove="Views\Supervisor\**" />
-    <Compile Remove="Views\Turma\**" />
-    <Content Remove="Views\Coordenador\**" />
-    <Content Remove="Views\Diretor\**" />
     <Content Remove="Views\Endereco\**" />
     <Content Remove="Views\Marca\**" />
     <Content Remove="Views\Modelo\**" />
-    <Content Remove="Views\PrestadorServico\**" />
-    <Content Remove="Views\Professor\**" />
-    <Content Remove="Views\Responsavel\**" />
-    <Content Remove="Views\Supervisor\**" />
-    <Content Remove="Views\Turma\**" />
-    <EmbeddedResource Remove="Views\Coordenador\**" />
-    <EmbeddedResource Remove="Views\Diretor\**" />
     <EmbeddedResource Remove="Views\Endereco\**" />
     <EmbeddedResource Remove="Views\Marca\**" />
     <EmbeddedResource Remove="Views\Modelo\**" />
-    <EmbeddedResource Remove="Views\PrestadorServico\**" />
-    <EmbeddedResource Remove="Views\Professor\**" />
-    <EmbeddedResource Remove="Views\Responsavel\**" />
-    <EmbeddedResource Remove="Views\Supervisor\**" />
-    <EmbeddedResource Remove="Views\Turma\**" />
-    <None Remove="Views\Coordenador\**" />
-    <None Remove="Views\Diretor\**" />
     <None Remove="Views\Endereco\**" />
     <None Remove="Views\Marca\**" />
     <None Remove="Views\Modelo\**" />
-    <None Remove="Views\PrestadorServico\**" />
-    <None Remove="Views\Professor\**" />
-    <None Remove="Views\Responsavel\**" />
-    <None Remove="Views\Supervisor\**" />
-    <None Remove="Views\Turma\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -62,10 +34,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+    <PackageReference Include="Refit" Version="8.0.0" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
 </Project>

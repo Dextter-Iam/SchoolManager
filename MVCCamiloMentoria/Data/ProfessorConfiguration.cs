@@ -16,29 +16,41 @@ namespace MVCCamiloMentoria.Data
                    .IsRequired()
                    .HasMaxLength(200);
 
+            builder.Property(p => p.Excluido)
+                   .HasDefaultValue(false);
+
             builder.Property(p => p.Matricula)
-                   .HasMaxLength(6)
                    .IsRequired();
 
-
-            builder.HasMany(d => d.Disciplinas)
+            builder.HasOne(p => p.Escola)
                    .WithMany(p => p.Professores)
-                   .UsingEntity(pd => pd.ToTable("ProfessorDisciplina"));
-
-            builder.HasMany(p => p.Aulas) 
-                   .WithOne(a => a.Professor)  
-                   .HasForeignKey(a => a.ProfessorId) 
+                   .HasForeignKey(p => p.EscolaId)
                    .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasMany(e => e.Telefones)
-                   .WithOne(e => e.Professor)
-                   .HasForeignKey(e => e.ProfessorId)
-                   .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(p => p.Endereco)
                    .WithOne()
                    .HasForeignKey<Professor>(p => p.EnderecoId)
                    .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(p => p.Telefones)
+                   .WithOne(t => t.Professor)
+                   .HasForeignKey(t => t.ProfessorId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(p => p.Aulas)
+                   .WithOne(a => a.Professor)
+                   .HasForeignKey(a => a.ProfessorId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(p => p.Turmas)
+                   .WithOne(pt => pt.Professor)
+                   .HasForeignKey(pt => pt.ProfessorId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(p => p.Disciplinas)
+                   .WithOne(pd => pd.Professor)
+                   .HasForeignKey(pd => pd.ProfessorId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

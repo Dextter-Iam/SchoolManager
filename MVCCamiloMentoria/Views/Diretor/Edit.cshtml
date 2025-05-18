@@ -1,0 +1,194 @@
+﻿@model MVCCamiloMentoria.ViewModels.DiretorViewModel
+
+@{
+    ViewData["Title"] = "Editar Diretor";
+}
+
+<div class="container">
+    <div class="justify-content-center">
+        <br />
+        <h3 class="mb-4">Editar Diretor</h3>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <!-- Seção Informações Pessoais -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Informações Pessoais</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label asp-for="Nome" class="form-label"></label>
+                            <input asp-for="Nome" class="form-control" />
+                            <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Matricula" class="form-label"></label>
+                            <input asp-for="Matricula" class="form-control" />
+                            <span asp-validation-for="Matricula" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Telefones</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.Telefones != null && Model.Telefones.Any())
+                        {
+                            var telefone = Model.Telefones.FirstOrDefault(); 
+                            <div class="row telefone-item mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">DDD</label>
+                                    <input name="Telefones[0].DDD" class="form-control" value="@telefone.DDD" />
+                                    <span asp-validation-for="Telefones[0].DDD" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="form-label">Número</label>
+                                    <input name="Telefones[0].Numero" class="form-control" value="@telefone.Numero" />
+                                    <span asp-validation-for="Telefones[0].Numero" class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row telefone-item mb-3">
+                                <div class="col-sm-12">
+                                    <span class="text-muted">Telefone não cadastrado</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+				<div class="card mb-4">
+					<div class="card-header bg-primary text-white">
+						<h5 class="mb-0">Escola</h5>
+					</div>
+					<div class="card-body">
+						<div class="form-group mb-3">
+							<label asp-for="EscolaId" class="form-label"></label>
+							<select asp-for="EscolaId" class="form-select" asp-items="ViewBag.Escolas"></select>
+							<span asp-validation-for="EscolaId" class="text-danger"></span>
+						</div>
+					</div>
+				</div>
+
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mt-4">Endereço</h5>
+                        </div>
+                        <div>
+                        <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label asp-for="Endereco.NomeRua" class="form-label">Rua</label>
+                            <input asp-for="Endereco.NomeRua" class="form-control" id="Endereco_NomeRua" />
+                            <span asp-validation-for="Endereco.NomeRua" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Endereco.NumeroRua" class="form-label">Número</label>
+                            <input asp-for="Endereco.NumeroRua" class="form-control" id="Endereco_NumeroRua" />
+                            <span asp-validation-for="Endereco.NumeroRua" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Endereco.Complemento" class="form-label">Complemento</label>
+                            <input asp-for="Endereco.Complemento" class="form-control" id="Endereco_Complemento" />
+                            <span asp-validation-for="Endereco.Complemento" class="text-danger"></span>
+                        </div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="Endereco.CEPMascara" class="form-label">CEP</label>
+                                <input asp-for="Endereco.CEPMascara" class="form-control" id="Endereco_CEP" />
+                                <span asp-validation-for="Endereco.CEPMascara" class="text-danger"></span>
+                            </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Endereco.EstadoId" class="form-label">Estado</label>
+                                <select asp-for="Endereco.EstadoId" class="form-control" id="Estado">
+                                <option value="">Selecione um Estado</option>
+                                @if (Model?.Endereco?.Estado != null)
+                                {
+                                    @foreach (var estado in Model.Endereco.Estado)
+                                    {
+                                        <option value="@estado.id">@estado.Nome</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="Endereco.EstadoId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <!-- Botões de Ação -->
+                <div class="form-group text-end">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary ms-2">
+                        <i class="fas fa-arrow-left"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#Endereco_CEP').blur(function() {
+            const cep = $(this).val().replace(/\D/g, '');
+            if (cep.length !== 8) return;
+
+
+            $.getJSON(`/api/cep/${cep}`, function(data) {
+                // console.log("Dados da API:", data);
+
+
+                if (data.logradouro) {
+                    $("#Endereco_NomeRua").val(data.logradouro).trigger('change');
+                }
+
+                // if (data.localidade) {
+                //     $("#Endereco_Cidade").val(data.localidade).trigger('change');
+                // }
+
+                const estadoSelect = $("#Estado");
+                if (data.uf || data.estado) {
+                    const estadoParaBuscar = data.estado || data.uf;
+                    const estadoEncontrado = estadoSelect.find("option").filter(function() {
+                        return $(this).text().trim() === estadoParaBuscar;
+                    }).val();
+
+                    if (estadoEncontrado) {
+                        estadoSelect.val(estadoEncontrado).trigger('change');
+                    } else {
+                        console.warn("Estado não encontrado:", estadoParaBuscar);
+                    }
+                }
+            }).fail(function() {
+                alert('CEP não encontrado ou erro na consulta!');
+
+                $("#Endereco_NomeRua, #Endereco_Cidade").val('');
+                $("#Estado").val('');
+            });
+        });
+    });
+</script>

@@ -14,50 +14,38 @@ namespace MVCCamiloMentoria.ViewModels
         [DisplayName("Nome da Escola")]
         [StringLength(200, ErrorMessage = "O nome deve ter no máximo 200 caracteres.")]
         public string? Nome { get; set; }
+        public EnderecoViewModel? Endereco { get; set; }
+        public List<SupervisorEscolaViewModel>? Supervisores { get; set; }
+        public List<TelefoneViewModel>? Telefones { get; set; } = new List<TelefoneViewModel>();
+        public List<TurmaViewModel>? Turmas { get; set; }
+        public List<ProfessorViewModel>? Professores { get; set; }
+        public List<DiretorViewModel>? Diretores { get; set; }
+        public List<AlunoViewModel>? Alunos { get; set; }
+        public List<CoordenadorViewModel>? Coordenadores  { get; set; }
+        public List<DisciplinaViewModel>? Disciplina { get; set; }
+        public List<EquipamentoViewModel>? Equipamentos { get; set; }
+        public List<FornecedorViewModel>? Fornecedores { get; set; }
+        public List<PrestadorServicoViewModel>? PrestadorServico { get; set; }
 
-        [Required(ErrorMessage = "Selecione um estado.")]
-        [DisplayName("Estado (UF)")]
-        public int? EstadoId { get; set; }
+        //FILTROS 
+        [NotMapped]
+        [DisplayName("Filtrar por Nome")]
+        public string? FiltroNome { get; set; }
 
-        [Required(ErrorMessage = "O nome da rua é obrigatório.")]
-        [DisplayName("Nome da Rua")]
-        [StringLength(200)]
-        public string? NomeRua { get; set; }
+        [NotMapped]
+        [DisplayName("Buscar por qualquer campo")]
+        public string? FiltroGeral { get; set; }
 
-        [Required(ErrorMessage = "O número da rua é obrigatório.")]
-        [DisplayName("Número")]
-        [Range(1, int.MaxValue, ErrorMessage = "O número da rua deve ser maior que zero.")]
-        public int NumeroRua { get; set; }
+        [NotMapped]
+        public string FiltroGeralNormalizado => string.IsNullOrWhiteSpace(FiltroGeral) ? string.Empty : FiltroGeral.Trim().ToLower();
 
-        [DisplayName("Complemento")]
-        [StringLength(150, ErrorMessage = "O complemento deve ter no máximo 150 caracteres.")]
-        public string? Complemento { get; set; }
+        [NotMapped]
+        public string NomeNormalizado => NormalizarFiltro(FiltroNome);
 
-        [Required(ErrorMessage = "O CEP é obrigatório.")]
-        [DisplayName("CEP")]
-        [Range(1000000, 99999999, ErrorMessage = "CEP inválido.")]
-        public int CEP { get; set; }
+        private string NormalizarFiltro(string input)
+        {
+            return string.IsNullOrWhiteSpace(input) ? string.Empty : input.Trim().ToLower();
+        }
 
-        public Estado? Estado { get; set; }
-
-        public int EnderecoId { get; set; }
-
-        public Endereco? Endereco { get; set; }
-
-        public List<Telefone>? Telefones { get; set; }
-
-        public List<Turma>? Turmas { get; set; }
-
-        public List<Professor>? Professores { get; set; }
-
-        public List<Aluno>? Alunos { get; set; }
-
-        public List<Disciplina>? Disciplina { get; set; }
-
-        public List<Equipamento>? Equipamentos { get; set; }
-
-        public List<Fornecedor>? Fornecedores { get; set; }
-
-        public List<PrestadorServico>? PrestadorServico { get; set; }
     }
 }

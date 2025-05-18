@@ -1,0 +1,171 @@
+﻿@model MVCCamiloMentoria.ViewModels.ResponsavelViewModel
+
+@{
+    ViewData["Title"] = "Cadastrar Responsável";
+}
+
+<div class="container">
+    <div class="justify-content-center">
+        <br />
+        <h3 class="mb-4">Cadastro de Responsável</h3>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Informações Pessoais</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label asp-for="Nome" class="form-label"></label>
+                            <input asp-for="Nome" class="form-control" />
+                            <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Telefone</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Telefones[0].DDD" class="form-label"></label>
+                                    <input asp-for="Telefones[0].DDD" class="form-control" />
+                                    <span asp-validation-for="Telefones[0].DDD" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Telefones[0].Numero" class="form-label"></label>
+                                    <input asp-for="Telefones[0].Numero" class="form-control" />
+                                    <span asp-validation-for="Telefones[0].Numero" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Alunos Relacionados</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label class="form-label">Selecione os Alunos</label>
+                            <select asp-for="AlunoIds" class="form-select" multiple="multiple" asp-items="ViewBag.Alunos"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Endereço</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label asp-for="Endereco.NomeRua" class="form-label"></label>
+                            <input asp-for="Endereco.NomeRua" class="form-control" id="Endereco_NomeRua" />
+                            <span asp-validation-for="Endereco.NomeRua" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Endereco.NumeroRua" class="form-label"></label>
+                                    <input asp-for="Endereco.NumeroRua" class="form-control" id="Endereco_NumeroRua" />
+                                    <span asp-validation-for="Endereco.NumeroRua" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Endereco.Complemento" class="form-label"></label>
+                                    <input asp-for="Endereco.Complemento" class="form-control" id="Endereco_Complemento" />
+                                    <span asp-validation-for="Endereco.Complemento" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Endereco.CEP" class="form-label"></label>
+                            <input asp-for="Endereco.CEP" class="form-control" id="Endereco_CEP" />
+                            <span asp-validation-for="Endereco.CEP" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Estado</label>
+                            @Html.DropDownListFor(model => model.Endereco.EstadoId,
+                                     (SelectList)ViewBag.Estados,
+                                     "Selecione um estado",
+                                     new { @class = "form-control", id = "Estado" })
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="form-group text-end">
+                    <input type="submit" value="Cadastrar" class="btn btn-primary px-4" />
+                    <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#Endereco_CEP').blur(function() {
+            const cep = $(this).val().replace(/\D/g, '');
+            if (cep.length !== 8) return;
+
+
+            $.getJSON(`/api/cep/${cep}`, function(data) {
+                // console.log("Dados da API:", data);
+
+
+                if (data.logradouro) {
+                    $("#Endereco_NomeRua").val(data.logradouro).trigger('change');
+                }
+
+                // if (data.localidade) {
+                //     $("#Endereco_Cidade").val(data.localidade).trigger('change');
+                // }
+
+
+                const estadoSelect = $("#Estado");
+                if (data.uf || data.estado) {
+                    const estadoParaBuscar = data.estado || data.uf;
+                    const estadoEncontrado = estadoSelect.find("option").filter(function() {
+                        return $(this).text().trim() === estadoParaBuscar;
+                    }).val();
+
+                    if (estadoEncontrado) {
+                        estadoSelect.val(estadoEncontrado).trigger('change');
+                    } else {
+                        console.warn("Estado não encontrado:", estadoParaBuscar);
+                    }
+                }
+            }).fail(function() {
+                alert('CEP não encontrado ou erro na consulta!');
+
+                $("#Endereco_NomeRua, #Endereco_Cidade").val('');
+                $("#Estado").val('');
+            });
+        });
+    });
+</script>

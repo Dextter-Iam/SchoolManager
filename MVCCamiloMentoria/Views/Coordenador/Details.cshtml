@@ -1,0 +1,66 @@
+﻿@model MVCCamiloMentoria.ViewModels.CoordenadorViewModel
+
+@{
+    ViewData["Title"] = "Detalhes do Coordenador";
+}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">Detalhes do Coordenador</div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Nome</dt>
+            <dd class="col-sm-9">@Model.Nome</dd>
+
+            <dt class="col-sm-3">Matrícula</dt>
+            <dd class="col-sm-9">@Model.Matricula</dd>
+
+            <dt class="col-sm-3">Escola</dt>
+            <dd class="col-sm-9">
+                @if (Model.Escola != null)
+                {
+                    @Model.Escola.Nome
+                }
+                else
+                {
+                    <span class="text-muted">Nenhuma escola vinculada</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Endereço</dt>
+            <dd class="col-sm-9">
+                @if (Model.Endereco != null )
+                {
+                    @($"{Model.Endereco.NomeRua}, {Model.Endereco.NumeroRua}")
+                }
+                else
+                {
+                    <span class="text-muted">Endereço não informado</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Telefone</dt>
+            <dd class="col-sm-9">
+                @if (Model.Telefones != null && Model.Telefones.Any())
+                {
+                    foreach (var telefone in Model.Telefones)
+                    {
+                        <p>(@telefone.DDD) @telefone.Numero.ToString("00000-0000")</p>
+                    }
+                }
+                else
+                {
+                    <span class="text-muted">Telefone não cadastrado</span>
+                }
+            </dd>
+        </dl>
+
+        <div class="text-end mt-4">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
+                <i class="fas fa-edit"></i> Editar
+            </a>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+        </div>
+    </div>
+</div>

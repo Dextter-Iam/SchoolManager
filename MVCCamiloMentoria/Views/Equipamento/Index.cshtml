@@ -1,20 +1,24 @@
 ﻿@model IEnumerable<MVCCamiloMentoria.ViewModels.EquipamentoViewModel>
 
-<div class="container">
+<div class="container-fluid">
     <p></p>
     <div class="card shadow-sm mb-5">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Equipamentos Cadastrados</h4>
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-4">Equipamentos Cadastrados</h4>
+            <form asp-action="Index" method="get" class="d-flex w-100 w-md-auto" style="max-width: 720px;">
+                <input type="text" name="FiltroGeral" class="form-control form-control-md me-2" placeholder="Pesquisar por nome, marca, modelo etc." />
+                <button type="submit" class="btn btn-light btn-md text-primary">🔍 Pesquisar</button>
+            </form>
         </div>
         <div class="card-body">
-            <table class="table table-bordered table-striped">
+            <table id ="equipamentosTable" class="table table-bordered table-striped">
                 <thead class="thead-dark">
                     <tr>
-                        <th>@Html.DisplayNameFor(model => model.Nome)</th>
-                        <th>@Html.DisplayNameFor(model => model.StatusOperacional)</th>
-                        <th>@Html.DisplayNameFor(model => model.Marca)</th>
-                        <th>@Html.DisplayNameFor(model => model.Modelo)</th>
-                        <th>@Html.DisplayNameFor(model => model.Escola)</th>
+                        <th class="sortable-column" data-column="0">@Html.DisplayNameFor(model => model.Nome)</th>
+                        <th class="sortable-column" data column = "1"> @Html.DisplayNameFor(model => model.StatusOperacional)</th>
+                        <th class="sortable-column" data-column = "2" >@Html.DisplayNameFor(model => model.Marca)</th>
+                        <th class="sortable-column" data-column="3">@Html.DisplayNameFor(model => model.Modelo)</th>
+                        <th class="sortable-column" data-column="4">@Html.DisplayNameFor(model => model.Escola)</th>
                         <th class="text-center">Ações</th>
                     </tr>
                 </thead>
@@ -31,15 +35,15 @@
                             <td>@item.Escola?.Nome</td>
                             <td class="text-center">
 
-                                <div class="d-flex justify-content-center">
-                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm mx-2">
-                                        <i class="fas fa-eye"></i> Detalhes
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm px-3" title="Detalhes">
+                                        <i class="fas fa-eye"></i>
                                     </a>
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm mx-2">
-                                        <i class="fas fa-edit"></i> Editar
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm px-3" title="Editar">
+                                        <i class="fas fa-pencil-alt"></i>
                                     </a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm mx-2">
-                                        <i class="fas fa-trash"></i> Excluir
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm px-3" title="Excluir">
+                                        <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </div>
                             </td>
@@ -47,111 +51,167 @@
                     }
                 </tbody>
             </table>
+
+        </div>
+        <div class="card-shadpw">
+            <br />
+            <nav aria-label="Paginação">
+                <ul class="pagination justify-content-center">
+                    @if (ViewBag.PaginaAtual > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { pagina = ViewBag.PaginaAtual - 1 })">Anterior</a>
+                        </li>
+                    }
+
+                    @for (int i = 1; i <= ViewBag.TotalPaginas; i++)
+                    {
+                        <li class="page-item @(i == ViewBag.PaginaAtual ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { pagina = i })">@i</a>
+                        </li>
+                    }
+
+                    @if (ViewBag.PaginaAtual < ViewBag.TotalPaginas)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { pagina = ViewBag.PaginaAtual + 1 })">Próxima</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+            </<div>
+            </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const sortDirection = {};
+
+            $('.sortable-column').each(function () {
+                const colIndex = $(this).data('column');
+                if (colIndex !== undefined) {
+                    sortDirection[colIndex] = 1;
+                    $(this).append(' <i class="fas fa-sort"></i>');
+                }
+            });
+
+            $('.column-filter').on('keyup', function () {
+                const columnIndex = $(this).data('column');
+                const searchText = $(this).val().toLowerCase();
+
+                $('#equipamentosTable tbody tr').each(function () {
+                    const cellText = $(this).find('td').eq(columnIndex).text().toLowerCase();
+                    const match = cellText.includes(searchText);
+                    $(this).toggle(match);
+                });
+            });
+
+            $('.sortable-column').on('click', function () {
+                const columnIndex = $(this).data('column');
+                if (columnIndex === undefined) return;
+
+                sortDirection[columnIndex] *= -1;
+
+                $('.sortable-column i').removeClass('fa-sort-up fa-sort-down').addClass('fa-sort');
+
+                const icon = $(this).find('i');
+                icon.removeClass('fa-sort');
+                icon.addClass(sortDirection[columnIndex] === 1 ? 'fa-sort-up' : 'fa-sort-down');
+
+                sortTable(columnIndex, sortDirection[columnIndex]);
+            });
+
+            function sortTable(columnIndex, direction) {
+                const rows = $('#equipamentosTable tbody tr').get();
+
+                rows.sort(function (a, b) {
+                    const aText = $(a).find('td').eq(columnIndex).text().toLowerCase();
+                    const bText = $(b).find('td').eq(columnIndex).text().toLowerCase();
+                    return aText.localeCompare(bText) * direction;
+                });
+
+                $.each(rows, function (index, row) {
+                    $('#equipamentosTable tbody').append(row);
+                });
+            }
+        });
+    </script>
+}
+
 <style>
-    html, body {
-        margin: 0;
-        padding: 0;
-        background: linear-gradient(120deg, #eef5fd, #ffffff);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 2rem;
-    }
-
     .card {
-        border-radius: 1rem;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 0.25rem;
     }
 
     .card-header {
-        background-color: #1976d2;
-        color: white;
-        font-weight: bold;
+        padding: 1rem 1.5rem;
     }
 
     .table {
-        border-radius: 0.5rem;
-        overflow: hidden;
+        margin-bottom: 0;
     }
 
-        .table thead {
-            background-color: #1976d2;
+        .table thead th {
+            vertical-align: middle;
+            background-color: #343a40;
             color: white;
         }
 
-        .table th, .table td {
-            text-align: center;
-            padding: 12px;
-            font-size: 1rem;
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.075);
+    }
+
+    .btn-sm {
+        min-width: 32px;/
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .column-filter {
+        max-width: 150px;
+        margin: 0 auto;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        border-radius: 0.2rem;
+        border: 1px solid #ced4da;
+    }
+
+    .sortable-column {
+        cursor: pointer;
+        position: relative;
+    }
+
+        .sortable-column:hover {
+            background-color: rgba(13, 110, 253, 1);
         }
 
-        .table .btn {
-            border-radius: 0.25rem;
-            padding: 6px 12px;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-            .table .btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(25, 118, 210, 0.2);
-            }
-
-    .btn-info {
-        background-color: #0288d1;
-        color: white;
+    .fa-sort, .fa-sort-up, .fa-sort-down {
+        margin-left: 5px;
     }
 
-    .btn-warning {
-        background-color: #fbc02d;
-        color: white;
+    .page-item.active .page-link {
+        background-color: #007bff;
+        border-color: #007bff;
     }
 
-    .btn-danger {
-        background-color: #d32f2f;
-        color: white;
-    }
-
-    .btn-success {
-        background-color: #388e3c;
-        color: white;
-    }
-
-    .btn-info:hover {
-        background-color: #0277bd;
-    }
-
-    .btn-warning:hover {
-        background-color: #f9a825;
-    }
-
-    .btn-danger:hover {
-        background-color: #c62828;
-    }
-
-    .btn-success:hover {
-        background-color: #2c6b2f;
-    }
-
-    .mb-5 {
-        margin-bottom: 3rem;
-    }
-
-    .d-flex {
-        display: flex;
-    }
-
-    .justify-content-around {
-        justify-content: space-around;
-    }
-
-    .justify-content-between {
-        justify-content: space-between;
+    .page-link {
+        color: #007bff;
     }
 </style>

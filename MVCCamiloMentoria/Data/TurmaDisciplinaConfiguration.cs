@@ -15,6 +15,9 @@ public class TurmaDisciplinaConfiguration : IEntityTypeConfiguration<TurmaDiscip
                .HasForeignKey(td => td.TurmaId)
                .OnDelete(DeleteBehavior.Restrict);
 
+        builder.Property(td => td.Excluido)
+               .HasDefaultValue(false);
+
         builder.HasOne(td => td.Disciplina)
                .WithMany(d => d.TurmaDisciplinas)
                .HasForeignKey(td => td.DisciplinaId)

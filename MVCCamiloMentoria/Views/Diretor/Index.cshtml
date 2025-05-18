@@ -1,0 +1,223 @@
+﻿@model IEnumerable<MVCCamiloMentoria.ViewModels.DiretorViewModel>
+
+
+@{
+	ViewData["Title"] = "Diretores";
+}
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-10 offset-md-1">
+			<div class="card mb-4">
+				<div class="card-header bg-primary text-white">
+					<div class="d-flex justify-content-between align-items-center">
+						<h5 class="mb-0">Diretores</h5>
+						<form asp-action="Index" method="get" class="d-flex w-100 w-md-auto" style="max-width: 720px;">
+							<input type="text" name="FiltroGeral" class="form-control form-control-md me-2" placeholder="Pesquisar por nome, matrícula, escola etc." />
+							<button type="submit" class="btn btn-light btn-md text-primary">🔍 Pesquisar</button>
+						</form>
+					</div>
+				</div>
+				<div class="table-responsive">
+					<table id="diretoresTable" class="table table-bordered table-striped">
+						<thead class="thead-dark">
+							<tr>
+								<th class="sortable-column" data-column="0">
+									@Html.DisplayNameFor(model => model.Nome)</th>
+								<th class="sortable-column" data-column="1">
+									@Html.DisplayName("Matrícula")</th>
+								<th class="sortable-column" data-column="2">
+									@Html.DisplayName("Escola")</th>
+								<th class="text-center">Ações</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item in Model)
+							{
+								<tr>
+									<td>@item.Nome</td>
+									<td>@item.Matricula</td>
+									<td>@item.Escola?.Nome</td>
+									<td class="d-flex justify-content-center">
+										<div class="d-flex justify-content-center gap-2">
+											<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm px-3" title="Detalhes">
+												<i class="fas fa-eye"></i>
+											</a>
+											<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm px-3" title="Editar">
+												<i class="fas fa-pencil-alt"></i>
+											</a>
+											<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm px-3" title="Excluir">
+												<i class="fas fa-trash-alt"></i>
+											</a>
+										</div>
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script>
+		$(document).ready(function () {
+			const sortDirection = {};
+
+			$('.sortable-column').each(function () {
+				const colIndex = $(this).data('column');
+				sortDirection[colIndex] = 1;
+				$(this).append(' <i class="fas fa-sort"></i>');
+			});
+
+			$('.column-filter').on('keyup', function () {
+				const columnIndex = $(this).data('column');
+				const searchText = $(this).val().toLowerCase();
+
+				$('#diretoresTable tbody tr').filter(function () {
+					const cellText = $(this).find('td').eq(columnIndex).text().toLowerCase();
+					$(this).toggle(cellText.includes(searchText));
+				});
+			});
+
+			$('.sortable-column').on('click', function () {
+				const columnIndex = $(this).data('column');
+				sortDirection[columnIndex] *= -1;
+
+				$('.sortable-column i').removeClass('fa-sort-up fa-sort-down').addClass('fa-sort');
+
+				const sortIcon = $(this).find('i');
+				sortIcon.removeClass('fa-sort');
+				if (sortDirection[columnIndex] === 1) {
+					sortIcon.addClass('fa-sort-up');
+				} else {
+					sortIcon.addClass('fa-sort-down');
+				}
+
+				sortTable(columnIndex, sortDirection[columnIndex]);
+			});
+
+			function sortTable(columnIndex, direction) {
+				const $table = $('#diretoresTable');
+				const $rows = $table.find('tbody tr').get();
+
+				$rows.sort(function (a, b) {
+					const aText = $(a).find('td').eq(columnIndex).text().toLowerCase();
+					const bText = $(b).find('td').eq(columnIndex).text().toLowerCase();
+					return aText.localeCompare(bText) * direction;
+				});
+
+				$.each($rows, function (index, row) {
+					$table.children('tbody').append(row);
+				});
+			}
+		});
+	</script>
+}
+<style>
+	html, body {
+		margin: 0;
+		padding: 0;
+		background: linear-gradient(120deg, #eef5fd, #ffffff);
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	}
+
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 2rem;
+	}
+
+	.card {
+		border-radius: 1rem;
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+	}
+
+	.card-header {
+		background-color: #1976d2;
+		color: white;
+		font-weight: bold;
+	}
+
+	.table {
+		border-radius: 0.5rem;
+		overflow: hidden;
+	}
+
+		.table thead {
+			background-color: #1976d2;
+			color: white;
+		}
+
+		.table th, .table td {
+			text-align: center;
+			padding: 12px;
+			font-size: 1rem;
+		}
+
+		.table .btn {
+			border-radius: 0.25rem;
+			padding: 6px 12px;
+			font-size: 0.9rem;
+			transition: all 0.3s ease;
+		}
+
+			.table .btn:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 5px 15px rgba(25, 118, 210, 0.2);
+			}
+
+	.btn-info {
+		background-color: #0288d1;
+		color: white;
+	}
+
+	.btn-warning {
+		background-color: #fbc02d;
+		color: white;
+	}
+
+	.btn-danger {
+		background-color: #d32f2f;
+		color: white;
+	}
+
+	.btn-success {
+		background-color: #388e3c;
+		color: white;
+	}
+
+	.btn-info:hover {
+		background-color: #0277bd;
+	}
+
+	.btn-warning:hover {
+		background-color: #f9a825;
+	}
+
+	.btn-danger:hover {
+		background-color: #c62828;
+	}
+
+	.btn-success:hover {
+		background-color: #2c6b2f;
+	}
+
+	.mb-5 {
+		margin-bottom: 3rem;
+	}
+
+	.d-flex {
+		display: flex;
+	}
+
+	.justify-content-around {
+		justify-content: space-around;
+	}
+
+	.justify-content-between {
+		justify-content: space-between;
+	}
+</style>

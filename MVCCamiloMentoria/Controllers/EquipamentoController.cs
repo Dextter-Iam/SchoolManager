@@ -15,13 +15,26 @@ namespace MVCCamiloMentoria.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pagina = 1, EquipamentoViewModel filtro = null)
         {
-            var equipamentos = await _context.Equipamento
-                .Include(e => e.Marca)
-                .Include(e => e.Modelo)
-                .Include(e => e.Escola)
-                .ToListAsync();
+            int registrosPorPagina = 10;
+
+            var query = _context.Equipamento
+                                .Where(e => !e.Excluido)
+                                .Include(e => e.Marca)
+                                .Include(e => e.Modelo)
+                                .Include(e => e.Escola)
+                                .AsQueryable();
+
+            query = AplicarFiltros(query, filtro);
+
+            var totalRegistros = await query.CountAsync();
+            var totalPaginas = (int)Math.Ceiling(totalRegistros / (double)registrosPorPagina);
+
+            var equipamentos = await query
+                                 .Skip((pagina - 1) * registrosPorPagina)
+                                 .Take(registrosPorPagina)
+                                 .ToListAsync();
 
             var equipamentosViewModel = equipamentos.Select(e => new EquipamentoViewModel
             {
@@ -36,6 +49,9 @@ namespace MVCCamiloMentoria.Controllers
                 Escola = e.Escola
             }).ToList();
 
+            ViewBag.AplicarFiltros = filtro;
+            ViewBag.PaginaAtual = pagina;
+            ViewBag.TotalPaginas = totalPaginas;
             return View(equipamentosViewModel);
         }
 
@@ -45,6 +61,7 @@ namespace MVCCamiloMentoria.Controllers
             if (id == null) return NotFound();
 
             var equipamento = await _context.Equipamento
+                .Where(e => !e.Excluido)
                 .Include(e => e.Escola)
                 .Include(e => e.Marca)
                 .Include(e => e.Modelo)
@@ -104,7 +121,13 @@ namespace MVCCamiloMentoria.Controllers
         {
             if (id == null) return NotFound();
 
-            var equipamento = await _context.Equipamento.FindAsync(id);
+            var equipamento = await _context.Equipamento
+                                            .Where(e => !e.Excluido)
+                                            .Include(e => e.Escola)
+                                            .Include(e => e.Marca)
+                                            .Include(e => e.Modelo)
+                                            .FirstOrDefaultAsync(m => m.Id == id);
+
             if (equipamento == null) return NotFound();
 
             var viewModel = new EquipamentoViewModel
@@ -166,6 +189,7 @@ namespace MVCCamiloMentoria.Controllers
             if (id == null) return NotFound();
 
             var equipamento = await _context.Equipamento
+                .Where(e => !e.Excluido)
                 .Include(e => e.Escola)
                 .Include(e => e.Marca)
                 .Include(e => e.Modelo)
@@ -193,7 +217,8 @@ namespace MVCCamiloMentoria.Controllers
             var equipamento = await _context.Equipamento.FindAsync(id);
             if (equipamento != null)
             {
-                _context.Equipamento.Remove(equipamento);
+                equipamento.Excluido = true;
+                _context.Equipamento.Update(equipamento);
                 await _context.SaveChangesAsync();
 
                 TempData["MensagemSucesso"] = "Equipamento excluído com sucesso!";
@@ -221,5 +246,49 @@ namespace MVCCamiloMentoria.Controllers
             ViewBag.MarcaId = new SelectList(marcas, "Id", "Nome", viewModel?.MarcaId);
             ViewBag.ModeloId = new SelectList(modelos, "Id", "Nome", viewModel?.ModeloId);
         }
+        private IQueryable<Equipamento> AplicarFiltros(IQueryable<Equipamento> query, EquipamentoViewModel filtro)
+        {
+            if (filtro == null)
+                return query;
+
+            if (!string.IsNullOrEmpty(filtro.NomeNormalizado))
+            {
+                var nome = filtro.NomeNormalizado;
+                query = query.Where(a => a.Nome != null && a.Nome.ToLower().Contains(nome));
+            }
+
+            if (!string.IsNullOrEmpty(filtro.MarcaNormalizada))
+            {
+                var marca = filtro.MarcaNormalizada;
+                query = query.Where(a => a.Marca != null && a.Marca.Nome.ToLower().Contains(marca));
+            }
+
+            if (!string.IsNullOrEmpty(filtro.ModeloNormalizado))
+            {
+                var modelo = filtro.ModeloNormalizado;
+                query = query.Where(a => a.Modelo != null && a.Modelo.Nome.ToLower().Contains(modelo));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.EscolaNormalizada))
+            {
+                var escola = filtro.EscolaNormalizada;
+                query = query.Where(a => a.Escola != null && a.Escola.Nome.ToLower().Contains(escola));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.FiltroGeralNormalizado) && filtro.FiltroGeralNormalizado.Length >= 3)
+            {
+                var termo = filtro.FiltroGeralNormalizado;
+                query = query.Where(a =>
+                    (a.Nome != null && a.Nome.ToLower().Contains(termo)) ||
+                    (a.Escola != null && a.Escola.Nome.ToLower().Contains(termo)) ||
+                    (a.Marca != null && a.Marca.Nome.ToLower().Contains(termo)) ||
+                    (a.Modelo != null && a.Modelo.Nome.ToLower().Contains(termo))
+                );
+            }
+
+            return query;
+        }
+
+
     }
 }

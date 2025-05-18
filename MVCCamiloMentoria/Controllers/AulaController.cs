@@ -17,26 +17,40 @@ namespace MVCCamiloMentoria.Controllers
         }
 
         // GET: AulaController
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(AulaViewModel filtro = null)
         {
-            var aulas = await _context.Aula
-                .Include(a => a.Escola)
-                .Include(a => a.Turma)
-                .Include(a => a.Professor)
-                .Include(a => a.Disciplina)
+
+
+            var query = _context.Aula
+                                .Include(a => a.Escola)
+                                .Include(a => a.Turma)
+                                .Include(a => a.Professor)
+                                .Include(a => a.Disciplina)
+                                .AsQueryable();
+
+            var aulasDb = await query.ToListAsync();
+
+            var aulasFiltradas = AplicarFiltros(aulasDb, filtro);
+
+            var aulas = aulasFiltradas
                 .Select(a => new AulaViewModel
                 {
                     Nome = a.Nome,
                     Id = a.Id,
                     EscolaId = a.EscolaId,
-                    Escola = a.Escola,
+                    Escola = new EscolaViewModel
+                    {
+                        Id = a.EscolaId,
+                        Nome = a.Escola!.Nome,
+                    },
                     HorarioFim = a.HorarioFim,
                     HorarioInicio = a.HorarioInicio,
                     TurmaId = a.TurmaId,
                     ProfessorId = a.ProfessorId,
                     DisciplinaId = a.DisciplinaId
-                }).ToListAsync();
+                }).ToList();
 
+            ViewBag.AplicarFiltros = filtro;
             return View(aulas);
         }
 
@@ -63,15 +77,33 @@ namespace MVCCamiloMentoria.Controllers
                 HorarioInicio = aula.HorarioInicio,
                 HorarioFim = aula.HorarioFim,
                 EscolaId = aula.EscolaId,
-                Escola = aula.Escola,
+                Escola = new EscolaViewModel
+                {
+                    Id = aula.EscolaId,
+                    Nome = aula.Escola!.Nome,
+                },
                 TurmaId = aula.TurmaId,
-                Turma = aula.Turma,
+                Turma = new TurmaViewModel
+                {
+                    NomeTurma = aula.Turma!.NomeTurma,
+                    TurmaId = aula.TurmaId!,
+                },
+
                 ProfessorId = aula.ProfessorId,
-                Professor = aula.Professor,
+                Professor = new ProfessorViewModel
+                {
+                    Id = aula.ProfessorId,
+                    Nome = aula.Professor!.Nome,
+                },
+
                 DisciplinaId = aula.DisciplinaId,
-                Disciplina = aula.Disciplina,
+                Disciplina = new DisciplinaViewModel
+                {
+                    Id = aula.DisciplinaId,
+                    Nome = aula.Disciplina!.Nome,
+                },
+
                 ConfirmacaoPresenca = aula.ConfirmacaoPresenca,
-                AlunosPresentes = aula.AlunosPresentes?.ToList()
             };
 
             return View(viewModel);
@@ -92,7 +124,6 @@ namespace MVCCamiloMentoria.Controllers
             {
                 try
                 {
-
                     var aulas = new Aula
                     {
                         Nome = viewModel.Nome,
@@ -157,7 +188,11 @@ namespace MVCCamiloMentoria.Controllers
                 HorarioFim = aula.HorarioFim,
                 EscolaId = aula.EscolaId,
                 ProfessorId = aula.ProfessorId,
-                Turma = aula.Turma,
+                Turma = new TurmaViewModel
+                {
+                    TurmaId = aula.TurmaId,
+                    NomeTurma = aula.Turma!.NomeTurma,
+                },
                 TurmaId = aula.TurmaId,
                 DisciplinaId = aula.DisciplinaId,
             };
@@ -219,7 +254,7 @@ namespace MVCCamiloMentoria.Controllers
         }
 
 
-        // GET: AulaController/Delete/5
+        // GET: Aula/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var aula = await _context.Aula
@@ -234,15 +269,47 @@ namespace MVCCamiloMentoria.Controllers
                 return NotFound();
             }
 
-            return View(aula);
+            var viewModel = new AulaViewModel
+            {
+                Id = aula.Id,
+                Nome = aula.Nome,
+                HorarioInicio = aula.HorarioInicio,
+                HorarioFim = aula.HorarioFim,
+                EscolaId = aula.EscolaId,
+                Escola = new EscolaViewModel
+                {
+                    Id = aula.EscolaId,
+                    Nome = aula.Escola!.Nome,
+                },
+                TurmaId = aula.TurmaId,
+                Turma = new TurmaViewModel
+                {
+                    NomeTurma = aula.Turma?.NomeTurma,
+                },
+                ProfessorId = aula.ProfessorId,
+                Professor = new ProfessorViewModel
+                {
+                    Nome = aula.Professor?.Nome,
+                    Id = aula.ProfessorId,
+                },
+                DisciplinaId = aula.DisciplinaId,
+                Disciplina = new DisciplinaViewModel
+                {
+                    Id = aula.DisciplinaId,
+                    Nome = aula.Disciplina!.Nome,
+                }
+            };
+
+            return View(viewModel);
         }
 
-        // POST: AulaController/Delete/5
+        // POST: Aula/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var aula = await _context.Aula.FindAsync(id);
+
             if (aula == null)
             {
                 return NotFound();
@@ -250,8 +317,10 @@ namespace MVCCamiloMentoria.Controllers
 
             _context.Aula.Remove(aula);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
+
 
         private async Task CarregarViewBagsAsync(AulaViewModel viewModel = null)
         {
@@ -288,12 +357,54 @@ namespace MVCCamiloMentoria.Controllers
                 viewModel?.DisciplinaId ?? (disciplinas.Any() ? disciplinas.First().Id : (int?)null)
             );
         }
-
-
-
         private bool AulaExists(int id)
         {
             return _context.Aula.Any(e => e.Id == id);
         }
+
+        private IEnumerable<Aula> AplicarFiltros(IEnumerable<Aula> query, AulaViewModel filtro)
+        {
+            if (filtro == null)
+                return query;
+
+            if (!string.IsNullOrWhiteSpace(filtro.NomeNormalizado))
+            {
+                query = query.Where(a => a.Nome != null && a.Nome.ToLower().Contains(filtro.NomeNormalizado));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.HorarioInicioNormalizado))
+            {
+                query = query.Where(a => a.HorarioInicio.ToString("HH:mm").Contains(filtro.HorarioInicioNormalizado));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.HorarioFimNormalizado))
+            {
+                query = query.Where(a => a.HorarioFim.ToString("HH:mm").Contains(filtro.HorarioFimNormalizado));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.EscolaNormalizado))
+            {
+                query = query.Where(a => a.Escola != null &&
+                    a.Escola.Nome != null &&
+                    a.Escola.Nome.ToLower().Contains(filtro.EscolaNormalizado));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtro.FiltroGeralNormalizado) && filtro.FiltroGeralNormalizado.Length >= 3)
+            {
+                var termo = filtro.FiltroGeralNormalizado;
+
+                query = query.Where(c =>
+                    (c.Nome != null && c.Nome.ToLower().Contains(termo)) ||
+                    (c.Escola != null && c.Escola.Nome != null && c.Escola.Nome.ToLower().Contains(termo)) ||
+                    c.HorarioInicio.ToString("HH:mm").Contains(termo) ||
+                    c.HorarioFim.ToString("HH:mm").Contains(termo)
+                );
+            }
+
+            return query;
+        }
+
+
+
     }
 }

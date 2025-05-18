@@ -1,7 +1,9 @@
 ﻿using MVCCamiloMentoria.Models;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace MVCCamiloMentoria.ViewModels
 {
@@ -20,7 +22,7 @@ namespace MVCCamiloMentoria.ViewModels
         [DataType(DataType.Date)]
         public DateTime DataNascimento { get; set; }
 
-        [DisplayName("E-mail ")]
+        [DisplayName("E-mail")]
         [Required(ErrorMessage = "O e-mail do aluno é obrigatório.")]
         [EmailAddress(ErrorMessage = "E-mail inválido.")]
         [StringLength(100, ErrorMessage = "O e-mail deve ter no máximo 100 caracteres.")]
@@ -34,56 +36,101 @@ namespace MVCCamiloMentoria.ViewModels
         [DisplayName("Bolsa Escolar")]
         public bool BolsaEscolar { get; set; }
 
+        [BindNever]
+        public TurmaViewModel? Turma { get; set; }
+
         [DisplayName("Turma")]
         [Required(ErrorMessage = "A turma é obrigatória.")]
+
         public int TurmaId { get; set; }
-        public Turma? Turma { get; set; }
 
-
-        [DisplayName("DDD")]
-        [Required(ErrorMessage = "Informe o DDD")]
-        [Range(11, 99, ErrorMessage = "DDD inválido")]
-        public int DDD { get; set; }
-
-        [DisplayName("Número de Telefone")]
-        [Required(ErrorMessage = "Informe o número")]
-        [Range(10000000, 999999999, ErrorMessage = "Número inválido")]
-        public int Numero { get; set; }
+        public List<TurmaViewModel>? Turmas { get; set; }
 
         [DisplayName("Endereço")]
-        public int? EnderecoId { get; set; }
-        public Endereco? Endereco { get; set; }
-
-        [DisplayName("Nome da Rua")]
-        [Required(ErrorMessage = "O nome da rua é obrigatório.")]
-        [StringLength(200, ErrorMessage = "O nome da rua deve ter no máximo 200 caracteres.")]
-        public string? NomeRua { get; set; }
-
-        [DisplayName("Número da Rua")]
-        [Required(ErrorMessage = "O número da rua é obrigatório.")]
-        [Range(1, int.MaxValue, ErrorMessage = "O número da rua deve ser maior que zero.")]
-        public int NumeroRua { get; set; }
-
-        [DisplayName("Complemento")]
-        [StringLength(150, ErrorMessage = "O complemento deve ter no máximo 150 caracteres.")]
-        public string? Complemento { get; set; }
-
-        [DisplayName("CEP")]
-        [Required(ErrorMessage = "O CEP é obrigatório.")]
-        [Range(1000000, 99999999, ErrorMessage = "CEP inválido.")]
-        public int CEP { get; set; }
-
-        [DisplayName("Estado")]
-        [Required(ErrorMessage = "O estado é obrigatório.")]
-        public int? EstadoId { get; set; }
-        public Estado? Estado { get; set; }
+        public EnderecoViewModel? Endereco { get; set; }
 
         [DisplayName("Escola")]
         [Required(ErrorMessage = "A escola é obrigatória.")]
         public int EscolaId { get; set; }
-        public Escola? Escola { get; set; }
-        public List<AlunoResponsavel>? AlunoResponsavel { get; set; }
-        public List<AlunoTelefone>? AlunoTelefone { get; set; }
-        public List<Aula>? Aulas { get; set; }
+        public List<EscolaViewModel>? Escolas { get; set; }
+
+        [DisplayName("Responsável")]
+        public int? ResponsavelId { get; set; }
+        public SelectList? ResponsaveisDisponiveis { get; set; }
+
+        [DisplayName("Responsáveis")]
+        public List<AlunoResponsavelViewModel>? Responsaveis { get; set; }
+
+        [DisplayName("Responsável Atual")]
+        public ResponsavelViewModel? Responsavel { get; set; }
+
+        public byte[]? Foto { get; set; }
+        public IFormFile? FotoUpload { get; set; }
+
+        public List<AlunoTelefoneViewModel>? Telefones { get; set; }
+        public List<AulaViewModel>? Aulas { get; set; }
+
+        [DisplayName("Responsável 1")]
+        public string? NomeResponsavel1 { get; set; }
+
+        [DisplayName("Parentesco 1")]
+        public string? Parentesco1 { get; set; }
+
+        [DisplayName("Responsável 2")]
+        public string? NomeResponsavel2 { get; set; }
+
+        [DisplayName("Parentesco 2")]
+        public string? Parentesco2 { get; set; }
+
+        public SelectList? ParentescoOptions { get; set; }
+
+        [NotMapped]
+        public int ResponsavelIdValue => ResponsavelId ?? 0;
+
+
+        //FILTROS 
+        [NotMapped]
+        [DisplayName("Filtrar por Nome")]
+        public string? FiltroNome { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por E-mail")]
+        public string? FiltroEmail { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Turma")]
+        public string? FiltroTurma { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Escola")]
+        public string? FiltroEscola { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Responsável")]
+        public string? FiltroResponsavel { get; set; }
+
+        [NotMapped]
+        [DisplayName("Filtrar por Matrícula")]
+        public string? FiltroMatricula { get; set; }
+
+        [NotMapped]
+        [DisplayName("Buscar por qualquer campo")]
+        public string? FiltroGeral { get; set; }
+
+        [NotMapped]
+        public string FiltroGeralNormalizado => string.IsNullOrWhiteSpace(FiltroGeral) ? string.Empty : FiltroGeral.Trim().ToLower();
+
+        [NotMapped]
+        public string NomeNormalizado => NormalizarFiltro(FiltroNome);
+
+        [NotMapped]
+        public string EmailNormalizado => NormalizarFiltro(FiltroEmail);
+
+        private string NormalizarFiltro(string input)
+        {
+            return string.IsNullOrWhiteSpace(input) ? string.Empty : input.Trim().ToLower();
+        }
+
+
     }
 }

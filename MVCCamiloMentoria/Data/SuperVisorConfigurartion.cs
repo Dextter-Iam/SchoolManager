@@ -20,6 +20,9 @@ namespace MVCCamiloMentoria.Data
                    .HasMaxLength(6)
                    .IsRequired();
 
+            builder.Property(p => p.Excluido)
+                   .HasDefaultValue(false);
+
             builder.HasOne(s => s.Endereco)
                    .WithOne()
                    .HasForeignKey<Supervisor>(s => s.EnderecoId)
@@ -30,10 +33,10 @@ namespace MVCCamiloMentoria.Data
                    .HasForeignKey(e => e.SupervisorId)
                    .OnDelete(DeleteBehavior.NoAction);
 
-
-            builder.HasMany(s => s.Escolas)
-                   .WithMany();
-
+            builder.HasMany(s => s.SupervisorEscolas)
+                   .WithOne(se => se.Supervisor)
+                   .HasForeignKey(se => se.SupervisorId)
+                   .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

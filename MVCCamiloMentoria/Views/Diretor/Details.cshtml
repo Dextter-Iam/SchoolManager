@@ -1,0 +1,152 @@
+﻿@model MVCCamiloMentoria.ViewModels.DiretorViewModel
+
+@{
+    ViewData["Title"] = "Detalhes do Diretor";
+}
+<br />
+
+<div class="row">
+    <div class="col-md-10 offset-md-1">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Informações do Diretor</h5>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <div class="card mb-3">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Informações Pessoais</h5>
+                    </div>
+
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Nome)</dt>
+                            <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
+
+                            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Matricula)</dt>
+                            <dd class="col-sm-9">@Html.DisplayFor(model => model.Matricula)</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Escola</h5>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dd class="col-sm-9">
+                                @if (Model.Escola != null)
+                                {
+                                    @Model.Escola.Nome
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Nenhuma escola vinculada</span>
+                                }
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Endereço</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.Endereco != null)
+                        {
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <span class="info-label">Logradouro</span>
+                                        <span class="info-value">
+                                            @Model.Endereco.NomeRua, @Model.Endereco.NumeroRua
+                                            @if (!string.IsNullOrEmpty(Model.Endereco.Complemento))
+                                            {
+                                                <span> - @Model.Endereco.Complemento</span>
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="info-item">
+                                        <span class="info-label">CEP</span>
+                                        <span class="info-value">@Model.Endereco.CEP?.ToString("00000-000")</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="info-item">
+                                        <span class="info-label">Estado</span>
+                                        @{
+                                            var estado = Model.Endereco.Estado?
+                                            .FirstOrDefault(e => e.id == Model.Endereco.EstadoId);
+                                        }
+                                        @if (estado != null)
+                                        {
+                                            <span class="info-value">@estado.Nome - @estado.Sigla</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="info-value text-muted">Não encontrado</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-light">
+                                <i class="fas fa-info-circle me-2"></i>Endereço não cadastrado
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Contato</h5>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-3 fw-bold">Telefone</dt>
+                            @if (Model.Telefones != null && Model.Telefones.FirstOrDefault() != null)
+                            {
+                                var telefone = Model.Telefones.FirstOrDefault();
+                                <dd class="col-sm-9">
+                                    (@telefone.DDD) @telefone.Numero.ToString(@"00000\-0000")
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-sm-9">
+                                    <span class="text-muted">Telefone não cadastrado</span>
+                                </dd>
+                            }
+
+                        </dl>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="text-end mt-3">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning px-4">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+                <a asp-action="Index" class="btn btn-secondary ms-2">
+                    <i class="fas fa-list"></i> Voltar à Lista
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

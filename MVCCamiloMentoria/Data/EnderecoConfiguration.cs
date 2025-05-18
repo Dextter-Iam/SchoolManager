@@ -12,9 +12,6 @@ namespace MVCCamiloMentoria.Data
 
             builder.HasKey(e => e.Id);
 
-            builder.HasMany(e => e.Alunos)
-                   .WithOne(e => e.Endereco);
-
             builder.Property(e => e.Complemento)
                    .HasMaxLength(30);
 

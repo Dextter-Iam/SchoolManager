@@ -1,0 +1,340 @@
+﻿@model IEnumerable<MVCCamiloMentoria.ViewModels.SupervisorViewModel>
+
+@{
+	ViewData["Title"] = "Supervisores";
+}
+
+<div class="card shadow-sm mb-5">
+	<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+		<h4 class="mb-0">Supervisores</h4>
+		<form asp-action="Index" method="get" class="d-flex w-100 w-md-auto" style="max-width: 720px;">
+			<input type="text" name="FiltroGeral" class="form-control form-control-md me-2" placeholder="Pesquisar por nome, matrícula, escola etc." />
+			<button type="submit" class="btn btn-light btn-md text-primary">🔍 Pesquisar</button>
+		</form>
+	</div>
+
+	<div class="card shadow-sm">
+		<div class="card-body p-0">
+			<table id="supervisorTable" class="table table-bordered table-striped">
+				<thead class="thead-dark">
+					<tr>
+						<th class="sortable-column" data-column="0">
+							@Html.DisplayNameFor(model => model.First().Nome)
+						</th>
+						<th class="sortable-column" data-column="1">@Html.DisplayNameFor(model => model.First().Matricula)</th>
+						<th class="sortable-column" data-column="2">Endereço</th>
+						<th class="sortable-column" data-column="3">Escolas</th>
+						<th class="text-center">Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					@if (Model.Any())
+					{
+						foreach (var supervisor in Model)
+						{
+							<tr>
+								<td>@supervisor.Nome</td>
+								<td>@supervisor.Matricula</td>
+								<td>
+									@if (supervisor.Endereco != null)
+									{
+										@($"{supervisor.Endereco.NomeRua}, {supervisor.Endereco.NumeroRua}")
+									}
+									else
+									{
+										<span class="text-muted">Não informado</span>
+									}
+								</td>
+								<td>
+									@if (supervisor.SupervisorEscola != null && supervisor.SupervisorEscola.Any())
+									{
+										foreach (var escola in supervisor.SupervisorEscola)
+										{
+											<div>@escola.Escola!.Nome</div>
+										}
+									}
+									else
+									{
+										<span class="text-muted">Nenhuma Escola</span>
+									}
+								</td>
+								<td class="text-center">
+									<div class="d-flex justify-content-center gap-2">
+										<a asp-action="Details" asp-route-id="@supervisor.Id" class="btn btn-info btn-sm px-3" title="Detalhes">
+											<i class="fas fa-eye"></i>
+										</a>
+										<a asp-action="Edit" asp-route-id="@supervisor.Id" class="btn btn-warning btn-sm px-3" title="Editar">
+											<i class="fas fa-pencil-alt"></i>
+										</a>
+										<a asp-action="Delete" asp-route-id="@supervisor.Id" class="btn btn-danger btn-sm px-3" title="Excluir">
+											<i class="fas fa-trash-alt"></i>
+										</a>
+									</div>
+								</td>
+							</tr>
+						}
+					}
+					else
+					{
+						<tr>
+							<td colspan="5" class="text-center text-muted">Nenhum supervisor cadastrado.</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+
+			<div class="card shadow-sm mt-3">
+				<nav aria-label="Paginação" class="mt-4">
+					<ul class="pagination justify-content-center mb-0">
+						@if (ViewBag.PaginaAtual > 1)
+						{
+							<li class="page-item">
+								<a class="page-link" href="@Url.Action("Index", new { pagina = ViewBag.PaginaAtual - 1 })">Anterior</a>
+							</li>
+						}
+
+						@for (int i = 1; i <= ViewBag.TotalPaginas; i++)
+						{
+							<li class="page-item @(i == ViewBag.PaginaAtual ? "active" : "")">
+								<a class="page-link" href="@Url.Action("Index", new { pagina = i })">@i</a>
+							</li>
+						}
+
+						@if (ViewBag.PaginaAtual < ViewBag.TotalPaginas)
+						{
+							<li class="page-item">
+								<a class="page-link" href="@Url.Action("Index", new { pagina = ViewBag.PaginaAtual + 1 })">Próxima</a>
+							</li>
+						}
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script>
+		$(document).ready(function () {
+			let sortDirection = {};
+
+
+
+			$('.sortable-column').each(function () {
+				const colIndex = $(this).data('column');
+				sortDirection[colIndex] = 1;
+				$(this).append(' <i class="fas fa-sort"></i>');
+			});
+
+
+				$('.column-filter').on('keyup', function () {
+				const columnIndex = $(this).data('column');
+				const searchText = $(this).val().toLowerCase();
+
+				$('#supervisorTable tbody tr').filter(function () {
+					const cellText = $(this).find('td').eq(columnIndex).text().toLowerCase();
+					$(this).toggle(cellText.includes(searchText));
+				});
+			});
+
+
+			$('.sortable-column').on('click', function () {
+				const columnIndex = $(this).data('column');
+				sortDirection[columnIndex] *= -1;
+
+
+				$('.sortable-column i').removeClass('fa-sort-up fa-sort-down').addClass('fa-sort');
+				const sortIcon = $(this).find('i');
+				sortIcon.removeClass('fa-sort');
+				sortIcon.addClass(sortDirection[columnIndex] === 1 ? 'fa-sort-up' : 'fa-sort-down');
+
+				sortTable(columnIndex, sortDirection[columnIndex]);
+			});
+
+			function sortTable(columnIndex, direction) {
+				const $table = $('#supervisorTable');
+				const $rows = $table.find('tbody tr').get();
+
+				$rows.sort(function (a, b) {
+					const aText = $(a).find('td').eq(columnIndex).text().trim();
+					const bText = $(b).find('td').eq(columnIndex).text().trim();
+
+
+					if (columnIndex === 2) {
+						return aText.localeCompare(bText) * direction;
+					}
+
+
+					if (columnIndex === 3) {
+						const aHasEscolas = aText.includes('Escola');
+						const bHasEscolas = bText.includes('Escola');
+						return (aHasEscolas - bHasEscolas) * direction;
+					}
+
+
+					return aText.localeCompare(bText) * direction;
+				});
+
+				$.each($rows, function (index, row) {
+					$table.children('tbody').append(row);
+				});
+			}
+		});
+	</script>
+}
+
+<style>
+	html, body {
+		margin: 0;
+		padding: 0;
+		background: #f4f6f9;
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		color: #333;
+	}
+
+	.container {
+		max-width: 1100px;
+		margin: 0 auto;
+		padding: 2rem 1rem;
+	}
+
+	.card {
+		border: none;
+		border-radius: 12px;
+		background-color: #ffffff;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+		overflow: hidden;
+	}
+
+	.card-header {
+		background-color: #1976d2;
+		color: white;
+		padding: 1rem 1.5rem;
+		font-size: 1.25rem;
+		font-weight: 600;
+		border-bottom: 1px solid rgba(0,0,0,0.05);
+	}
+
+	.card-body {
+		padding: 1.5rem;
+	}
+
+	.table {
+		width: 100%;
+		border-collapse: collapse;
+	}
+
+		.table thead {
+			background-color: #1976d2;
+			color: white;
+		}
+
+		.table th, .table td {
+			text-align: left;
+			padding: 0.85rem 1rem;
+			vertical-align: middle;
+			font-size: 0.95rem;
+			border-bottom: 1px solid #e0e0e0;
+		}
+
+			.table th:first-child,
+			.table td:first-child {
+				text-align: left;
+			}
+
+		.table td {
+			background-color: #fafafa;
+		}
+
+	.d-flex {
+		display: flex;
+		gap: 0.5rem;
+		justify-content: center;
+	}
+
+	.btn {
+		border-radius: 8px;
+		padding: 6px 12px;
+		font-size: 0.875rem;
+		transition: all 0.2s ease-in-out;
+		border: none;
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+
+		.btn i {
+			font-size: 0.85rem;
+		}
+
+	.btn-info {
+		background-color: #0288d1;
+		color: #fff;
+	}
+
+	.btn-warning {
+		background-color: #fbc02d;
+		color: #212121;
+	}
+
+	.btn-danger {
+		background-color: #d32f2f;
+		color: #fff;
+	}
+
+	.btn:hover {
+		opacity: 0.9;
+		transform: translateY(-1px);
+	}
+
+
+	.pagination {
+		padding-bottom: 1rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+		padding-left: 0;
+		list-style: none;
+	}
+
+		.pagination .page-item .page-link {
+			color: #1976d2;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+			padding: 0.5rem 0.75rem;
+			margin: 0 0.25rem;
+			transition: all 0.3s ease-in-out;
+		}
+
+		.pagination .page-item.active .page-link {
+			background-color: #1976d2;
+			border-color: #1976d2;
+			color: white;
+			font-weight: bold;
+		}
+
+		.pagination .page-item .page-link:hover {
+			background-color: #e3f2fd;
+		}
+
+	.sortable-column {
+		cursor: pointer;
+		transition: background-color 0.2s;
+	}
+
+		.sortable-column:hover {
+			background-color: rgba(255, 255, 255, 0.1);
+		}
+
+	.fa-sort, .fa-sort-up, .fa-sort-down {
+		margin-left: 5px;
+		font-size: 0.8rem;
+		opacity: 0.7;
+	}
+
+	.sortable-column:hover .fa-sort {
+		opacity: 1;
+	}
+</style>
+

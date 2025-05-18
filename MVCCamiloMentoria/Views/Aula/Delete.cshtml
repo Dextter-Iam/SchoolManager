@@ -1,4 +1,4 @@
-﻿@model MVCCamiloMentoria.Models.Aula
+﻿@model MVCCamiloMentoria.ViewModels.AulaViewModel
 
 <div class="container mt-5">
     <div class="card shadow-sm rounded-4 border-0">
@@ -31,9 +31,6 @@
 
                     <dt class="col-sm-3 text-muted">Disciplina</dt>
                     <dd class="col-sm-9">@Html.DisplayFor(model => model.Disciplina.Nome)</dd>
-
-                    <dt class="col-sm-3 text-muted">Presença Confirmada</dt>
-                    <dd class="col-sm-9">@Html.DisplayFor(model => model.ConfirmacaoPresenca)</dd>
                 </dl>
             </div>
 

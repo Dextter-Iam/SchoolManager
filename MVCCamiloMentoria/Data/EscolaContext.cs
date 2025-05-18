@@ -8,6 +8,7 @@ public class EscolaContext : DbContext
     {
     }
     public DbSet<Turma> Turma { get; set; }
+    public DbSet<AuthUserModel>AuthUser { get; set; }
     public DbSet<AlunoTelefone> AlunoTelefone { get; set; }
     public DbSet<Aluno> Aluno { get; set; }
     public DbSet<AlunoResponsavel> AlunoResponsavel { get; set; }
@@ -25,9 +26,12 @@ public class EscolaContext : DbContext
     public DbSet<Diretor> Diretor { get; set; }
     public DbSet<Professor> Professor { get; set; }
     public DbSet<TurmaDisciplina> TurmaDisciplina { get; set; }
+    public DbSet<ProfessorDisciplina> ProfessorDisciplina { get; set; }
     public DbSet<ProfessorTurma> ProfessorTurma { get; set; }
     public DbSet<Supervisor> Supervisor { get; set; }
+    public DbSet<SupervisorEscola>? SupervisorEscola { get; set; }
     public DbSet<Coordenador> Coordenador { get; set; }
+    public DbSet<Responsavel> Responsavel { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
