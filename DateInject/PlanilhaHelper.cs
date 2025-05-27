@@ -34,9 +34,9 @@ namespace DateInject
                         BolsaEscolar = row.Cell(5).GetValue<int>() == 1,
                         TurmaId = row.Cell(6).GetValue<int>(),
                         EnderecoId = row.Cell(7).GetValue<int>(),
-                        Excluido = row.Cell(8).GetValue<bool>(),
-                        EscolaId = row.Cell(9).GetValue<int>(),
-                        EstadoId = row.Cell(10).GetValue<int>()
+                        EscolaId = row.Cell(8).GetValue<int>(),
+                        EstadoId = row.Cell(09).GetValue<int>(),
+                        Excluido = row.Cell(10).GetValue<bool>()
                     };
 
                     alunos.Add(aluno);

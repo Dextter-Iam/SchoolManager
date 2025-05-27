@@ -21,7 +21,6 @@ namespace DateInject
                     services.AddDbContext<EscolaContext>(options =>
                         options.UseSqlServer(context.Configuration.GetConnectionString("SchoolMVCManagerConnectionString")));
 
-                    // Registra seus serviços
                     services.AddTransient<Importador>();
                     services.AddTransient<PlanilhaHelper>();
                 })
