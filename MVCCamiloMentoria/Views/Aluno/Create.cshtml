@@ -241,7 +241,8 @@
 									@Html.DropDownListFor(model => model.Endereco.EstadoId ,
 									(SelectList)ViewBag.Estados,
 																		"Selecione um estado",
-																		new { @class = "form-control", id = "Estado", disabled = "disabled" }) 
+																		new { @class = "form-control", id = "Estado"})
+									@Html.HiddenFor(model => model.Endereco.EstadoId)
 								</div>
 							</div>
 						</div>
