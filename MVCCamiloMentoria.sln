@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35913.81 d17.13
+VisualStudioVersion = 17.13.35913.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVCCamiloMentoria", "MVCCamiloMentoria\MVCCamiloMentoria.csproj", "{20315A1B-217E-471C-AC04-1DE007C09F0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DateInject", "DateInject\DateInject.csproj", "{510F1EBC-0F51-4894-9BD3-3447F2CBB8CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{20315A1B-217E-471C-AC04-1DE007C09F0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20315A1B-217E-471C-AC04-1DE007C09F0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20315A1B-217E-471C-AC04-1DE007C09F0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{510F1EBC-0F51-4894-9BD3-3447F2CBB8CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{510F1EBC-0F51-4894-9BD3-3447F2CBB8CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{510F1EBC-0F51-4894-9BD3-3447F2CBB8CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{510F1EBC-0F51-4894-9BD3-3447F2CBB8CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
