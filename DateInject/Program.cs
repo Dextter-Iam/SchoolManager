@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
-using MVCCamiloMentoria.Models;
+using MVCCamiloMentoria.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace DateInject
@@ -17,9 +17,11 @@ namespace DateInject
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddDbContext<EscolaContext>(options =>
-                        options.UseSqlServer(context.Configuration.GetConnectionString("DefaultConnection")));
 
+                    services.AddDbContext<EscolaContext>(options =>
+                        options.UseSqlServer(context.Configuration.GetConnectionString("SchoolMVCManagerConnectionString")));
+
+                    // Registra seus serviços
                     services.AddTransient<Importador>();
                     services.AddTransient<PlanilhaHelper>();
                 })

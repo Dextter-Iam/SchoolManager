@@ -15,7 +15,7 @@ namespace DateInject
 
         public void Executar()
         {
-            string caminhoPlanilha = @"C:\caminho\para\sua\planilha.xlsx";
+            string caminhoPlanilha = @"C:\Users\camilo.eduardo\Documents\Camilo.Eduardo\alunos_teste.xlsx";
 
             Console.WriteLine("Lendo a planilha...");
             var alunos = _planilhaHelper.LerAlunos(caminhoPlanilha);
