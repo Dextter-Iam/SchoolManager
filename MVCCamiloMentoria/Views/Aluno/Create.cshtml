@@ -157,21 +157,21 @@
 								</h5>
 							</div>
 							<div class="card-body px-4 py-3">
-								@for (int i = 0; i < Model.Telefones!.Count; i++)
+								@for (int i = 0; i < Model.Telefone!.Count; i++)
 								{
 									<div class="row g-3 mb-3">
 										<div class="col-md-4">
 											<div class="form-group">
-												<label asp-for="Telefones[@i].Telefones.DDD" class="form-label fw-semibold">DDD</label>
-												<input asp-for="Telefones[@i].Telefones.DDD" class="form-control rounded-3 py-2" placeholder="DDD" />
-												<span asp-validation-for="Telefones[@i].Telefones.DDD" class="text-danger small"></span>
+												<label asp-for="Telefone[@i].Telefone.DDD" class="form-label fw-semibold">DDD</label>
+												<input asp-for="Telefone[@i].Telefone.DDD" class="form-control rounded-3 py-2" placeholder="DDD" />
+												<span asp-validation-for="Telefone[@i].Telefone.DDD" class="text-danger small"></span>
 											</div>
 										</div>
 										<div class="col-md-8">
 											<div class="form-group">
-												<label asp-for="Telefones[@i].Telefones.Numero" class="form-label fw-semibold">Número</label>
-												<input asp-for="Telefones[@i].Telefones.Numero" class="form-control rounded-3 py-2" placeholder="Número do telefone" />
-												<span asp-validation-for="Telefones[@i].Telefones.Numero" class="text-danger small"></span>
+												<label asp-for="Telefone[@i].Telefone.Numero" class="form-label fw-semibold">Número</label>
+												<input asp-for="Telefone[@i].Telefone.Numero" class="form-control rounded-3 py-2" placeholder="Número do telefone" />
+												<span asp-validation-for="Telefone[@i].Telefone.Numero" class="text-danger small"></span>
 											</div>
 										</div>
 									</div>
@@ -201,21 +201,21 @@
 
 										<div class="form-group mb-3">
 											<label asp-for="Endereco.Cidade" class="form-label fw-semibold">Cidade</label>
-											<input asp-for="Endereco.Cidade" class="form-control rounded-3 py-2" id="Endereco_Cidade" readonly />
+											<input asp-for="Endereco.Cidade" class="form-control rounded-3 py-2" id="Endereco_Cidade"  />
 											<span asp-validation-for="Endereco.Cidade" class="text-danger small"></span>
 										</div>
 
 	
 										<div class="form-group mb-3">
 											<label asp-for="Endereco.Bairro" class="form-label fw-semibold">Bairro</label>
-											<input asp-for="Endereco.Bairro" class="form-control rounded-3 py-2" id="Endereco_Bairro" readonly />
+											<input asp-for="Endereco.Bairro" class="form-control rounded-3 py-2" id="Endereco_Bairro"  />
 											<span asp-validation-for="Endereco.Bairro" class="text-danger small"></span>
 										</div>
 
 
 										<div class="form-group mb-3">
 											<label asp-for="Endereco.NomeRua" class="form-label fw-semibold">Rua</label>
-											<input asp-for="Endereco.NomeRua" class="form-control rounded-3 py-2" id="Endereco_NomeRua" placeholder="Nome da rua" readonly />
+											<input asp-for="Endereco.NomeRua" class="form-control rounded-3 py-2" id="Endereco_NomeRua" placeholder="Nome da rua" />
 											<span asp-validation-for="Endereco.NomeRua" class="text-danger small"></span>
 										</div>
 									</div>
@@ -238,10 +238,10 @@
 
 								<div class="form-group">
 									<label>Estado</label>
-									@Html.DropDownListFor(model => model.Endereco.EstadoId,
+									@Html.DropDownListFor(model => model.Endereco.EstadoId ,
 									(SelectList)ViewBag.Estados,
 																		"Selecione um estado",
-																		new { @class = "form-control", id = "Estado", disabled = "disabled" })
+																		new { @class = "form-control", id = "Estado", disabled = "disabled" }) 
 								</div>
 							</div>
 						</div>

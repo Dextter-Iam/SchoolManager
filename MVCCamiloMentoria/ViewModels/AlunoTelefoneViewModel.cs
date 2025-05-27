@@ -8,6 +8,6 @@ namespace MVCCamiloMentoria.ViewModels
         public int TelefoneId { get; set; }
         public int AlunoId { get; set; }
         public AlunoViewModel? Aluno { get; set; } 
-        public TelefoneViewModel? Telefones { get; set; }
+        public TelefoneViewModel? Telefone { get; set; }
     }
 }

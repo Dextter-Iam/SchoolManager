@@ -67,7 +67,7 @@ namespace MVCCamiloMentoria.ViewModels
         public byte[]? Foto { get; set; }
         public IFormFile? FotoUpload { get; set; }
 
-        public List<AlunoTelefoneViewModel>? Telefones { get; set; }
+        public List<AlunoTelefoneViewModel>? Telefone { get; set; }
         public List<AulaViewModel>? Aulas { get; set; }
 
         [DisplayName("Responsável 1")]

@@ -104,7 +104,7 @@ namespace MVCCamiloMentoria.Controllers
                           {
                               AlunoId = at.AlunoId,
                               TelefoneId = at.TelefoneId,
-                              Telefones = new TelefoneViewModel
+                              Telefone = new TelefoneViewModel
                               {
                                   Id = at.Telefone!.Id,
                                   DDD = at.Telefone.DDD,
@@ -160,7 +160,7 @@ namespace MVCCamiloMentoria.Controllers
                         TurmaId = aluno.TurmaId,
                     },
                 },
-                Telefones = alunoTel,
+                Telefone = alunoTel,
 
             };
 
@@ -183,10 +183,10 @@ namespace MVCCamiloMentoria.Controllers
 
                 var viewModel = new AlunoViewModel
                 {
-                    Telefones = new List<AlunoTelefoneViewModel>
+                    Telefone = new List<AlunoTelefoneViewModel>
                 {
                      new AlunoTelefoneViewModel
-                { Telefones = new TelefoneViewModel()
+                { Telefone = new TelefoneViewModel()
 
                 }
                 },
@@ -221,15 +221,17 @@ namespace MVCCamiloMentoria.Controllers
                 try
                 {
                     var estados = _context.Estado.ToList();
-                    var estadoViewModel = estados.FirstOrDefault();
                     var endereco = viewModel.Endereco != null ? new Endereco
                     {
                         NomeRua = viewModel.Endereco.NomeRua,
                         NumeroRua = viewModel.Endereco.NumeroRua,
                         CEP = viewModel.Endereco.CEP,
+                        Bairro = viewModel.Endereco.Bairro,
+                        Cidade = viewModel.Endereco.Cidade,
                         Complemento = viewModel.Endereco.Complemento,
                         EstadoId = viewModel.Endereco.EstadoId,
                     } : null;
+
 
                     var aluno = new Aluno
                     {
@@ -246,12 +248,12 @@ namespace MVCCamiloMentoria.Controllers
                         Parentesco2 = viewModel.Parentesco2,
                         Endereco = endereco,
 
-                        AlunoTelefone = viewModel.Telefones?.Select(t => new AlunoTelefone
+                        AlunoTelefone = viewModel.Telefone?.Select(t => new AlunoTelefone
                         {
                             Telefone = new Telefone
                             {
-                                DDD = t.Telefones!.DDD,
-                                Numero = t.Telefones!.Numero,
+                                DDD = t.Telefone!.DDD,
+                                Numero = t.Telefone!.Numero,
                                 EscolaId = viewModel.EscolaId,
                             }
                         }).ToList()
@@ -300,8 +302,8 @@ namespace MVCCamiloMentoria.Controllers
                 {
                     AlunoId = at.AlunoId,
                     TelefoneId = at.TelefoneId,
-                    Telefones = new TelefoneViewModel
-                    {
+                    Telefone = new TelefoneViewModel
+                    {   
                         Id = at.Telefone!.Id,
                         DDD = at.Telefone.DDD,
                         Numero = at.Telefone.Numero,
@@ -309,7 +311,7 @@ namespace MVCCamiloMentoria.Controllers
                 })
                 .ToList() ?? new List<AlunoTelefoneViewModel>();
 
-            var primeiroTelefone = alunoTelefones.FirstOrDefault()?.Telefones;
+            var primeiroTelefone = alunoTelefones.FirstOrDefault()?.Telefone;
 
             var estado = _context.Estado.ToList();
             var viewModel = new AlunoViewModel
@@ -339,7 +341,7 @@ namespace MVCCamiloMentoria.Controllers
 
                 },
 
-                Telefones = alunoTelefones,
+                Telefone = alunoTelefones,
                 Endereco = new EnderecoViewModel
                 {
                     NomeRua = aluno.Endereco!.NomeRua,
@@ -407,16 +409,16 @@ namespace MVCCamiloMentoria.Controllers
                     aluno.Endereco.EstadoId = viewModel.Endereco.EstadoId;
 
                     aluno.AlunoTelefone?.Clear();
-                    if (viewModel.Telefones != null)
+                    if (viewModel.Telefone != null)
                     {
-                        aluno.AlunoTelefone = viewModel.Telefones
-                            .Where(t => t.Telefones != null)
+                        aluno.AlunoTelefone = viewModel.Telefone
+                            .Where(t => t.Telefone != null)
                             .Select(t => new AlunoTelefone
                             {
                                 Telefone = new Telefone
                                 {
-                                    DDD = t.Telefones!.DDD,
-                                    Numero = t.Telefones.Numero,
+                                    DDD = t.Telefone!.DDD,
+                                    Numero = t.Telefone.Numero,
                                     EscolaId = viewModel.EscolaId,
                                 }
                             }).ToList();
@@ -485,7 +487,7 @@ namespace MVCCamiloMentoria.Controllers
                           {
                               AlunoId = at.AlunoId,
                               TelefoneId = at.TelefoneId,
-                              Telefones = new TelefoneViewModel
+                              Telefone = new TelefoneViewModel
                               {
                                   Id = at.Telefone!.Id,
                                   DDD = at.Telefone.DDD,
@@ -541,7 +543,7 @@ namespace MVCCamiloMentoria.Controllers
                         TurmaId = aluno.TurmaId,
                     },
                 },
-                Telefones = alunoTel,
+                Telefone = alunoTel,
 
             };
 

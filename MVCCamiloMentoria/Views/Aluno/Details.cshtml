@@ -105,13 +105,13 @@
                                 <div class="col-md-6">
                                     <div class="info-item">
                                         <span class="info-label">Telefone</span>
-                                        @if (Model.Telefones != null && Model.Telefones.Any())
+                                        @if (Model.Telefone != null && Model.Telefone.Any())
                                         {
-                                            foreach (var alunoTelefone in Model.Telefones)
+                                            foreach (var alunoTelefone in Model.Telefone)
                                             {
-                                                if (alunoTelefone.Telefones != null)
+                                                if (alunoTelefone.Telefone != null)
                                                 {
-                                                    <span class="info-value">(@alunoTelefone.Telefones.DDD) @alunoTelefone.Telefones.Numero.ToString("00000-0000")</span>
+                                                    <span class="info-value">(@alunoTelefone.Telefone.DDD) @alunoTelefone.Telefone.Numero.ToString("00000-0000")</span>
                                                 }
                                             }
                                         }
