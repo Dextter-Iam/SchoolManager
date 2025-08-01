@@ -2,11 +2,9 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-# Copia o .csproj corretamente
 COPY SchoolManager/MVCCamiloMentoria/*.csproj ./MVCCamiloMentoria/
 RUN dotnet restore ./MVCCamiloMentoria/MVCCamiloMentoria.csproj
 
-# Copia todo o código-fonte
 COPY . .
 WORKDIR /src/SchoolManager/MVCCamiloMentoria
 RUN dotnet publish -c Release -o /app/publish
