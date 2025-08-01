@@ -2,11 +2,11 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-COPY SchoolManager/MVCCamiloMentoria/*.csproj ./MVCCamiloMentoria/
+COPY MVCCamiloMentoria/*.csproj ./MVCCamiloMentoria/
 RUN dotnet restore ./MVCCamiloMentoria/MVCCamiloMentoria.csproj
 
 COPY . .
-WORKDIR /src/SchoolManager/MVCCamiloMentoria
+WORKDIR /src/MVCCamiloMentoria
 RUN dotnet publish -c Release -o /app/publish
 
 # Etapa de runtime
